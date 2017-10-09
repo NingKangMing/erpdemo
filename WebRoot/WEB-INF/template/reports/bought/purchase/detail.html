@@ -1,0 +1,37 @@
+<div class="panel pageContent">
+	<div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">进货明细账本</span></label>
+				</li>
+			</ul>
+			<ul class="searchContent" style="margin-top: 5px;">
+				<li>
+					<span style="margin-left: 10px;">查询时间：</span>${(params.startDate)!}&nbsp;&nbsp;至&nbsp;&nbsp;${(params.endDate)!}
+				</li>
+			</ul>
+			<ul class="searchContent">
+				<li> 
+					<span style="margin-left: 10px;">商&nbsp;&nbsp;品:</span> ${productName!}
+				</li>
+				<li  style="float: right;margin-left: 10px;margin-right: 10px">
+				   <a href="${base}/fz/reportRow/search/cg501" target="dialog" rel="reportRowView"  width="520" height="500"><img src="${base}/img/base/setting.png" width="20px" height="20px" title="列配置"/></a>
+				</li>
+				<li style="float: right;">
+				    过滤&nbsp;&nbsp;<select name="notStatus" onchange="javascript:selectPost(this,'purchaseDetailAccountList','notStatus');">
+				       <option  value="">显示所有</option>
+				       <option  value="0">不显示红冲单据</option>
+				    </select>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div id="purchaseDetailAccountList"  layoutH="87">
+		<#include "detailList.html" />
+	</div>
+	
+</div>
+
+
+

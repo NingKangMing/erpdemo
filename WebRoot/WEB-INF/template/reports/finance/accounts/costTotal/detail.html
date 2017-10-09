@@ -1,0 +1,34 @@
+<div class="panel"  id="costTotalDetailPage">
+	<div class="pageContent">
+		<div class="textContent center">
+			<div>
+		         <span style="font:bold 18px '宋体',Arial,Times;">明细账本</span>
+		    </div>
+		    <div>
+		     	<span style="line-height: 30px;">
+		     	<span style="margin-left: 10px;">查询时间：</span>${(params.startTime)!}&nbsp;&nbsp;至&nbsp;&nbsp;${(params.endTime)!}
+   				<ul>
+   					<li style="float: left;margin-left:5px;">会计科目:<#if account??> ${account.fullName!}<#else> 其它科目 </#if></li>
+					<li style="float: left;margin-left:35px;">此前余额:${beforeMoney!0}</li>
+   				</ul>
+   				</span>
+		     	<div style="float: right;">
+				              红冲过滤：
+     				<select name="isRcw" onchange="javascript:selectPost(this,'costTotalDetailPage','isRcw');">
+     					<option value="" <#if isRcw?? && isRcw=="">selected="selected"</#if> >全部显示</option>
+     					<option value="0" <#if isRcw?? && isRcw=="0">selected="selected"</#if> >不显示红冲单据</option>
+     				</select>
+			     	<#assign columnType = 'cw512'/>
+					<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+		     	
+				</div>
+		     </div>
+		</div>
+	    <div style="padding:2px; padding-top: 0px;" layoutH="70">
+			<#include "detailList.html"/>
+		</div>
+	</div>
+</div>
+
+
+

@@ -1,0 +1,30 @@
+<div class="panel">
+	<div class="pageContent" id="virtualStockPage">
+		<div class="textContent" style="height: 85px;">
+		     <div>
+		         <span style="font:bold 18px '宋体',Arial,Times;">虚拟库存查询</span>
+		     </div>
+		     <div>
+		     	<span style="float: left; margin-left:30px; line-height: 50px;">仓库：${storageName!''}</span>
+		     	<!-- <span style="float: left; margin-left:30px; line-height: 50px;">商品：${productName!''}</span> -->
+		     </div>
+		    <div style="float: right;">
+		     	<select id="selectFilter" name="selectFilter"  onchange="javascript:selectPost(this,'virtualStockList','filterVal');" >
+		     		<option value="all"     <#if filterVal=='all'>selected</#if>     >显示全部</option>
+		     		<option value="sckNoN"  <#if filterVal=='sckNoN'>selected</#if>  >库存不为0</option>
+		     		<option value="dsckNoN" <#if filterVal=='dsckNoN'>selected</#if> >订单库存不为0</option>
+		     		<option value="csckNoN" <#if filterVal=='csckNoN'>selected</#if> >草稿数量不为0</option>
+		     	</select>
+		     	<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+			</div>
+		</div>
+		
+		<div style="float:left; display:block; overflow:auto; width:210px; border:solid 1px #CCC; line-height:21px; background:#fff" layoutH="100">
+			<input type="hidden" id="inlet" name="inlet" value="tree"/>
+			<ul id="virtualStockTree" relevancyIds="productPids,storagePids,filterVal,inlet" target="ztree" selectNodeId="${supId!0}" class="ztree" url="${base}/reports/stock/virtualStock/tree/0" rel="virtualStockList" ctarget="ajax"></ul>
+		</div>
+		<div id="virtualStockList" style="margin-left: 220px;padding:2px; padding-top: 0px;" layoutH="30">
+			<#include "list.html" />
+		</div>
+	</div>
+</div>

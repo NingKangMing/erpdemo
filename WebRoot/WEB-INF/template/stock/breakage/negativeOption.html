@@ -1,0 +1,53 @@
+<!--报损单保存负库存提示 -->
+<div>
+
+<div class="pageHeader">
+	<div class="searchBar">
+	   <ul class="searchContent">
+	       <li><h2 class="contentTitle">以下商品已经出现负库存，请确定操作是否继续进行？</h2></li>
+	    </ul>
+	</div>
+</div>
+<input type="hidden" id="dialogId" value="bsd_nagetive_price_info"/>
+<form action="${base}/stock/breakage/setStockPrice">
+<div class="pageContent">
+	<table class="table" layoutH="100"  targetType="dialog">
+		<thead>
+			<tr>
+				<th width="40">行号</th> 
+				<th align="center" width="100">所在行号</th>
+				<th align="center" width="100">商品编号</th>
+				<th align="center" width="100">商品全名</th>
+				<th align="center" width="100">库存数量</th>
+				<th align="center" width="100">负库存数量</th>
+				<th align="center" width="100">仓库编号</th>
+				<th align="center" width="100">仓库全名</th>
+			</tr>
+		</thead>
+		<tbody>
+		   <#assign flag = 'false'/>
+		   <#list rList as r>
+		    <#if !r.avgPrice?? || r.avgPrice ==0><#assign flag = 'true'/></#if>
+			<tr>
+				<td><a>${r_index+1}</a></td>
+				<td>${r.trIndex}</td>
+				<td cname="code">${(r.productCode)!}</td>
+				<td cname="fullName">${r.productName!}</td>
+				<td>${r.stockAmount!}</td>
+				<td>${r.negativeAmount!}</td>
+				<td>${r.storageCode!}</td>
+				<td>${r.storageName!}</td>
+			</tr>
+			</#list>
+		</tbody>
+	</table>
+</div>
+<input type="hidden" id="flag" name="flag" value="${flag}"/>
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+    <a style="margin-left: 440px;" class="button" onclick="nagetiveStockComfirm()"><span>确定</span></a>
+	<div style="margin-left: 20px;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+</div>
+</form>
+</div>

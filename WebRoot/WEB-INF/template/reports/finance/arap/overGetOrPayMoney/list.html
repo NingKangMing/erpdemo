@@ -1,0 +1,69 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/finance/arap/overPayGetMoney/search/${modelType}-page" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+	<input type="hidden" name="orderField" value="${orderField!'recodeDate'}" />
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" />
+    
+    <input type="hidden" id="listID" value="${listID}"/>
+    <input type="hidden" id="modelType" name="modelType" value="${modelType!'pay'}"/>            <!-- 过滤条件  -->
+    
+    <!-- 主页面过滤条件 -->
+	<input type="hidden" id="warn" name="warn" value="${warn!''}"/>           
+	<input type="hidden" id="stopDate" name="stopDate" value="${stopDate!''}"/>            <!-- 结束日期 -->
+	<input type="hidden" id="unitId" name="unitId" value="${unitId!0}"/>            <!-- 过滤条件  -->
+
+</form>
+<#include "/WEB-INF/template/common/columnConfig/tableTotalWidthLink.html"/>
+<table class="table" rel="${listID}" layoutH="200">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody id="reports_prdsellcount_body">
+		<#if pageMap??&&pageMap.pageList??>
+		<#list pageMap.pageList as obj>
+		<tr target="billId" rel="${obj.billId!}-${obj.billTypeId!}" title="${obj.navTabTitile!}" url="${base}/common/bill/lookBill/${obj.billId!}-${obj.billTypeId!}" cTarget="openNavTab" >
+			<td><a>${obj_index+1+pageMap.limit}</a></td>
+			<#list rowList as row>
+			<#if row.code?? && 'code'==row.code>
+			<td>${obj.code!''}</td>
+			<#elseif row.code?? && 'unitCode'==row.code>
+			<td>${obj.unitCode!''}</td>
+			<#elseif row.code?? && 'unitFullName'==row.code>
+			<td>${obj.unitFullName!''}</td>
+			<#elseif row.code?? && 'taxMoneys'==row.code>
+			<td><#if obj.taxMoneys??&&obj.taxMoneys!=0>${obj.taxMoneys!''}</#if></td>
+			<#elseif row.code?? && 'hasMoney'==row.code>
+			<td><#if obj.hasMoney??&&obj.hasMoney!=0>${obj.hasMoney!''}</#if></td>
+			<#elseif row.code?? && 'termDate'==row.code>
+			<td><#if obj.termDate??>${obj.termDate!''}</#if></td>
+			<#elseif row.code?? && 'delayTermDate'==row.code>
+			<td><#if obj.delayTermDate??>${obj.delayTermDate!''}</#if></td>
+			<#elseif row.code?? && 'hasNoMoney'==row.code>
+			<td><#if obj.hasNoMoney??&&obj.hasNoMoney!=0>${obj.hasNoMoney!''}</#if></td>
+			<#elseif row.code?? && 'isWarn'==row.code>
+			<td><#if obj.isWarn==1>取消报警<#elseif obj.termDate!=obj.delayTermDate>延迟报警</#if></td>
+			</#if>
+			</#list>
+		</tr>
+		</#list>
+		</#if>
+	</tbody>
+	<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+<div class="divider"></div>
+<div>
+    <a class="button" dynamic="true" target="navTab" href="${base}/common/bill/lookBill/{billId}"><span>查看单据</span></a>
+    <a class="button" target="ajaxTodo" href="${base}/reports/finance/arap/overPayGetMoney/cancelWarn/${modelType}-{billId}" callback="dialogAjaxDone" title="当前操作会影响所选条目，你确信要继续吗？"><span>取消报警</span></a>
+    <a class="button" target="ajaxTodo" href="${base}/reports/finance/arap/overPayGetMoney/recoveryWarn/${modelType}-{billId}" callback="dialogAjaxDone" title="当前操作会影响所选条目，你确信要继续吗？"><span>恢复报警</span></a>
+    <a class="button" href="${base}/reports/finance/arap/overPayGetMoney/toDelayWarn/${modelType}-{billId}" target="dialog" titile="延期报警" rel="cw_r_limitMoneyUpdate_dialog" width="300" height="250" param="stopDate,unitId"><span>延期报警</span></a>
+</div>
+<div style="float: right;">
+	<#if modelType=='get'>
+	   <#assign privs = '6-103-625-p'/>
+	<#elseif modelType=='pay'>
+	   <#assign privs = '6-103-626-p'/>
+	</#if>
+	<#assign href = '${base}/reports/finance/arap/overPayGetMoney/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

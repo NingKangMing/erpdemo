@@ -1,0 +1,67 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/finance/arap/settlementByOrder/dialogSearch/page" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+	<input type="hidden" name="orderField" value="${orderField!'recodeDate'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <!-- ID用于树点击参数 -->
+	<input type="hidden" id="billType" name="billType" value="${billType}"/>      
+	<input type="hidden" id="isOver" name="isOver" value="${isOver}"/>       
+	<input type="hidden" id="unit.id" name="unit.id" value="${unitId}"/>               <!-- 单位ID -->
+	<input type="hidden" id="staff.id" name="staff.id" value="${staffId}"/>            <!-- 职员ID -->
+	<input type="hidden" id="unit.fullName" name="unit.fullName" value="${unitFullName}"/>            
+	<input type="hidden" id="staff.name" name="staff.name" value="${staffFullName}"/>            
+	
+	<input type="hidden" id="startDate" name="startDate" value="${startDate}"/>        <!--开始日期  -->
+	<input type="hidden" id="endDate" name="endDate" value="${endDate}"/>            <!-- 结束日期 -->
+</form>
+<#include "/WEB-INF/template/common/columnConfig/tableTotalWidthLink.html"/>
+<table class="table" rel="${listID}" layoutH="230">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody id="reports_prdsellreturncount_body">
+		<#if pageMap??&&pageMap.pageList??>
+		<#list pageMap.pageList as obj>
+		<tr target="billId" rel="${obj.id!}-${obj.billTypId!}" title="${obj.orderTypeName!}"  <#if !obj.id??>isBill="no"</#if> url="${base}/common/bill/lookBill/${obj.id!}-${obj.billTypId!}" cTarget="openNavTab" >
+		    <td><#if obj.taxMoneys??&&obj.taxMoneys!=obj.lastMoney><a target="dialog" rel="cw_settlementByOrderDetail" href="${base}/reports/finance/arap/settlementByOrder/settlementDetail?billId=${obj.id!}&billTypeId=${obj.billTypId!}" title="结算详情" width="600" height="300" style="color: red;">+</a></#if>${obj_index+1+pageMap.limit}</td>
+			<#list rowList as row>
+		    <#if row.code?? && 'orderTypeName'==row.code>
+			<td>${obj.orderTypeName!''}</td>
+			<#elseif row.code?? && 'code'==row.code>
+			<td>${obj.code!''}</td>
+			<#elseif row.code?? && 'recodeDate'==row.code>
+			<td>${obj.recodeDate!''}</td>
+			<#elseif row.code?? && 'deliveryDate'==row.code>
+			<td><#if obj.deliveryDate??>${obj.deliveryDate!}</#if></td>
+			<#elseif row.code?? && 'remark'==row.code>
+			<td>${obj.remark!''}</td>
+			<#elseif row.code?? && 'taxMoneys'==row.code>
+			<td>${obj.taxMoneys!''}</td>
+			<#elseif row.code?? && 'lastMoney'==row.code>
+			<td>${obj.lastMoney!''}</td>
+			</#if>
+			</#list>
+		</tr>
+		<tr>
+		    <td></td>
+		    <#list rowList as row>
+			<td></td>
+			</#list>
+		</tr>
+		</#list>
+		</#if>
+	</tbody>
+	<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+
+<div class="divider"></div>
+<div>
+    <a class="button" target="dialog" href="${base}/reports/finance/arap/settlementByOrder/toSearchDialog/" rel="prdSellReturnCountSearchDialog" width="330" height="350" aimTitle="按单结算查询" aimUrl="${base}/reports/finance/arap/settlementByOrder/dialogSearch/search" aimTabId="cw_r_settlementByOrderView"><span>查询条件</span></a>
+    <a class="button" dynamic="true" target="navTab" href="${base}/common/bill/lookBill/{billId}"><span>查看单据</span></a>
+</div>
+<div style="float: right;">
+	<#assign privs = '6-103-624-p'/>
+	<#assign href = '${base}/reports/finance/arap/settlementByOrder/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

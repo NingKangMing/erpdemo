@@ -1,0 +1,44 @@
+<div class="pageContent">
+  
+	<div class="textContent center">
+	      <div>
+	         <span style="font-size: 18px;">单据编号设置</span>
+	     </div>
+	     <div>
+	        <#list typeList as type>
+	         <#if type_index ==0>
+	             <a class="buttonDisabled" target="ajax" href="${base}/sys/billCodeConfig/list/${type.id!}" rel="billSortList" onclick="changeButton(this)"><span>${type.name!}</span>&nbsp;&nbsp; </a> 
+	         <#else>
+	             <#if type.id!=6>
+	             <a class="button" target="ajax" href="${base}/sys/billCodeConfig/list/${type.id!}" rel="billSortList" onclick="changeButton(this)"><span>${type.name!}</span>&nbsp;&nbsp; </a> 
+	             <#elseif type.id==6 && version gte 2>
+	              <a class="button" target="ajax" href="${base}/sys/billCodeConfig/list/${type.id!}" rel="billSortList" onclick="changeButton(this)"><span>${type.name!}</span>&nbsp;&nbsp; </a> 
+	             </#if> 
+	         </#if>
+	       
+	        </#list>
+	     </div>
+	</div>
+	<div class="divider"></div>
+	<div class="pageContent" id="billSortList">
+	      <#include "list.html" />
+	</div>
+	<div class="textContent center">
+	    <div>
+	    <a class="button" href="${base}/sys/billCodeConfig/clearOne/{id}" target="ajaxTodo" title="确定要清除当前单据自定义编号格式吗？" callback="aioReloadForm"><span>清除</span>&nbsp;&nbsp; </a> 
+	    <a class="button" href="${base}/sys/billCodeConfig/toConfig/{id}" target="dialog" rel="billCodeConfigDialog" title="单据编号设置窗口" width="340" height="410"><span>格式设置</span>&nbsp;&nbsp; </a> 
+	    <a class="button" href="${base}/sys/billCodeConfig/applyAll/{id}" target="ajaxTodo" title="确定要把当前单据自定义编号格式设置到所有单据吗？" callback="aioReloadForm"><span>应用到所有单据</span>&nbsp;&nbsp; </a> 
+	    <a class="button" href="${base}/sys/billCodeConfig/clearAll" target="ajaxTodo" title="确定要清除所有单据自定义编号格式吗？" callback="aioReloadForm"><span>清除所有单据设置</span>&nbsp;&nbsp;</a> 
+	    <a class="button" href="${base}/sys/billCodeConfig/toGlobal" target="dialog" rel="billCodeConfigGlobal" title="单据编号全局配置" width="350" height="400"><span>全局配置</span>&nbsp;&nbsp; </a> 
+	    </div>
+	</div>
+	<div class="textContent" >
+		<div style="color:red">格式设置说明：</div>
+		<div style="color:blue">1、当在【全局配置】中勾选【系统自动生成单据编号】且单据样式设置为无时，系统默认单据样式为【单据类型前缀-T-YYYYMMDD-流水号】。例：进货订单为JHDD-T-2010-08-28-0001。</div>
+		<div style="color:blue">2、全局配置功能对单据编号设置中的所有单据有效。</div>
+		<div style="color:blue">3、每一栏中允许录入字母或汉字，也可以从弹出的选择框中选择。</div>
+		<div style="color:blue">4、系统默认第一项为单据类型前缀，用户不能修改。最后一项为流水号，可以在全局配置中设置。</div>
+		<div style="color:blue">5、单据编号长度（加流水号）不能超过200个字符。</div>
+	</div>
+</div>
+

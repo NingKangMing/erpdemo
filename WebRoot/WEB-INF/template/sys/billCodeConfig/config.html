@@ -1,0 +1,50 @@
+
+<div class="pageContent">
+    <form action="${base}/sys/billCodeConfig/config" class="tableForm pageForm required-validate" enctype="text/plain" method="post" 
+        onsubmit="return validateCallback(this,aioDialogAjaxDone);">
+        <input type="hidden" name="billCodeConfig.billId" value="${billType.id!0}"/>
+        <input type="hidden" name="billCodeConfig.id" value="${(config.id)!}"/>
+         <h3 class="contentTitle">${billType.name!}:单据编号设置》》</h3>
+         <div class="divider"></div>
+        <div>
+        <table class="table">
+            <thead>
+				<tr>
+					<th width="50px">
+						行号
+					</th>
+					<th width="250px"  align="center">
+						单据编号
+					</th>
+				</tr>
+	      </thead>
+	      <tbody>
+	         <#list 1..10 as td>
+	             <tr>
+		             <td>
+		                  ${td_index+1}
+		                  <input type="hidden" id="format${td_index+1}" name="billCodeConfig.format${td_index+1}" cname="format" value="${(config.getFormat('${td_index+1}'))!}"/>
+		             </td>
+		             <td onclick="cutTdInput(this,'format','',24)" cTarget="dialog" title="编号样式选择" cname="format" rel="billCodeConfigFormat"  url="${base}/sys/billCodeConfig/toFormat" dwidth="340" dheight="410">
+		                  ${(config.getFormat('${td_index+1}'))!}
+		             </td>
+		         </tr>
+	         </#list>
+	      </tbody>
+        </table>
+        </div>
+        <div style="height: 35px;margin-top: 10px" id="previewId">
+              <#include "preview.html" />
+              
+        </div>
+        <div class="formBar">
+			<ul>
+				<li><a class="button" href="${base}/sys/billCodeConfig/preview/${billType.id!}" rel="previewId" target="ajax" relevancyIds="format1,format2,format3,format4,format5,format6,format7,format8,format9,format10"><span>预览</span></a></li>
+				<li><a class="button" target="submit"><span>确定</span></a></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+			</ul>
+			
+		
+   </div>
+    </form>
+</div>

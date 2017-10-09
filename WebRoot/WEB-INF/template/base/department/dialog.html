@@ -1,0 +1,55 @@
+<div>
+   <form action="${base}/base/department/${toAction}"  class="tableForm" enctype="text/plain" method="post" onsubmit="return validateCallback(this,${callBack!'aioDialogAjaxDone'})">
+      <input type="hidden" name="department.supId" value="${(department.supId)!0}"/>
+      <input type="hidden" name="supId" value="${supId!0}"/>
+      <input type="hidden" name="pid" value="${(department.id)!}"/>
+      <input type="hidden" name="department.pids" value="${(department.pids)!}"/>
+      
+      <!-- dialog 新增加 -->
+      <input id="confirmType" name="confirmType" type="hidden" value="${confirmType!}"/><!-- dialog关闭时刷新dialog -->
+      <input type="hidden" name="selectedObjectId" id="selectedObjectId" /><!--默认选中对象的Id-->
+	  <input type="hidden" name="showLastPage" id="showLastPage" />   <!-- 跳转到最后一页 -->
+      <!-- end dialog 新增加 -->
+      <table style="margin-left: 10px; margin-top: 15px;">
+		  <tr style="height:45px;">
+		     <td style="width: 90px;">部门全名:</td>
+		     <td colspan="3"><input style="width: 342px;" type="text" id="name" name="department.fullName" value="${(department.fullName)!}" onblur="pingyinCode('name','spell')" class="required textInput" maxlength="100"/></td>
+		  </tr>
+		  <tr style="height:40px;">
+		     <td style="width: 90px;">部门编号:</td>
+		     <td><input type="text"  id="code" name="department.code" class="required textInput" value="${(department.code)!code!}" maxlength="100"/></td>
+		     <td style="text-align:right; width: 85px;">部门拼音码:</td>
+		     <td><input type="text" maxlength="100" id="spell" name="department.spell" value="${(department.spell)!}"/></td>
+		  </tr>
+		  <tr style="height:30px;">
+		     <td><input type="hidden"/></td>
+		     <td><input type="hidden"/></td>
+		     <td>
+		     	<input type="hidden" id="departmentStatus"  name="department.status" value="${(department.status)!2}"/>
+		     	<input type="checkbox" onchange="stopAndStart(this,'departmentStatus')" <#if department?? && department.status?number == 1>checked</#if> />停用
+		     </td>
+		     <td>
+		      	<input type="checkbox" name="codeIncrement" value="true" <#if codeIncrement?? && codeIncrement=="true">checked="checked"</#if> />编号递增
+		    </td>
+		  </tr>
+		   <tr style="height:50px;">
+		  	<td colspan="4" style="height: 110px;">
+		  	   <fieldset style="width: 390px;">
+		  	     <legend>备注</legend>
+		  	      <textarea  maxlength="240" style="width: 380px;" rows="4" name="department.memo" >${(department.memo)!}</textarea>
+		  	   </fieldset>
+		  	</td>
+		  </tr>
+		  <tr style="height: 20px;"></tr>
+	 </table>
+	 
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+		</ul>
+	  </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

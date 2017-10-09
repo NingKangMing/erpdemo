@@ -1,0 +1,99 @@
+<div class="pageContent">
+
+<input id="confirmType" type="hidden" value="dialogCloseReload"/>
+<input id="aimRel" type="hidden" value="productInitList"/>
+<input id="storageId" type="hidden" value="${storageId!}"/>
+<input id="productId" type="hidden" value="${productId!}"/>
+<input id="validity" type="hidden" value="${validity!}"/>
+<input id="selectedObjectId" type="hidden" value="${objectId!}"/>
+<div class="pageHeader">
+	<div class="searchBar">
+	   <ul class="searchContent">
+	       <li><h2 class="contentTitle">库存批次表</h2></li>
+	    </ul>
+	    <ul class="searchContent" style="margin-top: 10px;">
+	       <li>
+	           <div style="float: left;">
+	               <div style="float: left; margin-left: 10px;">商品：${productFullName!''}</div>    
+	               <div style="float: left; margin-left: 70px;">仓库：${storageFullName!'全部仓库'}</div>
+	           </div>
+	       </li>
+	    </ul>
+	</div>
+</div>
+<div id="productInitBatchList">
+	<table class="table" pattern="dialog" rel="productInitBatchList" layoutH="170"  targetType="dialog" >
+		<thead>
+			<tr>
+				<th width="50" align="center">行号</th> 
+				<th width="60" align="center">数量</th>
+				<th width="60" align="center">单价</th>
+				<th width="100" align="center">金额</th>
+				<th width="100" align="center">生产日期</th>
+				<th width="100" align="center">批号</th>
+				<#--到期日期demo-->
+				<th width="100" align="center">到期日期</th>
+			</tr>
+		</thead>
+		<tbody>
+			<#if stockList??>
+			    <#list stockList as stock>
+				<tr objectId="${objectId!0}" target="id" rel="${stock.id}" isSelect="true"  cTarget="citeEvent" citeEventModuleId="proBatchInitBtn" citeEventType="click" >
+					<td><a>${stock_index+1}</a></td>
+					<td>${(stock.amount)!''}</td>
+					<td>
+					<@shiro.hasPermission name='1101-s'>
+				    	${(stock.price)!}
+				    </@shiro.hasPermission>
+					<@shiro.lacksPermission name='1101-s'>
+						***  
+				    </@shiro.lacksPermission>
+					</td>
+					<td>
+					<@shiro.hasPermission name='1101-s'>
+						${(stock.money)!}
+					</@shiro.hasPermission>
+					<@shiro.lacksPermission name='1101-s'>
+						***  
+				    </@shiro.lacksPermission>
+					</td>
+					<td><#if stock?? && stock.produceDate??>${stock.produceDate?string("yyyy-MM-dd")}</#if></td>
+					<td>${(stock.batch)!''}</td>
+					<#--到期日期demo-->
+					<td><#if stock?? && stock.produceEndDate??>${stock.produceEndDate?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				</#list>
+			</#if>
+		</tbody>
+		<tfoot>
+	       <tr isSelect="false" style="border-top: #D0D0D0 solid 1px">
+		       <td align="center">合计</td>
+		       <td align="center" hasCount="true"></td>
+		       <td align="center"></td>
+		       <td align="center" hasCount="true"></td>
+		       <td align="center"></td>
+		       <td align="center"></td>
+		       <#--到期日期demo-->
+		       <td align="center"></td>
+	       </tr>
+		</tfoot>
+	</table>
+</div>
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+	<#if hasOpenAccount?? && hasOpenAccount==0>
+		<@shiro.hasPermission name='2-251-u'>
+		<a class="button" href="${base}/init/productInit/initBatchAdd"  title="期初批次录入" target="dialog" rel="productInitBatchEdit"  param="storageId,productId,validity" width="400" height="400"><span>新增</span></a>
+		<#if stockList?? && (stockList?size>0)>
+			<a class="button" href="${base}/init/productInit/initBatchDel" target="ajax" relevancyIds="storageId,productId,selectedObjectId" callback="dialogReloadDialog" confirmTxt="您确定要删除该记录吗？"><span>删除</span></a>
+			<a id="proBatchInitBtn" class="button" href="${base}/init/productInit/initBatchEdit" title="期初批次录入" target="dialog" rel="productInitBatchEdit"  param="storageId,productId,selectedObjectId" width="400" height="400"><span>修改</span></a>
+		<#else>
+			<a class="buttonDisabled" href="javascript:;"><span>修改</span></a>
+			<a class="buttonDisabled" href="javascript:;"><span>删除</span></a>
+	    </#if>
+	    </@shiro.hasPermission>
+    </#if>
+	<div style="float:right;" class="button"><div class="buttonContent"><button type="button" class="close" >关闭</button></div></div>
+</div>
+</div>

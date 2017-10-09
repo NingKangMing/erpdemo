@@ -1,0 +1,30 @@
+<div class="panel pageContent">
+	<div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">
+					 <#if action?? && action == 'profit'>
+					     年度利润表比较
+					    <#assign privs = '6-107-644-p'/>
+					 <#elseif action?? && action == 'asset'>
+					       年度资产负债表比较
+					     <#assign privs = '6-107-645-p'/>
+					 <#else>  
+					      其它  
+					     <#assign privs = ''/>
+					 </#if>
+					</span></label>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div layoutH="40">
+		<div id="yearCostTotalList" style="padding:2px; padding-top: 0px;" layoutH="50">
+			<#include "list.html"/>
+		</div>
+	</div>
+</div>
+
+
+

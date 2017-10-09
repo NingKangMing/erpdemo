@@ -1,0 +1,106 @@
+<form id="pagerForm" onsubmit="return divSearch(this, 'storageList');" class="pageForm required-validate" enctype="text/plain" action="${base}/base/storage/${goList!'list'}/${supId!0}" method="post">
+	<input type="hidden" name="pageNum" value="${pageMap.pageNum}" />
+	<input type="hidden" name="numPerPage" value="${pageMap.numPerPage}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+	
+	<!-- 保存条件 -->
+	<input type="hidden" id="b_stroage_term_par" name="screenPara" value="${screenPara!}"/>
+	<input type="hidden" id="b_stroage_term_val" name="screenVal" value="${screenVal!}"/>
+	<input type="hidden" id="b_stroage_term_scope" name="scope" value="${scope!'all'}"/>
+	<input type="hidden" id="b_stroage_term_supId" name="supId" value="${supId!0}"/>
+	<input type="hidden" id="b_stroage_term_node" name="node" value="${node!0}"/>
+	
+	<input type="hidden" name="showLastPage" id="showLastPage" />   <!-- 跳转到最后一页 -->
+	<input type="hidden" name="selectedObjectId" id="selectedObjectId" />   <!--   默认选中对象的Id -->
+</form>
+
+<table class="table" rel="storageList" layoutH="140">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody>
+		<#list pageMap.pageList as storage>
+		<#if storage.node==2>
+		<tr id="storageList${storage.id}" status="false"  objectId="${objectId!0}" order="${storage.rank!''}" oldOrder="${storage.rank!''}" target="id" trel="storageTree" rel="${storage.id}" crel="storageList" cTarget="ajax"   widths="420" heights="350" url="${base}/base/storage/list/${storage.id}">
+		<#else>
+		
+		<@shiro.hasPermission name='1-206-u'>
+		<tr id="storageList${storage.id}" status="2"  objectId="${objectId!0}" order="${storage.rank!''}" oldOrder="${storage.rank!''}" target="id" rel="${storage.id}"  crel="storageList" drel="storage_edit_${storage.id}" cTarget="dialog" title="修改" widths="420" heights="350" url="${base}/base/storage/edit/${storage.id}">
+        </@shiro.hasPermission>
+	    <@shiro.lacksPermission name='1-206-u'>
+	    <tr id="storageList${storage.id}" status="2"  objectId="${objectId!0}" order="${storage.rank!''}" oldOrder="${storage.rank!''}" target="id" rel="${storage.id}"  crel="storageList" drel="storage_edit_${storage.id}" title="修改">
+        </@shiro.lacksPermission>
+		</#if>
+			<td><a>${storage_index+1}</a><#if storage.node==2>..</#if></td>
+			<#list rowList as row>
+				<#assign columnObj = "" />
+				<#if row.code?? && ((row.code)?index_of(".")>-1)>
+					<#assign columnObj = (row.code)?substring(0,(row.code)?index_of(".")) />
+					<#assign columnParam = (row.code)?substring((row.code)?index_of(".")+1) />
+				<#else>
+					<#assign columnParam = row.code />
+				</#if>
+			
+				<#if row.code?? && 'status'==row.code>
+					<td id="status${storage.id}">
+						<#if storage.node?number == 1>
+							<#if storage.status ?? && storage.status?number == 2>启用</#if>
+							<#if storage.status ?? && storage.status?number == 1>停用</#if>
+						</#if>
+					</td>
+				<#else>
+					<#if columnObj?? && columnObj!="">
+						<td>${((storage[columnObj])[columnParam])!}</td>
+					<#else>
+						<td>${storage[columnParam]!}</td>
+					</#if>
+				</#if>
+			</#list>
+		</tr>
+		</#list>
+	</tbody>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+
+<div class="divider"></div>
+<div>
+    <@shiro.hasPermission name='1-206-a'>
+	<a class="button" href="${base}/base/storage/add/${supId!0}" href1="${base}/common/baseInfo/verifyBaseAddPrivs/${supId!0}-storage" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" rel="b_storage_add" target="dialog" width="420" height="360"><span>新增</span></a>
+	<#if isFreeVersion != "yes">
+	<a class="button" href="${base}/base/storage/copy/{id}" href1="${base}/common/baseInfo/verifyBaseAddPrivs/${supId!0}-storage" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="dialog" width="420" height="360"><span>复制新增</span></a>
+	<a class="button" href="${base}/base/storage/sort/{id}" href1="${base}/common/baseInfo/verifyBaseAddPrivs/{id}-storage-sort" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="dialog" width="420" height="360"><span>增加下级</span></a>
+	</#if>
+	</@shiro.hasPermission>
+	<@shiro.hasPermission name='1-206-u'>
+	<a class="button" href="${base}/base/storage/edit/{id}" target="dialog"  mask="true" width="420" height="360"><span>修改</span></a>
+	<a class="button" href="${base}/base/storage/delete/{id}" target="ajaxTodo"  callback="removeTreeAjaxTodo" title="数据删除后不能恢复，确认删除？"><span>删除</span></a>
+	
+	</@shiro.hasPermission>
+	<#if isFreeVersion != "yes">
+	<#if node?? && node == 1>
+		<a class="buttonDisabled" href="javascript:;"><span>列表</span></a>
+	<#else>
+		<a class="button" href="${base}/base/storage/line/${supId!0}" target="ajax" rel="storageList"><span>列表</span></a>
+	</#if>
+	</#if>
+	<a class="button" href="${base}/base/storage/toSearch" target="dialog" rel="b_storage_search"  mask="true" width="260" height="150"><span>查询</span></a>
+	<#if isFreeVersion != "yes">
+	<#if supId?? && supId!=0>
+		<a class="button" href="${base}/base/storage/list/${pSupId!0}-${supId!0}"  target="ajax" rel="storageList" trel="storageTree" nodeId="${pSupId!0}" ><span>上级</span></a>
+	<#else>
+		<a class="buttonDisabled" href="javascript:;"><span>上级</span></a>
+	</#if>
+	</#if>
+</div>
+<div style="float: right;">
+    <#if isFreeVersion != "yes">
+    <a class="button" href="${base}/base/storage/stopOrStart/{id}" isExec="{status}" warn="不能操作一类基础数据！" target="ajaxTodo"  callback="editStatus"><span>停用/启用</span> </a>
+	<a class="button" href="javascript:;"  target="tableRowSort" sort="up" rel="storageList" ><span>上移</span></a>
+	<a class="button" href="javascript:;"  target="tableRowSort" sort="down" rel="storageList" ><span>下移</span></a>
+	<a class="button" href="${base}/base/storage/saveRank" target="tableRowSortSave" rel="storageList" warn="没有排序变更"><span>排序保存</span></a>
+	</#if>
+	<#assign privs = '1-206-p'/>
+	<#assign href = '${base}/base/storage/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a>
+</div>

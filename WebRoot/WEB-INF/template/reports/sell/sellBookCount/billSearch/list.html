@@ -1,0 +1,94 @@
+<input type="hidden" id="projectBasePath" value="${base}"/>
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/book/search/page" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+	<input type="hidden" name="orderField" value="${orderField!'recodeDate'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    
+     <!-- ID用于树点击参数 -->
+	<input type="hidden" id="unit.id" name="unit.id" value="${unitId!'0'}"/>               <!-- 单位ID -->
+	<input type="hidden" id="staff.id" name="staff.id" value="${staffId!'0'}"/>            <!-- 职员ID -->
+	<input type="hidden" id="storage.id" name="storage.id" value="${storageId!'0'}"/>      <!-- 仓库ID -->
+	
+	<input type="hidden" id="unit.id" name="unit.fullName" value="${unitFullName!''}"/>               <!-- 单位ID -->
+	<input type="hidden" id="staff.id" name="staff.name" value="${staffFullName!''}"/>            <!-- 职员ID -->
+	<input type="hidden" id="storage.id" name="storage.fullName" value="${storageFullName!''}"/>      <!-- 仓库ID -->
+	
+	
+	<input type="hidden" id="startDate" name="startDate" value="${startDate!''}"/>         <!--开始日期  -->
+	<input type="hidden" id="endDate" name="endDate" value="${endDate!''}"/>               <!-- 结束日期 -->
+	<input type="hidden" id="aimDiv" name="aimDiv" value="${aimDiv!'all'}"/>               <!-- 过滤条件     all eq gt 下拉框改变赋值 -->
+	
+</form>
+<#include "/WEB-INF/template/common/columnConfig/tableTotalWidthLink.html"/>
+<table class="table" rel="${listID}" layoutH="230">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody id="reports_prdsellcount_body">
+		<#if pageMap??&&pageMap.pageList??>
+		<#list pageMap.pageList as obj>
+		<tr target="id" rel="${(obj.id)}" orderId="${(obj.id)}"  cTarget="openNavTab"  sameId="reports_prd_xs_detail_id">
+			<td><a>${obj_index+1+pageMap.limit}</a></td>
+			<#list rowList as row>
+			<#if row.code?? && 'recodeDate'==row.code>
+			<td><#if obj.recodeDate??>${(obj.recodeDate?string('yyyy-MM-dd HH:mm:ss'))}</#if></td>
+			<#elseif row.code?? && 'updateTime'==row.code>
+			<td>${(obj.updateTime?string('yyyy-MM-dd HH:mm:ss'))}</td>
+			<#elseif row.code?? && 'code'==row.code>
+			<td>${(obj.code)!''}</td>
+			<#elseif row.code?? && 'unitCode'==row.code>
+			<td>${(obj.unitCode)!''}</td>
+			<#elseif row.code?? && 'unitFullName'==row.code>
+			<td>${(obj.unitFullName)!''}</td>
+			<#elseif row.code?? && 'staffCode'==row.code>
+			<td>${(obj.staffCode)!''}</td>
+			<#elseif row.code?? && 'staffFullName'==row.code>
+			<td>${(obj.staffFullName)!''}</td>
+			<#elseif row.code?? && 'deliveryDate'==row.code>
+			<td><#if obj.deliveryDate??>${(obj.deliveryDate?string('yyyy-MM-dd'))}</#if></td>
+			<#elseif row.code?? && 'money'==row.code>
+			<td><#if obj.money??&&obj.money!=0>${(obj.money)!''}</#if></td>
+			<#elseif row.code?? && 'discountMoney'==row.code>
+			<td><#if obj.discountMoney??&&obj.discountMoney!=0>${(obj.discountMoney)!''}</#if></td>
+			<#elseif row.code?? && 'taxMoney'==row.code>
+			<td><#if obj.taxMoney??&&obj.taxMoney!=0>${(obj.taxMoney)!''}</#if></td>
+			<#elseif row.code?? && 'relStatus'==row.code>
+			<td>
+            <#if obj.relStatus==1>
+                                         未完成 
+            <#elseif obj.relStatus==2>
+                                         完成
+            <#elseif obj.relStatus==3>
+                                         强制完成
+            </#if>
+            </td>
+            <#elseif row.code?? && 'memo'==row.code>
+			<td>${(obj.memo)!''}</td>
+			</#if>
+			</#list>
+		</tr>
+		</#list>
+		</#if>
+	</tbody>
+	<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+
+	
+<div class="divider"></div>
+<div>
+    <a class="button" target="dialog" href="${base}/reports/book/toSearchDialog/" rel="prdSellCostSearchDialog" width="330" height="400" aimTitle="销售订单查询" aimUrl="${base}/reports/book/search/search" aimTabId="xs_sellBookSearch1"  aimDiv="${aimDiv}"><span>查询条件</span></a><!-- aimDiv值为all eq gt 下拉框改变赋值-->
+    <a class="button" href="${base}/sell/book/" target="navTab" title="销售订单" rel="sell_book_info"><span>新增</span></a>
+    <a class="button" href="${base}/sell/book/toEdit/{id}" href1="${base}/sell/book/toEditValidate/{id}" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="navTab" title="修改销售订单" rel="sell_book_info"><span>修改</span></a>
+    <a class="button" href="${base}/sell/book/delete/{id}" target="ajaxTodo" callback="navTabAjaxDone" title="数据删除后不能恢复，确认删除？"><span>删除</span></a>                                                         
+    <a class="button" href="${base}/sell/book/force/{id}" target="ajaxTodo" callback="navTabAjaxDone" title="订单完成后不能恢复，确认要强制完成吗？"><span>强制完成</span></a>
+    <a class="button" aimTitle="销售订单执行情况" aimTabId="xsdd_execute_detailView" aimUrl="${base}/reports/book/executeDetail/" onclick="getIdAndOpenNavTab(this,'reports_prdsellcount_body','pagerForm');"><span>执行情况</span></a>
+    <a id="reports_prd_xs_detail_id" class="button" href="${base}/sell/book/look/{id}" target="navTab" title="销售订单详情" rel="xs_book_lookView"><span>查看单据</span></a> 
+    <#--<a class="buttonDisabled" href="#"><span>订单复制</span></a>-->
+</div>
+<div style="float: right;">
+	<#assign privs = '4-63-419-p'/>
+	<#assign href = '${base}/reports/book/searchPrint'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

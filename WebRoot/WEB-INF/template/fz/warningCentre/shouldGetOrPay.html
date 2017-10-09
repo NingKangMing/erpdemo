@@ -1,0 +1,53 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/fz/warningCentre/shouldGetOrPay/${modelType}" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" />
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" />
+    <input type="hidden" name="modelType" value="${modelType}"/>
+</form>
+<table class="table" rel="warningList" layoutH="150">
+	<thead>
+		<tr>
+			<th width="80" align="center" >行号</th>
+			<th width="100" orderField="code" <#if orderField?? && 'code'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>单位编号</th>
+			<th width="130" orderField="fullName" <#if orderField?? && 'fullName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>单位全名</th>
+			<#if modelType?? && modelType == 'pay'>
+			<th width="100" orderField="totalPay" <#if orderField?? && 'totalPay'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>应付金额</th>
+			<th width="100" orderField="payMoneyLimit" <#if orderField?? && 'payMoneyLimit'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>应付上限</th>
+			<#else>
+			<th width="100" orderField="totalGet" <#if orderField?? && 'totalGet'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>应收金额</th>
+			<th width="100" orderField="getMoneyLimit" <#if orderField?? && 'getMoneyLimit'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>应收上限</th>
+			</#if>
+		</tr>
+	</thead>
+	<tbody id="reports_prdsellcount_body">
+		<#if pageMap??&&pageMap.pageList??>
+		<#list pageMap.pageList as obj>
+		<tr>
+			<td><a>${obj_index+1+pageMap.limit}</a></td>
+			<td>${obj.code!''}</td>
+			<td>${obj.fullName!''}</td>
+            <#if modelType?? && modelType == 'pay'>
+            <td>${obj.totalPay!''}</td>
+			<td>${obj.payMoneyLimit!''}</td>
+            <#else>
+            <td>${obj.totalGet!''}</td>
+			<td>${obj.getMoneyLimit!''}</td>
+            </#if>
+		</tr>
+		</#list>
+		</#if>
+	</tbody>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+
+	
+<div class="divider"></div>
+
+<div style="float: right;">
+     <#assign privs = '8-807-p'/>
+	<#assign href = '${base}/fz/warningCentre/shouldPrint'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

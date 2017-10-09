@@ -1,0 +1,105 @@
+<input type="hidden" id="projectBasePath" value="${base}"/>
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/book/detailSearch/page" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+	<input type="hidden" name="orderField" value="${orderField!'recodeDate'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <!-- ID用于树点击参数 -->
+	<input type="hidden" id="unit.id" name="unit.id" value="${unitId}"/>               <!-- 单位ID -->
+	<input type="hidden" id="product.id" name="product.id" value="${productId}"/>      <!-- 单位ID -->
+	<input type="hidden" id="staff.id" name="staff.id" value="${staffId}"/>            <!-- 职员ID -->
+	<input type="hidden" id="storage.id" name="storage.id" value="${storageId}"/>            <!-- 职员ID -->
+	
+	<input type="hidden" id="unit.id" name="unit.fullName" value="${unitFullName!''}"/>               <!-- 单位ID -->
+	<input type="hidden" id="product.id" name="product.fullName" value="${productFullName!''}"/>      <!-- ID -->
+	<input type="hidden" id="staff.id" name="staff.name" value="${staffFullName!''}"/>            <!-- 职员ID -->
+	<input type="hidden" id="storage.id" name="storage.fullName" value="${storageFullName!''}"/>      <!-- 仓库ID -->
+	
+	<input type="hidden" id="storage.id" name="storage.id" value="${storageId}"/>      <!-- 仓库ID -->
+	<input type="hidden" id="startDate" name="startDate" value="${startDate}"/>        <!--开始日期  -->
+	<input type="hidden" id="endDate" name="endDate" value="${endDate}"/>            <!-- 结束日期 -->
+	
+	<input type="hidden" name="whereComeDetail" value="other"> 
+</form>
+<#include "/WEB-INF/template/common/columnConfig/tableTotalWidthLink.html"/>
+<table class="table" rel="${listID}" layoutH="230">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody id="reports_prdsellcount_body">
+	    <#if pageMap??&&pageMap.pageList??>
+		<#list pageMap.pageList as obj>
+		<tr target="id" rel="${(obj.billId)}"  orderId="${(obj.billId)}" cTarget="openNavTab"  sameId="reports_prd_xs_detail_id">
+			<td><a>${obj_index+1+pageMap.limit}</a></td>
+			<#list rowList as row>
+			<#if row.code?? && 'recodeDate'==row.code>
+			<td>${(obj.recodeDate?string('yyyy-MM-dd hh:mm:ss'))}</td>
+			<#elseif row.code?? && 'billCode'==row.code>
+			<td>${(obj.billCode)!''}</td>
+			<#elseif row.code?? && 'productCode'==row.code>
+			<td>${(obj.productCode)!''}</td>
+			<#elseif row.code?? && 'productFullName'==row.code>
+			<td>${(obj.productFullName)!''}</td>
+			<#elseif row.code?? && 'unitCode'==row.code>
+			<td>${(obj.unitCode)!''}</td>
+			<#elseif row.code?? && 'unitFullName'==row.code>
+			<td>${(obj.unitFullName)!''}</td>
+			<#elseif row.code?? && 'staffCode'==row.code>
+			<td>${(obj.staffCode)!''}</td>
+			<#elseif row.code?? && 'staffFullName'==row.code>
+			<td>${(obj.staffFullName)!''}</td>
+			<#elseif row.code?? && 'storageCode'==row.code>
+			<td>${(obj.storageCode)!''}</td>
+			<#elseif row.code?? && 'storageFullName'==row.code>
+			<td>${(obj.storageFullName)!''}</td>
+			<#elseif row.code?? && 'deliveryDate'==row.code>
+			<td><#if obj.deliveryDate??>${(obj.deliveryDate?string('yyyy-MM-dd'))}</#if></td>
+			<#elseif row.code?? && 'basePrice'==row.code>
+			<td><#if obj.basePrice??&&obj.basePrice!=0>${(obj.basePrice)!''}</#if></td>
+			<#elseif row.code?? && 'baseAmount'==row.code>
+			<td><#if obj.baseAmount??&&obj.baseAmount!=0>${(obj.baseAmount)!''}</#if></td>
+			<#elseif row.code?? && 'taxMoney'==row.code>
+			<td><#if obj.taxMoney??&&obj.taxMoney!=0>${(obj.taxMoney)!''}</#if></td>
+			<#elseif row.code?? && 'untreatedAmount'==row.code>
+			<td><#if obj.untreatedAmount??&&obj.untreatedAmount!=0>${(obj.untreatedAmount)!''}</#if></td>
+			<#elseif row.code?? && 'untreatedMoney'==row.code>
+			<td><#if obj.untreatedMoney??&&obj.untreatedMoney!=0>${(obj.untreatedMoney)!''}</#if></td>
+			<#elseif row.code?? && 'arrivalAmount'==row.code>
+			<td><#if obj.arrivalAmount??&&obj.arrivalAmount!=0>${(obj.arrivalAmount)!''}</#if></td>
+			<#elseif row.code?? && 'arrivalMoney'==row.code>
+			<td><#if obj.arrivalMoney??&&obj.arrivalMoney!=0>${(obj.arrivalMoney)!''}</#if></td>
+			<#elseif row.code?? && 'forceAmount'==row.code>
+			<td><#if obj.forceAmount??&&obj.forceAmount!=0>${(obj.forceAmount)!''}</#if></td>
+			<#elseif row.code?? && 'forceMoney'==row.code>
+			<td><#if obj.forceMoney??&&obj.forceMoney!=0>${(obj.forceMoney)!''}</#if></td>
+			<#elseif row.code?? && 'replenishAmount'==row.code>
+			<td><#if obj.replenishAmount??&&obj.replenishAmount!=0>${(obj.replenishAmount)!''}</#if></td>
+			<#elseif row.code?? && 'replenishMoney'==row.code>
+			<td><#if obj.replenishMoney??&&obj.replenishMoney!=0>${(obj.replenishMoney)!''}</#if></td>
+			<#elseif row.code?? && 'presentAmount'==row.code>
+			<td><#if obj.presentAmount??&&obj.presentAmount!=0>${(obj.presentAmount)!''}</#if></td>
+			<#elseif row.code?? && 'remark'==row.code>
+			<td>${(obj.remark)!''}</td>
+			<#elseif row.code?? && 'memo'==row.code>
+			<td>${(obj.memo)!''}</td>
+			</#if>
+			</#list>
+		</tr>
+		</#list>
+		</#if>
+	</tbody>
+	<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+
+	
+<div class="divider"></div>
+<div>
+    <a class="button" target="dialog" href="${base}/reports/book/toSearchDetail/" rel="sellbookDetailSearchDialog" width="330" height="400" aimTitle="销售订单明细查询" aimUrl="${base}/reports/book/detailSearch/search" aimTabId="sellbookDetailCountView"><span>查询条件</span></a><!-- aimDiv值为all eq gt 下拉框改变赋值-->
+    <a id="reports_prd_xs_detail_id" class="button" href="${base}/sell/book/look/{id}" target="navTab" title="销售订单详情" rel="xs_book_lookView"><span>查看单据</span></a>
+</div>
+<div style="float: right;">
+	<#assign privs = '4-63-421-p'/>
+	<#assign href = '${base}/reports/book/detailPrint'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

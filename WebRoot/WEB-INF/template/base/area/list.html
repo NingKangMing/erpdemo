@@ -1,0 +1,101 @@
+<form id="pagerForm" onsubmit="return divSearch(this, 'areaList');" action="${base}/base/area/${goList!'list'}/${supId!0}" method="post">
+	<input type="hidden" name="pageNum" value="${pageMap.pageNum}" />
+	<input type="hidden" name="numPerPage" value="${pageMap.numPerPage}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+	
+	<!-- 保存条件 -->
+	<input type="hidden" id="b_area_term_par" name="screenPara" value="${screenPara!}"/>
+	<input type="hidden" id="b_area_term_val" name="screenVal" value="${screenVal!}"/>
+	<input type="hidden" id="b_area_term_scope" name="scope" value="${scope!'all'}"/>
+	<input type="hidden" id="b_area_term_supId" name="supId" value="${supId!0}"/>
+	<input type="hidden" id="b_area_term_node" name="node" value="${node!0}"/>
+	
+	<input type="hidden" name="showLastPage" id="showLastPage" />   <!-- 跳转到最后一页 -->
+	<input type="hidden" name="selectedObjectId" id="selectedObjectId" />   <!--   默认选中对象的Id -->
+	
+</form>
+
+<table class="table" rel="areaList" layoutH="140">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody>
+		<#list pageMap.pageList as area>
+		<#if area.node==2>
+		<tr objectId="${objectId!0}" status="false" order="${area.rank!''}" oldOrder="${area.rank!''}" target="id" trel="areaTree" rel="${area.id}"  crel="areaList"  cTarget="ajax"  url="${base}/base/area/list/${area.id}">
+		<#else>
+		<@shiro.hasPermission name='1-21-202-u'>
+		<tr  objectId="${objectId!0}" status="2" order="${area.rank!''}" oldOrder="${area.rank!''}" target="id" rel="${area.id}"  crel="areaList" drel="area_edit_${area.id}" title="修改" cTarget="dialog"  widths="400" heights="350" url="${base}/base/area/edit/${area.id}" >
+	    </@shiro.hasPermission>
+		<@shiro.lacksPermission name='1-21-202-u'>
+		<tr objectId="${objectId!0}" status="2" order="${area.rank!''}" oldOrder="${area.rank!''}" target="id" rel="${area.id}"  crel="areaList" drel="area_edit_${area.id}" title="修改">
+	    </@shiro.lacksPermission>
+		</#if>
+			<td><a>${area_index+1+pageMap.limit}</a><#if area.node==2>..</#if></td>
+			<#list rowList as row>
+				<#assign columnObj = "" />
+				<#if row.code?? && ((row.code)?index_of(".")>-1)>
+					<#assign columnObj = (row.code)?substring(0,(row.code)?index_of(".")) />
+					<#assign columnParam = (row.code)?substring((row.code)?index_of(".")+1) />
+				<#else>
+					<#assign columnParam = row.code />
+				</#if>
+			
+				<#if row.code?? && 'status'==row.code>
+					<td id="status${area.id}">
+						<#if area.node?number == 1>
+							<#if area.status?number == 2>启用</#if>
+							<#if area.status?number == 1>停用</#if>
+						</#if>
+					</td>
+				<#else>
+					<#if columnObj?? && columnObj!="">
+						<td>${((area[columnObj])[columnParam])!}</td>
+					<#else>
+						<td>${area[columnParam]!}</td>
+					</#if>
+				</#if>
+			</#list>
+		</tr>
+		</#list>
+	</tbody>
+</table>
+
+<#include "/WEB-INF/template/unitl/paging.html"/>
+	
+<div class="divider"></div>
+<div>
+    <@shiro.hasPermission name='1-21-202-a'>
+	<a class="button" href="${base}/base/area/add/${supId!0}" href1="${base}/common/baseInfo/verifyBaseAddPrivs/${supId!0}-area" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="dialog" rel="b_area_add" width="410" height="350"><span>新增</span></a>
+	<a class="button" href="${base}/base/area/copy/{id}" href1="${base}/common/baseInfo/verifyBaseAddPrivs/${supId!0}-area" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="dialog" width="410" height="350"><span>复制新增</span></a>
+	<a class="button" href="${base}/base/area/sort/{id}" href1="${base}/common/baseInfo/verifyBaseAddPrivs/{id}-area-sort" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="dialog" width="420" height="360"><span>增加下级</span></a>
+	</@shiro.hasPermission>
+	<@shiro.hasPermission name='1-21-202-u'>
+	<a class="button" href="${base}/base/area/edit/{id}" target="dialog"  mask="true" width="410" height="350"><span>修改</span>	</a>
+	<a class="button" href="${base}/base/area/delete/{id}" target="ajaxTodo" callback="removeTreeAjaxTodo" title="数据删除后不能恢复，确认删除？"><span>删除</span></a>
+	</@shiro.hasPermission>
+	
+	<#if node?? && node == 1>
+		<a class="buttonDisabled" href="javascript:;"><span>列表</span></a>
+	<#else>
+		<a class="button" href="${base}/base/area/line/${supId!0}" target="ajax" rel="areaList"><span>列表</span></a>
+	</#if>
+	<a class="button" href="${base}/base/area/toSearch" target="dialog" rel="b_area_search"  mask="true" width="260" height="150"><span>查询</span></a>
+	<#if supId?? && supId!=0>
+		<a class="button" href="${base}/base/area/list/${pSupId!0}-${supId!0}"  target="ajax" rel="areaList" trel="areaTree" nodeId="${pSupId!0}" ><span>上级</span></a>
+	<#else>
+		<a class="buttonDisabled" href="javascript:;"><span>上级</span></a>
+	</#if>
+</div>
+<div style="float: right;">
+    
+    <a class="button" href="${base}/base/area/stopOrStart/{id}" isExec="{status}" warn="不能操作一类基础数据！"  target="ajaxTodo"  callback="editStatus"><span>停用/启用</span></a>
+	<a class="button" href="javascript:;"  target="tableRowSort" sort="up" rel="areaList" ><span>上移</span></a>
+	<a class="button" href="javascript:;"  target="tableRowSort" sort="down" rel="areaList" ><span>下移</span></a>
+	<a class="button" href="${base}/base/area/saveRank" target="tableRowSortSave" rel="areaList" warn="没有排序变更"><span>排序保存</span></a>
+	<#assign privs = '1-21-202-p'/>
+	<#assign href = '${base}/base/area/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>
+

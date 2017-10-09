@@ -1,0 +1,47 @@
+<div class="pageContent">
+   <form action="${base}/common/searchDialog/go" method="post" class="pageForm required-validate" enctype="text/plain" onsubmit="return validateCallback(this,aioDialogPostCallBreak)">
+      <input type="hidden" id="aimTabId" name="aimTabId"  value=""/>
+      <input type="hidden" id="aimUrl"   name="aimUrl"   value=""/>
+      <input type="hidden" id="aimTitle" name="aimTitle"  value=""/>
+      <input type="hidden" id=aimDiv name="aimDiv" value="">
+      
+      <!-- 动态需要的参数 -->
+      <#if paraMap?exists>
+          <#list paraMap.keySet() as k>
+          	<input type="hidden" id="${k}" name="${k}" value="${paraMap.get(k)}"/>
+          </#list>
+      </#if>
+      
+      <div layoutH="35">
+	       <fieldset>
+			    <legend>选择条件</legend>
+				   <table  height="100px;">
+				   <#include "/WEB-INF/template/common/base/reports/storageReportLink.html"/>
+					   	<#--<tr>
+					   		<td>仓库全名：</td>
+					   		<td>
+					   			<input type="hidden" id="storageId" name="storage.id" value=""/>
+					   			<input type="hidden" name="storage.pids" lookName="storage" lookId="storage.id" />
+					     	    <input name="storage.fullName" lookName="storage" lookId="storage.id" />
+						        <a class="btnLook" id="storageLook" btnPattern="selectAll" href="${base}/base/storage/dialogList" warn="仓库" lookupgroup="storage" lookuppk="id" width="600" height="410">仓库</a>
+						   	</td>
+					   	</tr>-->
+					   	<tr>
+					   		<td style="text-align: right;">提前：</td>
+					   		<td>
+					   			<input onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" name="alertDay" type="text" value="1"/>天报警
+				   			</td>
+					   	</tr>
+				   </table>
+		   </fieldset>
+	 </div>
+	 <!--提交按钮  -->
+	 <div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+		</ul>
+	 </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

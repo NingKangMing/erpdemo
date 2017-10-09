@@ -1,0 +1,28 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/sys/backup/recoverPage">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+</form>
+<table class="table" pattern="dialog" rel="${listID}" targetType="dialog" layoutH="280">
+	<thead>
+		<tr>
+			<th width="50" align="center">行号</th>  
+			<th width="100" align="center">账套名称</th>
+			<th width="100" align="center">数据库名称</th>
+			<th width="90" align="center">备份文件名</th>
+			<th width="130" align="center">备份时间</th>
+		</tr>
+	</thead>
+	<tbody>
+		<#list pageMap.pageList as product>
+		<tr target="id"  rel="${product.file_name}" isSelect="true">
+			<td><a>${product_index+1+pageMap.limit}</a></td>
+			<td>${product.whichDbName}</td>
+			<td>${product.dataBaseName}</td>
+			<td>${product.file_name}</td>
+			<td>${(product.update_time?string('yyyy-MM-dd HH:mm:ss'))}</td>
+		</tr>
+	    </#list>
+	</tbody>
+</table>
+<#include "/WEB-INF/template/unitl/dialogpage.html"/>
+

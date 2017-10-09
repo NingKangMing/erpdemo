@@ -1,0 +1,31 @@
+<div class="pageContent">
+	<h2 class="contentTitle">延期设定</h2>
+	<form action="${base}/reports/finance/arap/overPayGetMoney/delayWarn/" class="tableForm" enctype="text/plain" method="post" onsubmit="return validateCallback(this,dialogAjaxDone)">
+		
+		<input type="hidden" name="modelType" value="${modelType!''}"/>             
+		<input type="hidden" name="billId" value="${billId!''}"/>             
+		
+		<div class="pageFormContent" layoutH="100">
+			<fieldset>
+				<legend></legend>
+				<table style="margin:0px auto;">
+					<tr height="30px;">
+						<td style="width: 90px;"><input type="radio" checked="checked" name="delayDay" value="delayDay"/>延期</td>
+						<td><input type="text" name="days"/></td>
+				    </tr>
+					<tr height="35px;">
+						<td style="width: 90px;"><input type="radio" name="delayDay" value="toDelayDay"/>延期到</td>
+						<td><input class="date"  readonly="readonly" type="text" name="date" /></td>
+					</tr>
+				</table>
+			</fieldset>
+			<div style="margin-left: 70px; margin-top: 15px; color: red;">当前操作会影响所选条目</div>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>

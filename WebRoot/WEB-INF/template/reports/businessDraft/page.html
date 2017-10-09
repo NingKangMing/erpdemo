@@ -1,0 +1,24 @@
+<div class="pageContent" id="bb_businessDraft" >
+	<div class="textContent center">
+		    <div>
+		         <span style="font-size: 18px;line-height: 30px;">查看业务草稿</span>
+		     </div>
+		     <div style="margin-top: 25px;">
+		     	<span>查询日期：${startTime!''}&nbsp;&nbsp;至&nbsp;&nbsp;${endTime!''}</span>
+		     	<div style="float: right;">
+		     		单据类型：
+     				<select name="billType" onchange="javascript:selectPost(this,'businessDraftList','selectVal1')">
+     					<option value="0">[所有单据]</option>
+     					<#list billTypes as billType>
+     						<option value="${billType.id!''}" <#if billTypeId?? && billTypeId == billType.id >selected="selected"</#if> >${billType.name!''}</option>
+     					</#list>
+     				</select>
+     				<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+				</div>
+		     </div>
+	</div>
+	
+	<div id="businessDraftList">
+		<#include "list.html"/>
+	</div>
+</div>

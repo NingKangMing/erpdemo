@@ -1,0 +1,106 @@
+
+<div class="pageContent">
+    <form action="${base}/fz/pricesManage/prices" class="tableForm pageForm required-validate" enctype="text/plain" method="post" 
+        onsubmit="return validateCallback(this,aioDialogAjaxDone);">
+        <input type="hidden" name="selectUnitId" value="${selectUnitId!1}"/>
+        <input type="hidden" name="productId" value="${productId!0}"/>
+         <h3 class="contentTitle">新价格输入</h3>
+         <div class="divider"></div>
+        <div>
+        <table class="table" layoutH="100">
+            <thead>
+				<tr>
+					<th width="50px">
+						行号
+					</th>
+					<th width="100px"  align="center">
+						价格类型
+					</th>
+					<th width="150px"  align="center">
+						单价
+					</th>
+				</tr>
+	      </thead>
+	      <tbody>
+	         
+	             <tr>
+		             <td>
+		                  1
+		                  <input type="hidden" id="retailPrice" name="retailPrice" cname="retailPrice" value="${(productUnit.retailPrice)!}"/>
+		             </td>
+		             <td>零售价</td>
+		             <td onclick="cutTdInput(this,'retailPrice','number',20)"  cname="retailPrice">
+		                  ${(productUnit.retailPrice)!}
+		             </td>
+		         </tr>
+		          <tr>
+		             <td>
+		                  2
+		                  <input type="hidden" id="defaultPrice1" name="defaultPrice1" cname="defaultPrice1" value="${(productUnit.defaultPrice1)!}"/>
+		             </td>
+		             <td>预设售价1</td>
+		             <td onclick="cutTdInput(this,'defaultPrice1','number',20)"  cname="defaultPrice1">
+		                  ${(productUnit.defaultPrice1)!}
+		             </td>
+		         </tr>
+	             <tr>
+		             <td>
+		                  3
+		                  <input type="hidden" id="defaultPrice2" name="defaultPrice2" cname="defaultPrice2" value="${(productUnit.defaultPrice2)!}"/>
+		             </td>
+		             <td>预设售价2</td>
+		             <td onclick="cutTdInput(this,'defaultPrice2','number',20)"  cname="defaultPrice2">
+		                  ${(productUnit.defaultPrice2)!}
+		             </td>
+		         </tr>
+		          <tr>
+		             <td>
+		                  4
+		                  <input type="hidden" id="defaultPrice3" name="defaultPrice3" cname="defaultPrice3" value="${(productUnit.defaultPrice3)!}"/>
+		             </td>
+		             <td>预设售价3</td>
+		             <td onclick="cutTdInput(this,'defaultPrice3','number',20)"  cname="defaultPrice3">
+		                  ${(productUnit.defaultPrice3)!}
+		             </td>
+		         </tr>
+		         <tr>
+		             <td>
+		                  5
+		                  <input type="hidden" id="lastCostPrice" name="lastCostPrice" cname="lastCostPrice" value="${(priceDiscountTrack.lastCostPrice)!}"/>
+		             </td>
+		             <td>最近进价</td>
+		             <@shiro.hasPermission name='1101-s'>
+		               <td onclick="cutTdInput(this,'lastCostPrice','number',20)"  cname="lastCostPrice" >
+		                 ${(priceDiscountTrack.lastCostPrice)!}
+		                </td>
+					  </@shiro.hasPermission>
+					  <@shiro.lacksPermission name='1101-s'>
+					    <td>
+						***
+						</td>
+					  </@shiro.lacksPermission>
+		             
+		         </tr>
+		         <tr>
+		             <td>
+		                  6
+		                  <input type="hidden" id="minSellPrice" name="minSellPrice" cname="minSellPrice" value="${(minSellPrice.minSellPrice)!}"/>
+		             </td>
+		             <td>最低售价</td>
+		             <td onclick="cutTdInput(this,'minSellPrice','number',20)"  cname="minSellPrice">
+		                  ${(minSellPrice.minSellPrice)!}
+		             </td>
+		         </tr>
+	      </tbody>
+        </table>
+        </div>
+        <div class="formBar">
+			<ul>
+				<li><a class="button" target="submit"><span>确定</span></a></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+			</ul>
+			
+		
+   </div>
+    </form>
+</div>

@@ -1,0 +1,669 @@
+<div class="pageContent">
+   <input type="hidden" id="whichCallBack" value="sellBarter"/>
+   <input type="hidden" id="billType" value="in"/><!-- 用于多表格，确认选中的哪个表格 -->
+   <input id="basePathId" type="hidden" value="${base}"/><!-- 用于手工指定法    弹出窗体url -->
+   <form id="sellBarterBillForm" class="tableForm pageForm" enctype="text/plain" method="post" action="${base}/sell/barter/add" onsubmit="return validateCallback(this, navTabAjaxDoneDialog)">
+	<input type="hidden" id="needComfirm" name="needComfirm" value="true"/>
+	<input type="hidden" id="confirmAllow" name="confirmAllow" value="true"/>
+	<input type="hidden" id="unPriceConfim" name="unPriceConfim" value="123"/><!-- 校验价格 -->
+	<input type="hidden" name="sellBarterBill.id" value="${(bill.id)!}"/>
+	<input type="hidden" name="draftId" value="${draftId!0}"/>
+	<input type="hidden" name="sellBarterBill.codeIncrease" value="${(bill.codeIncrease)!}"/>
+	<input type="hidden" id="billCode"  name="billCode" value="${bill.code!''}"/> 
+	<input type="hidden" id="autoPost" name="autoPost" value="${autoPost!}"/><!-- 批量过账时自动提交 -->
+	<div id="hasFujianClassId"  <#if orderFuJianIds?length gt 0>class="textContent center fujianClass"<#else>class="textContent center"</#if>>
+	      <div>
+	         <span style="font-size: 18px;">销售换货单</span>
+			 <span style="float: right;">
+		                 录单日期
+		     <input id="recodeTime" type="text" class="date required" name="sellBarterBill.recodeDate" dateFmt="yyyy-MM-dd HH:mm:ss" value="<#if bill.recodeDate??>${(bill.recodeDate)?string("yyyy-MM-dd HH:mm:ss")}</#if>" hasClear="no" readonly="readonly"/>
+		                单据编号
+		    <input id="showBillCode" class="line required textInput" type="text" style="width: 200px" name="sellBarterBill.code" value="${(bill.code)!}" maxlength="100" <#if codeAllowEdit?? && codeAllowEdit=="1">readonly="readonly"</#if>/>
+		    </span>
+	     </div>
+	     <div>
+	                           往来单位
+	        <input type="hidden" id="unitId" name="unit.id" value="${(bill.getBillUnit(session.loginConfigId).id)!}"/>
+	        <input type="hidden" name="unit.fullName" value="${(bill.getBillUnit(session.loginConfigId).fullName)!}"/>
+	        <input class="line required textInput enter" type="text" name="unit.fullName" value="${(bill.getBillUnit(session.loginConfigId).fullName)!}"/>
+	        <a class="btnLook" id="unitLook" backParam="outAllowMoney" btnPattern="optionAdd" href="${base}/base/unit/option/${(bill.getBillUnit(session.loginConfigId).id)!0}" module="navTab" warn="单位" lookupgroup="unit" type="post" lookuppk="id" width="600" height="410">单位</a>
+	                           经手人 
+	        <input type="hidden" name="staff.id" value="${(bill.getBillStaff(session.loginConfigId).id)!}"/>
+	        <input type="hidden" name="staff.name" value="${(bill.getBillStaff(session.loginConfigId).name)!}"/>
+
+	        <#if notEditStaff?? && notEditStaff==true>
+	        	<input class="line" readonly="readonly" type="text" name="staff.name" value="${(bill.getBillStaff(session.loginConfigId).name)!}"/>
+	        <#else>
+		        <input class="line enter" type="text" name="staff.name" id="staffName" value="${(bill.getBillStaff(session.loginConfigId).name)!}"/>
+		        <a class="btnLook" id="staffLook" type="POST" rel="staffLookDialog"  btnPattern="optionAdd" href="${base}/base/staff/dialogChild/${(bill.billStaff.supId)!0}-${(bill.billStaff.id)!0}" module="navTab" warn="员工" lookupgroup="staff" lookuppk="id" width="600" height="410">职员</a>
+	        </#if>                
+	                        部门    <input type="hidden" id="departmentId" name="department.id" value="${(bill.getBillDepartment(session.loginConfigId).id)!}"/>
+	             <input type="text" class="line"  name="department.fullName" value="${(bill.getBillDepartment(session.loginConfigId).fullName)!}" lookName="department" lookId="department.id"/>    
+	             <a class="btnLook" id="departmentLook" btnPattern="optionAdd" type="POST" href="${base}/base/department/option" warn="部门" lookupgroup="department" lookuppk="id" width="500" height="450">部门</a>       
+	         <span style="margin-left: 60px; color: red;">允许换货金额：<label id="outAllowMoney">${allowMoneys!0}</label></span> 
+	     </div>
+	     <div>
+	                         换入 仓库
+	        <input type="hidden" id="inStorageCode" name="inStorage.code" value="${(bill.getBillInStorage(session.loginConfigId).code)!}"/>
+	        <input type="hidden" id="inStorageId" name="inStorage.id" value="${(bill.getBillInStorage(session.loginConfigId).id)!}"/>
+     	    <input class="line textInput" id="inStorageName" name="inStorage.fullName" value="${(bill.getBillInStorage(session.loginConfigId).fullName)!}"  lookName="inStorage" lookId="inStorage.id"/>
+	        <a class="btnLook" id="inStorageLook" type="POST" btnPattern="optionAdd" href="${base}/base/storage/dialogList" module="navTab" warn="仓库" lookupgroup="inStorage" lookuppk="id" width="600" height="410">仓库</a>
+	                    换出 仓库
+	        <input type="hidden" id="outStorageCode" name="outStorage.code" value="${(bill.getBillOutStorage(session.loginConfigId).code)!}"/>
+	        <input type="hidden" id="outStorageId" name="outStorage.id" value="${(bill.getBillOutStorage(session.loginConfigId).id)!}"/>
+     	    <input class="line textInput" id="outStorageName" name="outStorage.fullName" value="${(bill.getBillOutStorage(session.loginConfigId).fullName)!}"  lookName="outStorage" lookId="outStorage.id"/>
+	        <a class="btnLook" id="outStorageLook" type="POST" btnPattern="optionAdd" href="${base}/base/storage/dialogList" module="navTab" warn="仓库" lookupgroup="outStorage" lookuppk="id" width="600" height="410">仓库</a>
+	                          摘要
+	        <input style="width: 250px;" class="line" type="text" name="sellBarterBill.remark" value="${(bill.remark)!}" maxlength="500"/>
+	                          附加说明
+	        <input style="width: 250px;" class="line" type="text" name="sellBarterBill.memo" value="${(bill.memo)!}" maxlength="500"/>
+	       <#include "/WEB-INF/template/common/columnConfig/billRowConfigLink.html"/>
+	        <div style="float: right;">
+	          <!--<img onclick="productMerge(this);" title="商品合并" bodyid="sellBarterbody" src="${base}/img/bill/merge.jpg" alt="商品合并">
+	          --><img style="margin-top: 5px;" onclick="openOrderFujianDialog('${base}','${tableId}','1','${(bill.id)!}');" title="单据附件" src="${base}/img/bill/fujian.jpg" alt="单据附件">
+	             <input type="hidden" id="orderFuJianIds" name="orderFuJianIds" value="${orderFuJianIds!}"/>
+	        </div>   
+	     </div>
+	</div>
+	<div class="divider"></div>
+	<div class="pageContent" layoutH="175">
+	   <#assign showWidth = 0/>
+	   <#list rowList as row>
+	     <#if row.width??>
+	      <#assign showWidth = showWidth+row.width/>
+	     </#if>
+	   </#list>
+	   <table class="table" model="order" layoutH="555" width="${showWidth!}px">
+	        <thead>
+			 <tr>
+				<th width="50px">
+					行号
+				</th>
+				<#list rowList as row>
+				   <th align="center" width="${(row.width)!100}px">
+				     <#if row.code?? && 'code'==row.code || 'fullName'==row.code>
+				                       换入 ${(row.showName)!(row.name)!}
+				     <#else>
+				         ${(row.showName)!(row.name)!}
+				     </#if>
+					
+				   </th>
+				</#list>
+				<th width="50px">
+				   <a title="添加一行" class="btnAdd" target="addTr" href="javascript:void(0);" rel="sellBarterInbody"></a>
+				</th>
+			</tr>
+		  </thead>
+		  <tbody id="sellBarterInbody" preDataName="sellBarterInDetail" type="in">
+		     <#include "/WEB-INF/template/common/columnConfig/costLookConfigLink.html"/>
+		     <#list detailInList as detail>
+		     <tr>
+		       <td>${detail_index+1}</td>
+		      <#list rowList as row>
+		       <#if row.code?? && 'code'==row.code>
+		       <!-- 商品编号 -->
+		       <td cTarget="dialog"  title="商品" warn="商品" billType="2" unitId="unitId" storageId="inStorageId" productId="productId" enterSearch="true" productSupId="supId" searchUrl="${base}/stock/stock/orderOneRecord/" editUrl="${base}/stock/stock/orderDialogEdit/" url="${base}/stock/stock/orderDialog/" rel="b_product_dialog" dwidth="680" dheight="450" type="text" requiredData="not"  onBlur="objDelOrClear(this,'code');" cname="code">
+		             ${(detail.product.code)!}
+		       </td>
+		       <#elseif row.code?? && 'fullName'==row.code>
+		       <!-- 商品名称 -->
+		       <td cTarget="dialog"  title="商品" warn="商品" billType="2" unitId="unitId" storageId="inStorageId" productId="productId" enterSearch="true" productSupId="supId" searchUrl="${base}/stock/stock/orderOneRecord/" editUrl="${base}/stock/stock/orderDialogEdit/" url="${base}/stock/stock/orderDialog/" rel="b_product_dialog" dwidth="680" dheight="450" type="text" requiredData="not"  onBlur="objDelOrClear(this,'fullName');" cname="fullName">
+		            ${(detail.product.fullName)!}
+		       </td>
+		       
+		       <#elseif row.code?? && 'smallName'==row.code>
+		       <!-- 商品简称 -->
+		       <td type="text"  validateAttr="" readonly="readonly" maxlength="50" cname="smallName">${(detail.product.smallName)!}</td>
+		       <#elseif row.code?? && 'spell'==row.code>
+		       <!-- 商品拼音 -->
+		       <td type="text"  validateAttr="" readonly="readonly" maxlength="50" cname="spell">${(detail.product.spell)!}</td>
+		       <#elseif row.code?? && 'standard'==row.code>
+		       <!-- 规格 -->
+		       <td type="text"  validateAttr="" readonly="readonly" maxlength="50" cname="standard">${(detail.product.standard)!}</td>
+		       <#elseif row.code?? && 'model'==row.code>
+		       <!-- 型号 -->
+		       <td type="text"  validateAttr="" readonly="readonly" maxlength="50" cname="model">${(detail.product.model)!}</td>
+		       <#elseif row.code?? && 'field'==row.code>
+		       <!-- 产地 -->
+		       <td type="text"  validateAttr="" readonly="readonly" maxlength="50" cname="field">${(detail.product.field)!}</td>
+		       <#elseif row.code?? && 'savePath'==row.code>
+		       <!-- 图片 -->
+		       <td type="text"  validateAttr="" readonly="readonly" cname="savePath">
+		        	<#if (detail.product.savePath)??>
+					    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(detail.product.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(detail.product.savePath)!}"  width="20px" height="20px"/>
+		            </#if>
+		       </td>
+		        <#elseif row.code?? && 'storageCode'==row.code>
+		        <!-- 仓库编号 -->
+		       <td cname="storageCode" validateAttr=""  maxlength="50" onBlur="objDelOrClear(this,'storageCode')" cTarget="dialog" hasDialog="dialogNotNull"  title="仓库" warn="仓库" storageSupId="storageSupId" productId="productId"  storageId="storageId" searchUrl="${base}/stock/stock/storageOneRecord/" editUrl="${base}/stock/stock/storageDialogEdit/" url="${base}/stock/stock/storageDialog/toDialog" rel="cc_storage_dialog" dwidth="600" dheight="450">
+		           ${(detail.storage.code)!}
+		       </td>
+		       <#elseif row.code?? && 'storageName'==row.code>
+		       <!-- 仓库全名-->
+		       <td cname="storageFullName" validateAttr=""  maxlength="50" onBlur="objDelOrClear(this,'storageFullName')" cTarget="dialog" hasDialog="dialogNotNull"  title="仓库" warn="仓库" storageSupId="storageSupId" productId="productId"  storageId="storageId" searchUrl="${base}/stock/stock/storageOneRecord/" editUrl="${base}/stock/stock/storageDialogEdit/" url="${base}/stock/stock/storageDialog/toDialog" rel="cc_storage_dialog" dwidth="600" dheight="450">
+		           ${(detail.storage.fullName)!}
+		       </td>
+		       <#elseif row.code?? && 'unit'==row.code>
+		       <!-- 单位 -->
+		       <td cTarget="dialog" hasDialog="dialogNotNull" billType="2" unitId="unitId" productId="productId" title="单位" rel="b_product_dialog"  url="${base}/base/product/calculateUnit/" dwidth="300" dheight="200" type="text" requiredData="not" readonly="readonly"  cname="baseUnit">
+		            ${(detail.selectUnit)!}
+		       </td>
+		       <#elseif row.code?? && 'helpUnit'==row.code>
+		       <!-- 辅助单位 -->
+		       <td type="text"  readonly="readonly"  cname="assistUnit" >${(detail.product.assistUnit)!}</td>
+		       <#elseif row.code?? && 'produceDate'==row.code>
+		       <!-- 生产日期 -->
+		       <td requiredData="need" type="text" validateAttr="dateISO"  cname="produceDate" needEndDate="yes"><#if detail.produceDate??>${(detail.produceDate)?string("yyyy-MM-dd")}</#if></td>
+		       <#elseif row.code?? && 'produceEndDate'==row.code>
+		       <!-- 结束日期 -->
+		       <td requiredData="need" type="text" validateAttr="dateISO"  cname="produceEndDate" where="abc"></td>
+			       <#if detail.produceEndDate??>${(detail.produceEndDate)?string("yyyy-MM-dd")}</#if>
+		       <#elseif row.code?? && 'batch'==row.code>
+		       <!-- 批号 -->
+		       <td cname="batch" validateAttr="" requiredData="need"  maxlength="50" cTarget="dialog" tbodyId="sellBarterInbody" manSel="true"  totalStorageId="inStorageId">${(detail.batch)!}</td>
+		       <#elseif row.code?? && 'helpAmount'==row.code>
+		       <!-- 辅助数量 -->
+		       <td type="text" readonly="readonly" cname="helpAmount">${(detail.helpAmount)!}</td>
+		       <#elseif row.code?? && 'amount'==row.code>
+		       <!-- 数量 -->
+		       <td cTarget="dialog" hasDialog="dialogNotNull" productId="productId" baseUnit="selectUnitId" title="数量" rel="b_product_dialog"  url="${base}/base/product/recordAmount/" dwidth="350" dheight="200" type="text" validateAttr="number" cname="amount" requiredData="need" maxlength="20" onBlur="amountPriceDiscountChange(this)">
+		           ${(detail.amount)!}
+		       </td>
+		       <#elseif row.code?? && 'baseAmount'==row.code>
+		       <!-- 基本数量-->
+		       <td type="text"  cname="baseAmount" readonly="readonly">${(detail.getOtherAmount(1))!} ${(detail.product.calculateUnit1)!}</td>
+		       <#elseif row.code?? && 'baseAmount1'==row.code>
+		       <!-- 辅助数量1 -->
+		       <td type="text"  cname="baseAmount1" readonly="readonly">${(detail.getOtherAmount(2))!} ${(detail.product.calculateUnit2)!}</td>
+		       <#elseif row.code?? && 'baseAmount2'==row.code>
+		       <!-- 辅助数量2 -->
+		       <td type="text"  cname="baseAmount2" readonly="readonly">${(detail.getOtherAmount(3))!} ${(detail.product.calculateUnit3)!}</td>
+		       <#elseif row.code?? && 'price'==row.code>
+		       <!-- 单价 -->
+		       <td cTarget="dialog"  hasDialog="dialogNotNull" storageId="inStorageId" productId="productId" baseUnit="selectUnitId" title="请选择价格" rel="selectPricesDialog"  url="${base}/stock/stock/getProductPrics/" dwidth="300" dheight="280" type="text" requiredData="need" validateAttr="number" cname="price" maxlength="20" onBlur="amountPriceDiscountChange(this)">
+		         ${(detail.price)!}
+		       </td>
+		       <#elseif row.code?? && 'money'==row.code>
+		       <!-- 金额 -->
+		       <td type="text"  requiredData="need" validateAttr="number" cname="money" maxlength="20" onBlur="moneyChange(this)">
+		          ${(detail.money)!}
+		       </td>
+		       <#elseif row.code?? && 'discount'==row.code>
+		       <!-- 折扣 -->
+		       <td type="text" requiredData="need" validateAttr="number" cname="discount" maxlength="20" onBlur="amountPriceDiscountChange(this)">${(detail.discount)!}</td>
+		       <#elseif row.code?? && 'discountPrice'==row.code>
+		       <!-- 折后单价 -->
+		       <td type="text"  requiredData="need" validateAttr="number" cname="discountPrice" maxlength="20" onBlur="discountPriceChange(this)">
+		          ${(detail.discountPrice)!}
+		       </td>
+		       <#elseif row.code?? && 'discountMoney'==row.code>
+		       <!-- 折后金额 -->
+		       <td type="text"  requiredData="need" validateAttr="number" cname="discountMoney" maxlength="20" onBlur="discountMoneyChange(this)">
+		           ${(detail.discountMoney)!}
+		       </td>
+		       <#elseif row.code?? && 'taxRate'==row.code>
+		       <!-- 税率 -->
+		       <td type="text" requiredData="need" validateAttr="number" cname="taxRate" maxlength="20" onBlur="taxRateChange(this)">${(detail.taxRate)!}</td>
+		       <#elseif row.code?? && 'taxPrice'==row.code>
+		       <!-- 含税单价 -->
+		       <td type="text"  requiredData="need" validateAttr="number" cname="taxPrice" maxlength="20" onBlur="taxPriceChange(this)">
+		         ${(detail.taxPrice)!}
+		       </td>
+		       <#elseif row.code?? && 'tax'==row.code>
+		       <!-- 税额 -->
+		       <td type="text" requiredData="need" cname="taxes" readonly="readonly">${(detail.taxes)!}</td>
+		       <#elseif row.code?? && 'taxMoney'==row.code>
+		       <!-- 含税金额 -->
+		       <td type="text"  requiredData="need" validateAttr="number" cname="taxMoney" maxlength="20" onBlur="taxMoneyChange(this)">
+		         ${(detail.taxMoney)!}
+		       </td>
+		       <#elseif row.code?? && 'memo'==row.code>
+		       <!-- 备注 -->
+		       <td type="text" requiredData="need" maxlength="500" cname="memo">${(detail.memo)!}</td>
+		       <#elseif row.code?? && 'status'==row.code>
+		       <!-- 状态 -->
+		       <td type="text"  cname="status" readonly="readonly">
+		            <#if detail.id?? && (!detail.price?? || detail.price==0)>
+		                                     赠品
+		           </#if>
+		       </td>
+		       <#elseif row.code?? && 'barCode'==row.code>
+		       <!--条码 -->
+		       <td type="text" requiredData="not" cname="barCode" readonly="readonly">${(detail.product["barCode"+detail.selectUnitId])!}</td>
+		       <#elseif row.code?? && 'message'==row.code>
+		       <!-- 附加信息 -->
+		       <td type="text" requiredData="need" cname="message" maxlength="100">${(detail.message)!}</td>
+		       <#elseif row.code?? && 'retailPrice'==row.code>
+		       <!--零售单价-->
+		       <td type="text"  requiredData="need"  cname="retailPrice" readonly="readonly">
+		          ${(detail.retailPrice)!}
+		       </td>
+		       <#elseif row.code?? && 'retailMoney'==row.code>
+		       <!--零售金额-->
+		       <td type="text"  requiredData="need"  cname="retailMoney" readonly="readonly">
+		          ${(detail.retailMoney)!}
+		       </td>
+		       <#else>
+		         <td></td>
+		       </#if>
+		      </#list>
+		       <td>
+		       	  <a title="删除本行" class="btnDel" href="javascript:void(0);" onclick="removeTr(this);"></a>
+		       	    <#if detail.id??>
+		       	    <input type="hidden" name="sellBarterInDetail[${detail_index}].id" value="${(detail.id)!}"/>
+		       	    <input class="stealth" type="hidden" value="${(detail.product.code)!}" cname="code">
+					<input class="stealth" type="hidden" value="${(detail.product.fullName)!}" cname="fullName">
+					
+					 <input type="hidden" name="boughtDetail[${detail_index}].id" value="${(detail.id)!}"/>
+		       	    <input type="hidden" name="boughtDetail[${detail_index}].productId" cname="productId" value="${(detail.productId)!}"/>
+		       	    <input type="hidden" name="boughtDetail[${detail_index}].selectUnitId" cname="selectUnitId" value="${(detail.selectUnitId)!}">
+		            <input class="stealth" type="hidden" value="${(detail.product.code)!}" cname="code">
+					<input class="stealth" type="hidden" value="${(detail.product.fullName)!}" cname="fullName">
+					<input class="stealth" type="hidden" value="${(detail.product.savePath)!}"  cname="savePath">
+					<input class="stealth" type="hidden" value="${(detail.product.validity)!}"  cname="validity">
+					<input class="stealth" type="hidden" value="<#if detail.produceEndDate??>${(detail.produceEndDate)?string('yyyy-MM-dd')}</#if>" maxlength="50" readonly="readonly" cname="produceEndDate">
+					
+					<input class="stealth" type="hidden" cname="storageId" name="sellBarterInDetail[${detail_index}].storageId" value="${(detail.storageId)!}">
+					<input class="stealth" type="hidden" value="${(detail.storage.code)!}" maxlength="50" cname="storageCode">
+					<input class="stealth" type="hidden" value="${(detail.storage.fullName)!}" maxlength="50" cname="storageFullName">
+					<input class="stealth" type="hidden" value="${(detail.selectUnit)!}" readonly="readonly" cname="baseUnit">
+					<input class="stealth date" type="hidden" value="<#if detail.produceDate??>${(detail.produceDate)?string("yyyy-MM-dd")}</#if>" name="sellBarterInDetail[${detail_index}].produceDate" cname="produceDate">
+					<input class="stealth" type="hidden" value="${(detail.batch)!}" maxlength="50" name="sellBarterInDetail[${detail_index}].batch" cname="batch">
+					<input class="stealth" type="hidden" value="${(detail.helpAmount)!}" readonly="readonly" cname="helpAmount">
+					<input class="stealth" type="hidden" value="${(detail.getOtherAmount(1))!} ${(detail.product.calculateUnit1)!}" readonly="readonly" cname="baseAmount">
+					<input class="stealth" type="hidden" value="${(detail.getOtherAmount(2))!} ${(detail.product.calculateUnit2)!}" readonly="readonly" cname="baseAmount1">
+					<input class="stealth" type="hidden" value="${(detail.getOtherAmount(3))!} ${(detail.product.calculateUnit3)!}" readonly="readonly" cname="baseAmount2">
+					<input class="stealth number" type="hidden" value="${(detail.amount)!}" maxlength="20" name="sellBarterInDetail[${detail_index}].amount" cname="amount">
+					<input class="stealth number" type="hidden" value="${(detail.price)!}" maxlength="20" name="sellBarterInDetail[${detail_index}].price" cname="price">
+					<input class="stealth number" type="hidden" value="${(detail.money)!}" maxlength="20" name="sellBarterInDetail[${detail_index}].money" cname="money">
+					<input class="stealth number" type="hidden" value="${(detail.discount)!}" maxlength="20" name="sellBarterInDetail[${detail_index}].discount" cname="discount">
+					<input class="stealth number" type="hidden" value="${(detail.discountPrice)!}" maxlength="20" name="sellBarterInDetail[${detail_index}].discountPrice" cname="discountPrice">
+					<input class="stealth number" type="hidden" value="${(detail.discountMoney)!}" maxlength="20" name="sellBarterInDetail[${detail_index}].discountMoney" cname="discountMoney">
+					<input class="stealth number" type="hidden" value="${(detail.taxRate)!}" maxlength="20" name="sellBarterInDetail[${detail_index}].taxRate" cname="taxRate">
+					<input class="stealth number" type="hidden" value="${(detail.taxPrice)!}" maxlength="20" name="sellBarterInDetail[${detail_index}].taxPrice" cname="taxPrice">
+					<input class="stealth" type="hidden" value="${(detail.taxes)!}" readonly="readonly" name="sellBarterInDetail[${detail_index}].taxes" cname="taxes">
+					<input class="stealth number" type="hidden" value="${(detail.taxMoney)!}" maxlength="20" name="sellBarterInDetail[${detail_index}].taxMoney" cname="taxMoney">
+					<input class="stealth" type="hidden" value="${(detail.retailPrice)!}" readonly="readonly" name="sellBarterInDetail[${detail_index}].retailPrice" cname="retailPrice">
+					<input class="stealth" type="hidden" value="${(detail.retailMoney)!}" readonly="readonly" name="sellBarterInDetail[${detail_index}].retailMoney" cname="retailMoney">
+					<input class="stealth" type="hidden" value="${(detail.memo)!}" maxlength="500" name="sellBarterInDetail[${detail_index}].memo" cname="memo">
+					<input class="stealth" type="hidden" value="<#if !detail.price?? || detail.price==0>赠品</#if>" readonly="readonly" cname="status">
+					<input class="stealth" type="hidden" value="${(detail.product.assistUnit)!}" readonly="readonly" cname="assistUnit">
+					<input class="stealth" type="hidden" value="${(detail.message)!}" maxlength="100" name="sellBarterInDetail[${detail_index}].message" cname="message">
+					<input class="stealth" type="hidden" value="${(detail.product["barCode"+detail.selectUnitId])!}" readonly="readonly" cname="barCode">
+					<input type="hidden" cname="supId" value="${(detail.product.supId)!}">
+					<input type="hidden" name="sellBarterInDetail[${detail_index}].productId" cname="productId" value="${(detail.productId)!}">
+					<input type="hidden" cname="oldCode" value="${(detail.product.code)!}">
+					<input type="hidden" cname="oldFullName" value="${(detail.product.fullName)!}">
+					<input type="hidden" name="sellBarterInDetail[${detail_index}].selectUnitId" cname="selectUnitId" value="${(detail.selectUnitId)!}">
+					<input type="hidden" cname="calculateUnit1" value="${(detail.product.calculateUnit1)!}">
+					<input type="hidden" cname="calculateUnit2" value="${(detail.product.calculateUnit2)!}">
+					<input type="hidden" cname="calculateUnit3" value="${(detail.product.calculateUnit3)!}">
+					<input type="hidden" name="product[${detail_index}].unitRelation1" cname="unitRelation1" value="${(detail.product.unitRelation1)!}">
+					<input type="hidden" name="product[${detail_index}].unitRelation2" cname="unitRelation2" value="${(detail.product.unitRelation2)!}">
+					<input type="hidden" name="product[${detail_index}].unitRelation3" cname="unitRelation3" value="${(detail.product.unitRelation3)!}">
+					<input type="hidden" cname="retailPrice1" value="${(detail.product.retailPrice1)!}">
+					<input type="hidden" cname="retailPrice2" value="${(detail.product.retailPrice2)!}">
+					<input type="hidden" cname="retailPrice3" value="${(detail.product.retailPrice3)!}">
+					<input type="hidden" cname="barCode1" value="${(detail.product.barCode1)!}">
+                    <input type="hidden" cname="barCode2" value="${(detail.product.barCode2)!}">
+                    <input type="hidden" cname="barCode3" value="${(detail.product.barCode3)!}">
+					<input type="hidden" cname="costArith" value="${(detail.product.costArith)!}">
+					<input type="hidden" value="${detail_index}" name="helpInUtil[${detail_index}].trIndex" cname="trIndex">
+					<input type="hidden" cname="oldStorageCode" value="${(detail.storage.code)!}">
+					<input type="hidden" cname="oldStorageFullName" value="${(detail.storage.fullName)!}">
+					<input type="hidden" cname="storageSupId" value="${(detail.storage.supId)!}">
+					<input type="hidden" name="sellBarterInDetail[${detail_index}].costPrice" cname="costPrice" value="${(detail.costPrice)!}">
+					</#if>
+		       </td>
+		     </tr>
+		     </#list>
+		  </tbody>
+		  <tfoot>
+		       <tr style="border-top: #D0D0D0 solid 1px">
+		       <td>合计</td>
+		       <#list rowList as row>
+		            <#if row.code?? && 'amount'==row.code>
+		            <!-- 总数 -->
+		            <td><input  class="stealth" id="amounts" readonly="readonly" hascount="true"/></td>
+		            <#elseif row.code?? && 'money'==row.code>
+		            <!-- 总价 -->
+		            <td><input  class="stealth" id="moneys" readonly="readonly" hascount="true"/></td>
+		            <#elseif row.code?? && 'discountMoney'==row.code>
+		            <!-- 折后总价 -->
+		            <td><input   class="stealth" id="discountMoneys" name="sellBarterBill.inDiscountMoneys" readonly="readonly" hascount="true"/></td>
+		            <#elseif row.code?? && 'tax'==row.code>
+		             <!-- 税额 -->
+		            <td><input  class="stealth" id="taxes" name="sellBarterBill.inTaxes" readonly="readonly" hascount="true"/></td>
+		            <#elseif row.code?? && 'taxMoney'==row.code>
+		            <!-- 税额 -->
+		            <td><input  class="stealth" id="taxMoneys" readonly="readonly" hascount="true"/></td>
+		             <#elseif row.code?? && 'retailMoney'==row.code>
+		            <!-- 零售金额 -->
+		            <td><input  class="stealth" id="retailMoneys" readonly="readonly" hascount="true"/></td>
+		            <#else>
+		            <td></td>
+		            </#if>
+		       </#list>
+		       <td></td>
+		       </tr>
+		 </tfoot>
+	   </table>
+
+		              <input type="hidden" class="stealth" id="inAmount" name="sellBarterBill.inAmount" value="${(bill.inAmount)!0}" style="width: 100px" readonly="readonly"/>
+		             <input type="hidden" class="stealth" id="inMoney" name="sellBarterBill.inMoney" value="${(bill.inMoney)!0}" style="width: 100px" readonly="readonly"/>
+		 
+	   <div class="divider"></div> 
+	   <table class="table" model="order" layoutH="555" width="${showWidth!}px">
+	        <thead>
+			 <tr>
+				<th width="50px">
+					行号
+				</th>
+				<#list rowList as row>
+				   <th align="center" width="${(row.width)!100}px">
+				     <#if row.code?? && 'code'==row.code || 'fullName'==row.code>
+				                      换出 ${(row.showName)!(row.name)!}
+				     <#else>
+				         ${(row.showName)!(row.name)!}
+				     </#if>
+					
+				   </th>
+				</#list>
+				<th width="50px">
+				   <a title="添加一行" class="btnAdd" target="addTr" href="javascript:void(0);" rel="sellBarterOutbody"></a>
+				</th>
+			</tr>
+		  </thead>
+		  <tbody id="sellBarterOutbody" preDataName="sellBarterOutDetail" type="out">
+		     <#list detailOutList as detail>
+		     <tr>
+		       <td>${detail_index+1}</td>
+		      <#list rowList as row>
+		       <#if row.code?? && 'code'==row.code>
+		       <!-- 商品编号 -->
+		       <td cTarget="dialog"  title="商品" warn="商品" billType="2" unitId="unitId" storageId="outStorageId" productId="productId" enterSearch="true" productSupId="supId" searchUrl="${base}/stock/stock/orderOneRecord/" editUrl="${base}/stock/stock/orderDialogEdit/" url="${base}/stock/stock/orderDialog/" rel="b_product_dialog" dwidth="680" dheight="450" type="text" requiredData="not"  onBlur="objDelOrClear(this,'code');" cname="code">
+		           ${(detail.product.code)!}
+		       </td>
+		       <#elseif row.code?? && 'fullName'==row.code>
+		       <!-- 商品名称 -->
+		       <td cTarget="dialog"  title="商品" warn="商品" billType="2" unitId="unitId" storageId="outStorageId" productId="productId" enterSearch="true" productSupId="supId" searchUrl="${base}/stock/stock/orderOneRecord/" editUrl="${base}/stock/stock/orderDialogEdit/" url="${base}/stock/stock/orderDialog/" rel="b_product_dialog" dwidth="680" dheight="450" type="text" requiredData="not"  onBlur="objDelOrClear(this,'fullName');" cname="fullName">
+		           ${(detail.product.fullName)!}
+		       </td>
+		        
+		        <#elseif row.code?? && 'smallName'==row.code>
+		       <!-- 商品简称 -->
+		       <td type="text"  validateAttr="" readonly="readonly" maxlength="50" cname="smallName">${(detail.product.smallName)!}</td>
+		       <#elseif row.code?? && 'spell'==row.code>
+		       <!-- 商品拼音 -->
+		       <td type="text"  validateAttr="" readonly="readonly" maxlength="50" cname="spell">${(detail.product.spell)!}</td>
+		       <#elseif row.code?? && 'standard'==row.code>
+		       <!-- 规格 -->
+		       <td type="text"  validateAttr="" readonly="readonly" maxlength="50" cname="standard">${(detail.product.standard)!}</td>
+		       <#elseif row.code?? && 'model'==row.code>
+		       <!-- 型号 -->
+		       <td type="text"  validateAttr="" readonly="readonly" maxlength="50" cname="model">${(detail.product.model)!}</td>
+		       <#elseif row.code?? && 'field'==row.code>
+		       <!-- 产地 -->
+		       <td type="text"  validateAttr="" readonly="readonly" maxlength="50" cname="field">${(detail.product.field)!}</td>
+		        <#elseif row.code?? && 'savePath'==row.code>
+		       <!-- 图片 -->
+		       <td type="text"  validateAttr="" readonly="readonly" cname="savePath">
+		        	<#if (detail.product.savePath)??>
+					    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(detail.product.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(detail.product.savePath)!}"  width="20px" height="20px"/>
+		            </#if>
+		       </td>
+		       
+		        <#elseif row.code?? && 'storageCode'==row.code>
+		        <!-- 仓库编号 -->
+		       <td cname="storageCode" validateAttr=""  maxlength="50" onBlur="objDelOrClear(this,'storageCode')" cTarget="dialog" hasDialog="dialogNotNull"  title="仓库" warn="仓库" storageSupId="storageSupId" productId="productId"  storageId="storageId" searchUrl="${base}/stock/stock/storageOneRecord/" editUrl="${base}/stock/stock/storageDialogEdit/" url="${base}/stock/stock/storageDialog/toDialog" rel="cc_storage_dialog" dwidth="600" dheight="450">
+		           ${(detail.storage.code)!}
+		       </td>
+		       <#elseif row.code?? && 'storageName'==row.code>
+		       <!-- 仓库全名-->
+		       <td cname="storageFullName" validateAttr=""  maxlength="50" onBlur="objDelOrClear(this,'storageFullName')" cTarget="dialog" hasDialog="dialogNotNull"  title="仓库" warn="仓库" storageSupId="storageSupId" productId="productId"  storageId="storageId" searchUrl="${base}/stock/stock/storageOneRecord/" editUrl="${base}/stock/stock/storageDialogEdit/" url="${base}/stock/stock/storageDialog/toDialog" rel="cc_storage_dialog" dwidth="600" dheight="450">
+		           ${(detail.storage.fullName)!}
+		       </td>
+		       
+		       <#elseif row.code?? && 'unit'==row.code>
+		       <!-- 单位 -->
+		       <td cTarget="dialog" hasDialog="dialogNotNull" billType="2" unitId="unitId" productId="productId" title="单位" rel="b_product_dialog"  url="${base}/base/product/calculateUnit/" dwidth="300" dheight="200" type="text" requiredData="not" readonly="readonly"  cname="baseUnit">
+		           ${(detail.selectUnit)!}
+		       </td>
+		       <#elseif row.code?? && 'helpUnit'==row.code>
+		       <!-- 辅助单位 -->
+		       <td type="text"  readonly="readonly"  cname="assistUnit" >${(detail.product.assistUnit)!}</td>
+		       <#elseif row.code?? && 'produceDate'==row.code>
+		       <!-- 生产日期 -->
+		       <td cname="produceDate" validateAttr="dateISO" requiredData="need" readonly="readonly" maxlength="50" cTarget="dialog" tbodyId="sellBarterOutbody" manSel="true"  totalStorageId="outStorageId">
+		       	<#if detail.produceDate??>${(detail.produceDate)?string("yyyy-MM-dd")}</#if>
+		       </td>
+		       <#elseif row.code?? && 'produceEndDate'==row.code>
+		       <!-- 结束日期 -->
+		       <td cname="produceEndDate" validateAttr="dateISO" requiredData="need" readonly="readonly" maxlength="50" cTarget="dialog" tbodyId="sellBarterOutbody" manSel="true"  totalStorageId="outStorageId">
+			       <#if detail.produceEndDate??>${(detail.produceEndDate)?string("yyyy-MM-dd")}</#if>
+		       <#elseif row.code?? && 'batch'==row.code>
+		       <!-- 批号 -->
+		       <td cname="batch" validateAttr="" requiredData="need" readonly="readonly" maxlength="50" cTarget="dialog" tbodyId="sellBarterOutbody" manSel="true"  totalStorageId="outStorageId">
+		           ${(detail.batch)!}
+		       </td>
+		       <#elseif row.code?? && 'helpAmount'==row.code>
+		       <!-- 辅助数量 -->
+		       <td type="text" readonly="readonly" cname="helpAmount">${(detail.helpAmount)!}</td>
+		       <#elseif row.code?? && 'amount'==row.code>
+		       <!-- 数量 -->
+		       <td cTarget="dialog" hasDialog="dialogNotNull" productId="productId" baseUnit="selectUnitId" title="数量" rel="b_product_dialog"  url="${base}/base/product/recordAmount/" dwidth="350" dheight="200" type="text" validateAttr="number" cname="amount" requiredData="need" maxlength="20" onBlur="amountPriceDiscountChange(this)">
+		            ${(detail.amount)!}
+		       </td>
+		       <#elseif row.code?? && 'baseAmount'==row.code>
+		       <!-- 基本数量-->
+		       <td type="text"  cname="baseAmount" readonly="readonly">${(detail.getOtherAmount(1))!} ${(detail.product.calculateUnit1)!}</td>
+		       <#elseif row.code?? && 'baseAmount1'==row.code>
+		       <!-- 辅助数量1 -->
+		       <td type="text"  cname="baseAmount1" readonly="readonly">${(detail.getOtherAmount(2))!} ${(detail.product.calculateUnit2)!}</td>
+		       <#elseif row.code?? && 'baseAmount2'==row.code>
+		       <!-- 辅助数量2 -->
+		       <td type="text"  cname="baseAmount2" readonly="readonly">${(detail.getOtherAmount(3))!} ${(detail.product.calculateUnit3)!}</td>
+		       <#elseif row.code?? && 'price'==row.code>
+		       <!-- 单价 -->
+		       <td cTarget="dialog"  hasDialog="dialogNotNull" storageId="outStorageId" productId="productId" baseUnit="selectUnitId" title="请选择价格" rel="selectPricesDialog"  url="${base}/stock/stock/getProductPrics/" dwidth="300" dheight="280" type="text" requiredData="need" validateAttr="number" cname="price" maxlength="20" onBlur="amountPriceDiscountChange(this)">
+		           ${(detail.price)!}
+		       </td>
+		       <#elseif row.code?? && 'money'==row.code>
+		       <!-- 金额 -->
+		       <td type="text"  requiredData="need" validateAttr="number" cname="money" maxlength="20" onBlur="moneyChange(this)">
+		         ${(detail.money)!}
+		       </td>
+		       <#elseif row.code?? && 'discount'==row.code>
+		       <!-- 折扣 -->
+		       <td type="text" requiredData="need" validateAttr="number" cname="discount" maxlength="20" onBlur="amountPriceDiscountChange(this)">${(detail.discount)!}</td>
+		       <#elseif row.code?? && 'discountPrice'==row.code>
+		       <!-- 折后单价 -->
+		       <td type="text"  requiredData="need" validateAttr="number" cname="discountPrice" maxlength="20" onBlur="discountPriceChange(this)">
+		          ${(detail.discountPrice)!}
+		       </td>
+		       <#elseif row.code?? && 'discountMoney'==row.code>
+		       <!-- 折后金额 -->
+		       <td type="text"  requiredData="need" validateAttr="number" cname="discountMoney" maxlength="20" onBlur="discountMoneyChange(this)">
+		          ${(detail.discountMoney)!}
+		       </td>
+		       <#elseif row.code?? && 'taxRate'==row.code>
+		       <!-- 税率 -->
+		       <td type="text" requiredData="need" validateAttr="number" cname="taxRate" maxlength="20" onBlur="taxRateChange(this)">${(detail.taxRate)!}</td>
+		       <#elseif row.code?? && 'taxPrice'==row.code>
+		       <!-- 含税单价 -->
+		       <td type="text"  requiredData="need" validateAttr="number" cname="taxPrice" maxlength="20" onBlur="taxPriceChange(this)">
+		         ${(detail.taxPrice)!}
+		       </td>
+		       <#elseif row.code?? && 'tax'==row.code>
+		       <!-- 税额 -->
+		       <td type="text" requiredData="need" cname="taxes" readonly="readonly">${(detail.taxes)!}</td>
+		       <#elseif row.code?? && 'taxMoney'==row.code>
+		       <!-- 含税金额 -->
+		       <td type="text"  requiredData="need" validateAttr="number" cname="taxMoney" maxlength="20" onBlur="taxMoneyChange(this)">
+		          ${(detail.taxMoney)!}
+		       </td>
+		       <#elseif row.code?? && 'memo'==row.code>
+		       <!-- 备注 -->
+		       <td type="text" requiredData="need" maxlength="500" cname="memo">${(detail.memo)!}</td>
+		       <#elseif row.code?? && 'status'==row.code>
+		       <!-- 状态 -->
+		       <td type="text"  cname="status" readonly="readonly">
+		            <#if detail.id?? && (!detail.price?? || detail.price==0)>
+		                                     赠品
+		           </#if>
+		       </td>
+		       <#elseif row.code?? && 'barCode'==row.code>
+		       <!--条码 -->
+		       <td type="text" requiredData="not" cname="barCode" readonly="readonly">${(detail.product["barCode"+detail.selectUnitId])!}</td>
+		       <#elseif row.code?? && 'message'==row.code>
+		       <!-- 附加信息 -->
+		       <td type="text" requiredData="need" cname="message" maxlength="100">${(detail.message)!}</td>
+		       <#elseif row.code?? && 'retailPrice'==row.code>
+		       <!--零售单价-->
+		       <td type="text"  requiredData="need"  cname="retailPrice" readonly="readonly">
+		         ${(detail.retailPrice)!}
+		       </td>
+		       <#elseif row.code?? && 'retailMoney'==row.code>
+		       <!--零售金额-->
+		       <td type="text"  requiredData="need"  cname="retailMoney" readonly="readonly">
+		         ${(detail.retailMoney)!}
+		       </td>
+		       <#else>
+		         <td></td>
+		       </#if>
+		      </#list>
+		       <td>
+		       	  <a title="删除本行" class="btnDel" href="javascript:void(0);" onclick="removeTr(this);"></a>
+		       	    <#if detail.id??>
+		       	    <input type="hidden" name="sellBarterOutDetail[${detail_index}].id" value="${(detail.id)!}"/>
+		       	    <input class="stealth" type="hidden" value="${(detail.product.code)!}" cname="code">
+					<input class="stealth" type="hidden" value="${(detail.product.fullName)!}" cname="fullName">
+					
+					 <input type="hidden" name="boughtDetail[${detail_index}].id" value="${(detail.id)!}"/>
+		       	    <input type="hidden" name="boughtDetail[${detail_index}].productId" cname="productId" value="${(detail.productId)!}"/>
+		       	    <input type="hidden" name="boughtDetail[${detail_index}].selectUnitId" cname="selectUnitId" value="${(detail.selectUnitId)!}">
+		            <input class="stealth" type="hidden" value="${(detail.product.code)!}" cname="code">
+					<input class="stealth" type="hidden" value="${(detail.product.fullName)!}" cname="fullName">
+					<input class="stealth" type="hidden" value="${(detail.product.savePath)!}"  cname="savePath">
+					<input class="stealth" type="hidden" value="${(detail.product.validity)!}"  cname="validity">
+					<input class="stealth" type="hidden" value="<#if detail.produceEndDate??>${(detail.produceEndDate)?string('yyyy-MM-dd')}</#if>" maxlength="50" readonly="readonly" cname="produceEndDate">
+					
+					<input class="stealth" type="hidden" cname="storageId" name="sellBarterOutDetail[${detail_index}].storageId" value="${(detail.storageId)!}">
+					<input class="stealth" type="hidden" value="${(detail.storage.code)!}" maxlength="50" cname="storageCode">
+					<input class="stealth" type="hidden" value="${(detail.storage.fullName)!}" maxlength="50" cname="storageFullName">
+					<input class="stealth" type="hidden" value="${(detail.selectUnit)!}" readonly="readonly" cname="baseUnit">
+					<input class="stealth date" type="hidden" value="<#if detail.produceDate??>${(detail.produceDate)?string("yyyy-MM-dd")}</#if>" name="sellBarterOutDetail[${detail_index}].produceDate" cname="produceDate">
+					<input class="stealth" type="hidden" value="${(detail.batch)!}" maxlength="50" name="sellBarterOutDetail[${detail_index}].batch" cname="batch">
+					<input class="stealth" type="hidden" value="${(detail.helpAmount)!}" readonly="readonly" cname="helpAmount">
+					<input class="stealth" type="hidden" value="${(detail.getOtherAmount(1))!} ${(detail.product.calculateUnit1)!}" readonly="readonly" cname="baseAmount">
+					<input class="stealth" type="hidden" value="${(detail.getOtherAmount(2))!} ${(detail.product.calculateUnit2)!}" readonly="readonly" cname="baseAmount1">
+					<input class="stealth" type="hidden" value="${(detail.getOtherAmount(3))!} ${(detail.product.calculateUnit3)!}" readonly="readonly" cname="baseAmount2">
+					<input class="stealth number" type="hidden" value="${(detail.amount)!}" maxlength="20" name="sellBarterOutDetail[${detail_index}].amount" cname="amount">
+					<input class="stealth number" type="hidden" value="${(detail.price)!}" maxlength="20" name="sellBarterOutDetail[${detail_index}].price" cname="price">
+					<input class="stealth number" type="hidden" value="${(detail.money)!}" maxlength="20" name="sellBarterOutDetail[${detail_index}].money" cname="money">
+					<input class="stealth number" type="hidden" value="${(detail.discount)!}" maxlength="20" name="sellBarterOutDetail[${detail_index}].discount" cname="discount">
+					<input class="stealth number" type="hidden" value="${(detail.discountPrice)!}" maxlength="20" name="sellBarterOutDetail[${detail_index}].discountPrice" cname="discountPrice">
+					<input class="stealth number" type="hidden" value="${(detail.discountMoney)!}" maxlength="20" name="sellBarterOutDetail[${detail_index}].discountMoney" cname="discountMoney">
+					<input class="stealth number" type="hidden" value="${(detail.taxRate)!}" maxlength="20" name="sellBarterOutDetail[${detail_index}].taxRate" cname="taxRate">
+					<input class="stealth number" type="hidden" value="${(detail.taxPrice)!}" maxlength="20" name="sellBarterOutDetail[${detail_index}].taxPrice" cname="taxPrice">
+					<input class="stealth" type="hidden" value="${(detail.taxes)!}" readonly="readonly" name="sellBarterOutDetail[${detail_index}].taxes" cname="taxes">
+					<input class="stealth number" type="hidden" value="${(detail.taxMoney)!}" maxlength="20" name="sellBarterOutDetail[${detail_index}].taxMoney" cname="taxMoney">
+					<input class="stealth" type="hidden" value="${(detail.retailPrice)!}" readonly="readonly" name="sellBarterOutDetail[${detail_index}].retailPrice" cname="retailPrice">
+					<input class="stealth" type="hidden" value="${(detail.retailMoney)!}" readonly="readonly" name="sellBarterOutDetail[${detail_index}].retailMoney" cname="retailMoney">
+					<input class="stealth" type="hidden" value="${(detail.memo)!}" maxlength="500" name="sellBarterOutDetail[${detail_index}].memo" cname="memo">
+					<input class="stealth" type="hidden" value="<#if !detail.price?? || detail.price==0>赠品</#if>" readonly="readonly" cname="status">
+					<input class="stealth" type="hidden" value="${(detail.product.assistUnit)!}" readonly="readonly" cname="assistUnit">
+					<input class="stealth" type="hidden" value="${(detail.message)!}" maxlength="100" name="sellBarterOutDetail[${detail_index}].message" cname="message">
+					<input class="stealth" type="hidden" value="${(detail.product["barCode"+detail.selectUnitId])!}" readonly="readonly" cname="barCode">
+					<input type="hidden" cname="supId" value="${(detail.product.supId)!}">
+					<input type="hidden" name="sellBarterOutDetail[${detail_index}].productId" cname="productId" value="${(detail.productId)!}">
+					<input type="hidden" cname="oldCode" value="${(detail.product.code)!}">
+					<input type="hidden" cname="oldFullName" value="${(detail.product.fullName)!}">
+					<input type="hidden" name="sellBarterOutDetail[${detail_index}].selectUnitId" cname="selectUnitId" value="${(detail.selectUnitId)!}">
+					<input type="hidden" cname="calculateUnit1" value="${(detail.product.calculateUnit1)!}">
+					<input type="hidden" cname="calculateUnit2" value="${(detail.product.calculateUnit2)!}">
+					<input type="hidden" cname="calculateUnit3" value="${(detail.product.calculateUnit3)!}">
+					<input type="hidden" name="product[${detail_index}].unitRelation1" cname="unitRelation1" value="${(detail.product.unitRelation1)!}">
+					<input type="hidden" name="product[${detail_index}].unitRelation2" cname="unitRelation2" value="${(detail.product.unitRelation2)!}">
+					<input type="hidden" name="product[${detail_index}].unitRelation3" cname="unitRelation3" value="${(detail.product.unitRelation3)!}">
+					<input type="hidden" cname="retailPrice1" value="${(detail.product.retailPrice1)!}">
+					<input type="hidden" cname="retailPrice2" value="${(detail.product.retailPrice2)!}">
+					<input type="hidden" cname="retailPrice3" value="${(detail.product.retailPrice3)!}">
+					<input type="hidden" cname="barCode1" value="${(detail.product.barCode1)!}">
+                    <input type="hidden" cname="barCode2" value="${(detail.product.barCode2)!}">
+                    <input type="hidden" cname="barCode3" value="${(detail.product.barCode3)!}">
+					<input type="hidden" cname="costArith" value="${(detail.product.costArith)!}">
+					<input type="hidden" value="${detail_index}" name="helpOutUtil[${detail_index}].trIndex" cname="trIndex">
+					<input type="hidden" cname="oldStorageCode" value="${(detail.storage.code)!}">
+					<input type="hidden" cname="oldStorageFullName" value="${(detail.storage.fullName)!}">
+					<input type="hidden" cname="storageSupId" value="${(detail.storage.supId)!}">
+		       	  <input type="hidden" name="sellBarterOutDetail[${detail_index}].costPrice" cname="costPrice" value="${(detail.costPrice)!}">
+		       	  </#if>
+		       </td>
+		     </tr>
+		     </#list>
+		  </tbody>
+		  <tfoot>
+		       <tr style="border-top: #D0D0D0 solid 1px">
+		       <td>合计</td>
+		       <#list rowList as row>
+		            <#if row.code?? && 'amount'==row.code>
+		             <!-- 总数 -->
+		             <td><input  class="stealth" id="amounts" readonly="readonly" hascount="true"/></td>
+		            <#elseif row.code?? && 'money'==row.code>
+		            <!-- 总价 -->
+		            <td><input  class="stealth" id="moneys" readonly="readonly" hascount="true"/></td>
+		            <#elseif row.code?? && 'discountMoney'==row.code>
+		            <!-- 折后总价 -->
+		            <td><input  class="stealth" id="discountMoneys" name="sellBarterBill.outDiscountMoneys" readonly="readonly" hascount="true"/></td>
+		            <#elseif row.code?? && 'tax'==row.code>
+		             <!-- 税额 -->
+		            <td><input  class="stealth" id="taxes" name="sellBarterBill.outTaxes" readonly="readonly" hascount="true"/></td>
+		            <#elseif row.code?? && 'taxMoney'==row.code>
+		            <!-- 税额 -->
+		            <td><input  class="stealth" id="taxMoneys" readonly="readonly" hascount="true"/></td>
+		             <#elseif row.code?? && 'retailMoney'==row.code>
+		            <!-- 零售金额 -->
+		            <td><input  class="stealth" id="retailMoneys" readonly="readonly" hascount="true"/></td>
+		            <#else>
+		            <td></td>
+		            </#if>
+		       </#list>
+		       <td></td>
+		       </tr>
+		 </tfoot>
+	   </table>
+	   </div>
+	   <div class="divider"></div>
+		<div class="textContent center">
+	       <input type="hidden" class="stealth" id="outAmount" name="sellBarterBill.outAmount" value="${(bill.outAmount)!0}" style="width: 100px" readonly="readonly"/>
+		   <input type="hidden" class="stealth" id="outMoney" name="sellBarterBill.outMoney" value="${(bill.outMoney)!0}" style="width: 100px" readonly="readonly"/>
+	     <div>
+	     <#import "/WEB-INF/template/common/base/payOrGet/getOrPayTemplate.html" as footer>
+		     <@footer.pageFooter field="sellBarterBill.payMoney" accountName="收款账户" accountMoney="收款金额" />
+
+			 <span style="float: right;">
+			     换货差额：<input type="text" class="stealth" id="gapMoney" name="sellBarterBill.gapMoney" value="${(bill.gapMoney)!0}" style="width: 100px" readonly="readonly"/>
+		                优惠金额<input class="line number" type="text" id="privilege"  name="sellBarterBill.privilege" value="${(bill.privilege)!0}" onblur="privilegeMoneyDarter()"/> 
+		                 优惠后金额：<input type="text" class="stealth" id="privilegeMoney" name="sellBarterBill.privilegeMoney" value="${(bill.privilegeMoney)!0}" style="width: 100px" readonly="readonly"/>
+		    </span>
+	     </div>
+	    </div>
+	     <div class="divider"></div> 
+		<div>
+	     <div style="float: right;">
+	        <@shiro.hasPermission name='404-t'>
+	        <a class="button" href="${base}/sell/barter/add" target="submit"><span>保存</span></a>
+	        </@shiro.hasPermission>
+	        <a class="button" href="${base}/sell/barter/draft/edit" target="submit"><span>保存草稿</span></a>
+		     <#assign privs = '404-p'/>
+			<#assign href = '${base}/sell/barter/print'/>
+			<#assign formId = 'sellBarterBillForm'/>
+			<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	        <a class="button" href="javascript:void(0);" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a>
+	     </div>
+	    </div>
+	
+  </form>
+</div>
+

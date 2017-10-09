@@ -1,0 +1,58 @@
+<div class="pageContent">
+   <form action="${base}/common/proStockSearchDialog/go" method="post" class="pageForm required-validate" enctype="text/plain" onsubmit="return validateCallback(this,aioDialogPostCallBreak)">
+      <input type="hidden" id="aimTabId" name="aimTabId"  value=""/>
+      <input type="hidden" id="aimUrl"   name="aimUrl"   value=""/>
+      <input type="hidden" id="aimTitle" name="aimTitle"  value=""/>
+      <input type="hidden" id=aimDiv name="aimDiv" value="">
+      
+      <!-- 动态需要的参数 -->
+      <#if paraMap?exists>
+          <#list paraMap.keySet() as k>
+          	<input type="hidden" id="${k}" name="${k}" value="${paraMap.get(k)}"/>
+          </#list>
+      </#if>
+      
+      		<div class="pageFormContent" layoutH="60">
+            <table>
+               <tr>
+                  <td style="vertical-align: top;">
+                      <fieldset  style="width: 270px;">
+					    <legend>选择基本信息</legend>
+					    <table style="height: 120px;">
+					    <#include "/WEB-INF/template/common/base/reports/productReportLink.html"/>
+					    
+					    <#include "/WEB-INF/template/common/base/reports/storageReportLink.html"/>
+					    </table>
+      				</fieldset>
+      				</td>
+      		</tr>
+      		</table>
+      		</div>		
+      <#--<div layoutH="35">
+	       <fieldset layoutH="50">
+			    <legend>选择基本信息</legend>
+				   <div align="center" style=" height: 50px;">
+				   		商品全名：
+				   		<input type="hidden" id="product.id" name="product.id" value=""/>
+				   	    <input name="product.fullName" lookName="product" lookId="product.id" />
+				        <a class="btnLook" id="productLook" btnPattern="selectMany" href="${base}/base/product/option" warn="商品" lookupgroup="product" lookuppk="id" width="600" height="410">商品</a>
+				   </div>
+				   <div align="center" style="height: 50px;">
+				   		仓库全名：
+				   		<input type="hidden" id="storageId" name="storage.id" value=""/>
+			     	    <input name="storage.fullName" lookName="storage" lookId="storage.id" />
+				        <a class="btnLook" id="storageLook" btnPattern="selectMany" href="${base}/base/storage/dialogList" warn="仓库" lookupgroup="storage" lookuppk="id" width="600" height="410">仓库</a>
+				   </div>
+		   </fieldset>
+	 </div>-->
+	 
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+		</ul>
+	  </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

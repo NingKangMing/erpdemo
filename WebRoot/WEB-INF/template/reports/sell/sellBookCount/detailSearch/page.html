@@ -1,0 +1,33 @@
+<div class="panel">
+	<div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">销售订单明细查询</span></label>
+				</li>
+			</ul>
+			<ul class="searchContent" style="margin-top: 5px;">
+				<li>
+					<span style="margin-left: 10px;">查询时间：</span>${startDate}至${endDate}
+				</li>
+			</ul>
+			<ul class="searchContent">
+				<li>
+					<span style="margin-left: 10px;">往来单位:</span><#if unitFullName=="">全部单位</#if>${unitFullName} 
+					<span style="margin-left: 50px;">内部职员:</span><#if staffFullName=="">全部职员</#if>${staffFullName} 
+					<span style="margin-left: 50px;">仓库:</span><#if storageFullName=="">全部仓库</#if>${storageFullName} 
+					<span style="margin-left: 50px;">商品:</span><#if productFullName=="">全部商品</#if>${productFullName} 
+				</li>
+				<li style="float: right;">
+				<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div id="${listID}" layoutH="87">
+			<#include "/WEB-INF/template/reports/sell/sellBookCount/detailSearch/list.html" />
+		</div>
+</div>
+
+
+

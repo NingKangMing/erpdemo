@@ -1,0 +1,10 @@
+<!--仓储管理-->
+<div class="nav-content">
+   <a href="${base}/stock/overflow" href1="${base}/common/verify/permittedVerify?key=5-80-505-e" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="navTab" rel="overflowBillView" class="nav-btn"><img alt="报溢单" src="${base}/img/base/overflow.png"><span>报溢单</span></a>
+   <a href="${base}/stock/breakage" href1="${base}/common/verify/permittedVerify?key=5-80-504-e" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="navTab" rel="breakageBillView" class="nav-btn"><img alt="报损单" src="${base}/img/base/breakage.png" ><span>报损单</span></a>
+   <#if isFreeVersion != "yes">
+   <a href="${base}/stock/dismount" href1="${base}/common/verify/permittedVerify?key=5-510-e" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="navTab" rel="dismountBillView" class="nav-btn"><img alt="生产拆装单" src="${base}/img/base/dismount.png"><span>生产拆装单</span></a>
+   <a href="${base}/stock/parityAllot" href1="${base}/common/verify/permittedVerify?key=5-508-e" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="navTab" rel="parityAllotView" class="nav-btn nav-fix"><img alt="同价调拨单" src="${base}/img/base/parityAllot.png"><span>同价调拨单</span></a>
+   <a href="${base}/stock/difftAllot" href1="${base}/common/verify/permittedVerify?key=5-509-e" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="navTab" rel="difftAllotView" title="变价调拨单" class="nav-btn"><img alt="变价调拨单" src="${base}/img/base/difftAllot.png"><span>变价调拨单</span></a>
+   </#if>
+</div>

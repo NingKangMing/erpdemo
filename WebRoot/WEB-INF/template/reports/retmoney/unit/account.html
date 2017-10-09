@@ -1,0 +1,40 @@
+<div class="panel pageContent">
+	<div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">单位明细账本</span></label>
+				</li>
+			</ul>
+			<ul class="searchContent" style="margin-top: 5px;">
+				<li>
+					<span style="margin-left: 10px;">查询时间：</span>${(params.startTime)!}&nbsp;&nbsp;至&nbsp;&nbsp;${(params.endTime)!}
+				</li>
+			</ul>
+			<ul class="searchContent" style="margin-top: 5px;">
+				<li>
+					<span style="margin-left: 10px;">往来单位:</span><#if unit??> ${unit.fullName!} <#else> 其他单位 </#if>
+				</li>
+				<#assign columnType = 'cw509'/>
+				<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+				<li style="float: right;">
+				        红冲过滤：
+     				<select name="isRcw" onchange="javascript:selectPost(this,'returnMomeyUnitAccountList','isRcw');">
+     					<option value="" >全部显示</option>
+     					<option value="0" >不显示红冲单据</option>
+     				</select>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div layoutH="60">
+		
+		<div id="returnMomeyUnitAccountList" style="padding:2px; padding-top: 0px;" layoutH="70">
+		 
+			<#include "accountList.html"/>
+		</div>
+	</div>
+</div>
+
+
+

@@ -1,0 +1,38 @@
+<div class="pageContent">
+	<h2 class="contentTitle">查询</h2>
+	<form action="${base}/reports/stock/stockBound/proSearch" class="pageForm required-validate" enctype="text/plain" method="post" onsubmit="return validateCallback(this,aioDialogSearchNavTab)">
+        <input type="hidden" name="aimTabId"  value="stockBoundView"/>
+        <input type="hidden" name="aimUrl"   value="${base}/reports/stock/stockBound"/>
+        <input type="hidden" name="aimTitle"  value="库存上下限报警设置"/>
+        <input type="hidden" name="isSearch"  value="1"/>
+		<input type="hidden" name="storageId" value="${storageId!0}"/>
+		<input type="hidden" name="storagePids" value="${storagePids!'{0}'}"/>
+		<input type="hidden" name="storageName" value="${storageName!'全部仓库'}"/>
+		<div class="pageFormContent" layoutH="100">
+			<p>
+				<label>查询条件：</label>
+				<select name="searchPar" style="height:23px;width:165px;">
+					<option value="all">快速查询</option>
+					<option value="code">按商品编号查询</option>
+					<option value="smallName">按商品简称查询</option>
+					<option value="fullName">按商品全名查询</option>
+					<option value="spell">按商品拼音码查询</option>
+					<option value="standard">按商品规格查询</option>
+					<option value="model">按商品型号查询</option>
+					<option value="barCode1">按商品条码查询</option>
+					<option value="field">按商品产地查询</option>
+				</select>
+			</p>
+			<p>
+				<label>查询信息：</label>
+				<input type="text" name="searchVal" style="width:160px;">
+			</p>	
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">查询</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>

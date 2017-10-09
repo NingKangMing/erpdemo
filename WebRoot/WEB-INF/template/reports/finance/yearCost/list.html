@@ -1,0 +1,59 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/finance/yearCost/second" onsubmit="return dwzSearch(this, 'returnMomeyUnitList');">
+   
+</form>
+<table class="table" rel="yearCostMoneyList" layoutH="120">
+	<thead>
+		<tr>
+			<th width="50px">行号</th>
+			<th width="100px">科目编号</th>
+			<th width="100px" align="left">科目全名</th>
+			<th width="50px">一月</th>
+            <th width="50px">二月</th>
+            <th width="50px">三月</th>
+            <th width="50px">四月</th>
+            <th width="50px">五月</th>
+            <th width="50px">六月</th>
+            <th width="50px">七月</th>
+            <th width="50px">八月</th>
+            <th width="50px">九月</th>
+            <th width="50px">十月</th>
+            <th width="50px">十一月</th>
+            <th width="50px">十二月</th>
+            <th width="50px">合计</th>
+		</tr>
+	</thead>
+	<tbody>
+		<#list accountList as account>
+		     <tr target="accountId" rel = "${account.id!0}">
+		         <td>${account_index+1}</td>
+		         <td>${account.code!}</td>
+		         <td>${(account.blank)!}${account.fullName!}</td>
+		         <td>${account.monthMoney1!}</td>
+		         <td>${account.monthMoney2!}</td>
+		         <td>${account.monthMoney3!}</td>
+		         <td>${account.monthMoney4!}</td>
+		         <td>${account.monthMoney5!}</td>
+		         <td>${account.monthMoney6!}</td>
+		         <td>${account.monthMoney7!}</td>
+		         <td>${account.monthMoney8!}</td>
+		         <td>${account.monthMoney9!}</td>
+		         <td>${account.monthMoney10!}</td>
+		         <td>${account.monthMoney11!}</td>
+		         <td>${account.monthMoney12!}</td>
+		         <td>${account.allMonthMoney!}</td>
+		     </tr>
+		</#list>
+	</tbody>
+</table>
+
+<div class="divider"></div>
+<div>
+     <a class="button" height="250" width="300" mask="true" rel="dateDialog" target="dialog" caption="查询条件" param="accountId" aimTabId="costTotalDetailView" aimTitle="明细账本" aimUrl="${base}/reports/finance/accounts/costTotal/detail" href="${base}/common/dateDialog"><span>明细账本</span></a>
+</div>
+<div style="float: right;">
+     <#assign privs = '6-107-639-p'/>
+	<#assign href = '${base}/reports/finance/yearCost/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

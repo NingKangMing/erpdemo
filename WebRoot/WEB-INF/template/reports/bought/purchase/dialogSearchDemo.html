@@ -1,0 +1,21 @@
+<#import "/WEB-INF/template/common/base/reports/commonReportSearch.html" as Dialog>
+<#-- 宏模板引用demo，使用import关键字引入模板，并把它声明为全局变量dialog -->
+<#-- 模板里面声明的变量，都用@dialog.变量的形式引用 并以/@dialog.变量这样的形式结尾(如果是双标签)->
+<#-- 引用page变量，并传入两个变量进去 -->
+
+<@Dialog.page filterName="shoeType" filterValue = "${shoeType!'0'}">
+
+<#-- 引用container变量，用于存放基本查询条件及查询时间 -->
+	<@Dialog.container>
+		<@Dialog.fieldList>
+			<@Dialog.unit /> <#-- 单位查询条件 -->
+			<@Dialog.staff /> <#-- 员工 -->
+			<@Dialog.storage /> <#-- 仓库 -->
+		</@Dialog.fieldList>
+		<@Dialog.searchTime />  <#-- 查询时间 -->
+	</@Dialog.container>
+	
+	<@Dialog.searchOption /> <#-- 查询选项 -->
+	
+</@Dialog.page>
+

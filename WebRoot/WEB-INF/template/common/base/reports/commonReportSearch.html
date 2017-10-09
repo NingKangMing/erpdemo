@@ -1,0 +1,145 @@
+<#macro page title="查询" filterName="" filterValue="">
+<#-- 报表查询对话框的宏模板，其中macro为定义宏的关键字，page为该宏模板的名称(宏变量)，page
+后面的变量是需要传进来的变量，可以用等于号赋默认值，如果不赋默认值，那么引用该宏的时候必须
+传入这个变量，否则报错 -->
+<div class="pageContent center">
+	<h2 class="contentTitle">${title}</h2> <#-- title变量为模板上面定义的变量 -->
+	<form>
+	    <input type="hidden" name="aimTabId" id="aimTabId"/>	     <!-- 设置目标Tab组件ID -->				
+	    <input type="hidden" name="aimUrl" id="aimUrl"/>	         <!-- 设置目标URl -->				
+	    <input type="hidden" name="aimTitle" id="aimTitle"/>         <!-- 设置目标标题 -->
+	    <input type="hidden" name="aimDiv" id="aimDiv"/>
+        <input type="hidden" id="${filterName}" name="${filterName}" value="${filterValue}"/>
+	    <input type="hidden" id="supId" name="supId" value="${supId!0}"/>                               <!-- 父级ID -->
+	    <div class="divider"></div>	
+	    		<div style="width:450px;" layoutH="100">
+	    		<#nested> 
+	    		<#-- nested 关键字声明的地方，为模板嵌入的内容 ，在引用模板的标签对里面写入的内容会放到这个地方 -->
+				<#-- container -->
+				<#-- searchOption -->
+				</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="button" fresh="true" onclick="fristOpenNavTabAfterLoadData(this,'storage','${base}')">确认</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>
+
+</#macro>
+
+<#-- 定义container变量 -->
+<#macro container>
+		    <div style="width:280px;position:relative;float:left;left: 20px;" >
+				<#nested> 
+				<#-- 这里放置 fieldList(基本信息查询条件、包括仓库、职员、查询时间等等) -->
+				<#-- fieldList -->
+				<#-- searchTime -->
+		    </div>
+
+</#macro>
+
+<#-- 定义fieldList变量 -->
+<#macro fieldList>
+		        <fieldset style="text-align: center;">
+                <legend>选择基本信息</legend> 
+				<#nested> <#-- 这里放置仓库、职员等查询条件 -->
+				<#-- storage-->
+                </fieldset>
+
+</#macro>
+<#-- -------------------------------- 仓库、职员等基本查询条件的声明 start ------------------ -->
+<#macro storage>
+				<div style="height: 30px;">
+					仓库全名:
+					<input type="hidden" name="storage.id" id="storageId" />
+					<input class="textInput" id="storageName" size="30" name="storage.fullName" lookName="storage" lookId="storage.id" />
+					<a class="btnLook" id="storageLook" type="POST" href="${base}/base/storage/dialogList" warn="仓库" lookupgroup="storage"
+						lookuppk="id" width="600" height="410">仓库</a>
+				</div>
+</#macro>
+
+<#macro unit>
+                <div style="height:30px;">
+	          	          单位全名:
+		           <input id="unitId" type="hidden" name="unit.id">
+                   <input class="textInput" type="hidden" name="unit.fullName" id="unitName"/>
+                   <input id="unitName" class="textInput enter" type="text" size="30"  name="unit.fullName">
+                   <a id="unitLook" class="btnLook" height="410" width="600" lookuppk="id" lookupgroup="unit" warn="单位"  href="${base}/base/unit/option/0">单位</a>
+                </div>
+</#macro>
+
+<#macro staff>
+                <div style="height:30px;">
+	          	          职员全名:
+	          	    <input class="line" type="hidden" name="staff.id" />
+		            <input type="hidden" name="staff.name" value=""/>
+		            <input class="textInput" type="textInput text" name="staff.name" size="30" />
+		            <a class="btnLook" id="staffLook" type="POST" rel="staffLookDialog" href="${base}/base/staff/dialogChild/${(boughtBill.staffId)!0}"  warn="员工" lookupgroup="staff" lookuppk="id" width="600" height="410">职员</a>
+                </div>
+</#macro> 
+
+<#macro area>
+				<div style="height: 30px;">
+					地区全名:
+					<input type="hidden" name="area.id" />
+					<input type="hidden" name="area.fullName" />
+					<input type="hidden" name="area.pids" />
+					<input class="textInput" id="areaName" type="text" size="30" name="area.fullName" lookName="area" lookId="area.id" />
+					<a class="btnLook" id="areaLook" btnPattern="selectMany,selectAll" type="POST" href="${base}/base/area/dialogList/0" warn="地区"
+						lookupgroup="area" lookuppk="id" width="600" height="410">地区</a>
+				</div>
+</#macro>
+
+<#macro department>
+				<div style="height:50px;">
+					 部门全名:
+					<input type="hidden" name="depm.id" value="${(model.departmentId)!}"/>
+					<input type="text"  name="depm.fullName" value="${(model.dept.fullName)!}" readonly="readonly" ondblclick="$('#depmLook').click();"/>
+					<a class="btnLook" id="depmLook" type="POST" href="${base}/base/department/option/${(record.deptId)!}" warn="部门" lookupgroup="depm" lookuppk="id" width="500" height="450">部门</a>
+				</div>
+</#macro>
+
+<#macro product>
+				<div style="height: 30px;">
+				  	商品全名:
+				    <input  type="hidden" name="product.id" id="productId"/>
+				    <input  type="text" name="product.fullName" size="30" ondblclick="$('#productDialogLook').click();"/>
+					<a class="btnLook" id="productDialogLook" btnPattern="selectMany,selectAll" href="${base}/base/product/option/0" warn="商品" lookupgroup="product" lookuppk="id" width="600" height="410">商品</a>
+				 </div>
+</#macro>
+
+<#-- -------------------------------- 仓库、职员等基本查询条件的声明  end------------------ -->
+
+<#-- searchTime变量 用于选择时间-->
+<#macro searchTime>
+                <fieldset style="text-align: center;">
+                <legend>选择时间</legend>
+				 <div style="height:30px;">开始日期:<input class="date" type="text" name="startDate" value="${startDate!}" hasClear="no" readonly="readonly"/></div>
+	  	         <div style="height:30px;">结束日期:<input class="date" type="text" name="endDate" value="${endDate!}" hasClear="no" readonly="readonly"/></div>
+	  	         <div>
+				 <input name="userSearchDate" type="checkbox" checked="checked" value="checked"/>保存时间条件
+			     </div>
+			     </fieldset>
+</#macro>
+
+<#-- searchOption变量用于选择单据 -->
+<#macro searchOption>
+		    <div style="position:relative;float:right;width:120px;left: -20px;">
+		        <fieldset>
+				<legend>选择单据</legend>
+				<div style="height:30px;">
+				   <input type="checkbox" checked="checked" name="orderTypes" value="5"/>进货单
+				</div>
+				<div style="height:30px;">
+				   <input type="checkbox" checked="checked" name="orderTypes" value="6"/>进货退货单
+				</div>
+				<#if isFreeVersion != "yes">
+				<div style="height:30px;">
+				   <input type="checkbox" checked="checked" name="orderTypes" value="12"/>进货换货单
+				</div>
+				</#if>
+				</fieldset>
+		    </div>
+</#macro>

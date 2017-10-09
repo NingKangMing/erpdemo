@@ -1,0 +1,20 @@
+<table class="table" rel="storageList">
+	<thead>
+		<tr>
+			<th width="40" align="center">行号</th>
+			<th width="300" align="center">配置类名</th>
+			<th width="30" align="center">允许</th>
+		</tr>
+	</thead>
+	<tbody>
+		<#list configList as cfg>
+		 <tr rel="${cfg.id}" >
+			<td>${cfg_index+1}</td>
+			<td>${cfg.memo!''}</td>
+			<td>
+				<input type="checkbox" target=ajax name="checkId" rel="${cfg.id}" value="1" ajaxUrl="${base}/sys/sysConfig/check" <#if cfg.isAllow?? && cfg.isAllow?number == 1> checked="checked"</#if> />
+			</td>
+		</tr>
+		</#list>
+	</tbody>
+</table>

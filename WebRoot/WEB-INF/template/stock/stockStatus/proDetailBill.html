@@ -1,0 +1,43 @@
+<div class="panel" id="proDetailBill">
+<div class="pageContent">
+	<div class="textContent center">
+		    <div>
+		         <span style="font:bold 18px '宋体',Arial,Times;">商品明细账本</span>
+		     </div>
+		     <div>
+		     	<span style="line-height: 30px;">
+		     	 查询时间：${startTime!''}&nbsp;&nbsp;至&nbsp;&nbsp;${endTime!''}
+   				<ul>
+   					<li style="float: left;margin-left:5px;">商&nbsp;&nbsp;品：${productName!''}</li>
+   					<li style="float: left;margin-left:35px;">仓&nbsp;&nbsp;库：${storageName!''}</li>
+   					<li style="float: left;margin-left:35px;">此前余量：${beforeAmount!0}</li>
+   					<li style="float: left;margin-left:35px;">
+   						此前余额：
+   						<#if beforeMoney??>
+							<@shiro.hasPermission name='1101-s'>
+								${beforeMoney!0}
+							</@shiro.hasPermission>
+							<@shiro.lacksPermission name='1101-s'>
+								***  
+							</@shiro.lacksPermission>
+						</#if>
+   					</li>
+   				</ul>
+   				</span>
+		     	<div style="float: right;">
+     				红冲过滤：
+     				<select name="isRcw" onchange="javascript:selectPost(this,'proDetailBill','isRcw');">
+     					<option value="-1" <#if isRcw?? && isRcw==-1>selected="selected"</#if> >全部显示</option>
+     					<option value="0"  <#if isRcw?? && isRcw== 0>selected="selected"</#if> >不显示红冲单据</option>
+     				</select>
+					<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+				</div>
+		     </div>
+	</div>
+	
+	<div class="divider"></div>
+	<div>
+		<#include "proDetailBillList.html"/>
+	</div>
+</div>
+</div>

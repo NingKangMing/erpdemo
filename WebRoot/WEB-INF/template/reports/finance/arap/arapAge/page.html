@@ -1,0 +1,32 @@
+<div class="panel">
+	<div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">账龄分析</span></label>
+				</li>
+			</ul>
+			<ul class="searchContent" style="margin-top: 5px;">
+				<li>
+					<span style="margin-left: 10px;">分析类型：</span>${typeName!''}
+					<span style="margin-left: 10px;">截至日期：</span>${stopDate!''}
+				</li>
+				<li style="float: right;">
+				    过滤<select onchange="xsReportAmountChange(this,'aimDiv','pagerForm','${listID}');">
+				       <option <#if aimDiv=="all">selected="selected"</#if> value="all">显示所有</option>
+				       <option <#if aimDiv=="hasData">selected="selected"</#if> value="hasData">只显示有数据的行</option>
+				       <option <#if aimDiv=="hasNoData">selected="selected"</#if> value="hasNoData">只显无数据的行</option>
+				    </select>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div layoutH="70">
+		<div id="${listID}">
+			<#include "/WEB-INF/template/reports/finance/arap/arapAge/list.html" />
+		</div>
+	</div>
+</div>
+
+
+

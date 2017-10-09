@@ -1,0 +1,38 @@
+<style type="text/css">   
+.unit{margin:4px;font-size:12px;}
+</style>
+<div class="pageContent">
+	<div layoutH="38">
+	  <fieldset>
+	  	<legend>版本信息</legend>
+		<div class="unit">${aioerpVersion!}</div>
+	  </fieldset>
+	  <#if isFreeVersion != "yes">
+	  <fieldset>
+	  	<legend>客户注册信息</legend>
+		  <div class="unit">公司名称：${Company!}</div>
+		  <div class="unit">地区：${Area!}</div>
+		  <div class="unit">加密狗号：${DogNO!}</div>
+		  <div class="unit">注册卡号：${CardNO!}</div>
+		  <div class="unit">用户数：${UserCount!}</div>
+		  <div class="unit">首次使用日期：${SDate!}</div>
+		  <div class="unit">注册日期：${RDate!}</div>
+	  </fieldset>
+	  </#if>
+	  <fieldset>
+	  	<legend>公司信息</legend>
+		  <div class="unit" style="font-weight: bold">出品公司</div>
+		  <div class="unit">总部：简易软件（香港）有限公司</div>
+		  <div class="unit">大陆：广州市简易软件有限公司</div>
+		  <div class="unit">公司网址：http://www.aioerp.com</div>
+		  <div class="unit">邮编：510000</div>
+		  <div class="unit">公司电话：020-85262369</div>
+		  <div class="unit">email: info@aioerp.com</div>
+	  </fieldset>
+   </div>
+  <div class="formBar">
+      <ul>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+	  </ul>
+  </div>
+</div>

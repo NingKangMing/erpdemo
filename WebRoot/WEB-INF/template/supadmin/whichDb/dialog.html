@@ -1,0 +1,69 @@
+<div class="pageContent">
+	<h2 class="contentTitle">【账套列表】</h2>
+	<form id="pagerForm" action="${base}/supAdmin/whichDb/toList" class="pageForm required-validate" enctype="text/plain" method="post">
+	<input type="hidden" id="selectedObjectId" name="selectedObjectId" value="${selectedObjectId!objectId!0}"/>
+	</form>
+	<table class="table" rel="sys_whichDb_listTable" layoutH="100">
+      <thead>
+		<tr>
+			<th width="40" align="center" >行号</th>
+			<th width="130" align="center" orderField="dataBaseName"  <#if orderField?? && 'dataBaseName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>数据库名</th>
+			<th width="140" align="center" orderField="whichDbCode"  <#if orderField?? && 'whichDbCode'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>账套编号</th>
+			<th width="130" align="center" orderField="whichDbName"  <#if orderField?? && 'whichDbName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>账套名称</th>
+			<th width="80" align="center">状态</th>
+			<th width="120" align="center" orderField="aioerpVersion"  <#if orderField?? && 'aioerpVersion'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>版本号</th>
+			<#if isFreeVersion != "yes">
+			<th width="100" align="center" orderField="hasOm"  <#if orderField?? && 'hasOm'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>OM状态</th>
+		    </#if>
+		</tr>
+	</thead>
+	<tbody>
+		<#if list??>
+		<#list list as obj>
+		<tr objectId="${objectId!0}" target="id" order="${(obj.rank)!}" oldOrder="${(obj.rank)!}" rel="${obj.id!0}" cTarget="openNavTab" sameId="aioerp_whichDb_update_btnid">
+			<td><a>${obj_index+1}</a></td>
+			<td>${obj.dataBaseName!''}</td>
+			<td>${obj.whichDbCode!''}</td>
+			<td>${obj.whichDbName!''}</td>
+			<td>
+				<#if obj.status=1>
+				 未激活
+				<#else>
+				已经激活
+				</#if>
+			</td>
+			<td>${obj.aioerpVersion!''}</td>
+			<#if isFreeVersion != "yes">
+			<td>
+				<#if obj.hasOm=1>
+				 未启用订单系统
+				<#else>
+				启用订单系统
+				</#if>
+			</td>
+			</#if>
+		</tr>
+		</#list>
+		</#if>
+	</tbody>
+   </table>
+   <div class="divider"></div>
+   <div>
+        <a class="button" target="dialog" rel="aioerp_whichDb_add" href="${base}/supAdmin/whichDb/toAdd" width="500" height="220"><span>创建账套</span></a>
+	    <a class="button" id="aioerp_whichDb_update_btnid" target="dialog"   rel="aioerp_whichDb_edit" href="${base}/supAdmin/whichDb/toEdit/{id}" width="500" height="220"><span>修改账套</span></a>
+	    <a class="button" target="ajaxTodo" href="${base}/supAdmin/whichDb/del/{id}" callback="dialogAjaxDone1" title="数据删除后不能恢复，确认删除？"><span>删除账套</span></a>
+	    <a class="button" target="ajaxTodo" href="${base}/supAdmin/whichDb/enable/{id}" callback="dialogAjaxDone1"><span>激活/停用账套</span></a>
+	    <#if isFreeVersion != "yes">
+	    <a class="button" target="ajaxTodo" href="${base}/supAdmin/whichDb/hasOm/{id}" callback="dialogAjaxDone1"><span>启用OM订单系统</span></a>
+	    </#if>
+	    <a class="button" target="ajaxTodo" href="${base}/supAdmin/whichDb/reloadPwd/{id}" callback="dialogAjaxDone1"><span>重置密码</span></a>
+	    <#if isFreeVersion != "yes">
+	    <div style="float: right">
+		    <a class="button" href="javascript:void(0);" target="tableRowSort" rel="sys_whichDb_listTable" sort="up" targetType="dialog"><span>上移</span></a>
+		    <a class="button" href="javascript:void(0);" target="tableRowSort" sort="down" rel="sys_whichDb_listTable" targetType="dialog"><span>下移</span></a> 
+	        <a class="button" href="${base}/supAdmin/whichDb/saveRank" target="tableRowSortSave" rel="sys_whichDb_listTable" warn="没有排序变更" targetType="dialog"><span>排序保存</span></a> 
+	    </div>
+	    </#if>
+	</div>
+</div>
+

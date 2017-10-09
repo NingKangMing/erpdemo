@@ -1,0 +1,86 @@
+<div class="panel" id="stockMaxBoundPage">
+	<div class="pageContent">
+		<div class="textContent center" style="height: 80px;">
+		     <div>
+		         <span style="font:bold 18px '宋体',Arial,Times;">库存商品上限报警</span>
+		     </div>
+		     <div>
+		     	<span style="margin-left:30px; line-height: 20px;">当前仓库：<span id="storgeName">${storgeName!'全部仓库'}</span>
+		     </div>
+			<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+		</div>
+		
+		<form id="pagerForm" enctype="text/plain" onsubmit="return divSearch(this, 'stockMaxBoundPage');" action="${base}/reports/stock/stockBound/maxPage" method="post">
+			<input type="hidden" name="pageNum" value="${pageMap.pageNum!1}" />
+			<input type="hidden" name="numPerPage" value="${pageMap.numPerPage!15}" />
+			<input type="hidden" name="orderField" value="${orderField!'pro.rank'}" /><!--查询排序-->
+		    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+			
+			<input type="hidden" id="storage.id" name="storage.id" value="${storageId!0}"/>
+			<input type="hidden" id="storage.pids" name="storage.pids" value="${storagePids!'{0}'}"/>
+			<input type="hidden" id="storage.fullName" name="storage.fullName" value="${storgeName!'全部仓库'}"/>
+			
+			<#include "/WEB-INF/template/base/baseSearchComDialog/searchConditionInputs.html"/><!--报表基本信息筛选条件保存 -->
+		</form>
+		
+		<table class="table" rel="stockMaxBoundPage" layoutH="180">
+			<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+			<tbody>
+				<#list pageMap.pageList as recode>
+				<tr target="adjust" rel="${(recode.adjust)!0}">
+					<td align="center"><a>${recode_index+1+pageMap.limit}</a></td>
+					<#list rowList as row>
+						<#assign columnObj = "" />
+						<#if row.code?? && ((row.code)?index_of(".")>-1)>
+							<#assign columnObj = (row.code)?substring(0,(row.code)?index_of(".")) />
+							<#assign columnParam = (row.code)?substring((row.code)?index_of(".")+1) />
+						<#else>
+							<#assign columnParam = row.code />
+						</#if>
+					
+						<#if row.code?? && ('sckAmount'==row.code || 'maxNum'==row.code)>
+							<td>
+								<#if recode[columnParam]?? && recode[columnParam] !=0 >${recode[columnParam]!}</#if>
+							</td>
+						<#elseif row.code?? && 'adjust'==row.code>
+							<td alter="adjustAmount">
+								<#if recode[columnParam]?? && recode[columnParam] !=0 >${recode[columnParam]!}</#if>
+							</td>
+						<#elseif row.code?? && 'pro.savePath'==row.code>
+							<td>
+								<#if (recode.pro.savePath)??>
+								    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(recode.pro.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(recode.pro.savePath)!}"  width="20px" height="20px"/>
+					            </#if>
+							</td>
+						<#else>
+							<#if columnObj?? && columnObj!="">
+								<td>${((recode[columnObj])[columnParam])!}</td>
+							<#else>
+								<td>${recode[columnParam]!}</td>
+							</#if>
+						</#if>
+					</#list>
+				</tr>
+				</#list>
+			</tbody>
+		</table>
+			
+		<#include "/WEB-INF/template/unitl/paging.html"/>
+				
+		<div class="divider"></div>
+		<div>
+			<a class="button" href="${base}/base/storage/dialogList" module="navTab" isReload=true reloadId="stockMaxBoundPage" showNameId="storgeName" warn="仓库" lookupgroup="storage" btnPattern="selectAll" lookuppk="id" width="600" height="410"><span>选择仓库</span></a>
+			<a class="button" aimtabid="stockMaxBoundView" aimurl="${base}/reports/stock/stockBound/maxPage" aimtitle="库存商品上限报警" height="210" width="400" rel="report_product_filtter" href="${base}/base/product/toReportBaseFilter/pagerForm-product" target="dialog">
+				<span>商品筛选</span>
+			</a>
+		</div>
+		<div style="float: right;">
+		    <#assign privs = '5-81-517-p'/>
+			<#assign href = '${base}/reports/stock/stockBound/printMaxAndMin/1'/>
+			<#assign formId = 'pagerForm'/>
+			<#include "/WEB-INF/template/common/print/printBtn.html"/>
+			<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+		</div>
+							
+	</div>
+</div>

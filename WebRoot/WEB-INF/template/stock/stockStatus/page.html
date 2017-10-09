@@ -1,0 +1,31 @@
+<div class="panel">
+	<div class="pageContent" id="stockStatusPage">
+		<div class="textContent" style="height: 68px;">
+		     <div>
+		         <span style="font:bold 18px '宋体',Arial,Times;">库存状况</span>
+		     </div>
+		     <div>
+				<div style="float:left;margin-left:30px; line-height: 30px;">当前仓库：<span id="storgeName">${storgeName!'全部仓库'}</span></div>
+				 <div style="float: right;">
+			     	<select id="selectFilter" name="selectFilter"  onchange="javascript:selectPost(this,'stockStatusList','filterVal');" >
+			     		<option value="all"     <#if filterVal=='all'>selected</#if>     >显示全部</option>
+			     		<option value="noZero"  <#if filterVal=='noZero'>selected</#if>  >不显示数量为0的行</option>
+			     		<option value="onlyZero" <#if filterVal=='onlyZero'>selected</#if> >只显示数量为0的行</option>
+			     	</select>
+			     	<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+				 </div>
+		     </div>
+		</div>
+
+		<div>
+			<div style="float:left; display:block; overflow:auto; width:210px; border:solid 1px #CCC; line-height:21px; background:#fff" layoutH="100">
+				<ul id="stockStatusTree" relevancyIds="storage.id,storage.pids,helpAmunitPattern,filterVal" target="ztree" selectNodeId="${supId!0}" class="ztree" url="${base}/stock/stockStatus/tree/0" rel="stockStatusList" ctarget="ajax"></ul>
+			</div>
+			
+			<div id="stockStatusList" style="margin-left: 220px;padding:2px; padding-top: 0px;" layoutH="30">
+				<#include "list.html" />
+			</div>
+			
+		</div>
+	</div>
+</div>

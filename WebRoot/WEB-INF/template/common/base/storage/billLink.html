@@ -1,0 +1,8 @@
+<!--navTab 仓库      eg:销售单头表选择仓库 -->
+<#--<#include "/WEB-INF/template/common/base/storage/billLink.html"/>-->
+
+<input type="hidden" name="storage.id" id ="storageId" value="${(bill.getBillStorage(session.loginConfigId).id)!(storage.id)!0}"/>
+<input type="hidden" name="storage.code" id="storageCode" value="${(bill.getBillStorage(session.loginConfigId).code)!(storage.code)!}"/>
+<input type="hidden" name="storage.supId" id="storageSupId" value="${(bill.getBillStorage(session.loginConfigId).code)!(storage.code)!}"/>
+<input class="line textInput" id="storageName" name="storage.fullName" value="${(bill.getBillStorage(session.loginConfigId).fullName)!(storage.fullName)!}"  lookName="storage" lookId="storage.id"/>
+<a class="btnLook" id="storageLook" type="POST" btnPattern="optionAdd" href="${base}/base/storage/dialogList" module="navTab" warn="仓库" lookupgroup="storage" lookuppk="id" width="600" height="410">仓库</a>                

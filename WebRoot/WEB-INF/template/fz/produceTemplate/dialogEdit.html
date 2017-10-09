@@ -1,0 +1,165 @@
+<div class="pageContent">
+	<input type="hidden" id="whichCallBack" value="produceTemplate">
+	<input id="basePathId" type="hidden" value="${base}"/><!-- 路径 -->
+	<form action="${base}/fz/produceTemplate/edit" method="post"
+		class="tableForm pageForm" enctype="text/plain"
+		onsubmit="return validateCallback(this,${callBack!'aioReloadForm'})">
+		<h1>生产模板--配料单</h1>
+		
+		<input type="hidden" id="copyTmpName" name="copyTmpName" value=""/><!-- 另存为新模板名 -->
+		<input type="hidden" name="produceTmp.id" value="${produceTmp.id!''}"/>
+		
+		<div style="width: 200px; float: left; margin-top: 15px;" layoutH="85" align="center">
+			<fieldset style="height:45px; text-align: center; width: 180px;">
+		  	     <legend style="font-weight: normal;">模板名称</legend>
+		  	     <input style="width: 150px;" class="required" id="tmpName" name="produceTmp.tmpName"  value="${(produceTmp.tmpName)!}" />
+		  	</fieldset>
+		  	<fieldset style="height:45px; text-align: center; width: 180px;">
+		  	     <legend style="font-weight: normal;">生产商品</legend>
+		  	     
+		  	     <input type="hidden" id="product.id" name="product.id" value="${(produceTmp.productId)!}"/>
+	   	    	 <input class="required" style="width: 130px; margin-left:11px;" name="product.fullName" lookName="product" lookId="product.id" value="${(produceTmp.getProduct(session.loginConfigId).fullName)!}"/>
+	        	 <a style="margin-right: 10px;" class="btnLook" id="productLook" showNameId="product.fullName" href="${base}/base/product/option" warn="商品" lookupgroup="product" lookuppk="id" width="600" height="410">商品</a>
+		  	</fieldset>
+		  	
+		  	
+		  	<fieldset style="height:45px; margin-top:120px; text-align: center; width: 180px;">
+		  	     <legend style="font-weight: normal;">出库仓库</legend>
+		  	     <input type="hidden" name="outStorage.id" id="outStorageId" />
+			     <input type="hidden" name="outStorage.code" id="outStorageCode" />
+			     <input type="hidden" name="outStorage.supId" id="outStorageSupId" />
+			  	 <input style="width: 130px; margin-left:11px;" name="outStorage.fullName" lookName="outStorage" lookId="outStorage.id"/>
+			     <a style="margin-right: 10px;" class="btnLook" btnpattern="selectMany,selectAll" backParam="reloadSckAmount" id="outStorageLook" type="POST" showNameId="outStorage.fullName" href="${base}/base/storage/dialogList" warn="仓库" lookupgroup="outStorage" lookuppk="id" width="600" height="410">仓库</a>
+		  	</fieldset>
+		  	<fieldset style="height:45px; text-align: center; width: 180px;">
+		  	     <legend style="font-weight: normal;">入库仓库</legend>
+		  	     <input type="hidden" name="inStorage.id" id="inStorageId" />
+			     <input type="hidden" name="inStorage.code" id="inStorageCode" />
+			     <input type="hidden" name="inStorage.supId" id="inStorageSupId" />
+			  	 <input style="width: 130px; margin-left:11px;" name="inStorage.fullName" lookName="inStorage" lookId="inStorage.id"/>
+			     <a style="margin-right: 10px;" class="btnLook" btnpattern="selectMany,selectAll" id="inStorageLook" type="POST" showNameId="inStorage.fullName" href="${base}/base/storage/dialogList" warn="仓库" lookupgroup="inStorage" lookuppk="id" width="600" height="410">仓库</a>
+		  	</fieldset>
+		  	<fieldset style="height:60px; text-align: center; width: 180px;">
+		  	     <legend style="font-weight: normal;">生产数量</legend>
+		  	     <input class="number" id="produceAmount" value="0" onBlur="inputProduceAmountBlur(this)"/>		
+		  	     <div  align="left" style="line-height: 30px; margin-left: 12px;">可生产数量：<lable id="allowAmount">${allowAmount!0}</lable></div>	
+		  	</fieldset>
+		</div>
+		<div style="margin-top: 15px;" layoutH="85">
+			<table class="table" model="order" >
+				<thead>
+					<tr>
+						<th width="30">
+							行号
+						</th>
+						<th width="80">
+							商品编号
+						</th>
+						<th width="100">
+							商品全名
+						</th>
+						<th width="65">
+							库存数量
+						</th>
+						<th width="65">
+							配套数量
+						</th>
+						<th width="65">
+							需求量
+						</th>
+						<th width="65">
+							库存余量
+						</th>
+						<th width="30px">
+							<a title="添加一行" class="btnAdd" target="addTr"
+								href="javascript:void(0);" rel="produceTemplatetBody"></a>
+						</th>
+					</tr>
+				</thead>
+				<tbody id="produceTemplatetBody" preDataName="produceTemplatetDetail">
+					<#list detailList as detail>
+					<tr isNotBatch="yes">
+						<td>${detail_index+1}</td>
+				        <!-- 商品编号-->
+				        <td cname="code" validateAttr="" maxlength="50" onBlur="objDelOrClear(this,'code');" storageId="outStorageId" cTarget="dialog"  title="商品" warn="商品"  productId="productId" enterSearch="true" productSupId="supId" searchUrl="${base}/stock/stock/orderOneRecord/" editUrl="${base}/stock/stock/orderDialogEdit/" url="${base}/stock/stock/orderDialog/" rel="b_product_dialog" dwidth="680" dheight="450">
+				        	<div>${(detail.product.code)!}</div>
+				        </td> 
+				        <!-- 商品名称 -->
+				        <td cname="fullName" validateAttr=""  maxlength="50" onBlur="objDelOrClear(this,'fullName');" storageId="outStorageId" cTarget="dialog"  title="商品" warn="商品" productId="productId" enterSearch="true" productSupId="supId" searchUrl="${base}/stock/stock/orderOneRecord/" editUrl="${base}/stock/stock/orderDialogEdit/" url="${base}/stock/stock/orderDialog/" rel="b_product_dialog" dwidth="680" dheight="450">
+				        	<div>${(detail.product.fullName)!}</div>
+				        </td>
+						<td cname="sckAmount"    readonly="readonly" ><div>${(detail.sckAmount)!}</div></td>
+						<td cname="assortAmount" requiredData="need" validateAttr="number" onBlur="inputAssortAmountBlur(this)"><div>${(detail.assortAmount)!}</div></td>
+						<td cname="needAmount"   readonly="readonly"><div></div></td>
+						<td cname="remainAmount" readonly="readonly"><div>${(detail.sckAmount)!}</div></td>
+						<td>
+							<a title="删除本行" class="btnDel" href="javascript:void(0);"	onclick="removeTr(this);"></a>
+							
+							<input class="stealth number" type="hidden" value="${(detail.id)!}" name="produceTemplatetDetail[${detail_index}].id"><!-- 生产模板明细Id -->
+							<input class="stealth" type="hidden" value="${(detail.product.code)!}" maxlength="50" cname="code">
+							<input class="stealth" type="hidden" value="${(detail.product.fullName)!}" maxlength="50" cname="fullName">
+							<input class="stealth" type="hidden" value="${(detail.sckAmount)!}" readonly="readonly" cname="sckAmount">
+							<input class="stealth number" type="hidden" value="${(detail.assortAmount)!}" name="produceTemplatetDetail[${detail_index}].assortAmount" cname="assortAmount">
+							<input class="stealth" type="hidden" value="" readonly="readonly" cname="needAmount">
+							<input class="stealth" type="hidden" value="${(detail.sckAmount)!}" readonly="readonly" cname="remainAmount">
+							<input type="hidden" cname="supId" value="${(detail.product.supId)!}">
+							<input type="hidden" name="produceTemplatetDetail[${detail_index}].productId" cname="productId" value="${(detail.productId)!}">
+							
+							<input type="hidden" cname="oldCode" value="${(detail.product.code)!}">
+							<input type="hidden" cname="oldFullName" value="${(detail.product.fullName)!}">
+							<input type="hidden" name="brekageBillDetail[${detail_index}].selectUnitId" cname="selectUnitId" value="${(detail.selectUnitId)!}">
+							<input type="hidden" cname="calculateUnit1" value="${(detail.product.calculateUnit1)!}">
+							<input type="hidden" cname="calculateUnit2" value="${(detail.product.calculateUnit2)!}">
+							<input type="hidden" cname="calculateUnit3" value="${(detail.product.calculateUnit3)!}">
+							<input type="hidden" name="product[${detail_index}].unitRelation1" cname="unitRelation1" value="${(detail.product.unitRelation1)!}">
+							<input type="hidden" name="product[${detail_index}].unitRelation2" cname="unitRelation2" value="${(detail.product.unitRelation2)!}">
+							<input type="hidden" name="product[${detail_index}].unitRelation3" cname="unitRelation3" value="${(detail.product.unitRelation3)!}">
+							<input type="hidden" cname="retailPrice1" value="${(detail.product.retailPrice1)!}">
+							<input type="hidden" cname="retailPrice2" value="${(detail.product.retailPrice2)!}">
+							<input type="hidden" cname="retailPrice3" value="${(detail.product.retailPrice3)!}">
+							<input type="hidden" cname="costArith" value="${(detail.product.costArith)!}">
+						
+							<input type="hidden" value="0" name="helpUitl[${detail_index}].trIndex" cname="trIndex">
+						</td>
+					</tr>
+					</#list>
+					
+					
+					<#list detailList.size()+1..15 as td>
+					<tr isNotBatch="yes">
+						<td>${detailList.size()+td_index+1}</td>
+				        <!-- 商品编号-->
+				        <td cname="code" validateAttr="" maxlength="50" onBlur="objDelOrClear(this,'code');" storageId="outStorageId" cTarget="dialog"  title="商品" warn="商品"  productId="productId" enterSearch="true" productSupId="supId" searchUrl="${base}/stock/stock/orderOneRecord/" editUrl="${base}/stock/stock/orderDialogEdit/" url="${base}/stock/stock/orderDialog/" rel="b_product_dialog" dwidth="680" dheight="450">
+				        </td> 
+				        <!-- 商品名称 -->
+				        <td cname="fullName" validateAttr=""  maxlength="50" onBlur="objDelOrClear(this,'fullName');" storageId="outStorageId" cTarget="dialog"  title="商品" warn="商品" productId="productId" enterSearch="true" productSupId="supId" searchUrl="${base}/stock/stock/orderOneRecord/" editUrl="${base}/stock/stock/orderDialogEdit/" url="${base}/stock/stock/orderDialog/" rel="b_product_dialog" dwidth="680" dheight="450">
+				        </td>
+						<td cname="sckAmount"    readonly="readonly" ></td>
+						<td cname="assortAmount" requiredData="need" validateAttr="number" onBlur="inputAssortAmountBlur(this)"></td>
+						<td cname="needAmount"   readonly="readonly"></td>
+						<td cname="remainAmount" readonly="readonly"></td>
+						<td>
+							<a title="删除本行" class="btnDel" href="javascript:void(0);"
+								onclick="removeTr(this);"></a>
+						</td>
+					</tr>
+					</#list>
+				</tbody>
+			</table>
+			
+		</div>
+
+
+		<!--提交按钮  -->
+		<div class="formBar">
+			<ul>
+				<li>
+					<a class="button" height="160" width="320" rel="inputTmpNameDialog" title="模板名称" target="dialog" href="${base}/fz/produceTemplate/copy"><span>另存为</span></a>
+				</li>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="btnChangeFormAction(this)" action="${base}/fz/produceTemplate/edit">保存</button></div></div></li>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+			</ul>
+		</div>
+		<!--end 提交按钮  -->
+	</form>
+</div>

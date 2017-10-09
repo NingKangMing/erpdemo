@@ -1,0 +1,27 @@
+<div>
+   <form action="${base}/supAdmin/whichDb/add" method="post" class="tableForm pageForm"  enctype="multipart/form-data" onsubmit="return validateCallback(this,dialogAjaxDone1)">
+      <table style="margin-left: 10px; margin-top: 15px;">
+		  <tr style="height:40px;">
+		     <td style="text-align: right;">数据库名:</td>
+		     <td colspan="3"><input type="text" maxlength="32" name="whichDb.dataBaseName" value="${(obj.dataBaseName)!}" class="required textInput" size="60"/></td>
+		  </tr>
+		  <tr style="height:40px;">
+		     <td style="text-align: right;">账套编号:</td>
+		     <td colspan="3"><input type="text" maxlength="50" name="whichDb.whichDbCode" value="${(obj.whichDbCode)!}" class="required textInput" size="60"/></td>
+		  </tr>
+		  <tr style="height:40px;">
+		     <td style="text-align: right;">账套名称:</td>
+		     <td colspan="3"><input type="text" maxlength="50" name="whichDb.whichDbName" value="${(obj.whichDbName)!}" class="required textInput" size="60"/></td>
+		  </tr>
+	 </table>
+	 <div class="divider"></div>
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+		</ul>
+	  </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

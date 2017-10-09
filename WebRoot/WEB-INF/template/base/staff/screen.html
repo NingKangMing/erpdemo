@@ -1,0 +1,29 @@
+
+<div class="pageContent">
+	<h2 class="contentTitle">查询</h2>
+	<form  action="${base}/base/staff/toScreen" class="pageForm required-validate" enctype="text/plain" method="post" onsubmit="return validateCallback(this, filter)">
+		<div class="pageFormContent" >
+			<p>
+				<label>查询条件：</label>
+				<select name="screenPara" id="screenPara" style="width: 130px;">
+		            <option value="quick">快速查询</option>
+					<option value="code">职员编号</option>
+					<option value="name">职员全名</option>
+					<option value="favoriteLimit">每单优惠限额</option>
+					<option value="sysImgId">有无图片</option>
+					<option value="status">状态</option>
+				</select>
+			</p>
+			<p>
+				<label>查询信息：</label>
+				<input type="text"  id="screenVal" name="screenVal" value="">
+			</p>	
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">查询</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>

@@ -1,0 +1,84 @@
+
+<form id="pagerForm" onsubmit="return divSearch(this, 'staffPermissionList');" action="${base}/sys/basePermission/staff" method="post">
+	<input type="hidden" name="pageNum" value="${(staffPageMap.get('pageNum'))}" />
+	<input type="hidden" name="numPerPage" value="${(staffPageMap.get('numPerPage'))!}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <input type="hidden" name="userId" value="${userId!}">
+    <input type="hidden" name="pSupId" value="${supId!-1}">
+</form>
+<table class="table" rel="staffPermissionList" layoutH="200">
+	<thead>
+		<tr>
+			<th width="50px">
+				行号
+			</th>
+			<th width="150px" align="center" orderField="code" <#if orderField?? && 'code'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+				单位编号
+			</th>
+			<th width="150px" align="center" orderField="fullName" <#if orderField?? && 'fullName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+				单位全称
+			</th>
+			<th width="150px" align="center" orderField="status" <#if orderField?? && 'status'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+				状态
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<#list staffPageMap.pageList as staff>
+		  <#if staff.node==2>
+		  <tr objectId="${objectId!0}" target="staffId" rel="${staff.id}"  crel="staffPermissionList" cTarget="ajax" url="${base}/sys/basePermission/staff/${staff.id}-{userId}">
+		  <#else>
+		   <tr objectId="${objectId!0}" target="staffId" rel="${staff.id}">
+		  </#if>
+			<td><a>${staff_index+1+staffPageMap.limit}</a>
+				<#if staff.node==2>..</#if>
+			</td>
+			<td>
+				${staff.code!''}
+			</td>
+			<td>
+				${staff.fullName!''}
+			</td>
+	
+			<td onclick="tdRelevanceTr(this,'staffChoose');">
+				<#if staff.privs==3>
+				       ★
+				<#elseif staff.privs==2>
+				       ☆
+				</#if>
+			</td>
+		</tr>
+		</#list>
+	</tbody>
+</table>
+<div class="panelBar">
+		 <div class="pages">
+			<span>显示</span>  
+			<select class="combox" name="numPerPage" onchange="navTabPageBreak({pageNum:${(staffPageMap.pageNum)!1},numPerPage:this.value},'${(staffPageMap.listID)!''}')">
+				<option <#if staffPageMap.numPerPage?number == 15>selected</#if> value="15">15</option>
+				<option <#if staffPageMap.numPerPage?number == 20>selected</#if> value="20">20</option>
+				<option <#if staffPageMap.numPerPage?number == 50>selected</#if> value="50">50</option>
+				<option <#if staffPageMap.numPerPage?number == 100>selected</#if> value="100">100</option>
+			</select>
+			<span>条，共${(staffPageMap.totalCount)!0}条</span>
+		</div>
+		<div class="pagination" rel="${(staffPageMap.listID)!''}" target="ajaxTodo"  totalCount="${(staffPageMap.totalCount)!0}" numPerPage="${(staffPageMap.numPerPage)!15}" pageNumShown="5" currentPage="${(staffPageMap.pageNum)!1}"></div>
+</div>
+
+<!--divider虚线-->
+	<div class="divider"></div>
+	<div>
+			<a class="button" id="staffChoose" href="${base}/sys/basePermission/choose/{userId}-{baseType}-{staffId}" target="ajaxTodo"  callback="reloadNavTabDiv"><span>选中</span></a>
+			<a class="button" href="${base}/sys/basePermission/allChoose/{userId}-{baseType}-{staffId}" target="ajaxTodo"  callback="reloadNavTabDiv"><span>全选</span></a>
+			<a class="button" href="${base}/sys/basePermission/empty/{userId}-{baseType}-{staffId}" target="ajaxTodo"  callback="reloadNavTabDiv"><span>清空</span></a>
+			<#if supId?? && supId!=-1>
+			<a class="button" href="${base}/sys/basePermission/staff?pSupId=${pSupId!0}&objectId=${supId!0}" relevancyIds="userId" target="ajax"  rel="staffPermissionList"><span>上级</span></a>
+	        <#else>
+	        <a class="buttonDisabled" href="javascript:void(0);"><span>上级</span></a>
+	        </#if>
+	        
+	</div>
+	<div style="float: right;">
+			<a class="button" href="javascript:void(0);" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a>
+	</div>

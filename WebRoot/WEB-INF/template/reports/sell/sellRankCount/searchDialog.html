@@ -1,0 +1,131 @@
+<div class="pageContent">
+	<h2 class="contentTitle">查询</h2>
+	<form>
+	    <input type="hidden" name="aimTabId" id="aimTabId"/>	     <!-- 设置目标Tab组件ID -->				
+	    <input type="hidden" name="aimUrl" id="aimUrl"/>	         <!-- 设置目标URl -->				
+	    <input type="hidden" name="aimTitle" id="aimTitle"/>         <!-- 设置目标标题 -->
+	    <input type="hidden" name="aimDiv"  id="aimDiv"/>            <!-- 目标DivId   (放过滤条件   all eq gt) -->
+	    
+	    					
+		<div class="pageFormContent" layoutH="100">
+            <table>
+               <tr>
+                  <td style="vertical-align: top;">
+                      <fieldset style="width: 280px;">
+					    <legend>选择基本信息</legend>
+					    <table>
+				           <#if modelType!='unit'>
+				           
+				           <#include "/WEB-INF/template/common/base/reports/unitReportLink.html"/>
+				           <#--<tr style="height: 30px;">
+				              <td>单位全名:</td>
+				              <td>
+				                  <input type="hidden" name="unit.id" id="unitId"/>
+							      <input class="line" type="hidden" name="unit.fullName" id="unitName"/>
+							      <input class="textInput" type="text" size="30" name="unit.fullName" id="unitName"/>
+							      <a class="btnLook" id="unitLook" btnPattern="selectMany,selectAll"  href="${base}/base/unit/option/0" warn="单位" lookupgroup="unit" type="post" lookuppk="id" width="600" height="410">单位</a>
+				              </td>
+				           </tr>-->
+				           </#if>
+				           <#if modelType!='prd'>
+				           
+				           <#include "/WEB-INF/template/common/base/reports/productReportLink.html"/>
+				           <#--<tr style="height: 30px;">
+				              <td>商品全名:</td>
+				              <td>
+				                  <input  type="hidden" name="product.id" id="productId"/>
+				                  <input  type="text" name="product.fullName" size="30" ondblclick="$('#productDialogLook').click();"/>
+	              				  <a class="btnLook" id="productDialogLook" btnPattern="selectMany,selectAll" href="${base}/base/product/option/0" warn="商品" lookupgroup="product" lookuppk="id" width="600" height="410">商品</a>
+				              </td>
+				           </tr>-->
+				           </#if>
+				           <#if modelType!='staff'>
+				           <#include "/WEB-INF/template/common/base/reports/staffReportLink.html"/>
+				           <#--<tr style="height: 30px;">
+				              <td>职员全名:</td>
+				              <td>
+				                  <input type="hidden" name="staff.id" id="staffId"/>
+							      <input class="line" type="hidden" name="staff.name" id="staffName"/>
+							      <input class="textInput" type="text" size="30" name="staff.name" id="staffName"/>
+							      <a class="btnLook" id="staffLook" btnPattern="selectMany,selectAll" type="POST"  href="${base}/base/staff/dialogChild/0" warn="员工" lookupgroup="staff" lookuppk="id" width="600" height="410">职员</a>
+				              </td>
+				           </tr>-->
+				           </#if>
+				           <#if modelType!='storage'>
+				           <#include "/WEB-INF/template/common/base/reports/storageReportLink.html"/>
+				           <#--<tr style="height: 30px;">
+				              <td>仓库全名:</td>
+				              <td>
+				                  <input type="hidden" name="storage.id" id ="storageId"/>
+						          <input type="hidden" name="storage.code" id="storageCode"/>
+					     	      <input class="textInput" id="storageName" size="30" name="storage.fullName" lookName="storage" lookId="storage.id"/>
+						          <a class="btnLook" id="storageLook" btnPattern="selectMany,selectAll" type="POST" href="${base}/base/storage/dialogList" warn="仓库" lookupgroup="storage" lookuppk="id" width="600" height="410">仓库</a>                
+				              </td>
+				           </tr>-->
+				           </#if>
+				        </table>
+				      </fieldset>
+                  </td>
+                  <td>
+                  	  <fieldset style="width: 110px; margin-left: 10px;">
+					    <legend>选择单据</legend>
+					    <table>
+				           <tr style="height: 25px;">
+				              <td><input type="checkbox" checked="checked" name="orderTypes" value="xsd"/>销售单</td>
+				           </tr>
+				           <tr style="height: 25px;">
+				              <td><input type="checkbox" checked="checked" name="orderTypes" value="xsthd"/>销售退货单</td>
+				           </tr>
+				           <tr style="height: 25px;">
+				              <td><input type="checkbox" checked="checked" name="orderTypes" value="xshhd"/>销售换货单</td>
+				           </tr>
+				           <#--
+				           <tr style="height: 25px;">
+				              <td><input type="checkbox" disabled="disabled" name="orderTypes" value="jzxsd"/>借转销售单</td>
+				           </tr>
+				           <tr style="height: 25px;">
+				              <td><input type="checkbox" disabled="disabled" name="orderTypes" value="wtjsd"/>委托结算单</td>
+				           </tr>
+				           -->
+				        </table>
+				      </fieldset>
+                  </td>
+               </tr>
+               <#include "/WEB-INF/template/common/base/reports/searchDateReportLink.html"/>
+               <#--<tr>
+                  <td>
+                     <fieldset style="width: 280px;">
+					    <legend>选择时间</legend>
+					    <table>
+				           <tr style="height: 30px;">
+				              <td>开始日期：</td>
+				              <td>
+				              	<input type="text" size="30" class="date" name="startDate" dateFmt="yyyy-MM-dd" value="${startDate!''}" hasClear="no" readonly="readonly"/>
+				              </td>
+				           </tr>
+				           <tr style="height: 30px;">
+				              <td>结束日期：</td>
+				              <td>
+				              	<input type="text" size="30" class="date" name="endDate" dateFmt="yyyy-MM-dd" value="${endDate!''}" hasClear="no" readonly="readonly"/>
+				              </td>
+				           </tr>
+				           <tr style="height: 25px;">
+				              <td colspan="2" align="center">
+								<input name="userSearchDate" type="checkbox" checked="checked" value="checked"/>保存时间条件
+							  </td>
+				           </tr>
+				        </table>
+				      </fieldset>
+                  </td>
+               </tr>-->
+            </table>			
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="fristOpenNavTabAfterLoadData(this,'${modelType}')">确认</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>
+

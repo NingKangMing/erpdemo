@@ -1,0 +1,188 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/sellRankCount/dialogSearch/page" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <!-- ID用于树点击参数 -->
+	<input type="hidden" id="modelType" name="modelType" value="${modelType}"/>        <!-- prd(商品销售统计)  unit(单位销售统计) -->
+	<input type="hidden" id="product.id" name="product.id" value="${productId}"/>      <!-- 商品ID -->
+	<input type="hidden" id="unit.id" name="unit.id" value="${unitId}"/>               <!-- 单位ID -->
+	<input type="hidden" id="staff.id" name="staff.id" value="${staffId}"/>            <!-- 职员ID -->
+	<input type="hidden" id="storage.id" name="storage.id" value="${storageId}"/>      <!-- 仓库ID -->
+	
+	<input type="hidden" id="product.id" name="product.fullName" value="${productFullName!}"/>      <!-- 商品ID -->
+	<input type="hidden" id="unit.id" name="unit.fullName" value="${unitFullName!}"/>               <!-- 单位ID -->
+	<input type="hidden" id="staff.id" name="staff.name" value="${staffFullName!}"/>            <!-- 职员ID -->
+	<input type="hidden" id="storage.id" name="storage.fullName" value="${storageFullName!!}"/>      <!-- 仓库ID -->
+	
+	
+	<input type="hidden" id="pageOrderTypes" name="pageOrderTypes" value="${orderTypes}"/>   <!--销售单(xsd),销售退货单(xsthd),销售换货单(xshhd),借转销售单(jzxsd),委托结算单(wtjsd)-->
+	<input type="hidden" id="startDate" name="startDate" value="${startDate}"/>        <!--开始日期  -->
+	<input type="hidden" id="endDate" name="endDate" value="${endDate}"/>            <!-- 结束日期 -->
+	<input type="hidden" id="aimDiv" name="aimDiv" value="${aimDiv}"/>                                   <!-- 过滤条件     all eq gt 下拉框改变赋值 -->
+	<input type="hidden" id="supId" name="supId" value="${supId}"/>                               <!-- 父级ID -->
+	<input type="hidden" id="node" name="node" value="${node!2}"/>
+	
+	<input type="hidden" name="whereComeDetail" value="other"> 
+	<#include "/WEB-INF/template/base/baseSearchComDialog/searchConditionInputs.html"/><!--报表基本信息筛选条件保存 -->
+</form>
+<#include "/WEB-INF/template/common/columnConfig/tableTotalWidthLink.html"/>
+<table class="table" rel="${listID}" layoutH="230">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody id="reports_prdsellcount_body">
+	    <#if pageMap??&&pageMap.pageList??>
+		<#list pageMap.pageList as obj>
+	    <#if obj.node??&&obj.node==2>
+		<tr nodeType1="${obj.node!'2'}" rel="${obj.id!0}" trel="${ztreeID}"  crel="${listID}" cTarget="ajax" url="${base}/reports/sellRankCount/dialogSearch/tree-${modelType}-${obj.id}" relevancyIds="product.id,unit.id,staff.id,storage.id,pageOrderTypes,startDate,endDate,aimDiv">
+		<#else>
+		<tr nodeType1="${(obj.node)!'1'}" rel="${(obj.id)!0}" cTarget="openNavTab"  sameId="reports_prd_xs_detail_id">
+		</#if>
+			<td><a>${obj_index+1+pageMap.limit}</a><#if (obj.node)??&&obj.node==2>..</#if></td>
+			<#list rowList as row>
+            <#if row.code?? && 'code'==row.code>
+			<td>${(obj.code)!''}</td> <!-- 编号 -->
+			<#elseif row.code?? && 'fullName'==row.code>
+			<td>${(obj.fullName)!'其它'}</td> <!-- 全名 -->
+			<#elseif row.code?? && 'smallName'==row.code>
+			<td>${(obj.smallName)!''}</td>
+			 <#elseif row.code?? && 'spell'==row.code>
+			<td>${(obj.spell)!''}</td> 
+			<#elseif row.code?? && 'standard'==row.code>
+			<td>${(obj.standard)!''}</td>
+			 <#elseif row.code?? && 'model'==row.code>
+			<td>${(obj.model)!''}</td> 
+			<#elseif row.code?? && 'field'==row.code>
+			<td>${(obj.field)!''}</td>
+			<#elseif row.code?? && 'savePath'==row.code>
+			<td>
+			<#if (obj.savePath)??>
+			    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(obj.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(obj.savePath)!}"  width="20px" height="20px"/>
+            </#if>
+			</td>
+			<#elseif row.code?? && 'assistUnit'==row.code>
+			<td>${(obj.assistUnit)!''}</td> <!--辅助单位  -->
+			<#elseif row.code?? && 'helpAmount'==row.code>
+			<td>${(obj.helpAmount)!''}</td> <!--辅助销售数量  -->
+			<#elseif row.code?? && 'avgPrice'==row.code>
+			<td><#if (obj.avgPrice)??&&obj.avgPrice!=0>${obj.avgPrice!''}</#if></td> <!-- 销售单价 -->
+			<#elseif row.code?? && 'sellAmount'==row.code>
+			<td><#if (obj.sellAmount)??&&obj.sellAmount!=0>${obj.sellAmount!''}</#if></td> <!--销售数量  -->
+			<#elseif row.code?? && 'sellGiftAmount'==row.code>
+			<td><#if (obj.sellGiftAmount)??&&obj.sellGiftAmount!=0>${obj.sellGiftAmount!''}</#if></td> <!-- 其中赠送数量 -->
+			<#elseif row.code?? && 'money'==row.code>
+			<td><#if (obj.money)??&&obj.money!=0>${obj.money!''}</#if></td> <!-- 折前金额 -->
+			<#elseif row.code?? && 'sellDiscountHasMoney'==row.code>
+			<td><#if (obj.sellDiscountHasMoney)??&&obj.sellDiscountHasMoney!=0>${obj.sellDiscountHasMoney!''}</#if></td> <!-- 折扣金额 -->
+			<#elseif row.code?? && 'sellDiscountAvgPrice'==row.code>
+			<td><#if (obj.sellDiscountAvgPrice)??&&obj.sellDiscountAvgPrice!=0>${obj.sellDiscountAvgPrice!''}</#if></td> <!-- 折后单价 -->
+			<#elseif row.code?? && 'sellDiscountMoney'==row.code>
+			<td><#if (obj.sellDiscountMoney)??&&obj.sellDiscountMoney!=0>${obj.sellDiscountMoney!''}</#if></td> <!-- 折后金额 -->
+			<#elseif row.code?? && 'sellTaxAvgPrice'==row.code>
+			<td><#if (obj.sellTaxAvgPrice)??&&obj.sellTaxAvgPrice!=0>${obj.sellTaxAvgPrice!''}</#if></td> <!-- 税后单价 -->
+			<#elseif row.code?? && 'sellTaxes'==row.code>
+			<td><#if (obj.sellTaxes)??&&obj.sellTaxes!=0>${obj.sellTaxes!''}</#if></td> <!-- 税额 -->
+			<#elseif row.code?? && 'sellTaxMoney'==row.code>
+			<td><#if (obj.sellTaxMoney)??&&obj.sellTaxMoney!=0>${obj.sellTaxMoney!''}</#if></td> <!-- 价税合计 -->
+			<#elseif row.code?? && 'sellCostMoneyAvgPrice'==row.code>
+			<td>
+			    <@shiro.hasPermission name='1101-s'>
+			    <#if obj.sellCostMoneyAvgPrice??&&obj.sellCostMoneyAvgPrice!=0>${obj.sellCostMoneyAvgPrice!''}</#if>
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td> <!-- 成本单价 -->
+			<#elseif row.code?? && 'sellCostMoney'==row.code>
+			<td>
+			    <@shiro.hasPermission name='1101-s'>
+			    <#if obj.sellCostMoney??&&obj.sellCostMoney!=0>${obj.sellCostMoney!''}</#if>
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td> <!-- 成本金额 -->
+			<#elseif row.code?? && 'profit'==row.code>
+			<td>
+			    <@shiro.hasPermission name='1101-s'>
+			    <#if obj.profit??&&obj.profit!=0>${obj.profit!''}</#if>
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td> <!-- 毛利 -->
+			<#elseif row.code?? && 'profitPercent'==row.code>
+			<td>
+			    <@shiro.hasPermission name='1101-s'>
+			    <#if obj.profitPercent??&&obj.profitPercent!=0>${obj.profitPercent!''}</#if>
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td> <!-- 毛利率(%) -->
+			<#elseif row.code?? && 'allSellPercent'==row.code>
+			<td><#if (obj.allSellPercent)??&&obj.allSellPercent!=0>${obj.allSellPercent!''}</#if></td> <!-- 销售比重(%) -->
+			<#elseif row.code?? && 'allProfitPercent'==row.code>
+			<td><#if (obj.allProfitPercent)??&&obj.allProfitPercent!=0>${obj.allProfitPercent!''}</#if></td> <!-- 利润比重(%) -->
+			</#if>
+			</#list>
+		</tr>
+		</#list>
+		</#if>
+	</tbody>
+	<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+
+	
+<div class="divider"></div>
+<div>
+    <#if modelType=="prd">
+	    <#assign aimTitle = '商品销售明细账本'/>
+		<#assign aimTabId = 'prd_xs_detail'/>
+		<#assign privs = '4-62-413-p'/>
+		<#assign baseTypeName = 'product'/>
+    <#elseif modelType=="unit">
+	    <#assign aimTitle = '单位销售明细账本'/>
+		<#assign aimTabId = 'unit_xs_detail'/>
+		<#assign privs = '4-62-414-p'/>
+		<#assign baseTypeName = 'unit'/>
+    <#elseif modelType=="staff">
+	    <#assign aimTitle = '职员销售明细账本'/>
+		<#assign aimTabId = 'staff_xs_detail'/>
+		<#assign privs = '4-62-415-p'/>
+		<#assign baseTypeName = 'staff'/>
+    <#elseif modelType=="dept">
+	    <#assign aimTitle = '部门销售明细账本'/>
+		<#assign aimTabId = 'dept_xs_detail'/>
+		<#assign privs = '4-62-416-p'/>
+		<#assign baseTypeName = 'department'/>
+    <#elseif modelType=="storage">
+	    <#assign aimTitle = '仓库销售明细账本'/>
+		<#assign aimTabId = 'storage_xs_detail'/>
+		<#assign privs = '4-62-417-p'/>
+		<#assign baseTypeName = 'storage'/>
+    <#elseif modelType=="area">
+	    <#assign aimTitle = '地区销售明细账本'/>
+		<#assign aimTabId = 'area_xs_detail'/>
+		<#assign privs = '4-62-418-p'/>
+		<#assign baseTypeName = 'area'/>
+    </#if>
+    <a class="button" target="dialog" href="${base}/reports/sellRankCount/toSearchDialog/${modelType}" rel="${modelType}SellCountSearchDialog" width="460" height="410" aimTitle="${modelTypeName}销售统计" aimUrl="${base}/reports/sellRankCount/dialogSearch/search" aimTabId="${modelType}SellRankCountView" aimDiv="${aimDiv}"><span>查询条件</span></a><!-- aimDiv值为all eq gt 下拉框改变赋值-->
+    <a class="button" id="reports_prd_xs_detail_id"  aimTitle="${aimTitle!}" aimTabId="${aimTabId!}" aimUrl="${base}/reports/prdSellCount/prdXsDetail/${modelType}" onclick="getIdAndOpenNavTab(this,'reports_prdsellcount_body','pagerForm');"><span>明细账本</span></a>
+    <#if node?? && node == 1>
+		<a class="buttonDisabled" href="javascript:;"><span>列表</span></a>
+	<#else>
+		<a class="button" href="${base}/reports/sellRankCount/dialogSearch/line" target="ajax" rel="${listID}"  relevancyIds="modelType,pageOrderTypes,unit.id,staff.id,storage.id,startDate,endDate,aimDiv,supId"><span>列表</span></a>
+	</#if>
+	
+	
+	<a class="button" target="dialog" href="${base}/base/product/toReportBaseFilter/pagerForm-${baseTypeName!}" rel="report_product_filtter" width="400" height="210" aimTitle="${modelTypeName}销售统计" aimUrl="${base}/reports/sellRankCount/dialogSearch/search" aimTabId="${modelType}SellRankCountView"><span>${modelTypeName}筛选</span></a>   
+	
+</div>
+<div style="float: right;">
+	<#assign privs = '${privs!}'/>
+	<#assign href = '${base}/reports/sellRankCount/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

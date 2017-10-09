@@ -1,0 +1,54 @@
+
+<div class="pageContent">
+         <div class="divider"></div>
+        <div>
+        <table class="table" layoutH="80">
+            <thead>
+				<tr>
+					<th width="30px">
+						行号
+					</th>
+					<th width="120px"  align="center">
+						系统固定字符
+					</th>
+					<th width="120px"  align="center">
+						系统固定字符示例
+					</th>
+				</tr>
+	      </thead>
+	      <tbody>
+	         <#list formatList as format>
+	             <tr ondblclick="callBackFormat(this);">
+		             <td>
+		                  ${format_index+1}
+		             </td>
+		             <td>
+		               <#if codeDateSep?? && codeDateSep=="0">
+		                ${format.formatHg!}
+		               <#elseif codeDateSep?? && codeDateSep=="1">
+		                 ${format.formatDd!}
+		               <#elseif codeDateSep?? && codeDateSep=="2">
+		                 ${format.formatCh!}
+		               <#elseif codeDateSep?? && codeDateSep=="3">
+		                 ${format.formatNo!}
+		               <#elseif codeDateSep?? && codeDateSep=="4">
+		                 ${format.formatKg!}
+		               <#else>
+		                ${format.formatHg!}
+		               </#if>
+		             </td>
+		             <td>${format.getFormat("${codeDateSep!}")}</td>
+		         </tr>
+	         </#list>
+	      </tbody>
+        </table>
+        </div>
+        <div class="formBar">
+			<ul>
+				<li><a class="button" href="javascript:void(0);" onclick="callBackFormat();"><span>确定</span></a></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+			</ul>
+			
+		
+   </div>
+</div>

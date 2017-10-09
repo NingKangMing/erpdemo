@@ -1,0 +1,58 @@
+<form id="pagerForm" onsubmit="return navTabSearch(this);" class="pageForm required-validate" enctype="text/plain" method="post" action="${base}/fz/baseMove/product/aimList/${supId}">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+	<input type="hidden" name="supId" value="${supId!}" />
+	
+	<span style="font-size: 18px; line-height: 30px;">数据搬移目标节点</span>
+	<table class="table" rel="aimList" layoutH="150" >
+		<thead drag=false>
+			<tr>
+				<th width="45" align="center">行号</th>  
+				<th width="120" align="center" orderField="code">商品编号</th>
+				<th width="250" align="center" orderField="fullName">商品名称</th>
+				<th width="100" align="center" orderField="fullName">商品规格</th>
+				<th width="100" align="center" orderField="fullName">商品型号</th>
+			</tr>
+		</thead>
+		<tbody>
+			<#list pageMap.pageList as product>
+		    <#if product.node==2>
+		    <!-- index,sequence用于上下移动参数 -->
+			<tr objectId="${objectId!0}" target="aimId" rel="${product.id!0}" serialize=true crel="aimList" cTarget="ajax" url="${base}/fz/baseMove/product/aimList/${product.id}">
+			<#else>
+			<tr objectId="${objectId!0}" target="aimId" rel="${product.id!0}" >
+			</#if>
+				<td><a>${product_index+1+pageMap.limit}</a><#if product.node==2>..</#if></td>
+				<td>${product.code!''}</td>
+				<td>${product.fullName!''}</td>
+				<td>${product.standard!''}</td>
+				<td>${product.model!''}</td>
+			</tr>
+			</#list>
+		</tbody>
+	</table>
+</form>
+
+<div class="panelBar">
+	 <div class="pages">
+		<span>显示</span>  
+		<select class="combox" name="numPerPage" onchange="navTabPageBreak({pageNum:${(pageMap.pageNum)!1},numPerPage:this.value},'aimList')">
+			<option <#if pageMap.numPerPage?number == 15>selected</#if> value="15">15</option>
+			<option <#if pageMap.numPerPage?number == 20>selected</#if> value="20">20</option>
+			<option <#if pageMap.numPerPage?number == 50>selected</#if> value="50">50</option>
+			<option <#if pageMap.numPerPage?number == 100>selected</#if> value="100">100</option>
+		</select>
+		<span>条，共${(pageMap.totalCount)!0}条</span>
+	</div>
+	<div noInput="true" class="pagination" rel="aimList" target="ajaxTodo"  totalCount="${(pageMap.totalCount)!0}" numPerPage="${(pageMap.numPerPage)!15}" pageNumShown="2" currentPage="${(pageMap.pageNum)!1}"></div>
+</div>
+
+<!--divider虚线-->
+<div class="divider"></div>
+<div style="float: right;">
+	<#if supId?? && supId!=0>
+    	<a class="button" href="${base}/fz/baseMove/product/aimList/${pSupId!0}-${supId}" target="ajax" rel="aimList"><span>上级</span></a>
+	<#else>
+        <a class="buttonDisabled" href="javascript:void(0);"><span>上级</span></a>
+	</#if>
+</div>

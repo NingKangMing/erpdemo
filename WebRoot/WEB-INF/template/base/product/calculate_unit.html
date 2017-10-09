@@ -1,0 +1,38 @@
+<!-- 销售订单   双击单位      支，包，箱 -->
+<div class="pageContent">
+	<table class="table" layoutH="60"  targetType="dialog">
+		<thead>
+		<tr>
+		   <th width="100" align="center">行号</th>
+		   <th width="150" align="center">单位</th>
+		</tr>
+	  </thead>
+	  <tbody id="calculate_unit_id">
+	    <input type="hidden" id="basePathId" value="${base!}"/>
+	    <input type="hidden" id="productId"  value="${productId!0}"/>
+	    <input type="hidden" id="unitId"  value="${unitId!0}"/>
+	    <input type="hidden" id="billType"  value="${billType!1}"/>
+		<tr trIndex="1" ondblclick="baseUnitDialog();">
+		   <td>1<input type="hidden" name="unitRelation1" value="${unitRelation1!''}"/><input type="hidden" name="retailPrice1" value="${retailPrice1!''}"/></td>
+		   <td>${calculateUnit1!''}</td>
+		</tr>
+		<tr trIndex="2" ondblclick="baseUnitDialog();">
+		   <td>2<input type="hidden" name="unitRelation2" value="${unitRelation2!''}"/><input type="hidden" name="retailPrice2" value="${retailPrice2!''}"/></td>
+		   <td>${calculateUnit2!''}</td>
+		</tr>
+		<tr trIndex="3" ondblclick="baseUnitDialog();">
+		   <td>3<input type="hidden" name="unitRelation3" value="${unitRelation3!''}"/><input type="hidden" name="retailPrice3" value="${retailPrice3!''}"/></td>
+		   <td>${calculateUnit3!''}</td>
+		</tr>
+	  </tbody>
+	</table>
+</div>
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+    <a style="margin-left: 100px;" class="button"   onclick="baseUnitDialog();"><span>选中</span></a>
+	<div style="margin-left: 30px;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+</div>
+
+
+	

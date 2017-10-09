@@ -1,0 +1,48 @@
+<div>
+   <form action="${base}/reports/billHistory/edit" method="post" class="pageForm required-validate" enctype="text/plain" onsubmit="return validateCallback(this,dialogAjaxDone)">
+      <input type="hidden" name="billHty.id" value="${(objId)!}"/>
+      <input type="hidden" name="billId" value="${(model.billId)!}"/>
+      <input type="hidden" name="billTableName" value="${(model.bt.biillTableName)!}"/>
+      <div layoutH="35">
+	       <fieldset>
+			    <legend>请修改以下内容</legend>
+			    	<table style="margin: 0 auto;">
+						  <tr style="height:50px;">
+						     <td style="text-align: right;">职员全名：</td>
+						     <td>
+						     	<input type="hidden" name="staff.id" value="${(model.staffId)!}"/>
+	        					<input type="text" name="staff.name" value="${(model.staff.name)!}" readonly="readonly" ondblclick="$('#staffLook').click();"/>
+	        					<a class="btnLook" id="staffLook" href="${base}/base/staff/dialogChild" warn="职员" lookupgroup="staff" lookuppk="id" width="600" height="410">职员</a>
+						     </td>
+						  </tr>
+						  <tr style="height:50px;">
+						     <td style="text-align: right;">部门全名：</td>
+						     <td>  
+						         <input type="hidden" name="depm.id" value="${(model.departmentId)!}"/>
+		         				 <input type="text"  name="depm.fullName" value="${(model.dept.fullName)!}" readonly="readonly" ondblclick="$('#depmLook').click();"/>
+		         				 <a class="btnLook" id="depmLook" type="POST" href="${base}/base/department/option/${(record.deptId)!}" warn="部门" lookupgroup="depm" lookuppk="id" width="500" height="450">部门</a>
+						     </td>
+						  </tr>
+						  
+						  <tr style="height:50px;">
+						     <td style="text-align: right;">单据编号：</td>
+						     <td><input type="text" name="billHty.billCode" value="${model.billCode!''}" /></td>
+						  </tr>
+						  <tr style="height:50px;">
+						     <td style="text-align: right;">摘&nbsp;&nbsp;要：</td>
+						     <td><input type="text" name="billHty.remark" value="${model.remark!''}"  /></td>
+						  </tr>
+					 </table>
+		   </fieldset>   
+	 </div>
+	 
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+		</ul>
+	  </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

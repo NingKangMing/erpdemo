@@ -1,0 +1,30 @@
+<div class="pageContent">
+	<h2 class="contentTitle">客户价格跟踪录入</h2>
+	<form action="${base}/fz/priceDiscountTrack/editPriceDiscount" class="tableForm" enctype="text/plain" method="post" onsubmit="return validateCallback(this,aioDialogAjaxDone)">
+        <input type="hidden" name="priceDiscountTrack.id"  value="${obj.id!0}"/>
+		<div class="pageFormContent" layoutH="100">
+			<div style="line-height: 50px;" align="center">
+				最&nbsp;&nbsp;近&nbsp;&nbsp;进&nbsp;&nbsp;价：
+				<input class="number" name="priceDiscountTrack.lastCostPrice" value="${obj.lastCostPrice!}"/>
+			</div>
+			<div style="line-height: 50px;" align="center">
+				最&nbsp;&nbsp;近&nbsp;&nbsp;售&nbsp;&nbsp;价：
+				<input class="number" name="priceDiscountTrack.lastSellPrice" value="${obj.lastSellPrice!}"/>
+			</div>
+			<div style="line-height: 50px;" align="center">
+				最近进货折扣：
+				<input class="number" name="priceDiscountTrack.lastCostDiscouont" value="${obj.lastCostDiscouont!}"/>
+			</div>
+			<div style="line-height: 50px;" align="center">
+				最近销售折扣：
+				<input class="number" name="priceDiscountTrack.lastSellDiscouont" value="${obj.lastSellDiscouont!}"/>
+			</div>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>

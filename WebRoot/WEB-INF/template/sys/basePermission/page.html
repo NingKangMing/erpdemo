@@ -1,0 +1,13 @@
+
+<div class="panel pageContent"">
+	  <div>
+          <span style="font:bold 18px '宋体',Arial,Times;">基本信息授权</span>
+      </div>
+	<div layoutH="20">
+		<div style="float:left; display:block; overflow:auto; width:210px; border:solid 1px #CCC; line-height:21px; background:#fff" layoutH="42">
+			<ul id="userTree" target="ztree" selectNodeId="${supId!0}" class="ztree" url="${base}/sys/basePermission/tree" rel="basePermissionList" ctarget="ajax"></ul>
+		</div>
+		<div id="basePermissionList" style="margin-left: 220px;padding:2px;padding-top: 0px;" layoutH="42">
+		     <#include "base.html"/>
+		</div>
+</div>

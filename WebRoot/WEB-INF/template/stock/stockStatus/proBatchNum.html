@@ -1,0 +1,92 @@
+<div>
+
+<div class="pageHeader">
+	<div class="searchBar">
+	   <ul class="searchContent">
+	       <li><h2 class="contentTitle">库存批次表</h2></li>
+	    </ul>
+	    <ul class="searchContent" style="margin-top: 10px;">
+	       <li>
+	           <div style="float: left;">
+	               <div style="float: left; margin-left: 10px;">商品：${productFullName!''}</div>    
+	               <div style="float: left; margin-left: 70px;">仓库：${storageFullName!'全部仓库'}</div>
+	           </div>
+	       </li>
+	    </ul>
+	</div>
+</div>
+<div class="pageContent">
+	<table class="table" layoutH="170"  targetType="dialog" >
+		<thead>
+			<tr>
+				<th width="50" align="center">行号</th> 
+				<th width="60" align="center">数量</th>
+				<th width="60" align="center">单价</th>
+				<th width="100" align="center">金额</th>
+				<th width="100" align="center">生产日期</th>
+				<th width="100" align="center">批号</th>
+				<#--到期日期demo-->
+				<th width="100" align="center">到期日期</th>
+			</tr>
+		</thead>
+		<tbody>
+		    <#list stockList as stock>
+			<tr>
+				<td><a>${stock_index+1}</a></td>
+				<td>${(stock.amount)!''}</td>
+				<td>
+					<#if (stock.costPrice)??>
+						<@shiro.hasPermission name='1101-s'>
+							${(stock.costPrice)!''}
+						</@shiro.hasPermission>
+						<@shiro.lacksPermission name='1101-s'>
+							***  
+						</@shiro.lacksPermission>
+					</#if>
+				</td>
+				<td>
+					<#if (stock.money)??>
+						<@shiro.hasPermission name='1101-s'>
+							${(stock.money)!''}
+						</@shiro.hasPermission>
+						<@shiro.lacksPermission name='1101-s'>
+							***  
+						</@shiro.lacksPermission>
+					</#if>
+				</td>
+				<td>${(stock.produceDate)!''}</td>
+				<td>${(stock.batchNum)!''}</td>
+				<#--到期日期demo-->
+				<td>${(stock.produceEndDate)!''}</td>
+			</tr>
+			</#list>
+		</tbody>
+		<tfoot>
+	       <tr isSelect="false" style="border-top: #D0D0D0 solid 1px">
+		       <td align="center">合计</td>
+		       <td align="center">${amountTotal!0}</td>
+		       <td align="center"></td>
+		       <td align="center">
+		       		<#if moneyTotal??>
+						<@shiro.hasPermission name='1101-s'>
+							${moneyTotal!}
+						</@shiro.hasPermission>
+						<@shiro.lacksPermission name='1101-s'>
+							***  
+						</@shiro.lacksPermission>
+					</#if>
+		       </td>
+		       <td align="center"></td>
+		       <td align="center"></td>
+		       <#--到期日期demo-->
+		       <td align="center"></td>
+	       </tr>
+		</tfoot>
+	</table>
+</div>
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+	<div style="float: right; margin-right: 10px;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+</div>
+</div>

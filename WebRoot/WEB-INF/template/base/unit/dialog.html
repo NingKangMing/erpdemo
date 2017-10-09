@@ -1,0 +1,164 @@
+<div>
+   <form id="unitDialogForm" action="${base}/base/unit/${toAction!}" class="pageForm required-validate" enctype="text/plain" method="post" 
+        onsubmit="return validateCallback(this,<#if toActionCall='add'>aioDialogAjaxDone<#elseif toActionCall='copyAdd'>aioDialogAjaxDone<#elseif toActionCall='edit'>updateTodoAndTee<#elseif toActionCall='sort'>dialogTreeAjaxDone<#elseif toActionCall='optionAdd'>aioDialogReloadOption</#if>);">
+        <input type="hidden" name="unit.id" value="${(unit.id)!}" />  <!-- 复制新增，修改，分类 -->  
+        <input type="hidden" name="unit.supId" value="${supId!0}"/>  <!-- 空白增加 -->              
+         
+         
+        <input id="confirmType" name="confirmType" type="hidden" value="${confirmType!}"/><!-- dialog关闭时刷新dialog -->
+        <input type="hidden" name="selectedObjectId" id="selectedObjectId" /><!--默认选中对象的Id-->
+	    <input type="hidden" name="showLastPage" id="showLastPage" />   <!-- 跳转到最后一页 --> 
+         
+        <fieldset>
+			  <legend>主要信息</legend>
+		<table style="margin-left: 10px; margin-top: 5px;">	  
+		  <tr style="height:25px;">
+		     <td style="text-align: right;">单位全名:</td>
+		     <td colspan="5"><input type="text" name="unit.fullName" value="${(unit.fullName)!''}" maxlength="100" class="required" id="b_unit_fullName"  onblur="pingyinCode('b_unit_fullName','b_unit_spell','b_unit_small')" style="width:99%;"/></td>
+		  </tr>
+		  <tr style="height:30px;">
+		     <td style="text-align: right;">单位编号:</td>
+		     <td><input type="text" id="code" name="unit.code"  value="${(unit.code)!code!''}" maxlength="100" class="required" size="16"/></td>
+		     <td style="text-align: right; width:75px;">单位简称:</td>
+		     <td><input type="text" id="b_unit_small" name="unit.smallName" value="${(unit.smallName)!}" maxlength="100" size="16"/></td>
+		     <td style="text-align: right; width:75px;">科目拼音码:</td>
+		     <td><input type="text" name="unit.spell" value="${(unit.spell)!}" id="b_unit_spell" maxlength="100" size="16"/></td>
+		  </tr>
+		 </table>
+		 </fieldset> 
+		 <fieldset>
+			  <legend>辅助信息</legend>
+		<table style="margin-left: 10px; margin-top: 5px;">	  
+		  <tr style="height:25px;">
+		     <td style="text-align: right;">单位地址:</td>
+		     <td colspan="3"><input type="text" name="unit.address" value="${(unit.address)!}" maxlength="100" style="width:98%;"/></td>
+		     <td style="text-align: right;">单位电话:</td>
+		     <td><input type="text" name="unit.phone" value="${(unit.phone)!}" maxlength="100" size="16"/></td>
+		  </tr>
+		  <tr style="height:30px;">
+		     <td style="text-align: right;">电子邮件:</td>
+		     <td><input type="text"  name="unit.email" value="${(unit.email)!}" maxlength="100" size="16"/></td>
+		     <td style="text-align: right;">联系人一:</td>
+		     <td><input type="text" name="unit.contact1" value="${(unit.contact1)!}" maxlength="100" size="16"/></td>
+		     <td style="text-align: right;">手机一:</td>
+		     <td><input type="text" name="unit.mobile1" value="${(unit.mobile1)!}" maxlength="100" size="16"/></td>
+		  </tr>
+		  <tr style="height:30px;">
+		     <td style="text-align: right;">联系人二:</td>
+		     <td><input type="text"  name="unit.contact2" value="${(unit.contact2)!}" maxlength="100" size="16"/></td>
+		     <td style="text-align: right;">手机二:</td>
+		     <td><input type="text" name="unit.mobile2" value="${(unit.mobile2)!}" maxlength="100" size="16"/></td>
+		     <td style="text-align: right;">默认经手人:</td>
+		     <td style="width: 115px;">
+		         <!--<input type="hidden" name="staff.id" value="${(unit.staffId)!}"/>
+		         <input type="hidden" name="staff.name" value="${(unit.staff.name)!}"/>
+		         <input type="text" class="enter" name="staff.name" value="${(unit.getStaff(session.loginConfigId).name)!}" size="16" />
+		         <a class="btnLook" opRel="optionStaff" btnPattern="optionAdd" href="${base}/base/staff/dialogChild/0-${(unit.staffId)!0}" type="POST" warn="员工" lookupgroup="staff" lookuppk="id" width="600" height="410">查找带回</a>
+		     -->
+		     <#assign baseUnitStyle = 'has'/>
+		     <#include "/WEB-INF/template/common/base/staff/billLink.html"/>
+		     </td>
+		  </tr>
+		  <tr style="height:30px;">
+		     <td style="text-align: right;">开户银行:</td>
+		     <td><input type="text"  name="unit.bank" value="${(unit.bank)!}" maxlength="100" size="16"/></td>
+		     <td style="text-align: right;">银行账号:</td>
+		     <td><input type="text" name="unit.bankAccount" value="${(unit.bankAccount)!}" maxlength="100" size="16"/></td>
+		     <td style="text-align: right;">传真:</td>
+		     <td><input type="text" name="unit.fax" value="${(unit.fax)!}" maxlength="100" size="16"/></td>
+		  </tr>
+		  <tr style="height:30px;">
+		     <td style="text-align: right;">税号:</td>
+		     <td><input type="text" name="unit.tariff" value="${(unit.tariff)!}" maxlength="100" size="16"/></td>
+		     <td style="text-align: right;">邮政编码:</td>
+		     <td><input type="text" name="unit.zipCode" value="${(unit.zipCode)!}" maxlength="100" size="16"/></td>
+		     <td style="text-align: right;">适用价格:</td>
+		     <td>
+		        <select name="unit.fitPrice" style="width:110px;">
+		           <option <#if unit??&&unit.fitPrice==0 >selected="selected"</#if> value="0">无</option>
+		           <option <#if unit??&&unit.fitPrice==1 >selected="selected"</#if> value="1">零售价</option>
+		           <option <#if unit??&&unit.fitPrice==2 >selected="selected"</#if> value="2">预设售价1</option>
+		           <option <#if unit??&&unit.fitPrice==3 >selected="selected"</#if> value="3">预设售价2</option>
+		           <option <#if unit??&&unit.fitPrice==4 >selected="selected"</#if> value="4">预设售价3</option>
+		        </select>
+		     </td>
+		  </tr>
+		  <tr style="height:30px;">
+		     <td style="text-align: right;">应收款上限:</td>
+		     <td><input type="text"  name="unit.getMoneyLimit" value="${(unit.getMoneyLimit)!}" class="number" value="0"  size="16"/></td>
+		     <td style="text-align: right;">应付款上限:</td>
+		     <td><input type="text" name="unit.payMoneyLimit" value="${(unit.payMoneyLimit)!}" class="number" value="0" size="16"/></td>
+		     <td style="text-align: right;">地区:</td>
+		     <td style="width: 115px;">
+		         <input type="hidden" id="areaId" name="area.id" value="${(unit.areaId)!}"/>
+		         <input type="text" name="area.fullName" lookName="area" lookId="area.id" value="${(unit.getArea(session.loginConfigId).fullName)!(area.fullName)!}" size="13" />
+		         <a class="btnLook" href="${base}/base/area/dialogList/" type="POST" warn="地区" lookupgroup="area" lookuppk="id" width="600" height="410">查找带回</a>
+		     </td>
+		  </tr>
+		  <tr style="height:30px;">
+		     <td style="text-align: right;">换货期限:</td>
+		     <td><input type="text"  name="unit.replacePrdPeriod" value="${(unit.replacePrdPeriod)!}" class="digits" value="0"  size="16"/></td>
+		     <td style="text-align: right;">换货比例(%):</td>
+		     <td><input type="text" name="unit.replacePrdPercentage" value="${(unit.replacePrdPercentage)!100}" class="digits" value="100" size="16"/></td>
+		     <td style="text-align: right;">结算期限(天):</td>
+		     <td><input type="text" name="unit.settlePeriod" value="${(unit.settlePeriod)!}" class="digits" value="0" size="16"/></td>
+		  </tr>
+		  <tr style="height:30px;">
+		     <td style="text-align: right;">累计应收:</td>
+		     <td>
+		     <@shiro.hasPermission name='6-103-104-617-s'>
+                <input type="text"  name="unit.totalGet" value="${(unit.totalGet)!}" disabled="disabled" size="16"/>
+		     </@shiro.hasPermission>
+		     <@shiro.lacksPermission name='6-103-104-617-s'>
+			    <#if version gt 1>
+		        <input type="text"  name="unit.totalGet" value="*" disabled="disabled" size="16"/>
+		        <#else>
+		        <input type="text"  name="unit.totalGet" value="${(unit.totalGet)!}" disabled="disabled" size="16"/>
+		        </#if>
+		     </@shiro.lacksPermission>
+		     </td>
+		     <td style="text-align: right;">累计应付:</td>
+		     <td>
+		     <@shiro.hasPermission name='6-103-104-617-s'>
+                <input type="text" name="unit.totalPay" value="${(unit.totalPay)!}" disabled="disabled"  size="16"/>
+		     </@shiro.hasPermission>
+		     <@shiro.lacksPermission name='6-103-104-617-s'>
+		        <#if version gt 1>
+		        <input type="text" name="unit.totalPay" value="*" disabled="disabled"  size="16"/>
+		        <#else>
+		        <input type="text" name="unit.totalPay" value="${(unit.totalPay)!}" disabled="disabled"  size="16"/>
+		        </#if>
+		     </@shiro.lacksPermission>
+		     </td>
+		     <td style="text-align: right;">
+		          <#if unit??&&unit.status == 1>
+		             <input type="checkbox" name="unit.status" checked="checked" value="1"/>停用	
+		          <#else>
+		             <input type="checkbox" name="unit.status" value="1"/>停用
+		          </#if>
+		     </td>
+		     <td>
+		         <#if code??||unit??&&numAutoAdd== 1>
+	                <input type="checkbox" name="numAutoAdd" checked="checked" value="1"/>编号递增
+	             <#else>
+	                <input type="checkbox" name="numAutoAdd" value="1"/>编号递增    
+	             </#if>
+		     </td>
+		  </tr>
+		 </table>
+		 </fieldset>
+		 <fieldset>
+			  <legend>备注</legend>
+			  <textarea style="margin-left: 20px; width:90%;" name="unit.memo" rows="3" cols="52">${(unit.memo)!}</textarea>
+		 </fieldset>
+	 
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		 <ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+		 </ul>
+      </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

@@ -1,0 +1,44 @@
+<div class="pageContent">
+	<h2 class="contentTitle">选择明细类型</h2>
+	<form action="${base}/reports/finance/arap/staffArap/toDetail" method="post" class="pageForm required-validate" enctype="text/plain" onsubmit="return validateCallback(this,aioDialogPostCallBreak)">
+	    <input type="hidden" name="aimDlgId" id="aimDlgId"/>	     <!-- 设置目标diolag组件ID -->				
+	    <input type="hidden" name="aimUrl" id="aimUrl"/>	         <!-- 设置目标URl -->				
+	    <input type="hidden" name="aimTitle" id="aimTitle"/>         <!-- 设置目标标题 -->
+	    <input type="hidden" name="aimWidth" id="aimWidth"/>         <!-- 设置目标宽度 -->
+	    <input type="hidden" name="aimHeight" id="aimHeight"/>       <!-- 设置目标高度 -->
+	    
+	    <input type="hidden" name="isPost" value=true><!-- 区别表单提交 -->
+	    
+	    <!-- 动态需要的参数 -->
+	    <#if paraMap?exists>
+          <#list paraMap.keySet() as k>
+          	<input type="hidden" id="${k}" name="${k}" value="${paraMap.get(k)}"/>
+          </#list>
+	    </#if>
+	    					
+		<div class="pageFormContent" layoutH="100">
+			<fieldset style="width: 90%;margin:0px auto;">
+				<legend>选择基本信息</legend>
+				<table style="margin:0px auto;">
+					<tr height="40px;">
+						<td>
+							<input style="float: left;" type="radio" name="pattern" id="pattern1" value="gets" checked="checked"/><label for="pattern1">应收明细</label>
+						</td>
+					</tr>
+					<tr height="40px;">
+						<td>
+							<input style="float: left;" type="radio" name="pattern" id="pattern2" value="pays"/><label for="pattern2">应付明细</label>
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确认</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>
+

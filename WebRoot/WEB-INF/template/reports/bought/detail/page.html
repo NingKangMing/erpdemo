@@ -1,0 +1,25 @@
+<div class="panel pageContent">
+   <div class="pageHeader">
+      <div>
+          <span style="font:bold 18px '宋体',Arial,Times;">进货订单明细查询</span>
+      </div>
+      <div style="margin-top: 10px;height: 50px">
+          <a>
+                             查询时间:&nbsp;${(params.startDate)!}&nbsp;&nbsp;至&nbsp;&nbsp;${(params.endDate)!}
+          </a><br/><br/>
+          <a>
+                                       商品：${productName!"全部商品"} <#if productName?? && ""==productName>全部商品</#if>&nbsp;&nbsp;&nbsp;&nbsp;
+                                       往来单位：${unitName!"全部单位"} <#if unitName?? && ""==unitName>全部单位</#if>&nbsp;&nbsp;&nbsp;&nbsp;
+                                       内部职员：${staffName!"全部职员"} <#if staffName?? && ""==staffName>全部职员</#if>&nbsp;&nbsp;&nbsp;&nbsp;
+                                       仓库：${storageName!"全部仓库"} <#if storageName?? && ""==storageName>全部仓库</#if>&nbsp;&nbsp;&nbsp;&nbsp;
+          </a>
+          <span  style="float: right;margin-left: 10px;margin-right: 10px">
+		      <a href="${base}/fz/reportRow/search/cg5018" target="dialog" rel="reportRowView"  width="520" height="500"><img src="${base}/img/base/setting.png" width="20px" height="20px" title="列配置"/></a>
+		  </span>
+      </div>
+   </div>
+   <div id="boughtDetailReportsList">
+      <#include "list.html"/> 
+   </div>
+</div>
+

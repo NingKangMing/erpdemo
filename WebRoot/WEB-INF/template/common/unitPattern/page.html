@@ -1,0 +1,39 @@
+<!-- eg:库存状况分布-》单位选择-->
+<!-- 
+特殊参数：{param:在列表隐藏文本域中预留的id,aimDiv：指定要刷新的divId}
+eg调用方式：<a class="button" href="${base}/common/unitPattern"
+	 		param="unitPattern" aimDiv="stockDistributedList" target="dialog"
+	 		rel="unitPattern"  width="220" height="300">
+	 		<span>单位选择</span>
+		</a>
+ -->
+<div class="pageContent">
+<h2 class="contentTitle">请选择单位模式</h2>
+   <form action="${base}/common/searchDialog/go" method="post" class="pageForm required-validate" enctype="text/plain" onsubmit="return validateCallback(this,aioReloadForm)">
+      <input type="hidden" id="aimDiv" name="aimDiv"  value=""/><!-- 目标DivId -->
+      <div layoutH="75">
+	       <fieldset>
+			    	<ul style="margin-top: 20px; margin-left: 20px;">
+			    		<li style="line-height: 40px;height: 40px;">
+			    			<input type="radio" name="unitPattern" id="baseUnit" value="baseUnit" <#if unitPattern?? && unitPattern=="baseUnit">checked</#if> /><label for="baseUnit">基本单位</label>
+			    		</li>
+			    		<li style="line-height: 40px;height: 40px;">
+			    			<input type="radio" name="unitPattern" id="helpUnit1" value="helpUnit1" <#if unitPattern?? && unitPattern=="helpUnit1">checked</#if> /><label for="helpUnit1">辅助单位1</label>
+			    		</li>
+			    		<li style="line-height: 40px;height: 40px;">
+			    			<input type="radio" name="unitPattern" id="helpUnit2" value="helpUnit2" <#if unitPattern?? && unitPattern=="helpUnit2">checked</#if> /><label for="helpUnit2">辅助单位2</label>
+						</li>
+			    	</ul>
+		   </fieldset>   
+	 </div>
+	 
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+		</ul>
+	  </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

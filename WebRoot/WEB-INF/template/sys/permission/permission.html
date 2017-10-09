@@ -1,0 +1,148 @@
+
+<table class="table" id="permissionTable${typeNum!}"  layoutH="194">
+	<thead>
+		<tr>
+			<th width="40px">
+				行号
+			</th>
+			<th width="100px"  align="center">
+				<input type="checkbox" name="*" onclick="checkRelevanceTable(this,true)" <#if disabled?? && disabled>disabled="disabled"</#if>>全选 
+			</th>
+			<#if typeNum ==1>
+			 <th width="50px"  align="center">
+				<input type="checkbox" name="see" onclick="checkRelevanceTable(this,true)" <#if disabled?? && disabled>disabled="disabled"</#if>>查看
+			 </th>
+			 <th width="50px"  align="center">
+				<input type="checkbox" name="ent" onclick="checkRelevanceTable(this,true)" <#if disabled?? && disabled>disabled="disabled"</#if>>录入
+			 </th>
+			 <th width="50px"  align="center">
+				<input type="checkbox" name="tran" onclick="checkRelevanceTable(this,true)" <#if disabled?? && disabled>disabled="disabled"</#if>>过账
+			 </th>
+			 <th width="50px"  align="center">
+				<input type="checkbox" name="print" onclick="checkRelevanceTable(this,true)" <#if disabled?? && disabled>disabled="disabled"</#if>>打印
+			 </th>
+			<#elseif typeNum ==2>
+			 <th width="50px"  align="center">
+				<input type="checkbox" name="see" onclick="checkRelevanceTable(this,true)" <#if disabled?? && disabled>disabled="disabled"</#if>>查看
+			 </th>
+			 <th width="50px"  align="center">
+				<input type="checkbox" name="print" onclick="checkRelevanceTable(this,true)" <#if disabled?? && disabled>disabled="disabled"</#if>>打印
+			 </th>
+			<#elseif typeNum ==3>
+			  <th width="70px"  align="center">
+				<input type="checkbox" name="see" onclick="checkRelevanceTable(this,true)" <#if disabled?? && disabled>disabled="disabled"</#if>>查看执行
+			 </th>
+			 <th width="70px"  align="center">
+				<input type="checkbox" name="add" onclick="checkRelevanceTable(this,true)" <#if disabled?? && disabled>disabled="disabled"</#if>>新增复制
+			 </th>
+			 <th width="70px"  align="center">
+				<input type="checkbox" name="edit" onclick="checkRelevanceTable(this,true)" <#if disabled?? && disabled>disabled="disabled"</#if>>修改删除
+			 </th>
+			 <th width="50px"  align="center">
+				<input type="checkbox" name="print" onclick="checkRelevanceTable(this,true)" <#if disabled?? && disabled>disabled="disabled"</#if>>打印
+			 </th>
+			<#elseif typeNum ==4>
+			 <th width="50px"  align="center">
+				<input type="checkbox" name="see" onclick="checkRelevanceTable(this,true)" <#if disabled?? && disabled>disabled="disabled"</#if>>查看
+			 </th>
+			<#elseif typeNum ==5>
+			 <th width="50px"  align="center">
+				<input type="checkbox" name="see" onclick="checkRelevanceTable(this,true)" <#if disabled?? && disabled>disabled="disabled"</#if>>查看
+			 </th>
+			</#if>
+		</tr>
+	</thead>
+	<tbody>
+	    <#if permissionList??>
+		<#list permissionList as permission>
+		
+		   <tr  target="permissionId" rel="${permission.id}">
+	
+			<td>
+				<a>${permission_index+1}</a> 
+			</td>
+			<td>
+				${(permission.name)!}
+			</td>
+			<#if typeNum ==1>
+			  <td>
+			     <#if permission.seeUrl??>
+			         <input type="checkbox"  onclick="checkRelevanceTable(this,false)"  name="permission.seeUrl" value="${(permission.seeUrl)!}" <#if permission.getChecked("seeUrl")>checked="checked"</#if> <#if disabled?? && disabled>disabled="disabled"</#if>>
+			     </#if>
+				
+			  </td>
+			  <td>
+			     <#if permission.entUrl??>  
+			        <input type="checkbox" onclick="checkRelevanceTable(this,false)" name="permission.entUrl" value="${(permission.entUrl)!}" <#if permission.getChecked("entUrl")>checked="checked"</#if> <#if disabled?? && disabled>disabled="disabled"</#if>>
+			     </#if>
+				
+			  </td>
+			  <td>
+			     <#if permission.tranUrl??> 
+			       <input type="checkbox" onclick="checkRelevanceTable(this,false)"  name="permission.tranUrl" value="${(permission.tranUrl)!}" <#if permission.getChecked("tranUrl")>checked="checked"</#if> <#if disabled?? && disabled>disabled="disabled"</#if>>
+			     </#if>
+				
+			  </td>
+			  <td>
+			      <#if permission.printUrl??> 
+			        <input type="checkbox" onclick="checkRelevanceTable(this,false)" name="permission.printUrl" value="${(permission.printUrl)!}" <#if permission.getChecked("printUrl")>checked="checked"</#if> <#if disabled?? && disabled>disabled="disabled"</#if>>
+			      </#if>
+			  </td>
+			<#elseif typeNum ==2>
+			  <td>
+			       <#if permission.seeUrl??>  
+			           <input type="checkbox" onclick="checkRelevanceTable(this,false)" name="permission.seeUrl" value="${(permission.seeUrl)!}" <#if permission.getChecked("seeUrl")>checked="checked"</#if> <#if disabled?? && disabled>disabled="disabled"</#if>>
+			       </#if>
+				
+			  </td>
+			  <td>
+			    <#if permission.printUrl??>
+			        <input type="checkbox" onclick="checkRelevanceTable(this,false)" name="permission.printUrl" value="${(permission.printUrl)!}" <#if permission.getChecked("printUrl")>checked="checked"</#if> <#if disabled?? && disabled>disabled="disabled"</#if>>
+			    </#if>
+				
+			  </td>
+			<#elseif typeNum ==3>
+			  <td>
+			      <#if permission.seeUrl??>
+			         <input type="checkbox" onclick="checkRelevanceTable(this,false)" name="permission.seeUrl" value="${(permission.seeUrl)!}" <#if permission.getChecked("seeUrl")>checked="checked"</#if> <#if disabled?? && disabled>disabled="disabled"</#if>>
+			      </#if>
+				
+			  </td>
+			  <td>
+			     <#if permission.addUrl??>  
+			         <input type="checkbox" onclick="checkRelevanceTable(this,false)" name="permission.addUrl" value="${(permission.addUrl)!}" <#if permission.getChecked("addUrl")>checked="checked"</#if> <#if disabled?? && disabled>disabled="disabled"</#if>>
+			     </#if>
+				
+			  </td>
+			  <td>
+			     <#if permission.editUrl??>
+			        <input type="checkbox" onclick="checkRelevanceTable(this,false)" name="permission.editUrl" value="${(permission.editUrl)!}" <#if permission.getChecked("editUrl")>checked="checked"</#if> <#if disabled?? && disabled>disabled="disabled"</#if>>
+			     </#if>
+				
+			  </td>
+			  <td>
+			     <#if permission.printUrl??>
+			       <input type="checkbox" onclick="checkRelevanceTable(this,false)"  name="permission.printUrl" value="${(permission.printUrl)!}" <#if permission.getChecked("printUrl")>checked="checked"</#if> <#if disabled?? && disabled>disabled="disabled"</#if>>
+			     </#if>
+				
+			  </td>
+			<#elseif typeNum ==4>
+			 <td>
+			     <#if permission.seeUrl??>
+			         <input type="checkbox" onclick="checkRelevanceTable(this,false)" name="permission.seeUrl" value="${(permission.seeUrl)!}" <#if permission.getChecked("seeUrl")>checked="checked"</#if> <#if disabled?? && disabled>disabled="disabled"</#if>>
+			     </#if>
+				
+			  </td>
+			<#elseif typeNum ==5>
+			 <td>
+			     <#if permission.seeUrl??>
+			        <input type="checkbox" onclick="checkRelevanceTable(this,false)" name="permission.seeUrl" value="${(permission.seeUrl)!}" <#if permission.getChecked("seeUrl")>checked="checked"</#if> <#if disabled?? && disabled>disabled="disabled"</#if>>
+			     </#if>
+				
+			  </td>
+			</#if>
+		</tr>
+		</#list>
+		</#if>
+	</tbody>
+</table>

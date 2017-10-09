@@ -1,0 +1,37 @@
+<!--  -->
+<div>
+<div class="pageHeader">
+	<form rel="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/base/staff/dialogLeaf/second" onsubmit="return divSearch(this, 'leafList');">
+	<div class="searchBar">
+	   <ul class="searchContent">
+		   <li>
+		    <select name="term">
+		       <option value="quick">快速查询</option>
+		       <option value="code" <#if term?? && term=='code'> selected="selected"</#if>>按职员编号查询</option>
+		       <option value="name" <#if term?? && term=='name'> selected="selected"</#if>>按职员全称查询</option>
+		       <option value="spell" <#if term?? && term=='spell'> selected="selected"</#if>>按职员拼音码查询</option>
+		       <option value="department" <#if term?? && term=='department'> selected="selected"</#if>>按职员部门查询</option>
+		    </select>
+		    &nbsp;&nbsp;
+		    </li>
+		    <li>
+		    <input class="textInput" name="termVal" value="${termVal!}" size="50"/>&nbsp;&nbsp;
+		    </li>
+		    <li>
+		    <div class="buttonActive"><div class="buttonContent"><button type="submit">查询</button></div></div>
+		    </li>
+	    </ul>
+	</div>
+	</form>
+</div>
+<div class="pageContent" id="leafList">
+	    <#include "leafList.html" />
+</div>
+
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+    <div class="button"><div class="buttonContent" onclick="selectTrdbClick()" ><button type="button" class="button">选中</button></div></div>
+	<div style="float: right;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+</div>
+</div>

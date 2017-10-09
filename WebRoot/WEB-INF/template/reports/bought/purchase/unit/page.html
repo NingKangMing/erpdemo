@@ -1,0 +1,45 @@
+<div class="panel pageContent">
+	<div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">单位进货统计</span></label>
+				</li>
+			</ul>
+			<ul class="searchContent" style="margin-top: 5px;">
+				<li>
+					<span style="margin-left: 10px;">查询时间：</span>${(params.startDate)!}&nbsp;&nbsp;至&nbsp;&nbsp;${(params.endDate)!}
+				</li>
+			</ul>
+			<ul class="searchContent">
+				<li> 
+					<span style="margin-left: 10px;">内部职员:</span><#if staffName=="">全部职员</#if>${staffName!} 
+					<span style="margin-left: 50px;">仓&nbsp;&nbsp;库:</span><#if storageName=="">全部仓库</#if>${storageName!}
+					<span style="margin-left: 50px;">商&nbsp;&nbsp;品:</span><#if productName=="">全部商品</#if>${productName!}  
+				</li>
+				<li  style="float: right;margin-left: 10px;margin-right: 10px">
+				   <a href="${base}/fz/reportRow/search/cg502" target="dialog" rel="billRowView"  width="520" height="500"><img src="${base}/img/base/setting.png" width="20px" height="20px" title="列配置"/></a>
+				</li>
+				<li style="float: right;">
+				    过滤&nbsp;&nbsp;<select name="shoeType" onchange="javascript:selectPost(this,'purchaseUnitStatisticsList','shoeType');">
+				       <option  value="">显示所有</option>
+				       <option <#if params.shoeType?? && params.shoeType==0>selected="selected"</#if> value="0">显示等于0</option>
+				       <option <#if params.shoeType?? && params.shoeType==1>selected="selected"</#if> value="1">显示大于0</option>
+				    </select>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div layoutH="80">
+		<div style="float:left; display:block; overflow:auto; width:210px; border:solid 1px #CCC; line-height:21px; background:#fff" layoutH="100">
+			<ul id="reports_purchaseUnitStatistics" target="ztree" selectNodeId="${supId!0}"  relevancyIds="product.id,staff.id,storage.id,startDate,endDate,shoeType,orderTypes" class="ztree" url="${base}/reports/bought/purchase/unit/tree/0" rel="purchaseUnitStatisticsList" ctarget="ajax"></ul>
+		</div>
+		<div id="purchaseUnitStatisticsList" style="margin-left: 220px;padding:2px; padding-top: 0px;" layoutH="87">
+			<#include "list.html" />
+		</div>
+	</div>
+</div>
+
+
+

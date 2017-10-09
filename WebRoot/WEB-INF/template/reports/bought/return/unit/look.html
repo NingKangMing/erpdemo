@@ -1,0 +1,329 @@
+<div class="pageContent">
+	<div class="textContent center">
+	      <div>
+	         <span style="font-size: 18px;">进货退货单</span>
+			 <span style="float: right;">
+		                 录单日期
+		     <input type="text" class="" name="purchaseReturnBill.recodeDate" dateFmt="yyyy-MM-dd HH:mm:ss" value="<#if bill?? && bill.recodeDate??>${(bill.recodeDate)?string("yyyy-MM-dd HH:mm:ss")}</#if>" readonly="readonly"/>
+		                单据编号
+		    <input class="line" type="text" name="purchaseReturnBill.code" value="${(bill.code)!}" readonly="readonly"/>
+		    </span>
+	     </div>
+	     <div>
+	                           收货单位
+	        <input class="line" type="text" id="unitName" name="unit.fullName" value="${(bill.unit.fullName)!}" readonly="readonly"/>
+	                           经手人 
+	        <input class="line" type="text" name="staff.name" id="staffName" value="${(bill.staff.name)!}" readonly="readonly"/>
+	                      部门   
+	        <input type="text" class="line"  name="department.fullName" value="${(bill.department.fullName)!}" readonly="readonly"/> 
+	     </div>
+	     <div>
+	                        发货仓库
+     	    <input class="line" id="storageName" name="storage.fullName" value="${(bill.storage.fullName)!}" readonly="readonly"/>
+	                          摘要
+	        <input class="line" type="text" id="remark" value="${(bill.remark)!}" readonly="readonly"/>
+	                          附加说明
+	        <input class="line" type="text" id="memo" name="purchaseReturnBill.memo" value="${(bill.memo)!}" readonly="readonly"/>
+	                          整单折扣
+	        <input class="line" type="text" id="discounts" name="purchaseReturnBill.discounts"  value="${(bill.discounts)!}" readonly="readonly"/>
+	     
+	     </div>
+	</div>
+	<div class="divider"></div>
+	<div class="pageContent">
+	   <#assign showWidth = 100/>
+	   <#list rowList as row>
+	     <#if row.width??>
+	      <#assign showWidth = showWidth+row.width/>
+	     </#if>
+	   </#list>
+	   <table class="table" model="order" layoutH="300" width="${showWidth!}px">
+	        <thead>
+			 <tr>
+				<th width="50px">
+					行号
+				</th>
+				<#list rowList as row>
+				   <th align="center" width="${(row.width)!100}px">
+					 ${(row.showName)!(row.name)!}
+				   </th>
+				</#list>
+			</tr>
+		  </thead>
+		  <tbody id="purchasebody" preDataName="purchaseDetail">
+		     <#list detailList as detail>
+		     <tr>
+		       <td>${detail_index+1}</td>
+		      <#list rowList as row>
+		       <#if row.code?? && 'code'==row.code>
+		       <!-- 商品编号 -->
+		       <td>${(detail.product.code)!}</td>
+		       <#elseif row.code?? && 'fullName'==row.code>
+		       <!-- 商品名称 -->
+		       <td>${(detail.product.fullName)!}</td>
+		       <#elseif row.code?? && 'unit'==row.code>
+		       <!-- 单位 -->
+		       <td>${(detail.selectUnit)!}</td>
+		       <#elseif row.code?? && 'helpUnit'==row.code>
+		       <!-- 辅助单位 -->
+		       <td>${(detail.product.assistUnit)!}</td>
+		       <#elseif row.code?? && 'produceDate'==row.code>
+		       <!-- 生产日期 -->
+		       <td><#if detail.produceDate??>${(detail.produceDate)?string("yyyy-MM-dd")}</#if></td>
+		       <#elseif row.code?? && 'batch'==row.code>
+		       <!-- 批号 -->
+		       <td>${(detail.batch)!}</td>
+		       <#elseif row.code?? && 'helpAmount'==row.code>
+		       <!-- 辅助数量 -->
+		       <td>${(detail.helpAmount)!}</td>
+		       <#elseif row.code?? && 'amount'==row.code>
+		       <!-- 数量 -->
+		       <td>${(detail.amount)!}</td>
+		       <#elseif row.code?? && 'baseAmount'==row.code>
+		       <!-- 基本数量-->
+		       <td>${(detail.getOtherAmount(1))!} ${(detail.product.calculateUnit1)!}</td>
+		       <#elseif row.code?? && 'baseAmount1'==row.code>
+		       <!-- 辅助数量1 -->
+		       <td>${(detail.getOtherAmount(2))!} ${(detail.product.calculateUnit2)!}</td>
+		       <#elseif row.code?? && 'baseAmount2'==row.code>
+		       <!-- 辅助数量2 -->
+		       <td>${(detail.getOtherAmount(3))!} ${(detail.product.calculateUnit3)!}</td>
+		       <#elseif row.code?? && 'price'==row.code>
+		       <!-- 单价 -->
+		       <td>
+		          
+		          <@shiro.hasPermission name='1101-s'>
+		          ${(detail.price)!}
+				 </@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					***
+				 </@shiro.lacksPermission>
+		       </td>
+		       <#elseif row.code?? && 'money'==row.code>
+		       <!-- 金额 -->
+		       <td>
+		         
+		          <@shiro.hasPermission name='1101-s'>
+		           ${(detail.money)!}
+				 </@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					***
+				 </@shiro.lacksPermission>
+		       </td>
+		       <#elseif row.code?? && 'discount'==row.code>
+		       <!-- 折扣 -->
+		       <td>
+		          
+		          <@shiro.hasPermission name='1101-s'>
+		           ${(detail.discount)!}
+				 </@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					***
+				 </@shiro.lacksPermission>
+		       </td>
+		       <#elseif row.code?? && 'discountPrice'==row.code>
+		       <!-- 折后单价 -->
+		       <td>
+		            
+		          <@shiro.hasPermission name='1101-s'>
+		           ${(detail.discountPrice)!}
+				 </@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					***
+				 </@shiro.lacksPermission>
+		       </td>
+		       <#elseif row.code?? && 'discountMoney'==row.code>
+		       <!-- 折后金额 -->
+		       <td>
+		           
+		           <@shiro.hasPermission name='1101-s'>
+		           ${(detail.discountMoney)!}
+				 </@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					***
+				 </@shiro.lacksPermission>
+		       </td>
+		       <#elseif row.code?? && 'taxRate'==row.code>
+		       <!-- 税率 -->
+		       <td>
+		          
+		          <@shiro.hasPermission name='1101-s'>
+		          ${(detail.taxRate)!}
+				 </@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					***
+				 </@shiro.lacksPermission>
+		       </td>
+		       <#elseif row.code?? && 'taxPrice'==row.code>
+		       <!-- 含税单价 -->
+		       <td>
+		           
+		           <@shiro.hasPermission name='1101-s'>
+		          ${(detail.taxPrice)!}
+				 </@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					***
+				 </@shiro.lacksPermission>
+		       </td>
+		       <#elseif row.code?? && 'tax'==row.code>
+		       <!-- 税额 -->
+		       <td>
+		           
+		          <@shiro.hasPermission name='1101-s'>
+		          ${(detail.taxes)!}
+				 </@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					***
+				 </@shiro.lacksPermission>
+		       </td>
+		       <#elseif row.code?? && 'taxMoney'==row.code>
+		       <!-- 含税金额 -->
+		       <td>
+		                
+		           <@shiro.hasPermission name='1101-s'>
+		          ${(detail.taxMoney)!}
+				 </@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					***
+				 </@shiro.lacksPermission>
+		       </td>
+		       <#elseif row.code?? && 'memo'==row.code>
+		       <!-- 备注 -->
+		       <td>${(detail.memo)!}</td>
+		       <#elseif row.code?? && 'status'==row.code>
+		       <!-- 状态 -->
+		       <td><#if !detail.price?? || detail.price==0>
+		                                     赠品
+		           </#if>
+		       </td>
+		       <#elseif row.code?? && 'barCode'==row.code>
+		       <!--条码 -->
+		       <td>${(detail.product["barCode"+detail.selectUnitId])!}</td>
+		       <#elseif row.code?? && 'message'==row.code>
+		       <!-- 附加信息 -->
+		       <td>${(detail.message)!}</td>
+		       <#elseif row.code?? && 'storageCode'==row.code>
+		       <!-- 仓库编号 -->
+		        <td>${(detail.storage.code)!}</td>
+		        <#elseif row.code?? && 'storageName'==row.code>
+		        <!-- 仓库名称 -->
+		        <td>${(detail.storage.fullName)!}</td>
+		       <#elseif row.code?? && 'retailPrice'==row.code>
+		       <!--零售单价-->
+		       <td>
+		           
+		          <@shiro.hasPermission name='1101-s'>
+		          ${(detail.retailPrice)!}
+				 </@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					***
+				 </@shiro.lacksPermission>
+		       </td>
+		       <#elseif row.code?? && 'retailMoney'==row.code>
+		       <!--零售金额-->
+		       <td>
+		           
+		           <@shiro.hasPermission name='1101-s'>
+		          ${(detail.retailMoney)!}
+				 </@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					***
+				 </@shiro.lacksPermission>
+		       </td>
+		        <#else>
+		        <td></td>
+		        </#if>
+		      </#list>
+		     </tr>
+		     </#list>
+		  </tbody>
+		  <tfoot>
+		       <tr style="border-top: #D0D0D0 solid 1px">
+		       <td>合计</td>
+		       <#list rowList as row>
+		            <#if row.code?? && 'amount'==row.code>
+		             <!-- 总数 -->
+		             <td>${(bill.amounts)!0}</td>
+		            <#elseif row.code?? && 'money'==row.code>
+		            <!-- 总价 -->
+		            <td>
+		              
+		               <@shiro.hasPermission name='1101-s'>
+				           ${(bill.moneys)!0}
+						 </@shiro.hasPermission>
+						 <@shiro.lacksPermission name='1101-s'>
+							***
+						 </@shiro.lacksPermission>
+		            </td>
+		            <#elseif row.code?? && 'discountMoney'==row.code>
+		            <!-- 折后总价 -->
+		            <td>
+		                    
+		                  <@shiro.hasPermission name='1101-s'>
+				           ${(bill.discountMoneys)!0}
+						 </@shiro.hasPermission>
+						 <@shiro.lacksPermission name='1101-s'>
+							***
+						 </@shiro.lacksPermission>
+		            </td>
+		            <#elseif row.code?? && 'tax'==row.code>
+		             <!-- 税额 -->
+		            <td>
+		                
+		                <@shiro.hasPermission name='1101-s'>
+				           ${(bill.taxes)!0}
+						 </@shiro.hasPermission>
+						 <@shiro.lacksPermission name='1101-s'>
+							***
+						 </@shiro.lacksPermission>
+		            </td>
+		            <#elseif row.code?? && 'taxMoney'==row.code>
+		            <!-- 含税金额 -->
+		            <td>
+		               
+		               <@shiro.hasPermission name='1101-s'>
+				           ${(bill.taxMoneys)!0}
+						 </@shiro.hasPermission>
+						 <@shiro.lacksPermission name='1101-s'>
+							***
+						 </@shiro.lacksPermission>
+		            </td>
+		            <#elseif row.code?? && 'retailMoney'==row.code>
+		            <!-- 零售金额 -->
+		            <td>
+		               
+		                <@shiro.hasPermission name='1101-s'>
+				            ${(bill.retailMoneys)!0}
+						 </@shiro.hasPermission>
+						 <@shiro.lacksPermission name='1101-s'>
+							***
+						 </@shiro.lacksPermission>
+		            </td>
+		            <#else>
+		            <td></td>
+		            </#if>
+		       </#list>
+		       </tr>
+		 </tfoot>
+	   </table>
+	   <div class="textContent center" layoutH="695">
+	     <div>
+	         <span>
+	                                付款账户<input class="line" type="text" id="payTypeAccounts" name="payTypeAccounts" value="${payTypeAccounts!}"readonly="readonly"/>
+	                                付款金额<input class="line" type="text" value="0" id="payTypeMoneys"  name="purchaseReturnBill.payMoney" value="${(bill.payMoney)!0}" readonly="readonly"/>
+	         </span>
+			 <span style="float: right;">
+		                优惠金额<input class="line number" type="text" id="privilege"  name="purchaseReturnBill.privilege" value="${(bill.privilege)!0}" readonly="readonly"/> 
+		                 优惠后金额：<input type="text" class="stealth" id="privilegeMoney" name="purchaseReturnBill.privilegeMoney" value="${(bill.privilegeMoney)!0}" style="width: 100px" readonly="readonly"/>
+		    </span>
+	     </div>
+	     </div>
+	    <div class="divider"></div> 
+		<div>
+	     <div style="float: right;">
+	        <a class="button" href="javascript:void(0);" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a>
+	     </div>
+	    </div>
+	</div>
+</div>
+

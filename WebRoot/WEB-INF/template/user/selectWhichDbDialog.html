@@ -1,0 +1,33 @@
+
+<div>
+   <form id="form"  class="pageForm" enctype="text/plain" method="post" 
+        onsubmit="return validateCallback(this,aioDialogAjaxDone);">
+           <table>
+		      <tr style="height: 40px;">
+		         <td style="text-align: right;">选择账套:</td>
+		         <td>
+     				<select id="loginWhichDbId" name="whichDbId" style="width: 170px;">
+     					<#list list as obj>
+     						<option value="${obj.id!''}" >${obj.whichDbName!''}</option>
+     					</#list>
+     				</select>
+     				<script type="text/javascript">
+     				    $(function(){
+     				        $("#loginWhichDbSubmit",getCurrentPanel()).focus();
+     				    });
+     				</script>
+		         </td>
+		      </tr>
+		   </table>
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		 <ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="button" id="loginWhichDbSubmit" onclick="selectWhichDbAfter();">确定</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+		 </ul>
+      </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>
+
+

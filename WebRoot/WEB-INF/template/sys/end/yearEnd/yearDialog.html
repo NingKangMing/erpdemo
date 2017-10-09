@@ -1,0 +1,94 @@
+<div class="pageContent">
+	<h2 class="contentTitle">年结存</h2>
+	<form action="${base}/sys/yearEnd/yearEnd" class="pageForm required-validate" enctype="text/plain" method="post" onsubmit="return validateCallback(this, dialogAjaxDone1)">
+		<div class="pageFormContent" layoutH="100">
+            <span style="margin-left: 50px;"><input type="radio"  name="yearEndType" value="one" onclick="sysOneYearEnd();" checked="checked"/>系统不使用多年账</span>
+            <span style="margin-left: 100px;"><input type="radio" name="yearEndType" value="many" onclick="sysManyYearEnd();"/>系统使用多年账</span>
+            <!-- 系统不使用多年账 -->
+            <div id="hasOneYearEnd">
+            	<table>
+	               <tr>
+	                  <td>
+	                      <fieldset style="margin-top: 20px; width: 420px;">
+						    <legend>年结存提示</legend>
+						    <div>年结存是非常重要的操作，请用户根据需要选择年结存选项:</div>
+						    <div style="text-indent : 20px; line-height: 20px;">1.所有明细账和单据将不再存在！</div>
+						    <div style="text-indent : 20px; line-height: 20px;">2.将本年的结存值做为期初值写入账套！</div>
+						    <div style="text-indent : 20px; line-height: 20px;">3.年结存不能查询年结存以前的明细账和往来！</div>
+						    <div style="text-indent : 20px; line-height: 20px;">4.在做年结存前，请先做数据备份！</div>
+						    <div style="text-indent : 20px; line-height: 20px;">5.在存期请不要使用机器和账套，不要按动键盘</div>
+					      </fieldset>
+	                  </td>
+	               </tr>
+	               <tr>
+	                  <td>
+	                      <fieldset style="margin-top: 20px;">
+						    <legend>年结存选项</legend>
+						    <div style="float: left">
+						        <span><input type="checkbox" name="removeDraftAndBook" value="yes"/>清除草稿和已完成订单</span>
+						    </div>
+					      </fieldset>
+	                  </td>
+	               </tr>
+	               <tr>
+	                  <td>
+	                      <fieldset style="margin-top: 20px;">
+						    <legend>将本年利润转入</legend>
+						    <span><input type="radio" name="profitsIntoOne" value="realAssets" checked="checked"/>实收资本</span>
+						    <span style="margin-left: 100px;"><input type="radio" name="profitsIntoOne" value="unPayProfits"/>未分配利润</span>
+					      </fieldset>
+	                  </td>
+	               </tr>
+	            </table>
+            </div>
+            <!-- end系统不使用多年账 -->
+            <!-- 系统使用多年账 -->
+            <div id="hasManyYearEnd" style="display: none;">
+            	<table>
+	               <tr>
+	                  <td>
+	                      <fieldset style="margin-top: 20px; width: 420px;">
+						    <legend>年结存提示</legend>
+						    <div>系统使用多年账是非常重要的操作，请用户注意以下说明:</div>
+						    <div style="text-indent : 20px; line-height: 20px;">1.年结存后，将保留所有单据信息！</div>
+						    <div style="text-indent : 20px; line-height: 20px;">2.年结存后，将不能修改期初数据，包括所有库存信息和会计科目信息！</div>
+						    <div style="text-indent : 20px; line-height: 20px;">3.年结存后，将可以查询跨年类报表！</div>
+						    <div style="text-indent : 20px; line-height: 20px;">4.年结存后，将不需要开账操作就可以直接进行业务操作！</div>
+						    <div style="text-indent : 20px; line-height: 20px;">5.年结存当天，将不能进行过账，零售单将不能保存！</div>
+						    <div style="text-indent : 20px; line-height: 20px;">6.在存期请不要使用机器和账套，不要按动键盘</div>
+					      </fieldset>
+	                  </td>
+	               </tr>
+	               <tr>
+	                  <td>
+	                      <fieldset style="margin-top: 20px;">
+						    <legend>年结存名称</legend>
+						    <div style="float: left">
+						        <div style="float: left; line-height: 25px; vertical-align: middle;">请输入年结存名称</div>
+						        <div style="float: left;"><input type="text" name="currentYearName" value="${currentYearName!}"/></div>
+						    </div>
+					      </fieldset>
+	                  </td>
+	               </tr>
+	               <tr>
+	                  <td>
+	                      <fieldset style="margin-top: 20px;">
+						    <legend>将本年利润转入</legend>
+						    <span><input type="radio" name="profitsIntoMany" value="realAssets" checked="checked"/>实收资本</span>
+						    <span style="margin-left: 100px;"><input type="radio" name="profitsIntoMany" value="unPayProfits"/>未分配利润</span>
+					      </fieldset>
+	                  </td>
+	               </tr>
+	            </table>
+            </div>
+            <!--end 系统使用多年账 -->			
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确认</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>
+

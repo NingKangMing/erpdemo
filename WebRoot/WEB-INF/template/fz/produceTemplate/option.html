@@ -1,0 +1,67 @@
+<div id="produceTemplate_option">
+<div class="pageHeader">
+	<form id="pagerForm" rel="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/fz/produceTemplate/${toAction!'dialogList'}" onsubmit="return dwzSearch(this, 'dialog');">
+		<input type="hidden" name="pageNum" value="${(pageMap.get('pageNum'))!}" />
+		<input type="hidden" name="numPerPage" value="${(pageMap.get('numPerPage'))!}" />
+		<input type="hidden" name="orderField" value="${orderField!'tmp.id'}" /><!--查询排序-->
+	    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+	     
+		<input type="hidden" name="selectedObjectId" id="selectedObjectId" value="${objectId!0}"/><!--默认选中对象的Id-->
+		
+		<div class="searchBar">
+		  <ul class="searchContent">
+		   <li>
+		    <select name="term">
+		       <option value="quick">快速查询</option>
+		       <option value="tmp.tmpName" <#if term?? && term=='tmp.tmpName'> selected="selected"</#if>>按模板名称查询</option>
+		       <option value="pro.code" <#if term?? && term=='pro.code'> selected="selected"</#if>>按商品编号查询</option>
+		       <option value="pro.fullName" <#if term?? && term=='pro.fullName'> selected="selected"</#if>>按商品全名查询</option>
+		    </select>
+		    &nbsp;&nbsp;
+		    </li>
+		    <li>
+		    <input class="textInput" id="termVal" name="termVal" value="${termVal!}" size="50"/>&nbsp;&nbsp;
+		    </li>
+		    <li>
+		    	<a style="margin-left: 15px;" class="button" href="javascript:submitChangeAction('termVal');"><span>查询</span></a>
+		    </li>
+	      </ul>
+			
+		</div>
+	</form>
+</div>
+<div class="pageContent">
+	<table class="table" layoutH="126" targetType="dialog">
+	<thead>
+		<tr>
+			<th width="45" align="center" >行号</th>
+			<th width="200" align="center"  orderField="tmp.tmpName" <#if orderField?? && 'tmp.tmpName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >模板名称</th>
+			<th width="100" align="center"  orderField="pro.code" <#if orderField?? && 'pro.code'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >商品编号</th>
+			<th width="150" align="center"  orderField="pro.fullName" <#if orderField?? && 'pro.fullName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >商品全名</th>
+		</tr>
+	</thead>
+	<tbody>
+		<#list pageMap.pageList as recode>
+			<tr objectId="${objectId!0}" target="tid" rel="${recode.tmp.id}">
+				<td><a>${recode_index+1+pageMap.limit}</a></td>
+				<td>${recode.tmp.tmpName!}</td>
+				<td>${recode.pro.code!}</td>
+				<td>${recode.pro.fullName!}</td>
+			</tr>
+		</#list>
+	</tbody>
+	</table>
+	<#include "/WEB-INF/template/unitl/dialogpage.html" />
+</div>
+	<div class="formBar">
+		<div style="margin-left: 10px;">
+		              拆装数量[1..1000000]<input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" value="0" id="amount" />
+			<span style="float: right;">
+			    <div class="buttonActive"><button type="button" target="checkedBack" relevancyIds="amount" url="${base}/fz/produceTemplate/optionCallBack/{tid}" callback="tempCkdCallBack">产品组装</button></div>
+			    <div class="buttonActive" style="margin-left: 5px;"><button type="button" target="checkedBack" relevancyIds="amount" url="${base}/fz/produceTemplate/optionCallBack/{tid}" callback="tempDisCallBack">产品拆分</button></div>
+			    <div class="buttonActive" style="margin-left: 5px;"><button type="button" class="close">退出</button></div>
+		    </span>
+		</div>
+	</div>
+</div>
+

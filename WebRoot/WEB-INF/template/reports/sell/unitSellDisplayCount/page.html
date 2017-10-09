@@ -1,0 +1,44 @@
+<div class="panel">
+	<div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">${modelTypeName}销售分布</span></label>
+				</li>
+			</ul>
+			<ul class="searchContent" style="margin-top: 5px;">
+				<li>
+					<span style="margin-left: 10px;">查询时间：</span>${startDate}至${endDate}
+				</li>
+			</ul>
+			<ul class="searchContent">
+				<li>
+				    <#if modelType!="unit">
+				    <span style="margin-left: 10px;">往来单位:</span><#if unitFullName=="">全部单位</#if>${unitFullName} 
+				    </#if>
+					<span style="margin-left: 50px;">内部职员:</span><#if staffFullName=="">全部职员</#if>${staffFullName} 
+					<#if modelType!="storage">
+					<span style="margin-left: 50px;">仓库:</span><#if storageFullName=="">全部仓库</#if>${storageFullName} 
+					</#if>
+					<span style="margin-left: 50px;">商品:</span>全部商品 
+				</li>
+				<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+				<li style="float: right;">
+				  <!--   过滤<select onchange="xsReportAmountChange(this,'aimDiv','pagerForm','xs_prdSellCount');" id="aimDiv" name="aimDiv"> -->
+				    金额统计方式<select onchange="xsReportAmountChange(this,'aimDiv','pagerForm','xs_prdSellCount');">
+				       <option <#if aimDiv=="after">selected="selected"</#if> value="after">税后金额</option>
+				       <option <#if aimDiv=="before">selected="selected"</#if> value="before">税前金额</option>
+				    </select>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div layoutH="80">
+		<div id="xs_prdSellCount">
+			<#include "/WEB-INF/template/reports/sell/unitSellDisplayCount/list.html" />
+		</div>
+	</div>
+</div>
+
+
+

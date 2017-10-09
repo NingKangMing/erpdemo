@@ -1,0 +1,99 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/fz/pricesManage/search" onsubmit="return dwzSearch(this, 'pricesManageList');">
+    <input type="hidden" name="pageNum" value="${pageMap.pageNum!}" />
+	<input type="hidden" name="numPerPage" value="${pageMap.numPerPage!}" />
+	<input type="hidden" name="orderField" value="${(params.orderField)!'code'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${(params.orderDirection)!'asc'}" /><!--升序降序-->
+    <input type="hidden" id="typeUnit" name="typeUnit" value="${(params.typeUnit)!}"/>
+    <#list productIds as productId>
+       <input type="hidden" name="productIdArr" value="${productId!}"/>
+    </#list>
+
+</form>
+<table class="table" rel="pricesManageList" layoutH="160">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody id="pricesManageBody">
+		
+		<#list pageMap.pageList as product>
+	    <tr target="id" rel="${product.id!0}-${product.unit.selectUnitId!1}" title="新价格输入" crel="newPriceDialog"  cTarget="dialog" url="${base}/fz/pricesManage/toPrices/${product.id!0}-${product.unit.selectUnitId!1}" widths="340" heights="340">
+			<td><a>${product_index+1}</a></td>
+			<#list rowList as row>
+			<#if row.code?? && 'code'==row.code>
+			<td>${product.code!''}</td>
+			<#elseif row.code?? && 'fullName'==row.code>
+			<td>${product.fullName!''}</td>
+			<#elseif row.code?? && 'smallName'==row.code>
+			<td>${product.smallName!''}</td>
+			<#elseif row.code?? && 'spell'==row.code>
+			<td>${product.spell!''}</td>
+			<#elseif row.code?? && 'standard'==row.code>
+			<td>${product.standard!''}</td>
+			<#elseif row.code?? && 'model'==row.code>
+			<td>${product.model!''}</td>
+			<#elseif row.code?? && 'field'==row.code>
+			<td>${product.field!''}</td>
+			<#elseif row.code?? && 'savePath'==row.code>
+			<td>
+			   <#if (product.savePath)??>
+			    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(product.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(product.savePath)!}"  width="20px" height="20px"/>
+               </#if>
+			</td>
+			<#elseif row.code?? && 'unit.calculateUnit'==row.code>
+			<td>${product.unit.calculateUnit!''}</td>
+			<#elseif row.code?? && 'unit.barCode'==row.code>
+			<td>${product.unit.barCode!''}</td>
+			<#elseif row.code?? && 'unit.retailPrice'==row.code>
+			<td>${product.unit.retailPrice!}</td>
+			<#elseif row.code?? && 'unit.defaultPrice1'==row.code>
+			<td>${product.unit.defaultPrice1!}</td>
+			<#elseif row.code?? && 'unit.defaultPrice2'==row.code>
+			<td>${product.unit.defaultPrice2!}</td>
+			<#elseif row.code?? && 'unit.defaultPrice3'==row.code>
+			<td>${product.unit.defaultPrice3!}</td>
+			<#elseif row.code?? && 'lastCostPrice'==row.code>
+			<td>
+			    
+			    <@shiro.hasPermission name='1101-s'>
+		           ${product.lastCostPrice!}
+				 </@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					***
+				 </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'minSellPrice'==row.code>
+			<td>${product.minSellPrice!}</td>
+			<#elseif row.code?? && 'avgprice'==row.code>
+			<td>
+			    
+			     <@shiro.hasPermission name='1101-s'>
+		            ${product.avgprice!}
+				</@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					***
+				 </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'grossMargin'==row.code>
+			<td>
+			   <#assign defaultPrice1 = 0 />
+			   <#assign avgprice = 0 />
+			   <#if product.unit.defaultPrice1??>
+			      <#assign defaultPrice1 = product.unit.defaultPrice1 />
+			   </#if>
+			   <#if product.avgprice??>
+			      <#assign avgprice = product.avgprice />
+			   </#if>
+	            <#if defaultPrice1?? && defaultPrice1 !=0>
+		       ${((defaultPrice1-avgprice)/defaultPrice1)!}
+		        </#if>
+				
+			</td>
+			<#elseif row.code?? && 'amount'==row.code>
+			<td>${product.amount!}</td>
+			</#if>
+			</#list>
+		</tr>
+		</#list>
+		
+	</tbody>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>	
+

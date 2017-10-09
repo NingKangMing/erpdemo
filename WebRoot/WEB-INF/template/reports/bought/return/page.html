@@ -1,0 +1,42 @@
+<div class="panel pageContent">
+	<div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">商品进货退货统计</span></label>
+				</li>
+			</ul>
+			<ul class="searchContent" style="margin-top: 5px;">
+				<li>
+					<span style="margin-left: 10px;">查询时间：</span>${(params.startDate)!}&nbsp;&nbsp;至&nbsp;&nbsp;${(params.endDate)!}
+				</li>
+			</ul>
+			<ul class="searchContent">
+				<li> 
+					<span style="margin-left: 10px;">往来单位:</span><#if unitName=="">全部单位</#if>${unitName!} 
+					<span style="margin-left: 50px;">内部职员:</span><#if staffName=="">全部职员</#if>${staffName!} 
+					<span style="margin-left: 50px;">仓库:</span><#if storageName=="">全部仓库</#if>${storageName!} 
+					<span style="margin-left: 50px;">商品:</span><#if productName=="">全部仓库</#if>${productName!} 
+				</li>
+				<li  style="float: right;margin-left: 10px;margin-right: 10px">
+				   <a href="${base}/fz/reportRow/search/cg503" target="dialog" rel="reportRowView"  width="520" height="500"><img src="${base}/img/base/setting.png" width="20px" height="20px" title="列配置"/></a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div layoutH="80">
+	   <#assign leftDistance =0/>
+	    <#if !node?? || node!=1>
+		<div style="float:left; display:block; overflow:auto; width:210px; border:solid 1px #CCC; line-height:21px; background:#fff" layoutH="100">
+			<ul id="reports_purchaseReturnStatistics" target="ztree" selectNodeId="${supId!0}"  relevancyIds="unit.id,staff.id,storage.id,startDate,endDate" class="ztree" url="${base}/reports/bought/return/tree/${(params.productId)!0}" rel="purchaseReturnStatisticsList" ctarget="ajax"></ul>
+		</div>
+		<#assign leftDistance =220/>
+		</#if>
+		<div id="purchaseReturnStatisticsList" style="margin-left: ${leftDistance!0}px;padding:2px; padding-top: 0px;" layoutH="87">
+			<#include "list.html" />
+		</div>
+	</div>
+</div>
+
+
+

@@ -1,0 +1,94 @@
+<!-- 会计科目多选-->
+<div id="b_product_dialog_paging"> 
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/base/accounts/accountsDialog/page-${whichCallBack!'getMoney'}" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${(pageMap.get('pageNum'))}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.get('numPerPage'))!}" />
+	<input type="hidden" name="orderField" value="${orderField!''}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <input type="hidden" name="selectedObjectId" id="selectedObjectId" value="${objectId!0}"/>        <!--   默认选中行对象的Id -->
+    <input type="hidden" name="oldSelectCheckBoxIds" id="b_dialog_product_oldpage_checkboxIds" value="${selectCheckboxObjs!''}"> <!-- 翻页记录旧checkbox  ids -->
+    <input type="hidden" name="selectCheckBoxIds" id="b_dialog_product_page_checkboxIds" value="${selectCheckboxObjs!''}">  <!-- 翻页记录 新checkbox  ids -->
+    
+    <input type="hidden" id="whichCallBack" name="whichCallBack" value="${whichCallBack!'getMoney'}">
+    <input type="hidden" id="supId" name="supId" value="${supId!0}">
+    <input type="hidden" id="pSupId" name="pSupId" value="${pSupId!0}">
+    <input type="hidden" id="opterate" name="opterate" value="${opterate!""}">
+</form>
+<div class="pageHeader">
+	<form rel="pagerForm" id="stoageOptionFromId"  method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/base/accounts/accountsDialog/search-${whichCallBack!'getMoney'}" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden"  name="whichCallBack" value="${whichCallBack!'getMoney'}">
+    <input type="hidden"  name="supId" value="${supId!0}">
+    <input type="hidden" id="opterate" name="opterate" value="${opterate!""}">
+	<div class="searchBar">
+	   <ul class="searchContent">
+		   <li>
+		    <select name="term">
+		       <option <#if term?? && 'quick'==term>selected="selected"</#if> value="quick">快速查询</option>
+		       <option <#if term?? && 'code'==term>selected="selected"</#if>  value="code">按科目编号查询</option>
+		       <option <#if term?? && 'fullName'==term>selected="selected"</#if> value="fullName">按科目全名查询</option>
+		       <option <#if term?? && 'spell'==term>selected="selected"</#if> value="spell">按科目拼音码查询</option>
+		    </select>
+		    &nbsp;&nbsp;
+		    </li>
+		    <li>
+		    <input class="textInput" name="termVal" value="${termVal!''}" size="50"/>&nbsp;&nbsp;
+		    </li>
+		    <li>
+		    <div class="buttonActive"><div class="buttonContent"><button type="submit">查询</button></div></div>
+		    </li>
+	    </ul>
+	    <ul class="searchContent">
+	        <div style="float: right;">
+	        </div>
+	    </ul>
+	</div>
+	</form>
+</div>
+<div class="pageContent">
+	<table class="table" layoutH="160"  targetType="dialog">
+		<thead>
+			<tr>
+			    <th width="40" align="center">行号</th> 
+			    <#if opterate=="select" && whichCallBack!='accountVoucher'><th width="30" align="center"><input class="checkboxCtrl" type="checkbox" group="productIdArr" onclick="checkAllVersa(this,'b_dialog_product_page_checkboxIds','b_dialog_product_search_checkboxIds');"/></th></#if>
+				<th width="70" align="center" orderField="code"  <#if orderField?? && 'code'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>科目编号</th>
+				<th width="100" align="center" orderField="fullName"  <#if orderField?? && 'fullName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>科目全名</th>
+				<th width="70" align="center" orderField="smallName"  <#if orderField?? && 'smallName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>科目简名</th>
+				<th width="100" align="center" orderField="spell"  <#if orderField?? && 'spell'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>科目拼音码</th>
+			</tr>
+		</thead>
+		<tbody id="b_product_dialog_tbody">
+		    <#list pageMap.pageList as obj>
+		    <#if obj.node==2>
+		    <!-- selectCheckboxObjs   要选中的checkBox -->
+			<tr objectId="${objectId!0}" selectCheckboxObjs="${selectCheckboxObjs!''}"  rel="${obj.id!0}" target="id" drel="cw_account_dialog"  cTarget="dialog" whichDialog="jsonData" relevancyIds="whichCallBack,opterate,b_dialog_product_oldpage_checkboxIds,b_dialog_product_page_checkboxIds" url="${base}/base/accounts/accountsDialog/down-${obj.id!0}">
+			<#else>
+			<tr objectId="${objectId!0}" selectCheckboxObjs="${selectCheckboxObjs!''}"  rel="${obj.id!0}"  drel="cw_account_dialog" cTarget="dialog" whichDialog="jsonData" single="singleObj" target="checkedBack" whichTr="accountsMulit" url="${base}/base/accounts/accountsSearchBack/${obj.id!0}" callback="accountsCheckBack">
+			</#if>
+				<td><a>${obj_index+1+pageMap.limit}</a><#if obj.node==2>..</#if></td>
+				<#if opterate=="select" && whichCallBack!='accountVoucher'><td><input type="checkbox" name="productIdArr"  value="${obj.id!0}" onclick="getProductIdList(this,'b_dialog_product_page_checkboxIds','b_dialog_product_search_checkboxIds');"/></td></#if>
+				<td>${obj.code!''}</td>
+				<td>${obj.fullName!''}</td>
+				<td>${obj.smallName!''}</td>
+				<td>${obj.spell!''}</td>
+			</tr>
+			</#list>
+		</tbody>
+	</table>
+</div>
+<#include "/WEB-INF/template/unitl/dialogpage.html"/>
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+    <#if whichCallBack=='accountVoucher'>
+       <div class="button"><div class="buttonContent" onclick="selectTrdbClick()"><button type="button" class="button">选中</button></div></div>
+    <#else>
+    <a class="button"  url="${base}/base/accounts/accountsSearchBack/" target="checkedBack" opterate="${opterate}" irel="b_dialog_product_page_checkboxIds" callback="accountsCheckBack"><span>选中</span></a>
+	</#if>
+	<#if supId?? && supId!=0>
+	   <a  class="button" href="${base}/base/accounts/accountsDialog/up" relevancyIds="pSupId,supId,whichCallBack,opterate,b_dialog_product_oldpage_checkboxIds,b_dialog_product_page_checkboxIds" target="aioUpAjax"  rel="b_product_dialog_paging"><span>上级</span></a>
+    <#else>
+       <a  class="buttonDisabled" href="javascript:void(0);"><span>上级</span></a>
+    </#if>
+	<div style="float: right;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+</div>
+</div>

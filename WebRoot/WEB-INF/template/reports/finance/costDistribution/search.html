@@ -1,0 +1,41 @@
+<div class="pageContent">
+   <form action="${base}/reports/finance/costDistribution/go" method="post" class="pageForm required-validate" enctype="text/plain" onsubmit="return validateCallback(this,aioDialogOpenNavTab)">
+      <input type="hidden" id="aimTabId" name="aimTabId"  value=""/>
+      <input type="hidden" id="aimUrl"   name="aimUrl"   value=""/>
+      <input type="hidden" id="aimTitle" name="aimTitle"  value=""/>
+      
+      <!-- 动态需要的参数 -->
+      <#if paraMap?exists>
+          <#list paraMap.keySet() as k>
+          	<input type="hidden" id="${k}" name="${k}" value="${paraMap.get(k)}"/>
+          </#list>
+      </#if>
+      
+      <div layoutH="35">
+	       <fieldset>
+			    <legend>请选择分布类型</legend>
+				   <div align="center" style="line-height: 40px;">
+				   		<input type="radio" name="disType" <#if disType?? && disType=='depm'> checked="checked" </#if> value="depm"/>部门费用分布
+				   </div>
+				   <div align="center" style="line-height: 40px;">
+				   		<input type="radio" name="disType" <#if disType?? && disType=='staff'> checked="checked" </#if> value="staff"/>职员费用分布
+				   </div>
+				   <div align="center" style="line-height: 40px;">
+				   		<input type="radio" name="disType" <#if disType?? && disType=='area'> checked="checked" </#if> value="area"/>地区费用分布
+				   </div>
+				   <div align="center" style="line-height: 40px;">
+				   		<input type="radio" name="disType" <#if disType?? && disType=='unit'> checked="checked" </#if> value="unit"/>单位费用分布
+				   </div>
+		   </fieldset>
+	 </div>
+	 
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+		</ul>
+	  </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

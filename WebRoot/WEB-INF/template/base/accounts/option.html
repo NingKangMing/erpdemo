@@ -1,0 +1,78 @@
+<div id="optionAccountList">
+<!-- 会计科目  查找带回 -->
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/base/accounts/option/page">
+	<input type="hidden" name="pageNum" value="${(pageMap.get('pageNum'))}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.get('pageSize'))!}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <input type="hidden"  name="supId" value="${supId!0}"/>
+	<input type="hidden" id="param" name="param" value="${param!}"/>
+	
+</form>
+<div class="pageHeader">
+	<form rel="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/base/accounts/option/search" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden"  name="supId" value="0"/>
+	<input type="hidden"  id="param" name="param" value="${param!}"/>
+	<div class="searchBar">
+	   <ul class="searchContent">
+		   <li>
+		    <select name="term">
+		       <option <#if term?? && 'quick'==term>selected="selected"</#if> value="quick">快速查询</option>
+		       <option <#if term?? && 'code'==term>selected="selected"</#if>  value="code">按科目编号查询</option>
+		       <option <#if term?? && 'fullName'==term>selected="selected"</#if> value="fullName">按科目全名查询</option>
+		       <option <#if term?? && 'spell'==term>selected="selected"</#if> value="spell">按科目拼音码查询</option>
+		    </select>
+		    &nbsp;&nbsp;
+		    </li>
+		    <li>
+		    <input class="textInput" type="text" name="termVal" value="${termVal!''}" size="38"/>&nbsp;&nbsp;
+		    </li>
+		    <li>
+		    <div class="buttonActive"><div class="buttonContent"><button type="submit">查询</button></div></div>
+		    </li>
+	    </ul>
+	</div>
+	</form>
+</div>
+<div class="pageContent">
+
+	<table class="table" layoutH="130" targetType="dialog">
+		<thead>
+			<tr>
+				<th width="40" align="center">行号</th>
+				<th width="60" align="center" orderField="code" <#if orderField?? && 'code'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>科目编号</th>
+				<th width="100" align="center" orderField="fullName" <#if orderField?? && 'fullName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>科目名称</th>
+				<th width="100" align="center" orderField="spell" <#if orderField?? && 'spell'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>科目拼音码</th>
+			</tr>
+		</thead>
+		<tbody>
+		    <#list pageMap.pageList as account>
+		    <#if account.node==2>
+		        <tr objectId="${objectId!0}" rel="${account.id}" title="会计科目选择" relevancyIds="param" cTarget="dialog" url="${base}/base/accounts/option/down-${account.id}">
+		    <#else>
+		        <tr objectId="${objectId!0}" rel="${account.id}"  ondblclick="javascript:$.bringBack({id:'${account.id}', fullName:'${account.fullName!}', code:'${account.code!}'})">
+		    </#if>
+				<td>${account_index+1}<#if account.node==2>..</#if></td>
+				<td>${(account.code)!}</td>
+				<td>${(account.fullName)!}</td>
+				<td>${(account.spell)!}</td>
+			</tr>
+			</#list>
+		</tbody>
+	</table>
+	<#include "/WEB-INF/template/unitl/dialogpage.html" />
+	
+</div>
+<!--divider虚线-->
+   <div class="divider"></div>
+    <div>
+        <div class="button"><div class="buttonContent" onclick="selectTrClick()"><button type="button" class="button">选中</button></div></div>
+		<#if supId?? && supId!=0>
+		   <a class="button" href="${base}/base/accounts/option/up-${pSupId!0}-${supId!0}" relevancyIds="param" target="ajax"  rel="optionAccountList"><span>上级</span></a>
+	    <#else>
+	       <a class="buttonDisabled" href="javascript:void(0);"><span>上级</span></a>
+	    </#if>
+	    
+		<div style="float: right;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+	</div>
+</div>

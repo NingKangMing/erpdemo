@@ -1,0 +1,13 @@
+<!--报表   基本信息查询框 -->
+<#--<#include "/WEB-INF/template/common/base/reports/areaReportLink.html"/>-->
+
+<tr style="height: 30px;">
+	<td>地区全名:</td>
+	<td>
+		<input type="hidden"  name="area.id"/>
+		<input type="hidden"  name="area.fullName"/>
+		<input type="hidden"  name="area.pids"/>
+ 	    <input class="textInput" id="areaName" type="text" size="30"  name="area.fullName" lookName="area" lookId="area.id"/>
+	    <a class="btnLook" id="areaLook" btnPattern="selectMany,selectAll" type="POST" href="${base}/base/area/dialogList/0"  warn="地区" lookupgroup="area" lookuppk="id" width="600" height="410">地区</a>
+	</td>
+</tr>

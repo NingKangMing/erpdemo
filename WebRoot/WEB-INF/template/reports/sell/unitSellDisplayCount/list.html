@@ -1,0 +1,151 @@
+<input type="hidden" id="projectBasePath" value="${base}"/>
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/layout/dialogSearch/page" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <!-- ID用于树点击参数 -->
+	<input type="hidden" id="modelType" name="modelType" value="${modelType}"/>        <!-- prd(商品销售统计)  unit(单位销售统计) -->
+	
+	<input type="hidden" id="unit.id" name="unit.id" value="${unitId!}"/>               <!-- 单位ID -->
+	<input type="hidden" id="staff.id" name="staff.id" value="${staffId!}"/>            <!-- 职员ID -->
+	<input type="hidden" id="storage.id" name="storage.id" value="${storageId!}"/>      <!-- 仓库ID -->
+	<input type="hidden" id="unit.id" name="unit.fullName" value="${unitFullName!}"/>               <!-- 单位ID -->
+	<input type="hidden" id="staff.id" name="staff.name" value="${staffFullName!}"/>            <!-- 职员ID -->
+	<input type="hidden" id="storage.id" name="storage.fullName" value="${storageFullName!}"/>      <!-- 仓库ID -->
+	
+	
+	<input type="hidden" id="pageOrderTypes" name="pageOrderTypes" value="${orderTypes}"/>   <!--销售单(xsd),销售退货单(xsthd),销售换货单(xshhd),借转销售单(jzxsd),委托结算单(wtjsd)-->
+	<input type="hidden" id="startDate" name="startDate" value="${startDate}"/>        <!--开始日期  -->
+	<input type="hidden" id="endDate" name="endDate" value="${endDate}"/>            <!-- 结束日期 -->
+	<input type="hidden" id="supId" name="supId" value="${supId!0}"/>                               <!-- 父级ID -->
+	<input type="hidden" name="selectedObjectId" id="selectedObjectId" value="${objectId!0}" /><!--   默认选中对象的Id -->
+	<input type="hidden" id="aimDiv" name="aimDiv" value="${aimDiv}"/> 
+	<input type="hidden" name="whereComeDetail" value="other"> 
+	<input type="hidden" id="node" name="node" value="${node!2}"/> 
+	<#include "/WEB-INF/template/base/baseSearchComDialog/searchConditionInputs.html"/><!--报表基本信息筛选条件保存 -->
+</form>
+<#assign colspan = 1/>
+<#list rowList as row>
+    <#assign  colspan = colspan+1/>
+</#list>
+<table class="table" rel="xs_prdSellCount" layoutH="265">
+	<thead>
+			<tr>
+				<th colspan="${colspan!}" align="center"></th>
+				<#if objList??>
+				<#list objList as storage>
+					<th colspan="2" align="center">${storage.fullName!}</th>
+				</#list>
+				</#if>
+				<th colspan="2" align="center">合计</th>
+			</tr>
+			<tr>
+			    <th width="80"  align="center" >行号</th>
+			    <#list rowList as row>
+				   <th  width="${(row.width)!100}px" rowspan="2" <#if row.isOrder?? && row.isOrder==2> orderField="${row.code}"  <#if orderField?? && row.code==orderField>class="${(orderDirection)!'asc'}"<#else>class="asc"</#if> </#if>>
+					 ${(row.showName)!(row.name)!}
+				   </th>
+			    </#list>
+			    <#if objList??>
+				<#list objList as storage>
+				<th width=100 align="center" orderField="amount${storage.id!}" <#if orderField?? && 'amount${storage_index}'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>数量</th>
+				<th width=100 align="center" orderField="money${storage.id!}" <#if orderField?? && 'money${storage_index}'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>金额</th>
+				</#list>
+				</#if>
+				<th width=100 align="center" orderField="allAmount" <#if orderField?? && 'allAmount'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >数量</th>
+				<th width=100 align="center" orderField="allMoneys" <#if orderField?? && 'allMoneys'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >金额</th>
+			</tr>
+		</thead>
+		<tbody>
+		    <#if pageMap??&&pageMap.pageList??>
+			<#list pageMap.pageList as recode>
+			<#if recode.node==2>
+			<tr objectId="${objectId!0}" target="pid"  rel="${recode.id}"  crel="xs_prdSellCount"  cTarget="ajax"  url="${base}/reports/layout/dialogSearch/tree" relevancyIds="modelType,selectedObjectId,unit.id,staff.id,storage.id,pageOrderTypes,startDate,endDate,aimDiv"  isSelect="true">
+			<#else>
+			<tr objectId="${objectId!0}" target="id" rel="${recode.id!}" isSelect="true" cTarget="citeEvent" citeEventModuleId="sellLayoutDetailButton" citeEventType="click">
+			</#if>
+				<td><a>${recode_index+1+pageMap.limit}</a><#if recode.node==2>..</#if></td>
+				<#list rowList as row>
+				 <#if row.code?? && 'savePath'==row.code>
+	               <td>
+				   <#if (recode.savePath)??>
+				    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(recode.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(recode.savePath)!}"  width="20px" height="20px"/>
+	               </#if>
+				  </td>
+	             <#else>
+	                <td>${recode[row.code]!}</td>
+	             </#if>
+	            </#list>
+				
+				<#if objList??>
+				<#list objList as storage>
+				<td>${(recode["amount"+storage.id])!}</td>
+				<td>${(recode["money"+storage.id])!}</td>
+				</#list>
+				</#if>
+				<td>${recode.allAmount!}</td>
+				<td>${recode.allMoney!}</td>
+			</tr>
+			</#list>
+			</#if>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td>合计</td>
+				<#list rowList as row>
+		           <td></td>
+		         </#list>
+				
+				<#list objList as storage>
+				<td hascount="true"></td>
+				<td hascount="true"></td>
+				</#list>
+				
+				<td hascount="true"></td>
+				<td hascount="true"></td>
+			</tr>
+		</tfoot>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+
+	
+<div class="divider"></div>
+<#--
+<a class="buttonDisabled" href="javascript:;"><span>图形对比</span></a>
+-->
+<div class="divider"></div>
+<div>
+	<a class="button" target="dialog" href="${base}/reports/layout/toSearchDialog/${modelType}" rel="${modelType}SellLayoutCountSearchDialog" width="460" height="400" aimTitle="${modelTypeName}销售统计" aimUrl="${base}/reports/layout/dialogSearch/search" aimTabId="${modelType}SellLayoutCountView" aimDiv="${aimDiv}"><span>查询条件</span></a><!-- aimDiv值为all eq gt 下拉框改变赋值-->
+	<#if modelType=="unit">
+	<#assign privs = '4-61-410-p'/>
+	<a class="button"  id="sellLayoutDetailButton" target="dialog" href="${base}/base/unit/option/0"  title="往来单位选择" lookupgroup="unit" serialize="false" ctarget="navTab" width="600" height="410" ctitle="销售明细账本" url="${base}/reports/prdSellCount/prdXsDetail/unit" cRel="unitxsDetailView"><span>明细账本</span></a>
+	<#elseif modelType=="storage">
+	<#assign privs = '4-61-411-p'/>
+	<a class="button" id="sellLayoutDetailButton"  target="dialog" href="${base}/base/storage/dialogList"  title="仓库选择" lookupgroup="storage" serialize="false" ctarget="navTab" width="600" height="410" ctitle="销售明细账本" url="${base}/reports/prdSellCount/prdXsDetail/storage" cRel="storagexsDetailView"><span>明细账本</span></a>
+	</#if>
+	
+	
+	<#if node?? && node == 1>
+		<a class="buttonDisabled" href="javascript:;"><span>列表</span></a>
+	<#else>
+		<a class="button" href="${base}/reports/layout/dialogSearch/line" target="ajax" rel="xs_prdSellCount"  relevancyIds="modelType,pageOrderTypes,unit.id,staff.id,storage.id,startDate,endDate,aimDiv,supId"><span>列表</span></a>
+	</#if>
+	
+	<a class="button" target="dialog" href="${base}/base/product/toReportBaseFilter/pagerForm-product" rel="report_product_filtter" width="400" height="210" aimTitle="${modelTypeName}销售统计" aimUrl="${base}/reports/layout/dialogSearch/search" aimTabId="${modelType}SellLayoutCountView"><span>商品筛选</span></a>   
+
+	<#--
+	<a class="buttonDisabled" href="javascript:;"><span>我的查询</span></a>
+	-->
+</div>
+<div style="float: right;">
+    <#if supId?? && supId!=0>
+	<a class="button"  onclick="upDataByFormPara('pagerForm','/reports/layout/dialogSearch/up','${listID}');"><span>上级</span></a>
+	<#else>
+	<a class="buttonDisabled" href="javascript:;"><span>上级</span></a>
+	</#if>
+	<#assign href = '${base}/reports/layout/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+    <a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

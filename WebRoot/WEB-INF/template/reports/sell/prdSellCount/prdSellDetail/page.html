@@ -1,0 +1,45 @@
+<div class="pageContent">
+   <div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">${modelTypeName}销售明细账本</span></label>
+				</li>
+			</ul>
+			<ul class="searchContent" style="margin-top: 5px;">
+				<li>
+					<span style="margin-left: 10px;">查询时间：</span>${startDate}至${endDate}
+				</li>
+			</ul>
+			<ul class="searchContent">
+				<li>
+					<span style="margin-left: 10px;">商品名称:</span>${productFullName!''}
+				</li>
+				<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+				<li style="float: right;">
+				    过滤<select onchange="xsReportAmountChange(this,'aimDiv','pagerForm','${listID!}');">
+				       <option value="all">全部显示</option>
+                	   <option value="notRedRow">不显示红冲单据</option>
+				    </select>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+   <div id="${listID!}">
+      <#if modelType=="prd"||modelType=="unit">
+      <#include "/WEB-INF/template/reports/sell/prdSellCount/prdSellDetail/prdUnitList.html" />
+      <#elseif modelType=="staff">
+      <#include "/WEB-INF/template/reports/sell/prdSellCount/prdSellDetail/staffList.html" />
+      <#elseif modelType=="dept">
+      <#include "/WEB-INF/template/reports/sell/prdSellCount/prdSellDetail/deptList.html" />
+      <#elseif modelType=="storage">
+      <#include "/WEB-INF/template/reports/sell/prdSellCount/prdSellDetail/storageList.html" />
+      <#elseif modelType=="area">
+      <#include "/WEB-INF/template/reports/sell/prdSellCount/prdSellDetail/areaList.html" />
+      </#if>
+   </div>
+</div>
+
+
+

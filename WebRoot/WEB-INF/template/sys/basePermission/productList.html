@@ -1,0 +1,85 @@
+
+<form id="pagerForm" onsubmit="return divSearch(this, 'productPermissionList');" action="${base}/sys/basePermission/product" method="post">
+	<input type="hidden" name="pageNum" value="${(productPageMap.get('pageNum'))}" />
+	<input type="hidden" name="numPerPage" value="${(productPageMap.get('numPerPage'))!}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <input type="hidden" name="userId" value="${userId!}">
+    <input type="hidden" name="pSupId" value="${supId!-1}">
+	
+</form>
+<table class="table" rel="productPermissionList" layoutH="200">
+	<thead>
+		<tr>
+			<th width="50px">
+				行号
+			</th>
+			<th width="150px" align="center" orderField="code" <#if orderField?? && 'code'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+				商品编号
+			</th>
+			<th width="150px" align="center" orderField="fullName" <#if orderField?? && 'fullName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+				商品全称
+			</th>
+			<th width="150px" align="center" orderField="status" <#if orderField?? && 'status'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+				状态
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<#list productPageMap.pageList as product>
+		  <#if product.node==2>
+		  <tr objectId="${objectId!0}" target="productId" rel="${product.id}"  crel="productPermissionList" cTarget="ajax" url="${base}/sys/basePermission/product/${product.id}-{userId}">
+		  <#else>
+		   <tr objectId="${objectId!0}" target="productId" rel="${product.id}">
+		  </#if>
+			<td><a>${product_index+1+productPageMap.limit}</a>
+				<#if product.node==2>..</#if>
+			</td>
+			<td>
+				${product.code!''}
+			</td>
+			<td>
+				${product.fullName!''}
+			</td>
+	
+			<td onclick="tdRelevanceTr(this,'productChoose');">
+				<#if product.privs==3>
+				       ★
+				<#elseif product.privs==2>
+				       ☆
+				</#if>
+			</td>
+		</tr>
+		</#list>
+	</tbody>
+</table>
+<div class="panelBar">
+		 <div class="pages">
+			<span>显示</span>  
+			<select class="combox" name="numPerPage" onchange="navTabPageBreak({pageNum:${(productPageMap.pageNum)!1},numPerPage:this.value},'${(productPageMap.listID)!''}')">
+				<option <#if productPageMap.numPerPage?number == 15>selected</#if> value="15">15</option>
+				<option <#if productPageMap.numPerPage?number == 20>selected</#if> value="20">20</option>
+				<option <#if productPageMap.numPerPage?number == 50>selected</#if> value="50">50</option>
+				<option <#if productPageMap.numPerPage?number == 100>selected</#if> value="100">100</option>
+			</select>
+			<span>条，共${(productPageMap.totalCount)!0}条</span>
+		</div>
+		<div class="pagination" rel="${(productPageMap.listID)!''}" target="ajaxTodo"  totalCount="${(productPageMap.totalCount)!0}" numPerPage="${(productPageMap.numPerPage)!15}" pageNumShown="5" currentPage="${(productPageMap.pageNum)!1}"></div>
+</div>
+
+ <!--divider虚线-->
+	<div class="divider"></div>
+	<div>
+			<a class="button" id="productChoose" href="${base}/sys/basePermission/choose/{userId}-{baseType}-{productId}" target="ajaxTodo"  callback="reloadNavTabDiv"><span>选中</span></a>
+			<a class="button" href="${base}/sys/basePermission/allChoose/{userId}-{baseType}-{productId}" target="ajaxTodo"  callback="reloadNavTabDiv"><span>全选</span></a>
+			<a class="button" href="${base}/sys/basePermission/empty/{userId}-{baseType}-{productId}" target="ajaxTodo"  callback="reloadNavTabDiv"><span>清空</span></a>
+			<#if supId?? && supId!=-1>
+			<a class="button" href="${base}/sys/basePermission/product?pSupId=${pSupId!0}&objectId=${supId!0}" relevancyIds="userId" target="ajax"  rel="productPermissionList"><span>上级</span></a>
+	        <#else>
+	        <a class="buttonDisabled" href="javascript:void(0);"><span>上级</span></a>
+	        </#if>
+	        
+	</div>
+	<div style="float: right;">
+			<a class="button" href="javascript:void(0);" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a>
+	</div>

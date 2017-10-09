@@ -1,0 +1,80 @@
+<div class="pageContent">
+	<h2 class="contentTitle">查询</h2>
+	<form>
+	    <input type="hidden" name="aimTabId" id="aimTabId"/>	     <!-- 设置目标Tab组件ID -->				
+	    <input type="hidden" name="aimUrl" id="aimUrl"/>	         <!-- 设置目标URl -->				
+	    <input type="hidden" name="aimTitle" id="aimTitle"/>         <!-- 设置目标标题 -->
+	    <input type="hidden" name="aimDiv"  id="aimDiv"/>            <!-- 目标DivId   (放过滤条件   all eq gt) -->
+	    
+	    <#assign time="time"/>					
+		<div class="pageFormContent" layoutH="100">
+            <table>
+               <tr>
+                  <td style="vertical-align: top;">
+                      <fieldset style="width: 280px;">
+					    <legend>选择基本信息</legend>
+					    <table>
+					    <#include "/WEB-INF/template/common/base/reports/staffReportLink.html"/>
+				           <#--<tr style="height: 30px;">
+				              <td>职员全名:</td>
+				              <td>
+				                  <input type="hidden" name="staff.id" id="staffId"/>
+							      <input class="line" type="hidden" name="staff.name" id="staffName"/>
+							      <input class="textInput" type="text" size="30" name="staff.name" id="staffName"/>
+							      <a class="btnLook" id="staffLook" type="POST"  href="${base}/base/staff/dialogChild/0" warn="员工" lookupgroup="staff" lookuppk="id" width="600" height="410">职员</a>
+				              </td>
+				           </tr>-->
+				           
+				           <#include "/WEB-INF/template/common/base/reports/storageReportLink.html"/>
+				           <#--<tr style="height: 30px;">
+				              <td>仓库全名:</td>
+				              <td>
+				                  <input type="hidden" name="storage.id" id ="storageId"/>
+						          <input type="hidden" name="storage.code" id="storageCode"/>
+					     	      <input class="textInput" id="storageName" size="30" name="storage.fullName" lookName="storage" lookId="storage.id"/>
+						          <a class="btnLook" id="storageLook" type="POST" href="${base}/base/storage/dialogList" warn="仓库" lookupgroup="storage" lookuppk="id" width="600" height="410">仓库</a>                
+				              </td>
+				           </tr>-->
+				        </table>
+				      </fieldset>
+                  </td>
+               </tr>
+               
+               <#include "/WEB-INF/template/common/base/reports/searchDateReportLink.html"/>
+               <#--<tr>
+                  <td>
+                     <fieldset style="width: 280px;">
+					    <legend>选择时间</legend>
+					    <table>
+				           <tr style="height: 30px;">
+				              <td>开始日期：</td>
+				              <td>
+				              	<input type="text" size="30" class="date" name="startTime" dateFmt="yyyy-MM-dd" value="${startTime!''}" hasClear="no" readonly="readonly"/>
+				              </td>
+				           </tr>
+				           <tr style="height: 30px;">
+				              <td>结束日期：</td>
+				              <td>
+				              	<input type="text" size="30" class="date" name="endTime" dateFmt="yyyy-MM-dd" value="${endTime!''}" hasClear="no" readonly="readonly"/>
+				              </td>
+				           </tr>
+				           <tr style="height: 25px;">
+				              <td colspan="2" align="center">
+								<input name="userSearchDate" type="checkbox" checked="checked" value="checked"/>保存时间条件
+							  </td>
+				           </tr>
+				        </table>
+				      </fieldset>
+                  </td>
+               </tr>-->
+            </table>			
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="fristOpenNavTabAfterLoadData(this,'${modelType}')">确认</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>
+

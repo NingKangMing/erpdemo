@@ -1,0 +1,105 @@
+<!-- 单位      商品销售明细账本           eg：商品销售统计   单位销售统计                排行榜      商品    客户-->
+<input type="hidden" id="projectBasePath" value="${base}"/>
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/prdSellCount/prdXsDetail/" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+	<input type="hidden" name="orderField" value="${orderField!'billRecodeDate'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <input type="hidden" name="id" value="${id!'0'}"/>
+    <input type="hidden" name="nodeType1" value="${nodeType1!''}"/>
+    
+    <!-- ID用于树点击参数 -->
+    <input type="hidden" name="modelType" value="${modelType}">
+	<input type="hidden" id="unit.id" name="unit.id" value="${unitId!'0'}"/>               <!-- 单位ID -->
+	<input type="hidden" id="product.id" name="product.id" value="${productId!'0'}"/>      <!-- 商品ID -->
+	<input type="hidden" id="staff.id" name="staff.id" value="${staffId!'0'}"/>            <!-- 职员ID -->
+	<input type="hidden" id="storage.id" name="storage.id" value="${storageId!'0'}"/>      <!-- 仓库ID -->
+	<input type="hidden" id="pageOrderTypes" name="pageOrderTypes" value="${orderTypes}"/>   <!--销售单(xsd),销售退货单(xsthd),销售换货单(xshhd),借转销售单(jzxsd),委托结算单(wtjsd)-->
+	<input type="hidden" id="startDate" name="startDate" value="${startDate!''}"/>        <!--开始日期  -->
+	<input type="hidden" id="endDate" name="endDate" value="${endDate}"/>            <!-- 结束日期 -->
+	<input type="hidden" id="aimDiv" name="aimDiv" value="${aimDiv!''}"/>                                   <!-- 过滤条件     all eq gt 下拉框改变赋值 -->
+ 
+ 
+    <input type="hidden" name="whereComeDetail" value="self">
+</form>
+<#include "/WEB-INF/template/common/columnConfig/tableTotalWidthLink.html"/>
+<table class="table" rel="${listID!}" layoutH="230">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody id="${listID!}table">
+		<#if pageMap??&&pageMap.pageList??>
+		<#list pageMap.pageList as data>
+		<tr target="tid" rel="${(data.id)}-${data.billTypeId}"  cTarget="openNavTab"  sameId="${listID!}detailBtnId" <#if data.isRCW!=0> style="color: red;" </#if>>
+			<td><a>${data_index+1+pageMap.limit}</a></td>
+			<#list rowList as row>
+			<#if row.code?? && 'billTypeId'==row.code>
+			<td>
+			   <#if data.billTypeId==4>
+			          销售单
+			   <#elseif data.billTypeId==7>
+			           销售退货单
+			   <#elseif data.billTypeId==13>
+			           销售换货单
+			   </#if> 
+			</td>
+			<#elseif row.code?? && 'recodeDate'==row.code>
+			<td>${(data.recodeDate?string('yyyy-MM-dd HH:mm:ss'))}</td>
+			<#elseif row.code?? && 'temp.code'==row.code>
+			<td>${(data.code)!''}</td>
+			<#elseif row.code?? && 'remark'==row.code>
+			<td>${(data.remark)!''}</td>
+			<#elseif row.code?? && 'product.code'==row.code>
+			<td>${(data.product.code)!''}</td>
+			<#elseif row.code?? && 'product.fullName'==row.code>
+			<td>${(data.product.fullName)!''}</td>
+			<#elseif row.code?? && 'product.smallName'==row.code>
+			<td>${(data.product.smallName)!''}</td> 
+			<#elseif row.code?? && 'product.spell'==row.code>
+			<td>${(data.product.spell)!''}</td> 
+			<#elseif row.code?? && 'product.standard'==row.code>
+			<td>${(data.product.standard)!''}</td> 
+			<#elseif row.code?? && 'product.model'==row.code>
+			<td>${(data.product.model)!''}</td>
+			 <#elseif row.code?? && 'product.field'==row.code>
+			<td>${(data.product.field)!''}</td>
+			<#elseif row.code?? && 'product.savePath'==row.code>
+			<td>
+			<#if (data.product.savePath)??>
+			    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(data.product.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(data.product.savePath)!}"  width="20px" height="20px"/>
+            </#if>
+			</td>
+			<#elseif row.code?? && 'storage.code'==row.code>
+			<td>${(data.storage.code)!''}</td>
+			<#elseif row.code?? && 'storage.fullName'==row.code>
+			<td>${(data.storage.fullName)!''}</td>
+			<#elseif row.code?? && 'unit.code'==row.code>
+			<td>${(data.unit.code)!''}</td>
+			<#elseif row.code?? && 'unit.fullName'==row.code>
+			<td>${(data.unit.fullName)!''}</td>
+			<#elseif row.code?? && 'sellOutAmount'==row.code>
+			<td><#if data.sellOutAmount??&&data.sellOutAmount!=0>${(data.sellOutAmount)!''}</#if></td>
+			<#elseif row.code?? && 'sellInAmount'==row.code>
+			<td><#if data.sellInAmount??&&data.sellInAmount!=0>${(data.sellInAmount)!''}</#if></td>
+			<#elseif row.code?? && 'basePrice'==row.code>
+			<td>${(data.basePrice)!''}</td>
+			<#elseif row.code?? && 'sellMoney'==row.code>
+			<td><#if data.sellMoney??&&data.sellMoney!=0>${(data.sellMoney)!''}</#if></td>
+			</#if>
+			</#list>
+		</tr>
+		</#list>
+		</#if> 
+	</tbody>
+	<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+	
+<div class="divider"></div>
+<div>
+    <a id="${listID!}detailBtnId" class="button" dynamic="true" target="navTab" href="${base}/common/bill/lookBill/{tid}"><span>查看单据</span></a>
+</div>
+<div style="float: right;">
+	<#assign href = '${base}/reports/prdSellCount/prdXsDetailPrint'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

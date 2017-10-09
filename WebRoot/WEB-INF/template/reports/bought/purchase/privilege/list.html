@@ -1,0 +1,142 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/bought/purchase/privilege/search/sel" onsubmit="return dwzSearch(this, 'purchasePrivilegeStatisticsList');">
+	
+	<input type="hidden" name="pageNum" value="${pageMap.pageNum!}" />
+	<input type="hidden" name="numPerPage" value="${pageMap.numPerPage!}" />
+	<input type="hidden" name="orderField" value="${(params.orderField)!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${(params.orderDirection)!'asc'}" /><!--升序降序-->
+	
+    <input type="hidden" id="unit.id" name="unit.id" value="${(params.unitId)!}"/>               <!-- 单位ID -->
+	<input type="hidden" id="staff.id" name="staff.id" value="${(params.staffId)!}"/>            <!-- 职员ID -->
+	<input type="hidden" name="unit.fullName" value="${unitName!}"/>
+    <input type="hidden" name="staff.name" value="${staffName!}"/>
+    
+	<input type="hidden" id="startDate" name="startDate" value="${(params.startDate)!}"/>        <!--开始日期  -->
+	<input type="hidden" id="endDate" name="endDate" value="${(params.endDate)!}"/>            <!-- 结束日期 -->
+	
+	<input type="hidden" id="billType" name="billType" value="${billType!}"/>         <!--单据类型-->
+	<input type="hidden" name="totalCount" value="${(pageMap.totalCount)!0}"/>
+	<#include "/WEB-INF/template/base/baseSearchComDialog/searchConditionInputs.html"/><!--报表基本信息筛选条件保存 -->
+</form>
+<#assign showWidth = 100/>
+<#list rowList as row>
+    <#if row.width??>
+     <#assign showWidth = showWidth+row.width/>
+    </#if>
+</#list>
+<table class="table" rel="purchasePrivilegeStatisticsList" layoutH="220" width="${showWidth!}px">
+	<thead>
+		<tr>
+			<th  width="50px">行号</th>
+			<#list rowList as row>
+				   <th  width="${(row.width)!100}px" <#if row.isOrder?? && row.isOrder==2> orderField="${row.code}"  <#if params.orderField?? && row.code==params.orderField>class="${(params.orderDirection)!'asc'}"<#else>class="asc"</#if> </#if>>
+					 ${(row.showName)!(row.name)!}
+				   </th>
+			 </#list>
+		</tr>
+	</thead>
+	<tbody>
+		<#list pageMap.pageList as bill>
+		<tr target="id" rel="${bill.id!0}" serialize="true" cTarget="openNavTab"  title="优惠明细账本" url="${base}/reports/bought/purchase/privilege/detail/${bill.id!0}" cRel="purchasePrivilegeStatisticsDetailView">
+			<td ><a>${bill_index+1+pageMap.limit}</a></td>
+			<#list rowList as row>
+			 <#if row.code?? && 'code'==row.code>
+            <td >${bill.code!}</td>
+             <#elseif row.code?? && ('fullName'==row.code || 'name'==row.code)>
+            <td> 
+               <#if !bill.id??>其它
+                      <#if billType?? && billType=='staff'>
+                                                                 职员
+                      <#elseif billType?? && billType=='department'>
+                                                                部门
+                      </#if>
+               </#if>
+                ${bill.fullName!bill.name!}
+            </td>
+            <#elseif row.code?? && 'taxMoneys'==row.code>
+            <td>
+               
+                <@shiro.hasPermission name='1101-s'>
+		          ${bill.taxMoneys!}
+			 </@shiro.hasPermission>
+			 <@shiro.lacksPermission name='1101-s'>
+				***
+			 </@shiro.lacksPermission>
+            </td>
+            <#elseif row.code?? && 'privilege'==row.code>
+            <td>
+                 
+	              <@shiro.hasPermission name='1101-s'>
+			          ${bill.privilege!}
+				 </@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					***
+				 </@shiro.lacksPermission>
+            </td>
+            <#elseif row.code?? && 'privilegeMoney'==row.code>
+            <td>
+                 
+                  <@shiro.hasPermission name='1101-s'>
+			          ${(bill.privilegeMoney)!}
+				 </@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					***
+				 </@shiro.lacksPermission>
+            </td
+            </#if>
+          </#list>
+		</tr>
+		</#list>
+	</tbody>
+    <tfoot>
+	   <tr isSelect="false" style="border-top: #D0D0D0 solid 1px">
+	   <td>合计</td>
+	   <#list rowList as row>
+	    <#if row.code?? && 'taxMoneys'==row.code>
+	    <td>
+	        <@shiro.hasPermission name='1101-s'>
+			          <#if taxMoneys?? && taxMoneys !=0>${taxMoneys!}</#if>
+			 </@shiro.hasPermission>
+			 <@shiro.lacksPermission name='1101-s'>
+				***
+			 </@shiro.lacksPermission>
+	    </td>
+	    <#elseif row.code?? && 'privilege'==row.code>
+	     <td>
+	       <@shiro.hasPermission name='1101-s'>
+			         <#if privileges?? && privileges !=0>${privileges!}</#if>
+			 </@shiro.hasPermission>
+			 <@shiro.lacksPermission name='1101-s'>
+				***
+			 </@shiro.lacksPermission>
+	     </td>
+	    <#elseif row.code?? && 'privilegeMoney'==row.code>
+	      <td>
+	        <@shiro.hasPermission name='1101-s'>
+			         <#if privilegeMoneys?? && privilegeMoneys !=0>${privilegeMoneys!}</#if>
+			 </@shiro.hasPermission>
+			 <@shiro.lacksPermission name='1101-s'>
+				***
+			 </@shiro.lacksPermission>
+	     </td>
+	    <#else>
+	    <td></td>
+	    </#if>
+	   </#list>
+	  </tr> 
+	</tfoot>
+</table>
+
+
+<#include "/WEB-INF/template/unitl/paging.html"/>	
+<div class="divider"></div>
+<div>
+    <a class="button" target="dialog" href="${base}/reports/bought/purchase/privilege" rel="purchasePrivilegeStatisticsDialog" param="billType" width="350" height="400" aimTitle="进货优惠统计" aimUrl="${base}/reports/bought/purchase/privilege/search" aimTabId="purchasePrivilegeStatisticsView" aimDiv="purchasePrivilegeStatisticsList"><span>查询条件</span></a><!-- aimDiv值为all eq gt 下拉框改变赋值-->
+    <a class="button" target="navTab" rel="purchasePrivilegeStatisticsDetailView" title="优惠明细账本" serialize="true" href="${base}/reports/bought/purchase/privilege/detail/{id}"><span>明细账本</span></a>
+</div>
+<div style="float: right;">
+     <#assign privs = '3-41-309-p'/>
+	<#assign href = '${base}/reports/bought/purchase/privilege/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/> 
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

@@ -1,0 +1,86 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/bought/bought/execute/${billId!}-second" onsubmit="return dwzSearch(this, 'purchaseStatisticsList');">
+	
+	<input type="hidden" name="pageNum" value="${pageNum!}" />
+	<input type="hidden" name="numPerPage" value="${numPerPage!}" />
+	<input type="hidden" name="orderField" value="${(params.orderField)!'updateTime'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${(params.orderDirection)!'asc'}" /><!--升序降序-->
+    <input type="hidden" name="totalCount" value="${(pageMap.totalCount)!0}"/>
+    <input type="hidden" name="billId" value="${billId!}"/>
+</form>
+<#assign showWidth = 100/>
+<#list rowList as row>
+    <#if row.width??>
+     <#assign showWidth = showWidth+row.width/>
+    </#if>
+</#list>
+<table class="table" rel="boughtBillExecuteList" layoutH="180" width="${showWidth!}px">
+	<thead>
+		<tr>
+			<th width="50px">
+				行号
+			</th>
+			<#list rowList as row>
+				   <th  width="${(row.width)!100}px" <#if row.isOrder?? && row.isOrder==2> orderField="${row.code}"  <#if params.orderField?? && row.code==params.orderField>class="${(params.orderDirection)!'asc'}"<#else>class="asc"</#if> </#if>>
+					 ${(row.showName)!(row.name)!}
+				   </th>
+			</#list>
+		</tr>
+	</thead>
+	<tbody>
+		<#list pageMap.pageList as bill>
+		  <tr target="id" rel="${bill.id!0}-${bill.type!0}" <#if bill.isRCW??&&bill.isRCW!=0> style="color: red"</#if>
+		    <#if bill.type?? && bill.type==5>url="${base}/bought/purchase/look/${bill.id}" title="进货单" cRel="purchaseLookView"<#elseif bill.type?? && bill.type==1>url="${base}/bought/bought/look/${bill.id}" title="进货订单" cRel="boughtLookView"</#if> cTarget="openNavTab" >
+		     <td>${bill_index+1+pageMap.limit}</td>
+		     <#list rowList as row>
+		     <#if row.code?? && 'type'==row.code>
+		     <td><#if bill.type?? && bill.type==5>进货单<#elseif bill.type?? && bill.type==1>进货订单</#if></td>
+		     <#elseif row.code?? && 'code'==row.code>
+		     <td>${bill.code!}</td>
+		     <#elseif row.code?? && 'updateTime'==row.code>
+		     <td><#if bill.updateTime??>${(bill.updateTime)?string("yyyy-MM-dd")}</#if></td>
+		     <#elseif row.code?? && 'remark'==row.code>
+		     <td>${(bill.remark)!}</td>
+		     <#elseif row.code?? && 'staffCode'==row.code>
+		     <td>${(bill.staff.code)!}</td>
+		     <#elseif row.code?? && 'staffName'==row.code>
+		     <td>${(bill.staff.name)!}</td>
+		     <#elseif row.code?? && 'username'==row.code>
+		     <td>${(bill.user.username)!}</td>
+		     <#elseif row.code?? && 'departmentCode'==row.code>
+		     <td>${(bill.department.code)!}</td>
+		     <#elseif row.code?? && 'departmentName'==row.code>
+		     <td>${(bill.department.fullName)!}</td>
+		     <#elseif row.code?? && 'moneys'==row.code>
+		     <td>${(bill.moneys)!}</td>
+		     <#elseif row.code?? && 'memo'==row.code>
+		     <td>${(bill.memo)!}</td>
+		     </#if>
+		     </#list>
+		  </tr>
+		</#list>
+	</tbody>
+	<tfoot>
+	   <tr isSelect="false" style="border-top: #D0D0D0 solid 1px">
+	   <td>合计</td>
+	   <#list rowList as row>
+	     <#if row.code?? && 'moneys'==row.code>
+	      <td>${(total.moneys)!0}</td>
+	     <#else>
+	     <td></td>
+	     </#if>
+	   </#list>
+	  </tr> 
+	</tfoot>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+     <a class="button" href="${base}/bought/bought/executeLook/{id}" target="navTab" dynamic="true" title="进货订单" rel="purchaseLookView"><span>查看单据</span></a>  
+</div>
+<div style="float: right;">
+	<#assign href = '${base}/bought/bought/printExecute'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+		<a class="button" href="javascript:void(0);" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a>
+</div>

@@ -1,0 +1,23 @@
+<div class="pageContent" id="productInitPage">
+	<input id="whichCallBack" type="hidden" value="productInit"/><!-- 用于区分不同模块库存商品带回进不同函数     ID是写死，value用于区分 -->
+	<div class="textContent" style="height: 80px;">
+		     <div>
+		         <label><span style="font:bold 18px '宋体',Arial,Times;">期初库存商品</span>
+		     </div>
+		     <div>
+		     	<span style="margin-left:30px; line-height: 20px;">当前仓库：<span id="storgeName">${storgeName!'全部仓库'}</span>
+		     </div>
+			<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+	</div>
+	
+	<div>
+		<div style="float:left; display:block; overflow:auto; width:210px; border:solid 1px #CCC; line-height:21px; background:#fff" layoutH="100">
+			<ul id="productInitTree" relevancyIds="storage.id,storage.pids,helpAmunitPattern" target="ztree" selectNodeId="${supId!0}" class="ztree" url="${base}/init/productInit/tree/0" rel="productInitList" ctarget="ajax"></ul>
+		</div>
+		
+		<div id="productInitList" style="margin-left: 220px;padding:2px; padding-top: 0px;" layoutH="30">
+			<#include "lookList.html" />
+		</div>
+		
+	</div>
+</div>

@@ -1,0 +1,15 @@
+<div class="panel" id="pagePanel">
+	<div style="height: 25px;">
+		<label><span style="font:bold 18px '宋体',Arial,Times; margin-left: 20px">单位信息</span></label>
+		<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+	</div>
+	<div layoutH="20">
+		<div style="float:left; display:block; overflow:auto; width:210px; border:solid 1px #CCC; line-height:21px; background:#fff" layoutH="42">
+			<ul id="b_unit_treeId" target="ztree" selectNodeId="${supId!0}" class="ztree" url="${base}/base/unit/tree" rel="b_unit_listTable" ctarget="ajax"></ul>
+		</div>
+		
+		<div id="b_unit_listTable" style="margin-left: 220px;padding:2px;" layoutH="30">
+			<#include "list.html" />
+		</div>
+	</div>
+</div>

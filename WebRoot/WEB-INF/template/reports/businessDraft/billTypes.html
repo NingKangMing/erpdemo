@@ -1,0 +1,25 @@
+<div class="pageContent">
+   <form action="${base}/reports/businessDraft/copyDraft" method="post" class="pageForm required-validate" enctype="text/plain" onsubmit="return validateCallback(this,aioReloadForm)">
+      <input type="hidden" name="billId"  value="${billId!}"/>
+      <input type="hidden" name="billType"  value="${billType!}"/>
+      <input type="hidden" name="drafId"  value="${drafId!}"/>
+      
+   	  <span style="font-size: 18px;line-height: 40px;height: 40px;">物流单据</span>
+      <table class="table" layoutH="86">
+       		<#list billTypes as bt>
+       			<tr target="typeId" rel="${(bt.id)!}" cTarget="citeEvent" citeEventModuleId="copyBillSubmit" citeEventType="click">
+       				<td width="155">${(bt.name)!}</td>
+       			</tr>
+       		</#list>
+      </table>
+      <div class="divider"></div>
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button id="copyBillSubmit" type="submit">确定</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+		</ul>
+	  </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

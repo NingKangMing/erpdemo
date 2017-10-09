@@ -1,0 +1,115 @@
+<form id="pagerForm" onsubmit="return divSearch(this, 'billHistoryList');" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/billHistory/list" method="post">
+	<input type="hidden" name="pageNum" value="${pageMap.pageNum}" />
+	<input type="hidden" name="numPerPage" value="${pageMap.numPerPage}" />
+	<input type="hidden" name="orderField" value="${orderField!'recodeDate'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'desc'}" /><!--升序降序-->
+	
+	<!-- 保存条件 -->
+	<input type="hidden" id="b_stroage_term_par" name="screenPara" value="${screenPara!}"/>
+	<input type="hidden" id="b_stroage_term_val" name="screenVal" value="${screenVal!}"/>
+	<input type="hidden" id="b_stroage_term_scope" name="scope" value="${scope!'all'}"/>
+	
+	<input type="hidden" name="startTime" id="startTime" value="${startTime!''}"/>   <!-- 开始日期-->
+	<input type="hidden" name="endTime" id="endTime"  value="${endTime!''}"/>   <!--结束日期 -->
+	<input type="hidden" name="selectVal1" id="selectVal1"  value="${billTypeId!0}"><!-- 单据类型 -->
+	<input type="hidden" name="selectVal2" id="selectVal2"  value="${isRcw!-1}"><!-- 是否显示红冲 -->
+	
+	
+	<input type="hidden" id="billTypeId" name="billTypeId" value="${billTypeId!}"/>
+	<input type="hidden" id="unitId" name="unitId" value="${unitId!}"/>
+	<input type="hidden" id="staffId" name="staffId" value="${staffId!}"/>
+	<input type="hidden" id="productId" name="productId" value="${productId!}"/>
+	<input type="hidden" id="storageId" name="storageId" value="${storageId!}"/>
+	<input type="hidden" id="departmentId" name="departmentId" value="${departmentId!}"/>
+	<input type="hidden" id="accountId" name="accountId" value="${accountId!}"/>
+	<input type="hidden" id="isCoupon" name="isCoupon" value="${isCoupon!}"/>
+	<input type="hidden" id="billCode" name="billCode" value="${billCode!}"/>
+	<input type="hidden" id="remark" name="remark" value="${remark!}"/>
+	<input type="hidden" id="memo" name="memo" value="${memo!}"/>
+	<input type="hidden" id="isMember" name="isMember" value="${isMember!}"/>
+	<input type="hidden" id="priceCase" name="priceCase" value="${priceCase!}"/>
+	<input type="hidden" id="price" name="price" value="${price!}"/>
+	<input type="hidden" id="discountCase" name="discountCase" value="${discountCase!}"/>
+	<input type="hidden" id="discount" name="discount" value="${discount!}"/>
+	<input type="hidden" id="taxrateCase" name="taxrateCase" value="${taxrateCase!}"/>
+	<input type="hidden" id="taxrate" name="taxrate" value="${taxrate!}"/>
+</form>
+
+<table class="table" rel="billHistoryList" layoutH="215">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody>
+		<#list pageMap.pageList as tr>
+		<tr target="tid" rel="${tr.billId}-${tr.billTypeId}-${tr.id}" isRCW="${(tr.isRCW)!}" cRel="${tr.bt.prefix!}LookView" title="${tr.bt.name!}查看" url="${base}/common/bill/lookBill/${tr.billId}-${tr.billTypeId}" cTarget="openNavTab" <#if tr.isRCW?? &&  tr.isRCW!=0 >style="color: red;"</#if> href1="${base}/common/verify/permittedVerifyBillLook/{tid}" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate">
+			<td>${tr_index+1+pageMap.limit}</td>
+			<#list rowList as row>
+				<#assign columnObj = "" />
+				<#if row.code?? && ((row.code)?index_of(".")>-1)>
+					<#assign columnObj = (row.code)?substring(0,(row.code)?index_of(".")) />
+					<#assign columnParam = (row.code)?substring((row.code)?index_of(".")+1) />
+				<#else>
+					<#assign columnParam = row.code />
+				</#if>
+			
+				<#if row.code?? && ('recodeDate'==row.code || 'postTime'==row.code)>
+					<td>
+						<#if tr[columnParam]?? >${tr[columnParam]?string("yyyy-MM-dd HH:mm:ss")}</#if>
+					</td>
+				<#elseif row.code?? && 'money'==row.code>
+					<td>
+						<#if tr.isRCW?? &&  tr.isRCW==2 >-</#if><#if tr.money?? &&  tr.money<0 >${0-tr.money!''}<#else>${tr.money!''}</#if>
+					</td>
+				<#elseif row.code?? && 'producer'==row.code>
+					<td>
+						${(tr.prod.username)!''}
+					</td>
+				<#elseif row.code?? && 'postUsre'==row.code>
+					<td>
+						${(tr.post.username)!''}
+					</td>
+				<#else>
+					<#if columnObj?? && columnObj!="">
+						<td>${((tr[columnObj])[columnParam])!}</td>
+					<#else>
+						<td>${tr[columnParam]!}</td>
+					</#if>
+				</#if>
+			</#list>
+		</tr>
+		</#list>
+	</tbody>
+	<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+	
+<#include "/WEB-INF/template/unitl/paging.html"/>
+
+<div class="divider"></div>
+<div>
+	<a class="button" dynamic="true" target="navTab" href="${base}/common/bill/lookBill/{tid}" href1="${base}/common/verify/permittedVerifyBillLook/{tid}" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate"><span>查看单据</span></a>
+	<@shiro.hasAnyRoles name='1102-s,1103-s'>
+	<a class="button" href="${base}/reports/billHistory/doRCW/{tid}" verifyFun="verifyBillIsRCW()"  target="ajaxTodo" title="确定要对这张单据进行红字反冲吗?"  callback="aioReloadForm"><span>红冲单据</span></a>
+    </@shiro.hasAnyRoles>
+    <@shiro.hasPermission name='1110-u'>
+	<a class="button" href="${base}/reports/billHistory/edit/{tid}" verifyFun="verifyBillIsRCW(2)" target="dialog" rel="editBillHistoryDialog" width="410" height="310"><span>修改单据</span></a>
+	</@shiro.hasPermission>
+	<a class="button" href="${base}/common/dateDialog" aimTabId="billHistoryView" aimTitle="经营历程" aimUrl="${base}/reports/billHistory" caption="查询条件" target="dialog" rel="dateDialog" width="300" height="250"><span>日期查询</span></a>
+	<a class="button" href="${base}/reports/billHistory/copyBill/{tid}" isRCW="{isRCW}" target="ajaxTodo" alterExecText="单据是红冲单据，是否复制该单？"  title="是否将选中的单据复制到草稿中去？" ><span>复制单据</span></a>
+	<!--
+	<a class="button" href="${base}/reports/billHistory/copyAllNotRowBill" target="ajax" rel="b_unit_listTable"><span>复制全部单据</span></a> 
+	-->
+	<!--
+	<a class="button" href="${base}/reports/billHistory/doRCWBillType" target="ajax" rel="b_unit_listTable"><span>红冲某种类型单据</span></a> 
+	-->
+	<a class="button" href="${base}/common/billSearchDialog" type="post" param="startTime,endTime,billTypeId,unitId,staffId,productId,storageId,departmentId,accountId,isCoupon,billCode,remark,memo,isMember,priceCase,price,discountCase,discount,taxrateCase,taxrate" aimTabId="billHistoryView" aimUrl="${base}/reports/billHistory"  target="dialog" rel="billSearchDialog" width="500" height="480" ><span>万能查询</span></a>
+	<!-- 
+	<a class="button" href="javascript:;"  target="" rel="storageList" ><span>航天金穗</span></a>
+	<!-- 
+	<a class="button" href="javascript:;"  target="" rel="storageList" ><span>批量打印</span></a>
+	 -->
+</div>
+<div style="float: right;">
+	<#assign privs = '1110-p'/>
+	<#assign href = '${base}/reports/billHistory/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a>
+</div>

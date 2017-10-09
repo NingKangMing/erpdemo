@@ -1,0 +1,147 @@
+<div class="panel" id="financeInitPage">
+	<div class="pageContent">
+		<div class="textContent center">
+		     <div>
+		         <span style="font:bold 18px '宋体',Arial,Times;">
+		         	<#if pattern?? && pattern=="bank">
+		         		期初现金银行
+		         	<#elseif pattern?? && pattern=="assets">
+		         		期初固定资产
+		         	<#else>
+		        		 期初财务数据
+		        	</#if>
+		         </span>
+		     </div>
+		</div>
+		<div class="divider"></div>
+		<div style="padding:0px 2px 0px 10px;" layoutH="30">
+		<form id="pagerForm" class="pageForm required-validate" enctype="text/plain" onsubmit="return navTabSearch(this);" method="post" action="${base}/init/financeInit">
+			<input type="hidden" name="selectedObjectId" id="selectedObjectId" value="${selectedObjectId!0}" />   <!-- 选中的Id -->
+			<input type="hidden" name="m" value="${pattern!}"/>
+		</form>
+			<table class="table" layoutH="125">
+				<thead>
+					<tr>
+						<th width="50">行号</th>
+						<th width="100">科目编号</th>
+						<th width="200" align="left">科目全名</th>
+						<th width="100">期初金额</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#list list as account>
+						
+						<#if pattern?? && pattern=="bank">
+						    <@shiro.hasPermission name='2-253-u'>
+							<#if hasOpen?? && hasOpen=="yes">
+				    		  <tr>
+				    		<#else>
+				    		  <tr accountType="${(account.type)!}" status="<#if account.node==2>false<#else>2</#if>" isSelect="true" target="accountId" rel="${account.id}" cTarget="citeEvent" citeEventModuleId="editInitBtn" citeEventType="click">
+				    		</#if>
+					        </@shiro.hasPermission>
+						    <@shiro.lacksPermission name='2-253-u'>
+						    <#if hasOpen?? && hasOpen=="yes">
+				    		  <tr>
+				    		<#else>
+				    		  <tr accountType="${(account.type)!}" status="<#if account.node==2>false<#else>2</#if>" isSelect="true" target="accountId" rel="${account.id}">
+				    		</#if>
+					        </@shiro.lacksPermission>
+			         	<#elseif pattern?? && pattern=="assets">
+						    <@shiro.hasPermission name='2-254-u'>
+							<#if hasOpen?? && hasOpen=="yes">
+				    		  <tr>
+				    		<#else>
+				    		  <tr accountType="${(account.type)!}" status="<#if account.node==2>false<#else>2</#if>" isSelect="true" target="accountId" rel="${account.id}" cTarget="citeEvent" citeEventModuleId="editInitBtn" citeEventType="click">
+				    		</#if>
+					        </@shiro.hasPermission>
+						    <@shiro.lacksPermission name='2-254-u'>
+						    <#if hasOpen?? && hasOpen=="yes">
+				    		  <tr>
+				    		<#else>
+				    		  <tr accountType="${(account.type)!}" status="<#if account.node==2>false<#else>2</#if>" isSelect="true" target="accountId" rel="${account.id}">
+				    		</#if>
+					        </@shiro.lacksPermission>
+						    
+			         	<#else>
+						    <@shiro.hasPermission name='2-255-u'>
+							<#if hasOpen?? && hasOpen=="yes">
+				    		  <tr>
+				    		<#else>
+				    		  <tr accountType="${(account.type)!}" status="<#if account.node==2>false<#else>2</#if>" isSelect="true" target="accountId" rel="${account.id}" cTarget="citeEvent" citeEventModuleId="editInitBtn" citeEventType="click">
+				    		</#if>
+					        </@shiro.hasPermission>
+						    <@shiro.lacksPermission name='2-255-u'>
+						    <#if hasOpen?? && hasOpen=="yes">
+				    		  <tr>
+				    		<#else>
+				    		  <tr accountType="${(account.type)!}" status="<#if account.node==2>false<#else>2</#if>" isSelect="true" target="accountId" rel="${account.id}">
+				    		</#if>
+					        </@shiro.lacksPermission>
+			        	</#if>
+							     <td>${account_index+1}</td>
+							     <td>${(account.code)!}</td>
+							     <td>${(account.blank)!}${(account.fullName)!}</td>
+							     <#if account.type=="000412">
+							     	<td><#if sckMoney?? && sckMoney !=0>${sckMoney!}</#if></td>
+							     <#elseif account.type=="000413">
+							     	<td><#if getMoney?? && getMoney !=0>${getMoney!}</#if></td>
+							     <#elseif account.type=="00013">
+							     	<td><#if payMoney?? && payMoney !=0>${payMoney!}</#if></td>
+							     <#elseif account.type=="0001">
+							     	<td><#if (account.moneys + sckMoney + getMoney)?? && (account.moneys + sckMoney + getMoney) !=0>${(account.moneys + sckMoney + getMoney)!}</#if></td>
+							     <#elseif account.type=="0007">
+							     	<td><#if (account.moneys + payMoney)?? && (account.moneys + payMoney) !=0>${(account.moneys + payMoney)!}</#if></td>
+							     <#else>
+							     	<td><#if account.moneys?? && account.moneys !=0 >${(account.moneys)!}</#if></td>
+							     </#if>
+					  		</tr>
+					</#list>
+				</tbody>
+			</table>
+			
+			<!--divider虚线-->
+			<div class="divider"></div>
+			<div>
+				<#if pattern?? && pattern=="bank">
+	         		<@shiro.hasPermission name='2-253-u'>
+				    <#if hasOpen?? && hasOpen=="yes">
+					    <a class="buttonDisabled" href="javascript:void(0);"><span>修改期初</span></a>
+					<#else>
+					    <a id="editInitBtn" verifyFun="verifyFinanceInitEdit()" class="button" href="${base}/init/financeInit/editInit" title="修改期初"  isExec="{status}" warn="本行为合计值，不能直接修改！" target="dialog" param="selectedObjectId" width="320" height="180"><span>修改期初</span></a>
+					</#if>
+				    </@shiro.hasPermission>
+	         	<#elseif pattern?? && pattern=="assets">
+	         		<@shiro.hasPermission name='2-254-u'>
+				    <#if hasOpen?? && hasOpen=="yes">
+					    <a class="buttonDisabled" href="javascript:void(0);"><span>修改期初</span></a>
+					<#else>
+					    <a id="editInitBtn" verifyFun="verifyFinanceInitEdit()" class="button" href="${base}/init/financeInit/editInit" title="修改期初"  isExec="{status}" warn="本行为合计值，不能直接修改！" target="dialog" param="selectedObjectId" width="320" height="180"><span>修改期初</span></a>
+					</#if>
+				    </@shiro.hasPermission>
+	         	<#else>
+	        		<@shiro.hasPermission name='2-255-u'>
+				    <#if hasOpen?? && hasOpen=="yes">
+					    <a class="buttonDisabled" href="javascript:void(0);"><span>修改期初</span></a>
+					<#else>
+					    <a id="editInitBtn" verifyFun="verifyFinanceInitEdit()" class="button" href="${base}/init/financeInit/editInit" title="修改期初"  isExec="{status}" warn="本行为合计值，不能直接修改！" target="dialog" param="selectedObjectId" width="320" height="180"><span>修改期初</span></a>
+					</#if>
+				    </@shiro.hasPermission>
+	        	</#if>
+			</div>
+			<div style="float: right;">
+				<#if pattern?? && pattern=="bank">
+	         		<#assign privs = '2-253-p'/>
+	         	<#elseif pattern?? && pattern=="assets">
+	         		<#assign privs = '2-254-p'/>
+	         	<#else>
+	        		<#assign privs = '2-255-p'/>
+	        	</#if>
+				<#assign href = '${base}/init/financeInit/print'/>
+				<#assign formId = 'pagerForm'/>
+				<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	        	
+				<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+			</div>
+		</div>
+	</div>
+</div>

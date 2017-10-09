@@ -1,0 +1,71 @@
+<form id="pagerForm" enctype="text/plain" onsubmit="return divSearch(this, 'stockLifeList');" action="${base}/reports/stock/stockLife/list" method="post">
+			<input type="hidden" name="pageNum" value="${pageMap.pageNum!1}" />
+			<input type="hidden" name="numPerPage" value="${pageMap.numPerPage!15}" />
+			<input type="hidden" name="orderField" value="${orderField!'sck.id'}" /><!--查询排序-->
+		    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+			
+			<input type="hidden" name="storageId" value="${storageId!0}"/>
+			<input type="hidden" name="alertDay" value="${alertDay!1}">
+			<#include "/WEB-INF/template/base/baseSearchComDialog/searchConditionInputs.html"/><!--报表基本信息筛选条件保存 -->
+</form>
+<table class="table" rel="stockLifeList" layoutH="230">
+		<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+		<tbody>
+			<#list pageMap.pageList as recode>
+			
+			<tr>
+				<td><a>${recode_index+1+pageMap.limit}</a></td>
+				<#list rowList as row>
+					<#assign columnObj = "" />
+					<#if row.code?? && ((row.code)?index_of(".")>-1)>
+						<#assign columnObj = (row.code)?substring(0,(row.code)?index_of(".")) />
+						<#assign columnParam = (row.code)?substring((row.code)?index_of(".")+1) />
+					<#else>
+						<#assign columnParam = row.code />
+					</#if>
+				
+					<#if row.code?? && 'zj.avgPrice'==row.code>
+						<td>
+							<@shiro.hasPermission name='1101-s'>
+						    	${recode.zj.avgPrice!}
+						    </@shiro.hasPermission>
+							<@shiro.lacksPermission name='1101-s'>
+								***  
+						    </@shiro.lacksPermission>
+						</td>
+					<#elseif row.code?? && 'pro.savePath'==row.code>
+						<td>
+							<#if (recode.pro.savePath)??>
+							    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(recode.pro.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(recode.pro.savePath)!}"  width="20px" height="20px"/>
+				            </#if>
+						</td>
+					<#elseif row.code?? && 'pro.validity'==row.code>
+						<td><#if recode.expire??>${(recode.expire)!}</#if></td>
+					<#elseif row.code?? && 'zj.costMoneys'==row.code>
+						<td>
+							<@shiro.hasPermission name='1101-s'>
+						    	${recode.zj.costMoneys!}
+						    </@shiro.hasPermission>
+							<@shiro.lacksPermission name='1101-s'>
+								***  
+						    </@shiro.lacksPermission>
+						</td>
+					<#elseif row.code?? && 'sck.produceDate'==row.code>
+						<td><#if recode.sck.produceDate??>${recode.sck.produceDate?string("yyyy-MM-dd")}</#if></td>
+					<#elseif row.code?? && 'expire'==row.code>
+						<td><#if recode.sck.produceEndDate??>${recode.sck.produceEndDate?string("yyyy-MM-dd")}</#if></td>
+					<#else>
+						<#if columnObj?? && columnObj!="">
+							<td>${((recode[columnObj])[columnParam])!}</td>
+						<#else>
+							<td>${recode[columnParam]!}</td>
+						</#if>
+					</#if>
+				</#list>
+			</tr>
+			
+			</#list>
+		</tbody>
+		<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>

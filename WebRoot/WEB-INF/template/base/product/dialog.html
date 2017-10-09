@@ -1,0 +1,260 @@
+<div>
+   <form  action="${base}/base/product/${toAction!}" class="tableForm pageForm" enctype="multipart/form-data" method="post" 
+        onsubmit="return validateCallback(this,<#if toActionCall='add'>aioDialogAjaxDone<#elseif toActionCall='copyAdd'>aioDialogAjaxDone<#elseif toActionCall='edit'>updateTodoAndTee<#elseif toActionCall='sort'>dialogTreeAjaxDone<#elseif toActionCall='optionAdd'>aioDialogReloadOption</#if>);">
+        <input type="hidden" name="product.id" value="${(product.id)!}" />  <!-- 复制新增，修改，分类 -->  
+        <input type="hidden" name="product.supId" value="${supId!0}"/> <!-- 空白增加 -->  
+        <input type="hidden" name="product.sysImgId" value="${(product.sysImgId)!}" id="product_img_id"/>        <!-- 商品图片ID -->  
+        
+        
+        <input id="confirmType" name="confirmType" type="hidden" value="${confirmType!}"/><!-- dialog关闭时刷新dialog -->
+        <input type="hidden" name="selectedObjectId" id="selectedObjectId" /><!--默认选中对象的Id-->
+	    <input type="hidden" name="showLastPage" id="showLastPage" />   <!-- 跳转到最后一页 -->          
+         
+         
+        <table style="margin-left: 10px; margin-top: 15px;">
+		  <tr style="height:25px;">
+		     <td style="text-align: right;">商品全名:</td>
+		     <td colspan="5"><input type="text" name="product.fullName" class="required" id="b_product_fullName" value="${(product.fullName)!}" maxlength="100" onblur="pingyinCode('b_product_fullName','b_product_spell','b_product_small')" style="width:99%;"/></td>
+		  </tr>
+		  <tr style="height:30px;">
+		     <td style="text-align: right;">商品编号:</td>
+		     <td><input type="text" id="code" name="product.code" value="${(product.code)!code!''}" maxlength="100" class="required" alt="" size="16"/></td>
+		     <td style="text-align: right;">商品简称:</td>
+		     <td><input type="text" id="b_product_small" name="product.smallName" value="${(product.smallName)!}" maxlength="100" size="16"/></td>
+		     <td style="text-align: right;">商品拼音码:</td>
+		     <td><input type="text" name="product.spell" value="${(product.spell)!}" maxlength="100" id="b_product_spell" size="16"/></td>
+		  </tr>
+		  <tr style="height:30px;">
+		     <td style="text-align: right;">规格:</td>
+		     <td><input type="text" name="product.standard" value="${(product.standard)!}" maxlength="100" size="16"/></td>
+		     <td style="text-align: right;">型号:</td>
+		     <td><input type="text" name="product.model" value="${(product.model)!}" maxlength="100" size="16"/></td>
+		     <td style="text-align: right;">产地:</td>
+		     <td><input type="text" name="product.field" value="${(product.field)!}" maxlength="100" size="16"/></td>
+		  </tr>
+		  <tr style="height:30px;">
+		     <td style="text-align: right;">成本算法:</td>
+		     <td>
+		        <select name="product.costArith">
+		            <#if product??>
+		                <option <#if product.costArith==1>selected="selected"</#if> <#if isRead?? && isRead=="true">disabled="disabled"</#if> value="1">移动加权平均</option>
+		                <option <#if product.costArith==4>selected="selected"</#if> <#if isRead?? && isRead=="true">disabled="disabled"</#if> value="4">手工指定法</option>
+		            <#else>
+		                <option selected="selected" value="1">移动加权平均</option>
+		                <option value="4">手工指定法</option>
+		            </#if>
+				</select>
+		     <td style="text-align: right;">有效期(天):</td>
+		     <td><input type="text" class="number lzm001"  name="product.validity" value="${(product.validity)!}" size="16"/></td>
+		     <td style="text-align: right;">
+		          <input type="checkbox" name="product.status" <#if product??&&product.status?number == 1> checked="checked"</#if> value="1"/>停用
+		     </td>
+		     <td>
+		          <#if code??||product??&&numAutoAdd?number == 1>
+		             <input type="checkbox" name="numAutoAdd" checked="checked" value="1"/>编号递增
+		          <#else>
+		             <input type="checkbox" name="numAutoAdd" value="1"/>编号递增    
+		          </#if>
+		     </td>
+		  </tr>
+		  <tr style="height:30px;">
+		     <td></td>
+		     <td></td>
+		     <td></td>
+		     <td></td>
+		     <td></td>
+		     <td></td>
+		  </tr>
+	 </table>
+	 <!-- 多个tab -->
+	 <div style="margin-top: 10px; height:210px;">
+	 <div class="tabs">
+	  <div class="tabsHeader">
+		  <div class="tabsHeaderContent">
+		     <ul>
+		         <li class="selected"><a href="javascript:void(0)"><span>价格信息</span></a></li>
+		         <li><a href="javascript:void(0)"><span>其他信息</span></a></li>
+		     </ul>
+		  </div>
+	  </div>
+	  <div class="tabsContent">
+	     <!-- 单位换算+售价 -->
+	     <div>
+	        <table class="table" model="order"  layoutH="300">
+				      <thead>
+						<tr>
+						   <th width="25" align="center">行号</th>
+						   <th width="55" align="center">项目</th>
+						   <th width="50" align="center">单位名称</th>
+						   <th width="50" align="center">单位关系</th>
+						   <th width="100" align="center">条码</th>
+						   <th width="50" align="center">零售价</th>
+						   <th width="60" align="center">预设售价1</th>
+						   <th width="60" align="center">预设售价2</th>
+						   <th width="60" align="center">预设售价3</th>
+						   <th width="25" align="center"></th>
+						</tr>
+					  </thead>
+					  <tbody>
+						<tr>
+						   <td>1</td>
+						   <td>基本单位</td>
+						   <td type="text"  requiredData="need"  maxlength="20" cname="product.calculateUnit1">${(product.calculateUnit1)!}</td>
+						   <td>1</td>
+						   <td type="text"  validateAttr="lzm002"  cname="product.barCode1">${(product.barCode1)!}</td>
+						   <td type="text"  validateAttr="number" cname="product.retailPrice1">${(product.retailPrice1)!}</td>
+						   <td type="text"  validateAttr="number" cname="product.defaultPrice11">${(product.defaultPrice11)!}</td>
+						   <td type="text"  validateAttr="number" cname="product.defaultPrice12">${(product.defaultPrice12)!}</td>
+						   <td type="text"  validateAttr="number" cname="product.defaultPrice13">${(product.defaultPrice13)!}</td>
+						   <td>
+						       <a title="删除本行" class="btnDel" href="javascript:void(0);" onclick="clearTr(this);"></a>
+							   <input type="hidden" cname="product.calculateUnit1" name="product.calculateUnit1" value="${(product.calculateUnit1)!}" maxlength="100"/>
+							   <input type="hidden" cname="product.barCode1" name="product.barCode1" value="${(product.barCode1)!}" maxlength="100"/>
+							   <input type="hidden" cname="product.retailPrice1"  name="product.retailPrice1" value="${(product.retailPrice1)!}" maxlength="20"/>
+							   <input type="hidden" cname="product.defaultPrice11"  name="product.defaultPrice11" value="${(product.defaultPrice11)!}" maxlength="20"/>
+							   <input type="hidden" cname="product.defaultPrice12" name="product.defaultPrice12" value="${(product.defaultPrice12)!}" maxlength="20"/>
+							   <input type="hidden" cname="product.defaultPrice13" name="product.defaultPrice13" value="${(product.defaultPrice13)!}" maxlength="20"/>
+						   </td>
+						</tr>
+						<tr>
+						   <td>2</td>
+						   <td>辅助单位1</td>
+						   <#if isRead?? && isRead=="true" && product.calculateUnit2??>
+						   <td type="text" cname="product.calculateUnit2">${(product.calculateUnit2)!}</td>
+						   <td>
+							   <input type="hidden" validateAttr="number" name="product.unitRelation2" value="${(product.unitRelation2)!}" maxlength="20"/>
+							   ${(product.unitRelation2)!}
+						   </td>
+						   <#else>
+						   <td type="text" cname="product.calculateUnit2">${(product.calculateUnit2)!}</td>
+						   <td type="text" validateAttr="number" cname="product.unitRelation2">${(product.unitRelation2)!}</td>
+						   </#if>
+						   <td type="text" validateAttr="lzm002" cname="product.barCode2">${(product.barCode2)!}</td>
+						   <td type="text" validateAttr="number" cname="product.retailPrice2">${(product.retailPrice2)!}</td>
+						   <td type="text" validateAttr="number" cname="product.defaultPrice21">${(product.defaultPrice21)!}</td>
+						   <td type="text" validateAttr="number" cname="product.defaultPrice22">${(product.defaultPrice22)!}</td>
+						   <td type="text" validateAttr="number" cname="product.defaultPrice23">${(product.defaultPrice23)!}</td>
+						   <td>
+						       <a title="删除本行" class="btnDel" href="javascript:void(0);" onclick="clearTr(this);"></a>
+							   <input type="hidden"  name="product.calculateUnit2" cname="product.calculateUnit2" value="${(product.calculateUnit2)!}" maxlength="100"/>
+							   <input type="hidden" name="product.unitRelation2" cname="product.unitRelation2" value="${(product.unitRelation2)!}" maxlength="20"/>
+							   <input type="hidden"  name="product.barCode2" cname="product.barCode2" value="${(product.barCode2)!}" maxlength="100"/>
+							   <input type="hidden" name="product.retailPrice2" cname="product.retailPrice2" value="${(product.retailPrice2)!}" maxlength="20"/>
+							   <input type="hidden" name="product.defaultPrice21" cname="product.defaultPrice21" value="${(product.defaultPrice21)!}" maxlength="20"/>
+							   <input type="hidden" name="product.defaultPrice22" cname="product.defaultPrice22" value="${(product.defaultPrice22)!}" maxlength="20"/>
+							   <input type="hidden" name="product.defaultPrice23" cname="product.defaultPrice23" value="${(product.defaultPrice23)!}" maxlength="20"/>
+						   </td>
+						</tr>
+						<tr>
+						   <td>3</td>
+						   <td>辅助单位2</td>
+						   <#if isRead?? && isRead=="true" && product.calculateUnit2?? && product.calculateUnit3??>
+						   <td type="text" cname="product.calculateUnit3">${(product.calculateUnit3)!}</td>
+						   <td>
+							   <input type="hidden" validateAttr="number" name="product.unitRelation3" value="${(product.unitRelation3)!}" maxlength="100"/>
+							   ${(product.unitRelation3)!""}
+						   </td>
+						   <#else>
+						   <td type="text" cname="product.calculateUnit3">${(product.calculateUnit3)!}</td>
+						   <td type="text" validateAttr="number" cname="product.unitRelation3">${(product.unitRelation3)!}</td>
+						   </#if>
+						   <td type="text" validateAttr="lzm002" cname="product.barCode3">${(product.barCode3)!}</td>
+						   <td type="text" validateAttr="number" cname="product.retailPrice3">${(product.retailPrice3)!}</td>
+						   <td type="text" validateAttr="number" cname="product.defaultPrice31">${(product.defaultPrice31)!}</td>
+						   <td type="text" validateAttr="number" cname="product.defaultPrice32">${(product.defaultPrice32)!}</td>
+						   <td type="text" validateAttr="number" cname="product.defaultPrice33">${(product.defaultPrice33)!}</td>
+						   
+						   <td>
+						       <a title="删除本行" class="btnDel" href="javascript:void(0);" onclick="clearTr(this);"></a>
+							   <input type="hidden"  name="product.calculateUnit3" cname="product.calculateUnit3" value="${(product.calculateUnit3)!}" maxlength="100"/>
+							   <input type="hidden"  name="product.unitRelation3" cname="product.unitRelation3" value="${(product.unitRelation3)!}" maxlength="20"/>
+							   <input type="hidden"  name="product.barCode3" cname="product.barCode3" value="${(product.barCode3)!}" maxlength="100"/>
+							   <input type="hidden"  name="product.retailPrice3" cname="product.retailPrice3" value="${(product.retailPrice3)!}" maxlength="20"/>
+							   <input type="hidden"  name="product.defaultPrice31" cname="product.defaultPrice31" value="${(product.defaultPrice31)!}" maxlength="20"/>
+							   <input type="hidden" name="product.defaultPrice32" cname="product.defaultPrice32" value="${(product.defaultPrice32)!}" maxlength="20"/>
+							   <input type="hidden" name="product.defaultPrice33" cname="product.defaultPrice33" value="${(product.defaultPrice33)!}" maxlength="20"/>
+						   </td>
+						</tr>
+					  </tbody>
+				   </table>
+				   <div style="margin-left: 20px;">           		
+				       <span>
+				                          进货默认单位
+				        <select name="inDefaultUnit">
+				                <option <#if inDefaultUnit??&&inDefaultUnit==1>selected="selected"</#if> value="1">基本单位</option>
+				                <option <#if inDefaultUnit??&&inDefaultUnit==2>selected="selected"</#if> value="2">辅助单位1</option>
+				                <option <#if inDefaultUnit??&&inDefaultUnit==3>selected="selected"</#if> value="3">辅助单位2</option>
+						</select>
+				       </span>
+				       <span style="margin-left: 10px;">
+				                          库存默认单位
+				        <select name="stockDefaultUnit">
+				                <option <#if stockDefaultUnit??&&stockDefaultUnit==1>selected="selected"</#if> value="1">基本单位</option>
+				                <option <#if stockDefaultUnit??&&stockDefaultUnit==2>selected="selected"</#if> value="2">辅助单位1</option>
+				                <option <#if stockDefaultUnit??&&stockDefaultUnit==3>selected="selected"</#if> value="3">辅助单位2</option>
+						</select>
+				       </span>
+				       <span style="margin-left: 10px;">
+				                          销售默认单位
+				        <select name="outDefaultUnit">
+				                <option <#if outDefaultUnit??&&outDefaultUnit==1>selected="selected"</#if> value="1">基本单位</option>
+				                <option <#if outDefaultUnit??&&outDefaultUnit==2>selected="selected"</#if> value="2">辅助单位1</option>
+				                <option <#if outDefaultUnit??&&outDefaultUnit==3>selected="selected"</#if> value="3">辅助单位2</option>
+						</select>
+				       </span>
+				   </div> 
+				   
+         </div>
+         <!-- end 单位换算+售价 -->
+	     <!-- 图片+备注 -->
+	     <div>
+	        <div class="pageContent">
+				<div class="pageFormContent">
+					<table style="margin-left: 10px;">
+						  <tr>
+						     <td>
+						       <fieldset>
+								    <legend>备注</legend>
+								    <textarea name="product.memo" rows="7" cols="30">${(product.memo)!}</textarea>
+							   </fieldset>   
+						     </td>
+						     <td>
+						       <fieldset>
+								    <legend> 图片</legend>
+								    <div id="b_showProductImg" style="width:280px; height:100px; background-color: gray;">
+								        <#if product??&&product.savePath??>
+							                <img style="width:282px; height:97px;" src="${base}/upLoadImg/${(product.savePath)!}"/>
+							            </#if>
+								    </div>
+								    <a class="button" href="${base}/upload/basePrdUploadImg" target="dialog" rel="b_product_img" title="上传图片" width="420" height="250" maxable="false"><span>图片管理</span></a>
+								    <a class="button"  onclick="deleteImg();"><span>删除图片</span></a>
+							   </fieldset>   
+						    </td>
+						  </tr>
+					</table>
+				</div>
+				<script type="text/javascript">
+				    function deleteImg(){
+				        $("#b_showProductImg").html("");
+				        $("#product_img_id").val("");
+				    }
+				</script>
+			</div>
+	     </div>
+	     <!--end 图片+备注 -->
+	     
+	     
+	  </div>
+	  </div>
+	  </div>
+	  <!--end 多个tab -->	 
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		 <ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+		 </ul>
+      </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

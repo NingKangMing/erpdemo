@@ -1,0 +1,12 @@
+<!--成本查看权限-->
+<#--<#include "/WEB-INF/template/common/columnConfig/costLookConfigLink.html"/>-->
+<@shiro.hasPermission name='1101-s'>
+  <#assign costLookPermission = 'hasPermission'/>
+  <#assign costInputType = 'text'/>
+</@shiro.hasPermission>
+<@shiro.lacksPermission name='1101-s'>
+  <#assign costLookPermission = 'lacksPermission'/>
+  <#assign costInputType = 'hidden'/>
+</@shiro.lacksPermission>
+
+

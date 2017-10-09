@@ -1,0 +1,40 @@
+<div  class="pageContent">
+   <form action="${base}/init/productInit/editInit" method="post" class="tableForm required-validate" enctype="text/plain" onsubmit="return validateCallback(this,${callBack!'aioDialogAjaxDone'})">
+      <input type="hidden" id="storageId" name="storage.id" value="${storageId!0}"/>
+      <input type="hidden" id="productId" name="selectedObjectId" value="${productId!0}"/>
+      <h1>期初库存商品录入</h1>
+      <div  layoutH="70">
+      	<div style="text-align:center;margin-top: 30px;">
+		      <table style="margin:auto; width:80%;">
+		      	<tr height="60px;">
+		      		<td>
+			      		期初数量
+			      		<input class="number" maxlength="28" id="amount" name="amount" onchange="countTwoModelVal('amount','mul','price','money')" value="${(stockInit.amount)!0}" />
+		      		</td>
+		      	</tr>
+		      	<tr height="60px;">
+		      		<td>
+		      			成本单价
+		      			<input class="number" maxlength="28" id="price" name="price" onchange="countTwoModelVal('amount','mul','price','money')" value="${(stockInit.price)!0}" />
+		      		</td>
+		      	</tr>
+		      	<tr height="60px;">
+		      		<td>
+		      			库存金额
+		      			<input class="number" maxlength="28" id="money" name="money" onchange="countTwoModelVal('money','div','amount','price')" value="${(stockInit.money)!0}" />
+		      		</td>
+		      	</tr>
+		      </table>
+	     </div>
+      </div>
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		<ul>
+			<li><a class="button" href="${base}/base/product/recordAmount" param="productId,amount" target="dialog" rel="proRecordAmount" width="350" height="200"><span>辅助数量</span></a></li>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+		</ul>
+	  </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

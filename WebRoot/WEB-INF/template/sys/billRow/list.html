@@ -1,0 +1,51 @@
+
+<table class="table" id="billRowTable" rel="billRowList" layoutH="126">
+	<thead>
+		<tr>
+			<th width="40px">
+				行号
+			</th>
+			<th width="100px"  align="center">
+				默认列名
+			</th>
+			<th width="100px" align="center">
+				显示列名
+			</th>
+			<th width="100px" align="center">
+				列宽度
+			</th>
+			<th width="100px">
+				是否显示
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	    <#if rowList??>
+		<#list rowList as row>
+		
+		   <tr order="${row.rank}"  oldOrder="${row.rank}" target="id" rel="${row.id}">
+	
+			<td>
+				<a>${row_index+1}</a> <input type="hidden" name="billRow[${row_index}].id"  value="${row.id}"/>
+				<input type="hidden" name="" rname="billRow[${row_index}].showName" cname="showName" value="${row.showName!}"/>
+				<input type="hidden" name="" rname="billRow[${row_index}].width" cname="width" value="${row.width!}"/>
+			</td>
+			<td>
+				${(row.name)!}
+			</td>
+			<td ondblclick="cutTdInput(this,'showName','',50)" class="pointer" >
+				${(row.showName)!}
+			</td>
+			<td ondblclick="cutTdInput(this,'width','digits',5)" class="pointer" >
+				${(row.width)!}
+			</td>
+			<td target="cutShow" url="${base}/sys/billRow/editStatus/${row.id}">
+			   <#if row.status?? && row.status == 2>
+			        <a title="显示" href="javascript:void(0);" class="btnSelect"></a>           
+			   </#if>
+			</td>
+		</tr>
+		</#list>
+		</#if>
+	</tbody>
+</table>

@@ -1,0 +1,105 @@
+<div class="pageContent center">
+	<h2 class="contentTitle">查询</h2>
+	<form>
+	    <input type="hidden" name="aimTabId" id="aimTabId"/>	     <!-- 设置目标Tab组件ID -->				
+	    <input type="hidden" name="aimUrl" id="aimUrl"/>	         <!-- 设置目标URl -->				
+	    <input type="hidden" name="aimTitle" id="aimTitle"/>         <!-- 设置目标标题 -->
+	    <input type="hidden" name="aimDiv" id="aimDiv"/>
+        <input type="hidden" id="spreadWay" name="spreadWay" value="${spreadWay!'0'}"/>         <!-- 过滤条件    下拉框改变赋值 -->
+	    <#--<input type="hidden" id="supId" name="supId" value="${supId!0}"/>-->                               <!-- 父级ID -->
+	    
+		<div class="pageFormContent" layoutH="100">
+            <table>
+               <tr>
+                  <td style="vertical-align: top;">
+		        <fieldset style="text-align: center;">
+                <legend>列表选择</legend> 
+                <table>
+                <tr style="height:30px;">
+                <td> 仓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;库</td>
+	          	 <td>       
+		           <input type="hidden" id="om_loginUser_storage_id" name="storageIds" >
+			      <input id="om_loginUser_storage" type="text"  ondblclick="alertMutilStorageDialog(this,'${base}','om_loginUser_storage_id');" class="required"  size="30"/>
+			      <a class="btnLook" onclick="$('#om_loginUser_storage').dblclick();"></a>
+                </td>
+                </tr>
+                <#--单位全名:-->
+               <#include "/WEB-INF/template/common/base/reports/unitReportLink.html"/>
+               
+               <#-- 职员全名-->
+               <#include "/WEB-INF/template/common/base/reports/staffReportLink.html"/>
+                </table>
+ 			</fieldset>
+ 			 </td>
+ 			 <td>
+                  	  <fieldset style="width: 110px; margin-left: 10px;">
+					    <legend>选择单据</legend>
+					    <table>
+				           <tr style="height: 25px;">
+				              <td><input type="checkbox" checked="checked" name="orderTypes" value="5"/>进货单</td>
+				           </tr>
+				           <tr style="height: 25px;">
+				              <td><input type="checkbox" checked="checked" name="orderTypes" value="6"/>进货退货单</td>
+				           </tr>
+				           <#if isFreeVersion != "yes">
+				           <tr style="height: 25px;">
+				              <td><input type="checkbox" checked="checked" name="orderTypes" value="12"/>进货换货单</td>
+				           </tr>
+				           </#if>
+				        </table>
+				      </fieldset>
+                  </td>
+          </tr>
+ 		<#include "/WEB-INF/template/common/base/reports/searchDateReportLink.html"/>
+ 			
+                <#--<div style="height:30px;">
+	          	          单位全名
+		           <input id="unitId" type="hidden" value="" name="unit.id">
+                   <input type="hidden" value="" name="unit.fullName">
+                   <input id="unitName" class="enter" type="text" size="30" value="" name="unit.fullName">
+                   <a id="unitLook" class="btnLook" height="410" width="600" lookuppk="id" lookupgroup="unit" warn="单位"  href="${base}/base/unit/option/0">单位</a>
+                </div>-->
+                <#--<div style="height:30px;">
+	          	          职员全名<input type="hidden" name="staff.id" value=""/>
+		            <input type="hidden" name="staff.name" value=""/>
+		            <input class="enter" type="text" name="staff.name" size="30" value=""/>
+		            <a class="btnLook" id="staffLook" type="POST" rel="staffLookDialog" href="${base}/base/staff/dialogChild/${(boughtBill.staffId)!0}"  warn="员工" lookupgroup="staff" lookuppk="id" width="600" height="410">职员</a>
+                </div>-->
+               
+                <#--<fieldset style="text-align: center;">
+				<legend>选择时间</legend>
+				 <div style="height:30px;">开始日期:<input class="date" type="text" name="startDate" value="${startDate!}" hasClear="no" readonly="readonly"/></div>
+	  	         <div style="height:30px;">结束日期:<input class="date" type="text" name="endDate" value="${endDate!}" hasClear="no" readonly="readonly"/></div>
+	  	         <div>
+								<input name="userSearchDate" type="checkbox" checked="checked" value="checked"/>保存时间条件
+			     </div>
+				</fieldset>
+		    </div>-->
+		    <#--
+		    <div style="position:relative;float:right;width:120px;left: -20px;">
+		        <fieldset>
+				<legend>选择单据</legend>
+				<div style="height:30px;">
+				   <input type="checkbox" checked="checked" name="orderTypes" value="5"/>进货单
+				</div>
+				<div style="height:30px;">
+				   <input type="checkbox" checked="checked" name="orderTypes" value="6"/>进货退货单
+				</div>
+				<#if isFreeVersion != "yes">
+				<div style="height:30px;">
+				   <input type="checkbox" checked="checked" name="orderTypes" value="12"/>进货换货单
+				</div>
+				</#if>
+				</fieldset>
+		    </div>	-->	
+		    </table>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="button" fresh="true" hasBeforCall="unitOrStorageMulitSelect" onclick="fristOpenNavTabAfterLoadData(this,'storage','${base}')">确认</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>
+

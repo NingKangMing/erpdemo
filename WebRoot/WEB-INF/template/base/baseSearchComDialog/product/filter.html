@@ -1,0 +1,36 @@
+<!--报表基本信息筛选条件页面 -->
+<#--<#include "/WEB-INF/template/base/baseSearchComDialog/product/filter.html"/>-->
+<div class="pageContent">
+	<h2 class="contentTitle">查询</h2>
+	<div  action="" class="pageForm required-validate" enctype="text/plain">
+	    <input type="hidden" id="submitFormId" name="submitFormId" value="${submitFormId!''}">        <!--筛选后把下面input封装到的input 表单ID  -->
+		
+		<input type="hidden" id="aimTabId" name="aimTabId">	       <!-- 设置目标Tab组件ID -->				
+	    <input type="hidden" id="aimUrl" name="aimUrl">	           <!-- 设置目标URl -->				
+	    <input type="hidden" id="aimTitle" name="aimTitle">         <!-- 设置目标标题 -->
+	    <input type="hidden" id="aimDiv" name="aimDiv">         	   <!-- 设置刷新ID -->
+		
+		<div class="pageFormContent" layoutH="100">
+			<p>
+				<label>查询条件：</label>
+				<select id="searchBaseAttr" name="searchBaseAttr" style="height:23px;width:165px;">
+					<option value="code">商品编号</option>
+					<option value="smallName">商品简称</option>
+					<option value="fullName">商品全名</option>
+					<option value="spell">商品拼音码</option>
+					<option value="barCode">商品条码</option>
+				</select>
+			</p>
+			<p>
+				<label>查询信息：</label>
+				<input id="searchBaseVal" type="text" name="searchBaseVal" style="width:160px;">  
+			</p>	
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="reprotBaseSearchSubmit();">查询</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+			</ul>
+		</div>
+	</div>
+</div>

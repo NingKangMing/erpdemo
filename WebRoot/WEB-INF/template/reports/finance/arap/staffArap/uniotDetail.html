@@ -1,0 +1,71 @@
+<div class="panel" id="staffArapUnitDetaiPage">
+	<div class="pageContent">
+		<div class="textContent center">
+			     <div>
+			         <span style="font:bold 18px '宋体',Arial,Times;">职员应<#if pattern=='gets'>收<#else>付</#if>明细</span>
+			     </div>
+			     <div>
+			     	<span style="float: left; margin-left:30px; line-height: 30px;">
+			     		内部职员：${staffName!''}
+			     	</span>
+			     	<span style="float: left; margin-left:30px; line-height: 30px;">
+			     		欠款总额：${totalMoney!''}
+			     	</span>
+			     </div>
+		</div>
+		<div class="divider"></div>
+		<div id="staffArapDetailList" style="padding:0px 2px 0px 10px;" layoutH="30">
+			<form id="pagerForm" class="pageForm required-validate" enctype="text/plain" onsubmit="return navTabSearch(this);" method="post" action="${base}/reports/finance/arap/staffArap/unitDetail">
+				<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+				<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+				<input type="hidden" name="orderField" value="${orderField!'arap.recodeTime'}" /><!--查询排序-->
+			    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+			    
+			    
+			    <input type="hidden" name="pattern" id="pattern" value="${pattern!0}" /><!--   类型 -->
+			    <input type="hidden" name="selectedObjectId" id="selectedObjectId" value="${objectId!0}" /><!--   默认选中对象的Id -->
+				
+			</form> 
+			
+			<table class="table" rel="staffArapUnitDetailList" layoutH="210">
+				<thead>
+					<tr>
+						<th width="80" align="center">行号</th>
+						<th width="100" align="center" orderField="bu.code" <#if orderField?? && 'bu.code'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >单位编号</th>
+						<th width="100" align="center" orderField="bu.fullName" <#if orderField?? && 'bu.fullName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>单位全名</th>
+						<th width="100" align="center" orderField="arapMoney" <#if orderField?? && 'arapMoney'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>应<#if pattern=='gets'>收<#else>付</#if>金额</th>
+						<th width="100" align="center" orderField="ppyMoney" <#if orderField?? && 'ppyMoney'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>预<#if pattern=='gets'>付<#else>收</#if>金额</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#list pageMap.pageList as recode>
+					<tr objectId="${objectId!0}" target="pid" rel="${recode.bu.id!}" >
+						<td><a>${recode_index+1+pageMap.limit}</a></td>
+						<td>${recode.bu.code!''}</td>
+						<td>${recode.bu.fullName!''}</td>
+						<td><#if recode.arapMoney?? && recode.arapMoney !=0 >${recode.arapMoney!''}</#if></td>
+						<td><#if recode.ppyMoney?? && recode.ppyMoney !=0 >${recode.ppyMoney!''}</#if></td>
+					</tr>
+					</#list>
+				</tbody>
+				<tfoot>
+			       <tr isSelect="false" style="border-top: #D0D0D0 solid 1px">
+				       <td>合计</td>
+				       <td></td>
+				       <td></td>
+				       <td hasCount="true"></td>
+				       <td hasCount="true"></td>
+			       </tr>
+				</tfoot>
+			</table>
+			<#include "/WEB-INF/template/unitl/dialogpage.html"/>
+			<!--divider虚线-->
+			<div class="divider"></div>
+			<div class="formBar">
+				<ul>
+					<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

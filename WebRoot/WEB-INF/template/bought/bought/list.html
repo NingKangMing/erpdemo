@@ -1,0 +1,172 @@
+<form id="pagerForm" onsubmit="return divSearch(this, 'boughtBillList');" class="pageForm required-validate" enctype="text/plain" action="${base}/bought/bought/query" method="post">
+	<input type="hidden" name="pageNum" value="${pageMap.pageNum}" />
+	<input type="hidden" name="numPerPage" value="${pageMap.numPerPage}" />
+    <input type="hidden" name="boughtBill.status" id="boughtBill.status" value="${(boughtBill.status)!}"/>
+    <input type="hidden" name="startDate" value="<#if params.startDate??>${(params.startDate)?string("yyyy-MM-dd")}</#if>"/>
+    <input type="hidden" name="endDate" value="<#if params.endDate??>${(params.endDate)?string("yyyy-MM-dd")}</#if>"/>
+    
+   
+    <input type="hidden" name="unit.id" value="${(params.unitId)!}"/>
+    <input type="hidden" name="unit.fullName" value="${unitName!}"/>
+    <input type="hidden" name="staff.id" value="${(params.staffId)!}"/>
+    <input type="hidden" name="staff.name" value="${staffName!}"/>
+    <input type="hidden" name="storage.fullName" value="${storageName!}"/>
+    <input type="hidden" name="storage.id" value="${(params.storageId)!}"/>
+    
+    <input type="hidden" name="orderField" value="${(orderField)!'updateTime'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${(orderDirection)!'asc'}" /><!--升序降序-->
+    
+    <input type="hidden" name="totalCount" value="${(pageMap.totalCount)!0}"/>
+</form>
+<#assign showWidth = 100/>
+<#list rowList as row>
+    <#if row.width??>
+     <#assign showWidth = showWidth+row.width/>
+    </#if>
+</#list>
+<table class="table" rel="boughtBillList" layoutH="190" width="${showWidth!}px">
+	<thead>
+		<tr>
+			<th width="50px">
+				行号
+			</th>
+			<#list rowList as row>
+				   <th  width="${(row.width)!100}px" <#if row.isOrder?? && row.isOrder==2> orderField="${row.code}"  <#if params.orderField?? && row.code==params.orderField>class="${(params.orderDirection)!'asc'}"<#else>class="asc"</#if> </#if>>
+					 ${(row.showName)!(row.name)!}
+				   </th>
+			 </#list>
+		</tr>
+	</thead>
+	<tbody>
+		<#list pageMap.pageList as bought>
+		  <tr target="id" rel="${bought.id!}" url="${base}/bought/bought/look/${bought.id}" cTarget="openNavTab" title="进货订单" cRel="boughtLookView">
+		     <td>${bought_index+1+pageMap.limit}</td>
+		     <#list rowList as row>
+		     <#if row.code?? && 'type'==row.code>
+		     <td>进货订单</td>
+		     <#elseif row.code?? && 'code'==row.code>
+		     <td>${bought.code!}</td>
+		     <#elseif row.code?? && 'recodeDate'==row.code>
+		     <td><#if bought.recodeDate??>${(bought.recodeDate)?string("yyyy-MM-dd")}</#if></td>
+		     <#elseif row.code?? && 'updateTime'==row.code>
+		     <td><#if bought.updateTime??>${(bought.updateTime)?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
+		     <#elseif row.code?? && 'unitCode'==row.code>
+		     <td>${(bought.unit.code)!}</td>
+		     <#elseif row.code?? && 'unitName'==row.code>
+		     <td>${(bought.unit.fullName)!}</td>
+		     <#elseif row.code?? && 'staffCode'==row.code>
+		     <td>${(bought.staff.code)!}</td>
+		     <#elseif row.code?? && 'staffName'==row.code>
+		     <td>${(bought.staff.name)!}</td>
+		     <#elseif row.code?? && 'deliveryDate'==row.code>
+		     <td><#if bought.deliveryDate??>${(bought.deliveryDate)?string("yyyy-MM-dd")}</#if></td>
+		     <#elseif row.code?? && 'moneys'==row.code>
+		     <td>
+		         
+		         <@shiro.hasPermission name='1101-s'>
+		           ${(bought.moneys)!}
+				</@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+					***
+				</@shiro.lacksPermission>
+		     </td>
+		     <#elseif row.code?? && 'discountMoneys'==row.code>
+		     <td>
+		         
+		         <@shiro.hasPermission name='1101-s'>
+		           ${(bought.discountMoneys)!}
+				</@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+					***
+				</@shiro.lacksPermission>
+		     </td>
+		     <#elseif row.code?? && 'taxMoneys'==row.code>
+		     <td>
+		          
+		          <@shiro.hasPermission name='1101-s'>
+		           ${(bought.taxMoneys)!}
+				</@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+					***
+				</@shiro.lacksPermission>
+		     </td>
+		     <#elseif row.code?? && 'status'==row.code>
+		     <td>
+		           <#if bought.status?? && bought.status==1>
+		                                          否
+		           <#elseif bought.status?? &&(bought.status==2 || bought.status==3)>
+		                                         是
+		           </#if>
+		        
+		     </td>
+		     <#elseif row.code?? && 'memo'==row.code>
+		     <td>${(bought.memo)!}</td>
+		     <#elseif row.code?? && 'printNum'==row.code>
+		     <td>${(bought.printNum)!}</td>
+		      </#if>
+		     </#list>
+		  </tr>
+		</#list>
+	</tbody>
+	<tfoot>
+	   <tr isSelect="false" style="border-top: #D0D0D0 solid 1px">
+	   <td>合计</td>
+	   <#list rowList as row>
+	   <#if row.code?? && 'moneys'==row.code>
+	   <td>
+	      
+	        <@shiro.hasPermission name='1101-s'>
+	            ${(total.moneys)!0}
+			</@shiro.hasPermission>
+			<@shiro.lacksPermission name='1101-s'>
+				***
+			</@shiro.lacksPermission>
+	   </td>
+	   <#elseif row.code?? && 'discountMoneys'==row.code>
+	   <td>
+	      
+	      <@shiro.hasPermission name='1101-s'>
+            ${(total.discountMoneys)!0}
+		</@shiro.hasPermission>
+		<@shiro.lacksPermission name='1101-s'>
+			***
+		</@shiro.lacksPermission>
+	   </td>
+	   <#elseif row.code?? && 'taxMoneys'==row.code>
+	   <td>
+	      <@shiro.hasPermission name='1101-s'>
+           ${(total.taxMoneys)!0}
+		</@shiro.hasPermission>
+		<@shiro.lacksPermission name='1101-s'>
+			***
+		</@shiro.lacksPermission>
+	   </td>
+	   <#else>
+	      <td></td>
+	   </#if>
+	   </#list>
+	  </tr> 
+	</tfoot>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+     <a class="button" href="${base}/bought/bought/look/{id}"  target="navTab" title="进货订单" rel="boughtLookView"><span>查看单据</span></a>
+     <a class="button" href="${base}/bought/bought/query" target="dialog" rel="boughtQueryDialog"  width="300" height="350"><span>查询条件</span></a>
+     <@shiro.hasPermission name='3-301-e'>
+     <a class="button" href="${base}/bought/bought/" target="navTab" title="进货订单" rel="boughtView"><span>新增</span></a>
+     <a class="button" href="${base}/bought/bought/edit/{id}" target="navTab" title="修改进货订单" rel="boughtView" callBefore="callBeforeNavTab"><span>修改</span></a>
+     <a class="button" href="${base}/bought/bought/delete/{id}" target="ajaxTodo" callback="navTabAjaxDone" title="数据删除后不能恢复，确认删除？"><span>删除</span></a>
+     </@shiro.hasPermission>
+     <a class="button" href="${base}/bought/bought/force/{id}" target="ajaxTodo" callback="navTabAjaxDone" title="订单完成后不能恢复，确认要强制完成吗？"><span>强制完成</span></a>
+     <a class="button" href="${base}/bought/bought/execute/{id}" target="navTab" title="进货订单执行情况" rel="boughtExecuteView"><span>执行情况</span></a>
+     
+</div>
+<div style="float: right;">
+     <#assign privs = '3-42-312-p'/>
+	<#assign href = '${base}/bought/bought/printSearch'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+		<a class="button" href="javascript:void(0);" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a>
+</div>

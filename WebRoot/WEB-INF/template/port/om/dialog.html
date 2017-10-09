@@ -1,0 +1,57 @@
+<div>
+   <form id="form2" action="${base}/aioerpom/user/${toAction!}" class="pageForm required-validate" enctype="text/plain" method="post" 
+        onsubmit="return validateCallback(this,aioDialogAjaxDone);">
+        <input type="hidden" name="omPortUser.id" value="${(omPortUser.id)!}"/>  <!-- 复制新增，修改，分类 -->  
+      
+        <fieldset>
+			  <legend>主要信息</legend>
+		<table style="margin-left: 10px; margin-top: 5px;">	  
+		 <tr style="height:40px;">
+		     <td style="text-align: right;">登录用户:</td>
+		     <td><input type="text" id="code" name="omPortUser.loginName" value="${(omPortUser.loginName)!''}" class="required" alt="" size="23"/></td>
+		     <td style="text-align: right;">单位 :</td>
+		     <td>
+                <input type="hidden" id="unitId" name="unit.id" value="${(omPortUser.unitId)!}"/>
+	     	    <input class="required" name="unit.fullName" lookName="unit" lookId="unit.id" value="${(omPortUser.fullName)!}"/>
+		        <a class="btnLook" id="unitLook"  href="${base}/base/unit/option/0"  warn="单位" lookupgroup="unit" type="post" lookuppk="id" width="600" height="410">单位</a>
+		     </td>
+		  </tr>
+		  <tr style="height:40px;">
+		     <td style="text-align: right;">仓库:</td>
+		     <td colspan="3">
+		        <input type="hidden" id="om_loginUser_storage_id" name="omPortUser.storageIds" value="${(omPortUser.storageIds)!''}">
+		        <input id="om_loginUser_storage" type="text"  ondblclick="alertMutilStorageDialog(this,'${base}','om_loginUser_storage_id');" value="${(omPortUser.storageFullNames)!''}" class="required"  size="55"/>
+		        <a class="btnLook" onclick="$('#om_loginUser_storage').dblclick();"></a>
+		     </td>
+		  </tr>
+		  <tr style="height:40px;">
+		     <#if toAction=="edit">
+		     <td></td>
+		     <td></td>
+		     <td></td>
+		     <td></td>
+		     <#else>
+		     <td style="text-align: right;">登录密码:</td>
+		     <td><input type="password" id="password" name="omPortUser.loginPwd" class="required" value="${(omPortUser.loginPwd)!}" size="23"/></td>
+		     <td style="text-align: right;">确认密码:</td>
+		     <td><input type="password" id="password1" name="rePwd" class="required twoPwd" value="${(omPortUser.loginPwd)!}" size="23"/></td>
+		     </#if>
+		  </tr>
+		  <tr style="height:40px;">
+		     <td style="text-align: right;">密码错误提示:</td>
+		     <td colspan="5"><input type="text" name="omPortUser.loginPwdInfo" value="${(omPortUser.loginPwdInfo)!}"  style="width:98%;"/></td>
+		  </tr>
+		  
+		  
+		  </table>
+		  </fieldset> 
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		 <ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+		 </ul>
+      </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

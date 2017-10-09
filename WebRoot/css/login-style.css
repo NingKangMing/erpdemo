@@ -1,0 +1,46 @@
+/*标签初始化*/
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, form, fieldset, img,button {margin: 0;padding: 0;border: none; } 
+dl,dt,dd,ul,ol,li,p {list-style-type: none; margin:0; padding:0;}
+em, cite, th,h1,h2,h3,h4,h5,h6 { font-style: normal; font-weight: normal;}
+input,img{vertical-align:middle;}
+html,body{height:100%;}
+body{color:#333; font-size:12px; line-height:24px;background:#eee;}
+h1,h2,h3,h4{font-family:"微软雅黑", "宋体", Arial, Helvetica, sans-serif;}
+a{ color:#333; text-decoration: none; cursor:pointer;}
+a:hover {color:#f00; text-decoration:underline;}
+/*标签初始化 ok*/
+.loginwarp{ margin: 100px auto 20px;width:666px; height:364px; background-color:#478ede;box-shadow:0px 0px 6px #999;}
+.logtitwarp{ height:123px; background-color:#FFF; border:1px solid #f1f1f1; border-bottom:none; position:relative;}
+.loginwarp .logcolose{ width:24px;height:24px; position:absolute; top:4px; right:4px;}
+.loginwarp .logcolose img{ cursor:pointer;}
+.loginwarp .logsmal{ width:24px;height:24px; position:absolute; top:4px; right:28px;}
+.loginwarp .logsmal img{cursor:pointer;}
+.loginwarp .loginlogo{margin: 10px auto;
+    width: 412px;}
+.loginwarp .loginlogo img{float:left;}
+.loginwarp .loginlogo font{float: left;
+    font-size: 20px;
+    margin-left: 6px;
+    margin-top: 42px;}
+.loginwarp .loginputwarpp{ color:#fff; padding:24px 0 0 30px;}
+.loginwarp .loginputwarpp .loglinebox{margin:4px 4px 4px 0;}
+.loginwarp .loginputwarpp .loglinebox .inputlogintxt{ line-height:32px;width:282px; height:32px; border:1px solid #86B4E8; font-size:14px; color:#fff; text-indent:30px;outline:none;}
+.loginwarp .loginputwarpp .loglinebox .logname{ background:#86B4E8 url(../img/user-ico.png) no-repeat 6px center;}
+.loginwarp .loginputwarpp .logpass{ background:#86B4E8 url(../img/pass-ico.png) no-repeat 6px center;}
+.loginwarp .loginputwarpp .forgetpass{ color:#fff;padding-left:12px; }
+.loginwarp .loginputwarpp .linfowarp{ height:38px;position:relative;}
+.loginwarp .loginputwarpp .linfowarp .langae{ float:left; width:142px; height:38px; line-height:38px; background-color:#fff; color:#333; font-size:14px; text-indent:20px; background:#fff url(../img/login-ico--1.png) no-repeat 92% center; cursor:pointer; }
+.loginwarp .loginputwarpp .linfowarp .langae a{ color:#333;}
+.loginwarp .loginputwarpp .linfowarp .langae img{}
+.loginwarp .loginputwarpp .linfowarp .langae .selvelue{width:142px; height:62px; line-height:30px; background-color:#eee; position:absolute; top:38px; left:0;}
+.loginwarp .loginputwarpp .linfowarp .langae .selvelue ul{}
+.loginwarp .loginputwarpp .linfowarp .langae .selvelue ul li{width:142px; height:30px; line-height:30px; border-top:1px solid #fff;}
+.loginwarp .loginputwarpp .linfowarp .loginbtn{ float:left; width:116px; height:38px;}
+.loginwarp .loginputwarpp .linfowarp .loginbtn .loginsubmit{cursor:pointer;width:114px; height:38px; background-color:#F38D1E; border:1px solid #F38D1E; font-size:14px; font-weight:bold; color:#fff;}
+.loginwarp .loginputwarpp .join .joinlink{color:#fff; font-size:14px; font-weight:bold; padding-left:12px;}
+.loginwarp .loginputwarpp .aboutmsg{ line-height:20px;margin-left:10px;margin-top:0px; width:177px; height:74px; padding:6px; border:1px solid #dedede;}
+.loginwarp .loginputwarpp .defaulttxt{line-height:14px; padding:6px 12px;margin-top:2px;margin-bottom:22px;}
+.loginwarp .loginputwarpp .otherred{ height:40px;; line-height:40px;}
+#splitBar{display:none;}
+
+.unit{margin:8px;}

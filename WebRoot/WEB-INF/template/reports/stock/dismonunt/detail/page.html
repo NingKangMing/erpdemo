@@ -1,0 +1,39 @@
+<div class="pageContent">
+   <div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">${modelTypeName}</span></label>
+				</li>
+			</ul>
+			<ul class="searchContent" style="margin-top: 5px;">
+				<li>
+					<span style="margin-left: 10px;">查询时间：</span>${startTime}至${endTime}
+				</li>
+			</ul>
+			<ul class="searchContent">
+				<li>
+					<span style="margin-left: 10px;">商品名称:</span>${productFullName!''}
+					<#--显示会让人误解
+					<span style="margin-left: 50px;">出库仓库:</span><#if outStorageFullName=="">全部仓库</#if>${outStorageFullName} 
+					<span style="margin-left: 50px;">入库仓库:</span><#if inStorageFullName=="">全部仓库</#if>${inStorageFullName} 
+					-->
+				</li>
+				<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+				<li style="float: right;">
+				    过滤<select onchange="xsReportAmountChange(this,'aimDiv','pagerForm','${listID}');">
+				       <option value="all">全部显示</option>
+                	   <option value="notRedRow">不显示红冲单据</option>
+				    </select>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+   <div id="${listID}">
+      <#include "/WEB-INF/template/reports/stock/dismonunt/detail/dismonuntList.html" />
+   </div>
+</div>
+
+
+

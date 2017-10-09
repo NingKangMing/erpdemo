@@ -1,0 +1,100 @@
+<form id="pagerForm" onsubmit="return divSearch(this, 'businessDraftList');" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/businessDraft/list" method="post">
+	<input type="hidden" name="pageNum" value="${pageMap.pageNum}" />
+	<input type="hidden" name="numPerPage" value="${pageMap.numPerPage}" />
+	<input type="hidden" name="orderField" value="${orderField!'handleDate'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+	
+	
+	<input type="hidden" name="selectVal1" id="selectVal1"  value="${billTypeId!0}"><!-- 单据类型 -->
+	
+	
+	<input type="hidden" id="startTime" name="startTime" value="${startTime!''}"/>   <!-- 开始日期-->
+	<input type="hidden" id="endTime" name="endTime" value="${endTime!''}"/>   <!--结束日期 -->
+	<input type="hidden" id="billTypeId" name="billTypeId" value="${billTypeId!}"/>
+	<input type="hidden" id="unitId" name="unitId" value="${unitId!}"/>
+	<input type="hidden" id="staffId" name="staffId" value="${staffId!}"/>
+	<input type="hidden" id="productId" name="productId" value="${productId!}"/>
+	<input type="hidden" id="storageId" name="storageId" value="${storageId!}"/>
+	<input type="hidden" id="departmentId" name="departmentId" value="${departmentId!}"/>
+	<input type="hidden" id="accountId" name="accountId" value="${accountId!}"/>
+	<input type="hidden" id="isCoupon" name="isCoupon" value="${isCoupon!}"/>
+	<input type="hidden" id="billCode" name="billCode" value="${billCode!}"/>
+	<input type="hidden" id="remark" name="remark" value="${remark!}"/>
+	<input type="hidden" id="memo" name="memo" value="${memo!}"/>
+	<input type="hidden" id="isMember" name="isMember" value="${isMember!}"/>
+	<input type="hidden" id="priceCase" name="priceCase" value="${priceCase!}"/>
+	<input type="hidden" id="price" name="price" value="${price!}"/>
+	<input type="hidden" id="discountCase" name="discountCase" value="${discountCase!}"/>
+	<input type="hidden" id="discount" name="discount" value="${discount!}"/>
+	<input type="hidden" id="taxrateCase" name="taxrateCase" value="${taxrateCase!}"/>
+	<input type="hidden" id="taxrate" name="taxrate" value="${taxrate!}"/>
+	
+	<input type="hidden" id="checkObjIds" name="checkObjIds" value="${checkObjIds!}"/>
+</form>
+
+<table class="table" rel="businessDraftList" layoutH="215">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody id="businessDraftTbody">
+		<#list pageMap.pageList as tr>
+		<tr target="tid" rel="${tr.billId}-${tr.billTypeId}-${tr.id}" isFlow="${tr.bt.isFlow!}"  cRel="${tr.bt.prefix!}DraftView" title="${tr.bt.name!}草稿" url="${base}/common/bill/editDraftBill/${tr.billId}-${tr.billTypeId}-${tr.id}" cTarget="openNavTab"  href1="${base}/common/verify/permittedVerifyDraftLook/{tid}" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate">
+			<td>
+				<input type="checkbox" name="draftBillRel"  value="${tr.billId}-${tr.billTypeId}-${tr.id}" onclick="checkItem(this,'checkObjIds');"/>
+			</td>
+			<td width="40px;">${tr_index+1+pageMap.limit}</td>
+			<#list rowList as row>
+				<#assign columnObj = "" />
+				<#if row.code?? && ((row.code)?index_of(".")>-1)>
+					<#assign columnObj = (row.code)?substring(0,(row.code)?index_of(".")) />
+					<#assign columnParam = (row.code)?substring((row.code)?index_of(".")+1) />
+				<#else>
+					<#assign columnParam = row.code />
+				</#if>
+			
+				<#if row.code?? && ('recodeDate'==row.code || 'postTime'==row.code)>
+					<td>
+						<#if tr[columnParam]?? >${tr[columnParam]?string("yyyy-MM-dd HH:mm:ss")}</#if>
+					</td>
+				<#elseif row.code?? && 'money'==row.code>
+					<td>
+						<#if tr.money?? &&  tr.money<0 >${0-tr.money!''}<#else>${tr.money!''}</#if>
+					</td>
+				<#elseif row.code?? && 'producer'==row.code>
+					<td>
+						${(tr.prod.username)!''}
+					</td>
+				<#else>
+					<#if columnObj?? && columnObj!="">
+						<td>${((tr[columnObj])[columnParam])!}</td>
+					<#else>
+						<td>${tr[columnParam]!}</td>
+					</#if>
+				</#if>
+			</#list>
+		</tr>
+		</#list>
+	</tbody>
+	<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+	
+<#include "/WEB-INF/template/unitl/paging.html"/>
+
+<div class="divider"></div>
+<div>
+	<@shiro.hasPermission name='1105-s'>
+		<a class="button" href="${base}/common/bill/editDraftBill/{tid}" target="navTab" ><span>修改单据</span></a>
+	</@shiro.hasPermission>
+	<@shiro.hasPermission name='1106-s'>
+		<a class="button" href="${base}/reports/businessDraft/delDraft" target="ajaxTodo" title="数据删除后不能恢复，确认删除？" param="checkObjIds" verify="checkObjIds" verifyText="请勾选草稿！"><span>删除草稿</span></a>
+	</@shiro.hasPermission>
+	<a class="button" href="${base}/reports/businessDraft/toBillType/{tid}" verifyFun="verifyFlowBillToCopy()" target="dialog" rel="copyBillTypeDialog" title="选择单据类型" width="200" height="380"><span>复制单据</span></a>
+	
+	<a class="button" href="${base}/common/billSearchDialog" type="post" param="startTime,endTime,billTypeId,unitId,staffId,productId,storageId,departmentId,accountId,isCoupon,billCode,remark,memo,isMember,priceCase,price,discountCase,discount,taxrateCase,taxrate" aimTabId="businessDraftView" aimUrl="${base}/reports/businessDraft"  target="dialog" rel="billSearchDialog" width="500" height="480" ><span>万能查询</span></a>
+	<a class="button" href="${base}/common/bill/editDraftBill" target="navTab" type="post" param="checkObjIds" verify="checkObjIds" verifyText="请勾选草稿！"><span>批量过账</span></a>
+</div>
+<div style="float: right;">
+    <#assign privs = '1104-p'/>
+	<#assign href = '${base}/reports/businessDraft/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a>
+</div>

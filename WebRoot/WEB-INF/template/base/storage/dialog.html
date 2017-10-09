@@ -1,0 +1,66 @@
+<div>
+   <form id="pagerForm" action="${base}/base/storage/${toAction}" method="post" class="tableForm" enctype="text/plain" onsubmit="return validateCallback(this,${callback})">
+      <input type="hidden" name="storage.supId" value="${(storage.supId)!0}"/>
+      <input type="hidden" id="supId" name="supId" value="${supId!0}"/>
+      <input type="hidden" name="sid" value="${(storage.id)!}"/>
+      <input type="hidden" name="storage.pids" value="${(storage.pids)!}"/>
+      
+	  <!-- dialog 新增加 -->
+      <input id="confirmType" name="confirmType" type="hidden" value="${confirmType!}"/><!-- dialog关闭时刷新dialog -->
+      <input type="hidden" name="selectedObjectId" id="selectedObjectId" /><!--默认选中对象的Id-->
+	  <input type="hidden" name="showLastPage" id="showLastPage" />   <!-- 跳转到最后一页 -->
+      <!-- end dialog 新增加 -->
+      <table>
+		  <tr style="height:30px;">
+		     <td style="text-align: right;">仓库全名:</td>
+		     <td colspan="3"><input style="width: 332px;" type="text" maxlength="100" id="sName"  name="storage.fullName" value="${(storage.fullName)!}" onblur="pingyinCode('sName','sSpell','sSmall')" class="required textInput"/></td>
+		  </tr>
+		  <tr style="height:30px;">
+		     <td style="text-align: right;">仓库编号:</td>
+		     <td><input type="text" maxlength="100" id="code" name="storage.code" class="required textInput" value="${(storage.code)!code!}" /></td>
+		     <td style="text-align: right;">仓库简名:</td>
+		     <td><input type="text" maxlength="100" id="sSmall" name="storage.smallName" value="${(storage.smallName)!}"/></td>
+		  </tr>
+		  <tr style="height:30px;">
+		     <td style="text-align: right;">仓库拼音码:</td>
+		     <td><input type="text" maxlength="100" id="sSpell" name="storage.spell" value="${(storage.spell)!}" /></td>
+		     <td style="text-align: right;">仓库地址:</td>
+		     <td>
+		      	<input type="text"  maxlength="100" name="storage.stoAddress" value="${(storage.stoAddress)!}" />
+		    </td>
+		  </tr>
+		  <tr style="height:30px;">
+		     <td style="text-align: right;">负责人:</td>
+		     <td><input type="text" maxlength="100" name="storage.functionary" value="${(storage.functionary)!}"/></td>
+		     <td style="text-align: right;">负责人电话:</td>
+		     <td><input type="text" maxlength="100" name="storage.phone" class="number" value="${(storage.phone)!}"/></td>
+		  </tr>
+		  <tr style="height:30px;">
+		     <td></td>
+		     <td></td>
+		     <td style="text-align: right;">
+		     	<input type="hidden" id="storageStatus"  name="storage.status" value="${(storage.status)!2}"/>
+		     	<input type="checkbox" onchange="stopAndStart(this,'storageStatus')" <#if storage?? && storage.status?? && storage.status?number == 1>checked</#if> />停用
+		     </td>
+		     <td style="text-align: right;"><input type="checkbox" name="codeIncrement" value="true" <#if codeIncrement?? && codeIncrement=="true">checked="checked"</#if> />编号递增</td>
+		  </tr>
+		  <tr style="height:30px;">
+		  	<td colspan="4" align="center">
+		       <fieldset>
+				    <legend>备注</legend>
+				    <textarea  maxlength="240" style="width: 370px;" name="storage.memo" rows="5" >${(storage.memo)!}</textarea>
+			   </fieldset>   
+		     </td>
+		  </tr>
+	 </table>
+	 
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+		</ul>
+	  </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

@@ -1,0 +1,156 @@
+<#import "/WEB-INF/template/common/base/header/addCommonPage.html" as orderHead>
+<div class="pageContent">
+   <input id="whichCallBack" type="hidden" value="accountVoucher"/><!-- 用于区分不同模块库存商品带回进不同函数     ID是写死，value用于区分 -->
+   <input id="basePathId" type="hidden" value="${base}"/><!-- 用于手工指定法    弹出窗体url -->
+   <form id="accountVoucherBillForm" class="tableForm pageForm" enctype="text/plain" method="post" action="${base}/finance/accountVoucher/add" onsubmit="return validateCallback(this, navTabAjaxDoneDialog)">
+      <input type="hidden" name="accountVoucherBill.codeIncrease" value="${codeIncrease!}"/>
+      <input type="hidden" id="billCode"  name="billCode" value="${code!}"/>
+	<div id="hasFujianClassId" class="textContent center">
+	
+	<@orderHead.billCode title="会计凭证" billName="accountVoucherBill"/>
+	      <#--<div>
+	         <span style="font-size: 18px;">会计凭证</span>
+			 <span style="float: right;">
+		                 录单日期
+		     <input type="text"  name="accountVoucherBill.recodeDate" dateFmt="yyyy-MM-dd HH:mm:ss" value="${todayTime!}" hasClear="no" readonly="readonly"/>
+		                单据编号
+		     <input id="showBillCode" class="line required textInput" type="text" style="width: 200px" name="accountVoucherBill.code"  value="${code!}" <#if codeAllowEdit?? && codeAllowEdit=="1">readonly="readonly"</#if>/>
+		     </span>
+	     </div>-->
+	     <div>
+	     <@orderHead.staffTag/>
+	                        <#--   经手人 
+	        <input type="hidden" name="staff.id" value=""/>
+	        <input type="hidden" name="staff.name" value=""/>
+	        <#if notEditStaff?? && notEditStaff==true>
+	        	<input class="line" readonly="readonly" type="text" name="staff.name" value="${(staff.fullName)!}"/>
+	        <#else>
+	        	<input class="line enter" type="text" name="staff.name" id="staffName" />
+	        	<a class="btnLook" id="staffLook"  type="POST" btnPattern="optionAdd" rel="staffLookDialog" href="${base}/base/staff/dialogChild" module="navTab" warn="员工" lookupgroup="staff" lookuppk="id" width="600" height="410">职员</a>
+	        </#if>-->
+	                    附加说明
+	        <input class="line" type="text" style="width: 250px;" name="accountVoucherBill.memo" value="" id="memo" maxlength="500"/>
+	     </div>
+	     <#include "/WEB-INF/template/common/columnConfig/billRowConfigLink.html"/> 
+	     
+	     <@orderHead.attachment/>
+	     <#--<div style="float: right;">
+		        <img style="margin-left: 7px;" onclick="openOrderFujianDialog('${base}','${tableId}');" title="单据附件" src="${base}/img/bill/fujian.jpg" alt="单据附件">
+		        <input type="hidden" id="orderFuJianIds" name="orderFuJianIds"/>
+         </div>-->
+	     <div>
+	                          摘要
+	        <input class="line" type="text" style="width:440px;" name="accountVoucherBill.remark" value="" maxlength="500"/>
+	                     
+	     </div>
+	</div>
+	<div class="divider"></div>
+	<div class="pageContent">
+	   <#assign showWidth = 0/>
+	   <#list rowList as row>
+	     <#if row.width??>
+	      <#assign showWidth = showWidth+row.width/>
+	     </#if>
+	   </#list>
+	   <table class="table" model="order"  layoutH="190" width="${showWidth!}px">
+	   
+	        <thead>
+			 <tr>
+				<th width="50px" >
+					行号
+				</th>
+				<#list rowList as row>
+				   <th width="${(row.width)!100}px"> 
+					 ${(row.showName)!(row.name)!}
+				   </th>
+				</#list>
+				<th width="45px">
+				   <a title="添加一行" class="btnAdd" target="addTr" href="javascript:void(0);" rel="accountVoucherBillbody"></a>
+				</th>
+			</tr>
+		  </thead>
+		  <tbody id="accountVoucherBillbody" preDataName="accountVoucherDetail">
+		     <#list 1..15 as td>
+		     <tr>
+		       <td>${td_index+1}</td>
+		       <!--  -->
+		     <#list rowList as row>
+		       <#if row.code?? && 'accountsCode'==row.code>
+		       <!-- 科目编号-->
+		       <td cname="accountsCode" validateAttr="" maxlength="50" onBlur="objDelOrClear(this,'accountsCode');"  cTarget="dialog"  title="会计科目选择" warn="会计科目选择"   enterSearch="true" searchUrl="${base}/base/accounts/accountsOneRecord/" editUrl="${base}/base/accounts/accountsDialogEdit/" url="${base}/base/accounts/accountsDialog/" rel="cw_account_dialog" dwidth="570" dheight="450"></td> 
+		       <#elseif row.code?? && 'accountsFullName'==row.code>
+		       <!-- 科目名称 -->
+		       <td cname="accountsFullName" validateAttr=""  maxlength="50" onBlur="objDelOrClear(this,'accountsFullName');"  cTarget="dialog"  title="会计科目选择" warn="会计科目选择" enterSearch="true" searchUrl="${base}/base/accounts/accountsOneRecord/" editUrl="${base}/base/accounts/accountsDialogEdit/" url="${base}/base/accounts/accountsDialog/" rel="cw_account_dialog" dwidth="570" dheight="450"></td>
+		       <#elseif row.code?? && 'accountsSmallName'==row.code>
+		       <!-- 科目简称 -->
+		       <td cname="accountsSmallName" readonly="readonly"></td>
+		       <#elseif row.code?? && 'accountsSpell'==row.code>
+		       <!-- 科目拼音码 -->
+		       <td cname="accountsSpell"  readonly="readonly"></td>
+		       <#elseif row.code?? && 'accountsMemo'==row.code>
+		       <!-- 科目备注 -->
+		       <td cname="accountsMemo" readonly="readonly"  maxlength="50"></td>
+		       <#elseif row.code?? && 'accountsDetailName'==row.code>
+		        <!-- 明细科目 -->
+		       <td cname="accountsDetail" requiredData="need" readonly="readonly" maxlength="50" type="text" validateAttr=""  onBlur="objDelOrClear(this,'accountsDetail')" cTarget="dialog" hasDialog="dialogNotNull"  title="单位" warn="单位"   url="${base}/base/unit/option?whichCallBack=accountVoucher"  dwidth="600" dheight="410"></td>
+		       <#elseif row.code?? && 'debitMoney'==row.code>
+		       <!-- 借方金额 -->
+		       <td cname="debitMoney" validateAttr="number" requiredData="need"  maxlength="50" onBlur="inputDebitMoney(this)"> </td>
+		       <#elseif row.code?? && 'lendMoney'==row.code>
+		       <!-- 贷方金额 -->
+		       <td cname="lendMoney" validateAttr="number" requiredData="need"  maxlength="50" onBlur="inputLendMoney(this)"> </td>
+		       <#elseif row.code?? && 'memo'==row.code>
+		       <!-- 摘要 -->
+		       <td cname="memo" validateAttr=""  requiredData="need" maxlength="50"> </td>
+		       <#elseif row.code?? && 'message'==row.code>
+		       <!-- 附加信息 -->
+		       <td cname="message" validateAttr="" requiredData="need" maxlength="200"></td>
+		       <#else>
+		         <td></td>
+		       </#if>
+		      </#list>
+		       <td><a title="删除本行" class="btnDel" href="javascript:void(0);" onclick="removeTr(this);"></a></td>
+		     </tr>
+		     </#list>
+		  </tbody>
+		  <tfoot>
+		       <tr style="border-top: #D0D0D0 solid 1px">
+		       <td>合计</td>
+		       <#list rowList as row>
+		            <#if row.code?? && 'debitMoney'==row.code>
+		             <!-- 借方金额 -->
+		             <td><input  class="stealth" name="accountVoucherBill.debitMoneys" id="debitMoneys" readonly="readonly"/></td>
+		             <#elseif row.code?? && 'lendMoney'==row.code>
+		              <!-- 贷方金额 -->
+		             <td><input  class="stealth" name="accountVoucherBill.lendMoneys" id="lendMoneys" readonly="readonly"/></td>
+		            <#else>
+		            <td></td>
+		            </#if>
+		       </#list>
+		       <td></td>
+		       </tr>
+		  </tfoot>
+	   </table>
+	   <div class="divider"></div> 
+
+		<div>
+	     <div style="float: right;">
+	      
+	   		<@shiro.hasPermission name='616-t'>
+	        <a class="button" href="${base}/finance/accountVoucher/add" target="submit"><span>保存</span></a>
+	        </@shiro.hasPermission>
+	        <@shiro.hasPermission name='6-616-e'>
+	        <a class="button" href="${base}/finance/accountVoucher/draft/add" target="submit"><span>保存草稿</span></a>
+	        </@shiro.hasPermission>
+	        
+	        
+			<#assign privs = '616-p'/>
+	<#assign href = '${base}/finance/accountVoucher/print'/>
+	<#assign formId = 'accountVoucherBillForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+			<a class="button" href="javascript:void(0);" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+	     </div>
+	    </div>
+	</div>
+  </form>
+</div>

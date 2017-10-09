@@ -1,0 +1,41 @@
+<div class="panel pageContent">
+	<div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">仓库进货分布</span></label>
+				</li>
+			</ul>
+			<ul class="searchContent" style="margin-top: 5px;">
+				<li>
+					<span style="margin-left: 10px;">查询时间：</span>${(params.startDate)!}&nbsp;&nbsp;至&nbsp;&nbsp;${(params.endDate)!}
+				</li>
+			</ul>
+			<ul class="searchContent">
+				<li> 
+				    <span style="margin-left: 10px;">往来单位</span> <#if !unitName?? || unitName=="">全部单位</#if>${unitName!}
+					<span style="margin-left: 50px;">内部职员</span> <#if !staffName?? || staffName=="">全部职员</#if>${staffName!}
+					<span style="margin-left: 50px;">商品</span> <#if !storageName?? || storageName=="">全部商品</#if>${storageName!}
+				</li>
+				<li  style="float: right;margin-left: 10px;margin-right: 10px">
+				   <a href="${base}/fz/reportRow/search/cg5011" target="dialog" rel="reportRowView"  width="520" height="500"><img src="${base}/img/base/setting.png" width="20px" height="20px" title="列配置"/></a>
+				</li>
+				<li style="float: right;">
+				    金额统计方式&nbsp;&nbsp;<select name="spreadWay" onchange="javascript:selectPost(this,'purchaseStorageSpreadList','spreadWay');">
+				       <option <#if params.spreadWay?? && params.spreadWay=="0">selected="selected"</#if>  value="0">税后金额</option>
+				       <option <#if params.spreadWay?? && params.spreadWay=="1">selected="selected"</#if>  value="1">税前金额</option>
+				    </select>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+		
+	<div id="purchaseStorageSpreadList">
+		<#include "spreadList.html" />
+	</div>
+	
+</div>
+
+
+

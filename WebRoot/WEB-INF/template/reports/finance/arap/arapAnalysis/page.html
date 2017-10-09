@@ -1,0 +1,34 @@
+<div class="panel">
+	<div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">往来分析</span></label>
+				</li>
+			</ul>
+			<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+			<ul class="searchContent" style="margin-top: 5px;">
+				<li>
+					<span style="margin-left: 10px;">查询时间：</span>${startTime!''}至${endTime!''}
+				</li>
+				<li style="float: right;">
+				    过滤<select onchange="xsReportAmountChange(this,'aimDiv','pagerForm','${listID}');">
+				       <option <#if aimDiv=="all">selected="selected"</#if> value="all">显示所有</option>
+				       <option <#if aimDiv=="inOrOut">selected="selected"</#if> value="inOrOut">显示发生进货或销售业务的单位</option>
+				       <option <#if aimDiv=="in">selected="selected"</#if> value="in">只显示有进货业务的单位</option>
+				       <option <#if aimDiv=="out">selected="selected"</#if> value="out">只显示有销售业务的单位</option>
+				       <option <#if aimDiv=="no">selected="selected"</#if> value="no">只显示没有发生业务的单位</option>
+				    </select>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div layoutH="70">
+		<div id="${listID}">
+			<#include "/WEB-INF/template/reports/finance/arap/arapAnalysis/list.html" />
+		</div>
+	</div>
+</div>
+
+
+

@@ -1,0 +1,21 @@
+<!--采购管理-->
+<#if isFreeVersion != "yes">
+<div <#if version gt 1>class="nav-content"<#else>class="nav-content1"</#if> >
+   <a href="${base}/bought/bought/" href1="${base}/common/verify/permittedVerify?key=3-301-e" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="navTab" rel="boughtView" id="boughtView" class="nav-btn" ><img alt="进货订单" src="${base}/img/base/bought.png"><span>进货订单</span></a>
+   <a href="${base}/bought/purchase/" href1="${base}/common/verify/permittedVerify?key=3-302-e" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="navTab" rel="purchaseView" id="purchaseView" class="nav-btn" ><img alt="进货单" src="${base}/img/base/purchase.png" ><span>进货单</span></a>
+   <a href="${base}/bought/return/" href1="${base}/common/verify/permittedVerify?key=3-303-e" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="navTab" rel="purchaseReturnView" id="purchaseReturnView" class="nav-btn" ><img alt="进货退货单" src="${base}/img/base/bought.png"><span>进货退货单</span></a>
+   <a href="${base}/bought/barter/" href1="${base}/common/verify/permittedVerify?key=3-304-e" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="navTab" rel="purchaseBarterView" title="进货换货单" class="nav-btn <#if version gt 1>nav-fix</#if>" ><img alt="进货换货单" src="${base}/img/base/barter.png"><span>进货换货单</span></a>
+   <#if version gt 1>
+   <a href="${base}/finance/payMoney/" href1="${base}/common/verify/permittedVerify?key=6-602-e" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="navTab" rel="cw_payMoneyView" title="付款单" class="nav-btn" ><img alt="付款单" src="${base}/img/base/payMoney.png"><span>付款单</span></a>
+   </#if>
+</div>
+<#else>
+<div class="nav-content">
+   <a href="${base}/bought/purchase/" href1="${base}/common/verify/permittedVerify?key=3-302-e" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="navTab" rel="purchaseView" id="purchaseView" class="nav-btn" ><img alt="进货单" src="${base}/img/base/purchase.png" ><span>进货单</span></a>
+   <a href="${base}/bought/return/" href1="${base}/common/verify/permittedVerify?key=3-303-e" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="navTab" rel="purchaseReturnView" id="purchaseReturnView" class="nav-btn" ><img alt="进货退货单" src="${base}/img/base/bought.png"><span>进货退货单</span></a>
+   <#if version gt 1>
+   <a href="${base}/finance/payMoney/" href1="${base}/common/verify/permittedVerify?key=6-602-e" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="navTab" rel="cw_payMoneyView" title="付款单" class="nav-btn nav-fix" ><img alt="付款单" src="${base}/img/base/payMoney.png"><span>付款单</span></a>
+   </#if>
+</div>
+</#if>
+

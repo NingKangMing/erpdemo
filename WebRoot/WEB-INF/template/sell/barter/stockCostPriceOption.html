@@ -1,0 +1,34 @@
+<div>
+   <form class="tableForm"  action="#">
+	<table class="table" layoutH="57"  targetType="dialog">
+		<thead>
+		<tr>
+		   <th width="50px;">行号</th>
+		   <th align="center" width="100px;">商品编号</th>
+		   <th align="center" width="100px;">商品全名</th>
+		   <th align="center" width="100px;">单位</th>
+		   <th align="center" width="100px;">价格</th>
+		</tr>
+	  </thead>
+	  <tbody>
+	    <#list recordList as record>
+		<tr>
+		   <input name="trIndex" type="hidden" value="${record.trIndex}"/>
+		   <td><a>${record_index+1}</a></td>
+		   <td>${record.productCode!}</td>
+		   <td>${record.productName!}</td>
+		   <td>${record.productUnit!}</td>
+		   <td><input name="costPrice" class="stealth required number" type="text" /></td>
+		</tr>
+		</#list>
+	  </tbody>
+	</table>
+	</form>
+
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+    <a style="margin-left: 340px;" class="button" onclick="inputXshrStockPrice();"><span>确定</span></a>
+	<div style="margin-left: 30px;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+</div>
+</div>

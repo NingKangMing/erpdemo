@@ -1,0 +1,58 @@
+<div id="b_area_search_dialog_table">
+
+
+<div class="pageContent">
+	<table class="table" layoutH="150" targetType="dialog" >
+	<thead>
+		<tr>
+			<th  width="50" align="center">
+				行号
+			</th>
+			<th width="100" align="center" orderField="code" <#if orderField?? && 'code'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+				地区编号
+			</th>
+			<th width="100" align="center" orderField="name" <#if orderField?? && 'name'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+				地区全称
+			</th>
+			<th width="100" align="center" orderField="spell" <#if orderField?? && 'spell'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+				地区简拼
+			</th>
+			<th width="100" align="center">
+				操作
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<#list pageMap.pageList as area>
+		  <#if area.node==2>
+		  <tr objectId="${objectId!0}" rel="${area.id}"  cTarget="dialog" url="${base}/base/area/dialogList/${area.id}-${area.supId}">
+		  <#else>
+		   <tr objectId="${objectId!0}"  rel="${area.id}"  ondblclick="javascript:$.bringBack({areaId:'${area.id}', areaName:'${area.fullName!}'})">
+		  </#if>
+			<td><a>${area_index+1+pageMap.limit}</a>
+				<#if area.node==2>..</#if>
+			</td>
+			<td>
+				${area.code!''}
+			</td>
+			<td>
+				${area.name!''}
+			</td>
+			<td>
+				${area.spell!''}
+			</td>
+			<td>
+			   <a class="btnSelect" href="javascript:$.bringBack({areaId:'${area.id}', areaName:'${area.fullName!}'})" title="查找带回">选择</a> 
+			</td>
+		</tr>
+		</#list>
+	</tbody>
+	</table>
+</div>
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+       <a style="margin-left: 220px;" class="button" href="javascript:;"><span>确定</span></a>
+	   <div style="margin-left: 30px;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+</div>
+</div>

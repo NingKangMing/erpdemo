@@ -1,0 +1,78 @@
+<form id="pagerForm" enctype="text/plain" onsubmit="return divSearch(this, 'stockBatchTailList');" action="${base}/reports/stock/stockBatchTail/list" method="post">
+			<input type="hidden" name="pageNum" value="${pageMap.pageNum!1}" />
+			<input type="hidden" name="numPerPage" value="${pageMap.numPerPage!15}" />
+			<input type="hidden" name="orderField" value="${orderField!'sckRos.id'}" /><!--查询排序-->
+		    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+			
+			<input type="hidden" name="productId" value="${productId!0}"/>
+			<input type="hidden" name="productName" value="${productName!''}"/>
+			<input type="hidden" name="batchNum" value="${batchNum!''}">
+			<input type="hidden" name="startTime" value="${startTime!''}">
+			<input type="hidden" name="endTime" value="${endTime!''}">
+</form>
+<table class="table" rel="stockBatchTailList" layoutH="220" >
+		<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+		<tbody>
+			<#list pageMap.pageList as recode>
+			
+			<tr target="id" rel="${recode.sckRos.billId!}-${recode.sckRos.billTypeId!}" cRel="${recode.btype.billTableName!}" title="${recode.btype.name!}" url="${base}/common/bill/lookBill/${recode.sckRos.billId!}-${recode.sckRos.billTypeId!}" cTarget="openNavTab">
+				<td><a>${recode_index+1+pageMap.limit}</a></td>
+				<#list rowList as row>
+					<#assign columnObj = "" />
+					<#if row.code?? && ((row.code)?index_of(".")>-1)>
+						<#assign columnObj = (row.code)?substring(0,(row.code)?index_of(".")) />
+						<#assign columnParam = (row.code)?substring((row.code)?index_of(".")+1) />
+					<#else>
+						<#assign columnParam = row.code />
+					</#if>
+				
+					<#if row.code?? && 'sckRos.price'==row.code>
+						<td>
+							<@shiro.hasPermission name='1101-s'>
+						    	${recode.sckRos.price!}
+						    </@shiro.hasPermission>
+							<@shiro.lacksPermission name='1101-s'>
+								<#if recode.btype.name="进货单"||recode.btype.name="进货换货单"||recode.btype.name="销售换货单"||recode.btype.name="报溢单">
+									*** 
+								<#else>
+									${recode.sckRos.price!}
+								</#if>
+							</@shiro.lacksPermission>
+						</td>
+					<#elseif row.code?? && 'pro.savePath'==row.code>
+						<td>
+							<#if (recode.pro.savePath)??>
+							    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(recode.pro.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(recode.pro.savePath)!}"  width="20px" height="20px"/>
+				            </#if>
+						</td>
+					<#elseif row.code?? && 'costMoney'==row.code>
+						<td>
+						    <@shiro.hasPermission name='1101-s'>
+						    	${recode.costMoney!}
+						    </@shiro.hasPermission>
+							<@shiro.lacksPermission name='1101-s'>
+								<#if recode.btype.name="进货单"||recode.btype.name="进货换货单"||recode.btype.name="销售换货单"||recode.btype.name="报溢单">
+									*** 
+								<#else>
+									${recode.costMoney!}
+								</#if>
+						    </@shiro.lacksPermission>
+						</td>
+					<#elseif row.code?? && 'sckRos.produceDate'==row.code>
+						<td><#if recode.sckRos.produceDate??>${recode.sckRos.produceDate?string("yyyy-MM-dd")}</#if></td>
+					<#elseif row.code?? && 'sckRos.recodeTime'==row.code>
+						<td><#if recode.sckRos.recodeTime??>${recode.sckRos.recodeTime?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
+					<#else>
+						<#if columnObj?? && columnObj!="">
+							<td>${((recode[columnObj])[columnParam])!}</td>
+						<#else>
+							<td>${recode[columnParam]!}</td>
+						</#if>
+					</#if>
+				</#list>
+			</tr>
+			</#list>
+		</tbody>
+		<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>

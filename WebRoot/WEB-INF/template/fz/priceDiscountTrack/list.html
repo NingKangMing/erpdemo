@@ -1,0 +1,105 @@
+<input id="basePathId" type="hidden" value="${base}"/><!-- 用于手工指定法    弹出窗体url -->
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/fz/priceDiscountTrack/dialogSearch/page" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+	<input type="hidden" name="orderField" value="${orderField!'pd.id'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <!-- ID用于树点击参数 -->
+	<input type="hidden" id="unit.id" name="unitId" value="${unitId}"/>                     <!--过滤 单位ID -->
+	<input type="hidden" id="product.id" name="productId" value="${productId}"/>            <!--过滤 商品ID -->
+	<input type="hidden"  name="unit.id" value=""/>               <!--下面的新增加保存值 单位ID -->
+	<input type="hidden"  name="product.id" value=""/>            <!--下面的新增加保存值 商品ID -->
+	<input type="hidden" id="aimDiv" name="aimDiv" value="${aimDiv}"/>                                   <!-- 过滤条件     all eq gt 下拉框改变赋值 -->
+	
+	<input type="hidden" name="whereComeDetail" value="other"> 
+</form>
+<#include "/WEB-INF/template/common/columnConfig/tableTotalWidthLink.html"/>
+<table class="table" rel="${listID!}" layoutH="160">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody id="reports_prdsellcount_body">
+		<#if pageMap??&&pageMap.pageList??>
+		<#list pageMap.pageList as obj>
+	    <tr target="pid" rel="${obj.pd.id}" cTarget="citeEvent" citeEventModuleId="fz_priceDiscountTrack_edit" citeEventType="click">
+			<td><a>${obj_index+1+pageMap.limit}</a></td>
+			<#list rowList as row>
+			<#if row.code?? && 'unit.code'==row.code>
+			<td>${obj.unit.code!''}</td>
+			<#elseif row.code?? && 'unit.fullName'==row.code>
+			<td>${obj.unit.fullName!''}</td>
+			<#elseif row.code?? && 'pro.code'==row.code>
+			<td>${obj.pro.code!''}</td>
+			<#elseif row.code?? && 'pro.fullName'==row.code>
+			<td>${obj.pro.fullName!''}</td>
+			<#elseif row.code?? && 'pro.smallName'==row.code>
+			<td>${(obj.pro.smallName)!''}</td> 
+			<#elseif row.code?? && 'pro.spell'==row.code>
+			<td>${(obj.pro.spell)!''}</td> 
+			<#elseif row.code?? && 'pro.standard'==row.code>
+			<td>${(obj.pro.standard)!''}</td>
+			 <#elseif row.code?? && 'pro.model'==row.code>
+			<td>${(obj.pro.model)!''}</td> 
+			<#elseif row.code?? && 'pro.field'==row.code>
+			<td>${(obj.pro.field)!''}</td> 
+			<#elseif row.code?? && 'pro.savePath'==row.code>
+			<td>
+			<#if (obj.pro.savePath)??>
+			    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(obj.pro.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(obj.pro.savePath)!}"  width="20px" height="20px"/>
+            </#if>
+			</td>
+			<#elseif row.code?? && 'pd.selectUnitId'==row.code>
+			<td><#if obj.pd.selectUnitId==1>${obj.pro.calculateUnit1!''}<#elseif obj.pd.selectUnitId==2>${obj.pro.calculateUnit2!''}<#elseif obj.pd.selectUnitId==3>${obj.pro.calculateUnit3!''}</#if></td>
+			<#elseif row.code?? && 'pd.lastCostPrice'==row.code>
+			<td>
+			    <@shiro.hasPermission name='1101-s'>
+				${obj.pd.lastCostPrice!''}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'pd.lastSellPrice'==row.code>
+			<td>${obj.pd.lastSellPrice!''}</td>
+			<#elseif row.code?? && 'pd.lastCostDiscouont'==row.code>
+			<td>${obj.pd.lastCostDiscouont!''}</td>
+			<#elseif row.code?? && 'pd.lastSellDiscouont'==row.code>
+			<td>${obj.pd.lastSellDiscouont!''}</td>
+			<#elseif row.code?? && 'pd.lastCostDate'==row.code>
+			<td><#if (obj.pd.lastCostDate)??>${obj.pd.lastCostDate?string('yyyy-MM-dd hh:mm:ss')}</#if></td>
+			<#elseif row.code?? && 'pd.lastSellDate'==row.code>
+			<td><#if (obj.pd.lastSellDate)??>${obj.pd.lastSellDate?string('yyyy-MM-dd hh:mm:ss')}</#if></td>
+			<#elseif row.code?? && 'pro.barCode'==row.code>
+			<td><#if obj.pd.selectUnitId==1>${obj.pro.barCode1!''}<#elseif obj.pd.selectUnitId==2>${obj.pro.barCode2!''}<#elseif obj.pd.selectUnitId==3>${obj.pro.barCode3!''}</#if></td>
+			<#elseif row.code?? && 'pd.isMark'==row.code>
+			<td removeTrDb="true" hasMark="fz_priceDiscountTrack"><#if obj.pd.isMark==1>√</#if></td>
+		    </#if>
+			</#list>
+		</tr>
+		</#list>
+		</#if>
+	</tbody>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+
+	
+<div class="divider"></div>
+<div>
+    <a class="button" target="dialog" href="${base}/fz/priceDiscountTrack/toSearchDialog" rel="fz_priceDiscountSearchDialog" width="320" height="250" aimTitle="价格折扣跟踪" aimUrl="${base}/fz/priceDiscountTrack/dialogSearch/first" aimTabId="fz_priceDiscountView" aimDiv="${aimDiv}"><span>查询条件</span></a><!-- aimDiv值为all eq gt 下拉框改变赋值-->
+    <@shiro.hasPermission name='8-804-a'>
+    <a class="button" href="${base}/base/unit/option" module="navTab" title="选择往来单位" navTabType="priceDiscountTrack" which="unit"  btnPattern="selectMany" btnPattern2="selectMany" lookupgroup="unit"  lookuppk="id" width="600" height="410" ctarget="dialog"  url="${base}/base/product/option" ctitle="查询条件" width2="600" height2="410"  aimTabId="${listID!}"  aimUrl="${base}/fz/priceDiscountTrack/dialogSearch/newAdd"><span>新增</span></a>
+    </@shiro.hasPermission>
+    <@shiro.hasPermission name='8-804-u'>
+    <a id="fz_priceDiscountTrack_edit" class="button" href="${base}/fz/priceDiscountTrack/toEditPriceDiscount/{pid}" target="dialog" titile="客户价格跟踪录入" rel="fz_priceDiscountTrack_edit_dialog" width="350" height="350" ><span>修改</span></a>
+    <a class="button" target="ajaxTodo" href="${base}/fz/priceDiscountTrack/delete/{pid}" callback="removeTreeAjaxTodo" title="确定要删除所选的价格跟踪吗？"><span>删除</span></a>
+    <a class="button"  href="${base}/base/unit/option" module="navTab" title="选择往来单位" btnPattern="selectMany" lookupgroup="unit" lookuppk="id" width="600" height="410" ctarget="dialog" url="${base}/fz/priceDiscountTrack/delInfo/unit" ctitle="提示" aimTabId="proDetailBillView" aimTitle="商品明细账本" aimUrl="${base}/stock/stockStatus/proDetailBill" width2="400" height2="150" ><span>删除指定客户</span></a>
+    <a class="button"  href="${base}/base/product/option" module="navTab" title="选择商品信息" btnPattern="selectMany" lookupgroup="product" lookuppk="id" width="600" height="410" ctarget="dialog" url="${base}/fz/priceDiscountTrack/delInfo/prd" ctitle="提示" aimTabId="proDetailBillView" aimTitle="商品明细账本" aimUrl="${base}/stock/stockStatus/proDetailBill" width2="400" height2="150" ><span>删除指定商品</span></a>
+    <a class="button" href="#" onclick="fzHasMarkOrNot('button');"><span>清除标记</span></a>
+    </@shiro.hasPermission>
+    <a class="button" href="${base}/fz/priceDiscountTrack/toFormulaSet" param="unit.id,product.id,aimDiv" target="dialog" rel="fz_formulaset_dialog" width="450" height="350" ><span>生成</span></a>
+</div>
+<div style="float: right;">
+	<#assign privs = '8-804-p'/>
+	<#assign href = '${base}/fz/priceDiscountTrack/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

@@ -1,0 +1,34 @@
+<div class="panel">
+	<div>
+		<div id="sourceList" style="float:left; width: 39%;" layoutH="5">
+			<#include "source.html" />
+		</div>
+		
+		<div style="float: left; width: 190px;" layoutH="5">
+			<div style="position: absolute; top: 30%; margin-left:5px;">
+				<form enctype="text/plain" method="post" action="${base}/fz/baseMove/unit/move">
+					<p style="margin-left: 20px;">
+						<label for="peerNode5"><input type="radio" id="peerNode5"  name="moveNode" value="1" checked />同级节点</label>
+						<label for="sonNode5"><input type="radio" id="sonNode5"  name="moveNode" value="-1" />子级节点</label>
+					</p>
+					<p style="margin-left: 50px; margin-top: 20px;">
+						<a class="button"><span><button type="button" onclick="baseMoveFormAction(this)">开始搬移</button></span></a>
+					</p>
+				</form>
+				<div style="margin-top: 50px;">
+			      <fieldset style="margin-top: 10px;">
+				    <legend>搬移提示</legend>
+				    <div style="line-height: 30px;">1.在运用此功能时，务请谨慎。</div>
+				    <div style="line-height: 30px;">2.使用此功能需要配置操作权限。</div>
+				    <div style="line-height: 30px;">3.建议让其他操作员退出系统。</div>
+			      </fieldset>
+	       		</div>
+			</div>
+		</div>
+		
+		<div id="aimList" style="float:left; width: 39%;margin-left: 5px;" layoutH="5">
+			<#include "aim.html" />
+		</div>
+	</div>
+	
+</div>

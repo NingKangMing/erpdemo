@@ -1,0 +1,79 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/sellPrivilegeCount/dialogSearch/page" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <!-- ID用于树点击参数 -->
+	<input type="hidden" id="modelType" name="modelType" value="${modelType!''}"/>        <!-- prd(商品销售统计)  unit(单位销售统计) -->
+	<input type="hidden" id="unit.id" name="unit.id" value="${unitId!}"/>               <!-- 单位ID -->
+	<input type="hidden" id="staff.id" name="staff.id" value="${staffId!}"/>            <!-- 职员ID -->
+	<input type="hidden" id="unit.id" name="unit.fullName" value="${unitFullName!}"/>               <!-- 单位ID -->
+	<input type="hidden" id="staff.id" name="staff.name" value="${staffFullName!}"/>            <!-- 职员ID -->
+	
+	<input type="hidden" id="startDate" name="startDate" value="${startDate}"/>        <!--开始日期  -->
+	<input type="hidden" id="endDate" name="endDate" value="${endDate}"/>            <!-- 结束日期 -->
+	
+	<input type="hidden" name="whereComeDetail" value="other"> 
+</form>
+<#include "/WEB-INF/template/common/columnConfig/tableTotalWidthLink.html"/>
+<table class="table" rel="xs_sellPrivilegeCount" layoutH="230">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody id="reports_sellPrivilegecount_body">
+		<#if pageMap??&&pageMap.pageList??>
+		<#list pageMap.pageList as obj>
+		<tr nodeType1="${obj.node!1}" rel="${obj.id!}" cTarget="openNavTab"  sameId="reports_prd_xs_detail_id">
+			<td><a>${obj_index+1+pageMap.limit}</a></td>
+			<#list rowList as row>
+			<#if row.code?? && 'code'==row.code>
+			<td>${obj.code!''}</td>
+			<#elseif row.code?? && 'fullName'==row.code>
+			<td>
+			   <#if obj.fullName??>
+			   		${obj.fullName!''}
+			   <#else>
+			       <#if modelType=="unit">
+			     	     其它单位
+			       <#elseif modelType=="dept">
+			     	      其它部门
+			       <#elseif modelType=="staff">
+			     	      其它职员
+			       </#if>
+			   </#if>
+			</td>
+			<#elseif row.code?? && 'taxMoneys'==row.code>
+			<td><#if obj.taxMoneys??&&obj.taxMoneys!=0>${obj.taxMoneys!''}</#if></td>
+			<#elseif row.code?? && 'privilege'==row.code>
+			<td><#if obj.privilege??&&obj.privilege!=0>${obj.privilege!''}</#if></td>
+			<#elseif row.code?? && 'privilegeMoney'==row.code>
+			<td><#if obj.privilegeMoney??&&obj.privilegeMoney!=0>${obj.privilegeMoney!''}</#if></td>
+			</#if>
+			</#list>
+		</tr>
+		</#list>
+		</#if>
+	</tbody>
+	<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+
+	
+<div class="divider"></div>
+<div>
+    <a class="button" target="dialog" href="${base}/reports/sellPrivilegeCount/toSearchDialog/" rel="sellPrivilegeCountSearchDialog" width="330" height="430" aimTitle="销售优惠统计" aimUrl="${base}/reports/sellPrivilegeCount/dialogSearch/search" aimTabId="sellPrivilegeCountCountView"><span>查询条件</span></a>
+    <a class="button" id="reports_prd_xs_detail_id"
+     <#if modelType=="unit">
+     	aimTitle="单位销售优惠明细账本" aimTabId="unit_xs_privilege_detail" aimUrl="${base}/reports/sellPrivilegeCount/xsPrivilegeDetail/${modelType}" 
+     <#elseif modelType=="dept">
+     	aimTitle="部门销售优惠明细账本" aimTabId="dept_xs_privilege_detail" aimUrl="${base}/reports/sellPrivilegeCount/xsPrivilegeDetail/${modelType}" 
+     <#elseif modelType=="staff">
+     	aimTitle="职员销售优惠明细账本" aimTabId="staff_xs_privilege_detail" aimUrl="${base}/reports/sellPrivilegeCount/xsPrivilegeDetail/${modelType}" 
+     </#if>
+     onclick="getIdAndOpenNavTab(this,'reports_sellPrivilegecount_body','pagerForm');"><span>明细账本</span></a>
+</div>
+<div style="float: right;">
+	<#assign privs = '4-61-409-p'/>
+	<#assign href = '${base}/reports/sellPrivilegeCount/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

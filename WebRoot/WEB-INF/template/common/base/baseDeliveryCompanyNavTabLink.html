@@ -1,0 +1,7 @@
+<!--navTab 最基本的弹出   快递连接    eg:销售单-->
+<#--<#include "/WEB-INF/template/common/base/baseDeliveryCompanyNavTabLink.html"/>-->
+
+<input type="hidden" name="deliveryCompany.code" id="deliveryCompanyCode" value="${(bill.getBillDeliveryCompany(session.loginConfigId).code)!}"/>
+<input class="line" type="hidden" name="deliveryCompany.name" id="deliveryCompanyName" value="${(bill.getBillDeliveryCompany(session.loginConfigId).name)!}"/>
+<input class="line enter" type="text" name="deliveryCompany.name" id="deliveryCompanyName" value="${(bill.getBillDeliveryCompany(session.loginConfigId).name)!}"/>
+<a class="btnLook" id="deliveryCompany" type="GET" href="${base}/sys/deliveryCompany/option" module="navTab" warn="快递" lookupgroup="deliveryCompany" lookuppk="id" width="550" height="410">快递</a>

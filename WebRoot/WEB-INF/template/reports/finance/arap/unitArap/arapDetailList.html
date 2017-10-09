@@ -1,0 +1,71 @@
+<form id="pagerForm" onsubmit="return divSearch(this, 'arapDetailList');" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/finance/arap/unitArap/<#if arapType==0>getsDetailList<#else>paysDetailList</#if>" method="post">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!1}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!15}" />
+	<input type="hidden" name="orderField" value="${orderField!'arap.recodeTime'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+	
+	
+	<input type="hidden" name="startTime" id="startTime" value="${startTime!''}"/>   <!-- 开始时间-->
+	<input type="hidden" name="endTime" id="endTime"  value="${endTime!''}"/>   <!--结束时间 -->
+	<input type="hidden" name="isRcw" id="isRcw"  value="${isRcw!-1}"><!-- 是否显示红冲 -->
+	
+	<input type="hidden" name="selectedObjectId" id="selectedObjectId"  value="${selectedObjectId!}"><!-- 单位pids -->
+	<input type="hidden" name="unitPids" id="unitPids"  value="${unitPids!}"><!-- 单位pids -->
+	
+</form>
+<table class="table" rel="arapDetailList" layoutH="210">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody>
+		<#if pageMap ? exists>
+			<#list pageMap.pageList as tr>
+			<tr target="id" rel="${tr.arap.billId!}-${tr.arap.billTypeId!}" cRel="${tr.bt.billTableName!}" title="${tr.bt.name!}" url="${base}/common/bill/lookBill/${tr.arap.billId!}-${tr.arap.billTypeId!}" cTarget="openNavTab" <#if tr.arap.isRCW?? &&  tr.arap.isRCW!=0 >style="color: red;"</#if> >
+				<td width="40px;">${tr_index+1+pageMap.limit}</td>
+				<#list rowList as row>
+					<#assign columnObj = "" />
+					<#if row.code?? && ((row.code)?index_of(".")>-1)>
+						<#assign columnObj = (row.code)?substring(0,(row.code)?index_of(".")) />
+						<#assign columnParam = (row.code)?substring((row.code)?index_of(".")+1) />
+					<#else>
+						<#assign columnParam = row.code />
+					</#if>
+				
+					<#if row.code?? && ('arapMoney'==row.code)>
+						<td>
+							<#if tr[columnParam]?? && tr[columnParam] !=0 >${tr[columnParam]!}</#if>
+						</td>
+					<#elseif  row.code?? && ('arap.addMoney'==row.code) && (arapType?number)==0>
+						<td>${tr.arap.addMoney!''}</td>
+					<#elseif  row.code?? && ('arap.addMoney'==row.code) && (arapType?number)!=0>
+						<td>${tr.arap.subMoney!''}</td>
+					<#elseif  row.code?? && ('arap.subMoney'==row.code) && (arapType?number)==0>
+						<td>${tr.arap.subMoney!''}</td>
+					<#elseif  row.code?? && ('arap.subMoney'==row.code) && (arapType?number)!=0>
+						<td>${tr.arap.addMoney!''}</td>
+					<#else>
+						<#if columnObj?? && columnObj!="">
+							<td>${((tr[columnObj])[columnParam])!}</td>
+						<#else>
+							<td>${tr[columnParam]!}</td>
+						</#if>
+					</#if>
+				</#list>
+			</tr>
+			</#list>
+		</#if>
+	</tbody>
+	<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+
+<#include "/WEB-INF/template/unitl/paging.html"/>
+
+<div class="divider"></div>
+<div>
+	<a class="button" dynamic="true" target="navTab" href="${base}/common/bill/lookBill/{id}"><span>查看单据</span></a>
+</div>
+<div style="float: right;">
+   	<#assign privs = '6-103-104-617-p'/>
+	<#assign href = '${base}/reports/finance/arap/unitArap/printDetail/${arapType!}'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a>
+</div>

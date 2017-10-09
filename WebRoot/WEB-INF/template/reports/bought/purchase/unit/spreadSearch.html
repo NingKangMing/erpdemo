@@ -1,0 +1,104 @@
+<div class="pageContent center">
+	<h2 class="contentTitle">查询</h2>
+	<form>
+	    <input type="hidden" name="aimTabId" id="aimTabId"/>	     <!-- 设置目标Tab组件ID -->				
+	    <input type="hidden" name="aimUrl" id="aimUrl"/>	         <!-- 设置目标URl -->				
+	    <input type="hidden" name="aimTitle" id="aimTitle"/>         <!-- 设置目标标题 -->
+	    <input type="hidden" name="aimDiv" id="aimDiv"/>
+        <input type="hidden" id="spreadWay" name="spreadWay" value="${spreadWay!'0'}"/>         <!-- 过滤条件    下拉框改变赋值 -->
+	    <input type="hidden" id="supId" name="supId" value="${supId!0}"/>                               <!-- 父级ID -->
+	    
+		<div class="pageFormContent" layoutH="100">
+            <table>
+               <tr>
+                  <td style="vertical-align: top;">
+		        <fieldset style="text-align: center;">
+                <legend>列表选择</legend> 
+                <table>
+                <tr style="height:30px;">
+                <td>单位全名</td>
+                <td>
+                <input type="hidden" id="om_loginUser_storage_id" name="unitIds">
+					      <input id="om_loginUser_storage" type="text"  ondblclick="alertMutilUnitDialog(this,'${base}','om_loginUser_storage_id');" class="required"  size="30"/>
+					     <a class="btnLook" onclick="$('#om_loginUser_storage').dblclick();"></a>
+                </td>
+                </tr>
+                <#include "/WEB-INF/template/common/base/reports/staffReportLink.html"/>
+                <#--<tr style="height:30px;">
+	          	<td>职员全名</td>
+	          	<td>
+	          	    <input type="hidden" name="staff.id" value=""/>
+		            <input type="hidden" name="staff.name" value=""/>
+		            <input class="enter" type="text" name="staff.name" size="30" value=""/>
+		            <a class="btnLook" id="staffLook" type="POST" rel="staffLookDialog" href="${base}/base/staff/dialogChild/${(boughtBill.staffId)!0}"  warn="员工" lookupgroup="staff" lookuppk="id" width="600" height="410">职员</a>
+		        </td>
+                </tr>-->
+                
+                <#include "/WEB-INF/template/common/base/reports/storageReportLink.html"/>
+                <#--<tr style="height:30px;">
+                <td>仓库全名</td>
+                <td>
+                <input type="hidden" name="storage.id" id ="storageId"/>
+					<input class="textInput" id="storageName" size="30" name="storage.fullName" lookName="storage" lookId="storage.id"/>
+					<a class="btnLook" id="storageLook" type="POST" href="${base}/base/storage/dialogList" warn="仓库" lookupgroup="storage" lookuppk="id" width="600" height="410">仓库</a>
+                </td>
+                </tr>-->
+                </table>
+                </fieldset>
+</td>
+<td>
+		        <fieldset style="width: 110px; margin-left: 10px;">
+				<legend>选择单据</legend>
+				<div style="height:30px;">
+				   <input type="checkbox" checked="checked" name="orderTypes" value="5"/>进货单
+				</div>
+				<div style="height:30px;">
+				   <input type="checkbox" checked="checked" name="orderTypes" value="6"/>进货退货单
+				</div>
+				<#if isFreeVersion != "yes">
+				<div style="height:30px;">
+				   <input type="checkbox" checked="checked" name="orderTypes" value="12"/>进货换货单
+				</div>
+				</#if>
+				</fieldset>
+</td>
+</tr>
+
+<#include "/WEB-INF/template/common/base/reports/searchDateReportLink.html"/>
+<#--<tr>
+<td>
+                <fieldset style="text-align: center;">
+				<legend>选择时间</legend>
+				<table>
+				<tr style="height: 30px;">
+				 <td>开始日期:</td>
+				 <td>
+				 <input class="date" type="text" name="startDate" value="${startDate!}" hasClear="no" readonly="readonly"/></div>
+				 </td>
+				 </tr>
+				 <tr style="height: 30px;"> 
+				 <td>结束日期:</td>
+				 <td>
+	  	          <input class="date" type="text" name="endDate" value="${endDate!}" hasClear="no" readonly="readonly"/></div>
+	  	          </td>
+	  	         </tr>
+	  	         <tr>
+	  	         <td colspan="2" align="center">
+				<input name="userSearchDate" type="checkbox" checked="checked" value="checked"/>保存时间条件
+				</td>
+			   </tr>
+			   </table>
+				</fieldset>
+				</td>
+				</tr>-->
+				</table>
+		    </div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="button"  fresh="true" hasBeforCall="unitOrStorageMulitSelect" onclick="fristOpenNavTabAfterLoadData(this,'unit','${base}')">确认</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>
+

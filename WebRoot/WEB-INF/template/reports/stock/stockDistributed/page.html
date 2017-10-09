@@ -1,0 +1,17 @@
+<div class="panel">
+	<div class="pageContent" id="stockDistributedPage">
+		<div class="textContent center" style="height: 80px;">
+		     <div>
+		         <span style="font:bold 18px '宋体',Arial,Times;">库存状况分布</span>
+		     </div>
+		     <div>
+		     	<span style="float: left; margin-left:30px; line-height: 50px;">价格方式：${priceMode!'库存成本价'}</span>
+		     </div>
+		     <#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+		</div>
+		
+		<div id="stockDistributedList">
+			<#include "list.html" />
+		</div>
+	</div>
+</div>

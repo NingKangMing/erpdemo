@@ -1,0 +1,57 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/finance/costDistribution/${disType!}-second" onsubmit="return dwzSearch(this, 'costDistributionList');">
+	
+	<input type="hidden" name="pageNum" value="${pageMap.pageNum!}" />
+	<input type="hidden" name="numPerPage" value="${pageMap.numPerPage!}"/>
+	
+	<input type="hidden" id="disTypes"  name="disType" value="${params.disType!}"/>
+	
+	<input type="hidden" id="startTime" name="startTime" value="${(params.startTime)!}"/>        <!--开始日期  -->
+	<input type="hidden" id="endTime" name="endTime" value="${(params.endTime)!}"/>            <!-- 结束日期 -->
+
+</form>
+<table class="table" rel="costDistributionList" layoutH="200">
+	<thead>
+		<tr>
+			<th colspan="3" align="center"></th>
+			  <#list objList as obj>
+			    <th align="center">${obj.fullName}</th> 
+			  </#list>
+			<th align="center">合计</th>
+		</tr>
+		<tr>
+		   <th width="45px">行号</th>
+		   <th width="100px" align="center">科目编号</th>
+		   <th width="100px" align="left">科目全名</th>
+		  <#list objList as obj>
+		      <th width="100px" align="center" >金额</th> 
+		  </#list>
+		   <th width="100px" align="center" >金额</th>
+		</tr>
+	</thead>
+	<tbody>
+		<#list pageMap.pageList as bill>
+		<tr>
+			<td>${bill_index+1+pageMap.limit}</td>
+            <td>${bill.code!}</td>
+            <td>${bill.blank!}${bill.fullName!}</td>
+		    <#list objList as obj>
+		       <td>${(bill["money"+obj.id])!}</td>
+		    </#list>
+		    <td>${bill.allMoney!}</td>
+		</tr>
+		</#list>
+	</tbody>
+</table>
+
+
+<#include "/WEB-INF/template/unitl/paging.html"/>	
+<div class="divider"></div>
+<div>
+    <a class="button" mask="true" caption="分布类型选择" target="dialog" href="${base}/reports/finance/costDistribution/toSearch" param="startTime,endTime,disTypes" rel="costDistributionDialog" width="200" height="280" aimTitle="费用分布" aimUrl="${base}/reports/finance/costDistribution/depm-search" aimTabId="costDistributionView"><span>查询条件</span></a>
+</div>
+<div style="float: right;">
+	<#assign href = '${base}/reports/finance/costDistribution/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

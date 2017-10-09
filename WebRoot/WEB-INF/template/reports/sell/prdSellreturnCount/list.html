@@ -1,0 +1,103 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/sellReturnCount/dialogSearch/page" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <!-- ID用于树点击参数 -->
+	<input type="hidden" id="modelType" name="modelType" value="${modelType!}"/>        <!-- prd(商品销售统计)  unit(单位销售统计) -->
+	<input type="hidden" id="product.id" name="product.id" value="${productId!}"/>      <!-- 商品ID -->
+	<input type="hidden" id="unit.id" name="unit.id" value="${unitId!}"/>               <!-- 单位ID -->
+	<input type="hidden" id="staff.id" name="staff.id" value="${staffId!}"/>            <!-- 职员ID -->
+	<input type="hidden" id="storage.id" name="storage.id" value="${storageId!}"/>      <!-- 仓库ID -->
+	
+	
+	<input type="hidden" id="product.id" name="product.fullName" value="${productFullName!}"/>      <!-- 商品ID -->
+	<input type="hidden" id="unit.id" name="unit.fullName" value="${unitFullName!}"/>               <!-- 单位ID -->
+	<input type="hidden" id="staff.id" name="staff.name" value="${staffFullName!}"/>            <!-- 职员ID -->
+	<input type="hidden" id="storage.id" name="storage.fullName" value="${storageFullName!}"/>      <!-- 仓库ID -->
+	
+	
+	
+	<input type="hidden" id="startDate" name="startDate" value="${startDate}"/>        <!--开始日期  -->
+	<input type="hidden" id="endDate" name="endDate" value="${endDate}"/>            <!-- 结束日期 -->
+	<input type="hidden" id="supId" name="supId" value="${supId}"/>                               <!-- 父级ID -->
+	<input type="hidden" id="node" name="node" value="${node!2}"/> 
+	<#include "/WEB-INF/template/base/baseSearchComDialog/searchConditionInputs.html"/><!--报表基本信息筛选条件保存 -->
+</form>
+<#include "/WEB-INF/template/common/columnConfig/tableTotalWidthLink.html"/>
+<table class="table" rel="xsth_prdSellCount" layoutH="230">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody id="reports_prdsellreturncount_body">
+		<#if pageMap??&&pageMap.pageList??>
+		<#list pageMap.pageList as product>
+	    <#if product.node==2>
+		<tr nodeType1="${product.node!'2'}" rel="${product.id!0}" trel="reports_prdsellreturncount"  crel="xsth_prdSellCount" cTarget="ajax" url="${base}/reports/sellReturnCount/dialogSearch/tree-${modelType}-${product.id}" relevancyIds="unit.id,staff.id,storage.id,startDate,endDate">
+		<#else>
+		<tr nodeType1="${product.node!'1'}" rel="${product.id!0}" cTarget="openNavTab"  sameId="reports_prd_xs_detail_id">
+		</#if>
+			<td><a>${product_index+1+pageMap.limit}</a><#if product.node==2>..</#if></td>
+			<#list rowList as row>
+			<#if row.code?? && 'code'==row.code>
+			<td>${product.code!''}</td>
+			<#elseif row.code?? && 'fullName'==row.code>
+			<td>${product.fullName!''}</td>
+			<#elseif row.code?? && 'smallName'==row.code>
+			<td>${product.smallName!''}</td> 
+			<#elseif row.code?? && 'spell'==row.code>
+			<td>${product.spell!''}</td> 
+			<#elseif row.code?? && 'standard'==row.code>
+			<td>${product.standard!''}</td> 
+			<#elseif row.code?? && 'model'==row.code>
+			<td>${product.model!''}</td> 
+			<#elseif row.code?? && 'field'==row.code>
+			<td>${product.field!''}</td>
+			<#elseif row.code?? && 'savePath'==row.code>
+			<td>
+			<#if (product.savePath)??>
+			    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(product.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(product.savePath)!}"  width="20px" height="20px"/>
+            </#if>
+			</td>
+			<#elseif row.code?? && 'sellAmount'==row.code>
+			<td><#if product.sellAmount??&&product.sellAmount!=0>${product.sellAmount!''}</#if></td>
+			<#elseif row.code?? && 'sellTaxMoney'==row.code>
+			<td><#if product.sellTaxMoney??&&product.sellTaxMoney!=0>${product.sellTaxMoney!''}</#if></td>
+			<#elseif row.code?? && 'sellInAmount'==row.code>
+			<td><#if product.sellInAmount??&&product.sellInAmount!=0>${product.sellInAmount!''}</#if></td>
+			<#elseif row.code?? && 'sellInMoney'==row.code>
+			<td><#if product.sellInMoney??&&product.sellInMoney!=0>${product.sellInMoney!''}</#if></td>
+			<#elseif row.code?? && 'sellOutAmount'==row.code>
+			<td><#if product.sellOutAmount??&&product.sellOutAmount!=0>${product.sellOutAmount!''}</#if></td>
+			<#elseif row.code?? && 'sellOutMoney'==row.code>
+			<td><#if product.sellOutMoney??&&product.sellOutMoney!=0>${product.sellOutMoney!''}</#if></td>
+			<#elseif row.code?? && 'returnPrecent'==row.code>
+			<td><#if product.returnPrecent??&&product.returnPrecent!=0>${product.returnPrecent!''}</#if></td>
+			</#if>
+			</#list>
+		</tr>
+		</#list>
+		</#if>
+	</tbody>
+	<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+
+<div class="divider"></div>
+<div>
+    <a class="button" target="dialog" href="${base}/reports/sellReturnCount/toSearchDialog/prd" rel="prdSellReturnCountSearchDialog" width="330" height="400" aimTitle="商品销售退货统计" aimUrl="${base}/reports/sellReturnCount/dialogSearch/search" aimTabId="prdSellReturnCountView"><span>查询条件</span></a>
+    
+    <#if node?? && node == 1>
+		<a class="buttonDisabled" href="javascript:;"><span>列表</span></a>
+	<#else>
+		<a class="button" href="${base}/reports/sellReturnCount/dialogSearch/line" target="ajax" rel="xsth_prdSellCount"  relevancyIds="modelType,pageOrderTypes,unit.id,staff.id,storage.id,startDate,endDate,aimDiv,supId"><span>列表</span></a>
+	</#if>
+    
+    <a class="button" target="dialog" href="${base}/base/product/toReportBaseFilter/pagerForm-product" rel="report_product_filtter" width="400" height="210" aimTitle="商品销售退货统计" aimUrl="${base}/reports/sellReturnCount/dialogSearch/search" aimTabId="prdSellReturnCountView"><span>商品筛选</span></a>   
+    
+</div>
+<div style="float: right;">
+	<#assign privs = '4-61-407-p'/>
+	<#assign href = '${base}/reports/sellReturnCount/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

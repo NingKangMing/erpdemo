@@ -1,0 +1,35 @@
+<div class="pageContent">
+    <form class="tableForm">
+	<table class="table" layoutH="57"  targetType="dialog">
+		<thead>
+		<tr>
+		   <th width="40" align="center">行号</th>
+		   <th width="100" align="center">商品编号</th>
+		   <th width="120" align="center">商品全名</th>
+		   <th width="50" align="center">单位</th>
+		   <th width="70" align="center">价格</th>
+		</tr>
+	  </thead>
+	  <tbody>
+	    <#list recordList as record>
+		<tr>
+		   <input ccname="trIndex" type="hidden" value="${record.trIndex}"/>
+		   <input ccname="selectUnitIds" type="hidden" value="${record.selectUnitIds}"/>
+		   <input ccname="type" type="hidden" value="${record.type}"/>
+		   <td><a>${record_index+1}</a></td>
+		   <td>${record.prdCode}</td>
+		   <td>${record.prdFullName}</td>
+		   <td>${record.prdUnitNmae}</td>
+		   <td><input ccname="costPrice" class="stealth number" type="text" /></td>
+		</tr>
+		</#list>
+	  </tbody>
+	</table>
+	</form>
+</div>
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+    <a style="margin-left: 160px;" class="button" onclick="xsNagetiveStockPrice();"><span>确定</span></a>
+	<div style="margin-left: 30px;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+</div>

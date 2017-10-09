@@ -1,0 +1,27 @@
+<div class="panel pageContent">
+	<div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">制单人收款统计</span></label>
+				</li>
+			</ul>
+			<ul class="searchContent" style="margin-top: 5px;">
+				<li>
+					<span style="margin-left: 10px;">查询时间：</span>${(params.startTime)!}&nbsp;&nbsp;至&nbsp;&nbsp;${(params.endTime)!}
+				</li>
+				<#assign columnType = 'cw506'/>
+				<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+			</ul>
+		</div>
+	</div>
+	<div layoutH="60">
+		<div id="returnMomeyUserList" style="padding:2px; padding-top: 0px;" layoutH="70">
+		 
+			<#include "list.html"/>
+		</div>
+	</div>
+</div>
+
+
+

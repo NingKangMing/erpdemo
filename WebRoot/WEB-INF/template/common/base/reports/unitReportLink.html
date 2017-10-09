@@ -1,0 +1,14 @@
+<!--报表   基本信息查询框 -->
+<#--<#include "/WEB-INF/template/common/base/reports/unitReportLink.html"/>-->
+<tr style="height: 30px;">
+				              <td>单位全名:</td>
+				              <td>
+				                  <input type="hidden" name="unit.id" id="unitId"/>
+							      <input class="line" type="hidden" name="unit.fullName" id="unitName"
+							      <#if click??>ondblclick="alertMutilUnitDialog(this,'${base}','om_loginUser_storage_id');"</#if>/>
+							      <input class="textInput enter" type="text" size="30" name="unit.fullName" id="unitName"/>
+							      <a class="btnLook" id="unitLook" href="${base}/base/unit/option/0" <#if btnPattern??>btnPattern = "${btnPattern}"</#if>
+							      <#if click??>onclick="$('#om_loginUser_storage').dblclick();"</#if>
+							      warn="单位" lookupgroup="unit" type="post" lookuppk="id" width="600" height="410">单位</a>
+				              </td>
+				           </tr>

@@ -1,0 +1,82 @@
+<div class="panel" id="deptBusinessPage">
+	<div class="pageContent">
+		<div class="textContent center" style="height: 80px;">
+		     <div>
+		         <span style="font:bold 18px '宋体',Arial,Times;">部门业务统计</span>
+		     </div>
+		     <div>
+		     	<span style="float: left; margin-left:30px; line-height: 30px;">
+		     		查询日期：${startTime!''}&nbsp;&nbsp;至&nbsp;&nbsp;${endTime!''}
+		     	</span>
+		     </div>
+		     <#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+		</div>
+		<div style="padding:0px 2px 0px 10px;" layoutH="30">
+			<form id="pagerForm" class="pageForm required-validate" enctype="text/plain" onsubmit="return navTabSearch(this);" method="post" action="${base}/reports/finance/businessCount/deptBusiness">
+				<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+				<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+				<input type="hidden" name="orderField" value="${orderField!'deptRank'}" /><!--查询排序-->
+			    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+			    
+			    
+			    <input type="hidden" name="selectedObjectId" id="selectedObjectId" value="${objectId!0}" /><!--   默认选中对象的Id -->
+				<input type="hidden" name="startTime" id="startTime" value="${startTime!''}"/>   <!-- 开始日期-->
+				<input type="hidden" name="endTime" id="endTime"  value="${endTime!''}"/>   <!--结束日期 -->
+				
+			</form> 
+			
+			<table class="table" layoutH="220">
+				<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+				<tbody>
+					<#list pageMap.pageList as recode>
+					<tr objectId="${objectId!0}" target="pid" rel="${recode.dept.id!}" >
+						<td><a>${recode_index+1+pageMap.limit}</a></td>
+						<#list rowList as row>
+							<#assign columnObj = "" />
+							<#if row.code?? && ((row.code)?index_of(".")>-1)>
+								<#assign columnObj = (row.code)?substring(0,(row.code)?index_of(".")) />
+								<#assign columnParam = (row.code)?substring((row.code)?index_of(".")+1) />
+							<#else>
+								<#assign columnParam = row.code />
+							</#if>
+						
+							<#if row.code?? && ('inMoney'==row.code || 'inWaitMoney'==row.code || 'outMoney'==row.code || 'outWaitMoney'==row.code || 'costMoney'==row.code || 'profit'==row.code || 'otherIn'==row.code || 'costTotal'==row.code || 'returenMoney'==row.code || 'periodProfit'==row.code)>
+								<td>
+									<#if (recode[columnParam])?? && (recode[columnParam]) !=0 >
+										<@shiro.hasPermission name='1101-s'>
+											${(recode[columnParam])!}
+										</@shiro.hasPermission>
+										<@shiro.lacksPermission name='1101-s'>
+											***  
+										</@shiro.lacksPermission>
+									</#if>
+								</td>
+							<#else>
+								<#if columnObj?? && columnObj!="">
+									<td>${((recode[columnObj])[columnParam])!}</td>
+								<#else>
+									<td>${recode[columnParam]!}</td>
+								</#if>
+							</#if>
+						</#list>
+					</tr>
+					</#list>
+				</tbody>
+				<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+			</table>
+			<#include "/WEB-INF/template/unitl/paging.html"/>
+			<!--divider虚线-->
+			<div class="divider"></div>
+			<div>
+				<a class="button" href="${base}/common/dateDialog" aimTabId="businessCountDeptView" aimTitle="部门业务统计" aimUrl="${base}/reports/finance/businessCount/deptBusiness" caption="查询条件" target="dialog" rel="dateDialog" width="300" height="250" type="post"><span>查询条件</span></a>
+			</div>
+			<div style="float: right;">
+		    	<#assign privs = '6-103-106-633-p'/>
+	<#assign href = '${base}/reports/finance/businessCount/print/3'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+				<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,174 @@
+<form id="pagerForm" enctype="text/plain" onsubmit="return divSearch(this, 'stockDistributedList');" action="${base}/reports/stock/stockDistributed/list" method="post">
+	<input type="hidden" name="pageNum" value="${pageMap.pageNum!1}" />
+	<input type="hidden" name="numPerPage" value="${pageMap.numPerPage!15}" />
+	<input type="hidden" name="orderField" value="${orderField!'pro.rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+		
+	<input type="hidden" id="node" name="node" value="${node!0}"/>
+	<input type="hidden" id="supId" name="supId" value="${supId!0}"/>
+	<input type="hidden" name="selectedObjectId" id="selectedObjectId" value="${objectId!0}" /><!--   默认选中对象的Id -->
+	
+	<input type="hidden" id="storageId" name="storage.id"/>
+	<input type="hidden" id="priceWay" name="priceWay" value="${priceWay!'stockPrice'}"/>
+	<input type="hidden" id="unitPattern" name="unitPattern" value="${unitPattern!'baseUnit'}"/>
+	
+	<#include "/WEB-INF/template/base/baseSearchComDialog/searchConditionInputs.html"/><!--报表基本信息筛选条件保存 -->
+	
+</form>
+<table class="table" rel="stockDistributedList" layoutH="245">
+		<thead>
+			<tr>
+			    <#assign colspanSub = 0>
+			    <#list rowList as row>
+			       <#if row.code?? && row.code=='pro.calculateUnit1' && 'baseUnit'!=unitPattern>
+			         <#assign colspanSub = colspanSub+1>
+			       <#elseif row.code?? && row.code=='pro.calculateUnit2' && 'helpUnit1'!=unitPattern>
+			         <#assign colspanSub = colspanSub+1>
+			       <#elseif row.code?? && row.code=='pro.calculateUnit3' && 'helpUnit2'!=unitPattern>
+			         <#assign colspanSub = colspanSub+1>
+			       </#if>
+			    </#list>
+				<th colspan="${rowList.size()-colspanSub+1!}">&nbsp;</th>
+				<#list storageList as storage>
+				<th colspan="2" align="center">${storage.fullName!}</th>
+				</#list>
+				<th colspan="2" align="center">合计</th>
+			</tr>
+			<tr>
+				<th width="50" align="center" >行号</th>
+				<#list rowList as row>
+			   	   <th width="${(row.width)!100}px" <#if row.isOrder?? && row.isOrder==2> orderField="${row.code}"  <#if orderField?? && row.code==orderField>class="${(orderDirection)!'asc'}"<#else>class="asc"</#if> </#if>>
+					 ${(row.showName)!(row.name)!}
+				   </th>
+		 		</#list>
+				
+				<#list storageList as storage>
+					<th width="100" align="center" orderField="amount${storage_index}" <#if orderField?? && 'amount${storage_index}'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>数量</th>
+					<th width="100" align="center" orderField="money${storage_index}" <#if orderField?? && 'money${storage_index}'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>金额</th>
+				</#list>
+				<th width="100" align="center">数量</th>
+				<th width="100" align="center">金额</th>
+			</tr>
+		</thead>
+		<tbody>
+			<#list pageMap.pageList as recode>
+			<#if recode.pro.node==2>
+			<tr objectId="${objectId!0}" target="pid"  rel="${recode.pro.id}"  crel="stockDistributedList" serialize="true" cTarget="ajax"  url="${base}/reports/stock/stockDistributed/list/${recode.pro.id}"  isSelect="true">
+			<#else>
+			<tr objectId="${objectId!0}" target="pid" rel="${recode.pro.id}" isSelect="true" cTarget="citeEvent" citeEventModuleId="detailBillBtn" citeEventType="click" >
+			</#if>
+				<td><a>${recode_index+1+pageMap.limit}</a><#if recode.pro.node==2>..</#if></td>
+				<#list rowList as row>
+					<#assign columnObj = "" />
+					<#if row.code?? && ((row.code)?index_of(".")>-1)>
+						<#assign columnObj = (row.code)?substring(0,(row.code)?index_of(".")) />
+						<#assign columnParam = (row.code)?substring((row.code)?index_of(".")+1) />
+					<#else>
+						<#assign columnParam = row.code />
+					</#if>
+				
+					<#if row.code?? && 'proUnit'==row.code>
+					   <#if unitPattern?? && 'baseUnit'==unitPattern>
+						   <td>${recode.pro.calculateUnit1!}</td>
+					   <#elseif unitPattern?? && 'helpUnit1'==unitPattern>
+					   	   <td>${recode.pro.calculateUnit2!}</td>
+					   <#elseif unitPattern?? && 'helpUnit2'==unitPattern>
+					       <td>${recode.pro.calculateUnit3!}</td>
+					   </#if>
+					<#elseif row.code?? && 'pro.savePath'==row.code>
+						<td>
+							<#if (recode.pro.savePath)??>
+							    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(recode.pro.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(recode.pro.savePath)!}"  width="20px" height="20px"/>
+				            </#if>
+						</td>
+					<#else>
+						<#if columnObj?? && columnObj!="">
+							<td>${((recode[columnObj])[columnParam])!}</td>
+						<#else>
+							<td>${recode[columnParam]!}</td>
+						</#if>
+					</#if>
+				</#list>
+				
+				<#assign amountTot = 0 />
+				<#assign moneyTot = 0 />
+				<#list storageList as storage>
+				<#assign amountTot = amountTot + (recode["amount"+storage_index])!0 />
+				<#assign moneyTot = moneyTot + (recode["money"+storage_index])!0 />
+				<td>${(recode["amount"+storage_index])!}</td>
+				<td>
+					<#if (recode["money"+storage_index])??>
+						<@shiro.hasPermission name='1101-s'>
+					    	${(recode["money"+storage_index])!}
+					    </@shiro.hasPermission>
+						<@shiro.lacksPermission name='1101-s'>
+							***  
+					    </@shiro.lacksPermission>
+					</#if>
+			    </td>
+				</#list>
+				
+				<td><#if amountTot?? && amountTot!=0>${amountTot!}</#if></td>
+				<td>
+					<#if moneyTot?? && moneyTot!=0>
+						<@shiro.hasPermission name='1101-s'>
+					    	${moneyTot!}
+					    </@shiro.hasPermission>
+						<@shiro.lacksPermission name='1101-s'>
+							***  
+					    </@shiro.lacksPermission>
+				    </#if>
+			    </td>
+			</tr>
+			</#list>
+		</tbody>
+		<tfoot>
+			<tr isSelect="false" style="border-top: #D0D0D0 solid 1px">
+				<td>合计</td>
+				<#list rowList as row>
+		             <td></td>
+		        </#list>
+				
+				<#list storageList as storage>
+				<td hascount="true"></td>
+				<td hascount="true"></td>
+				</#list>
+				
+				<td hascount="true"></td>
+				<td hascount="true"></td>
+			</tr>
+		</tfoot>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+<!-- <a class="buttonDisabled" href="javascript:;"><span>图形对比</span></a> -->
+<div class="divider"></div>
+<div>
+	<#if node?? && node == 1>
+		<a class="buttonDisabled"><span>列表</span></a>
+	<#else>
+		<a class="button" params="node" vals="1" target="linePost" rel="stockDistributedList"><span>列表</span></a>
+	</#if>
+	<a id="detailBillBtn" class="button"  href="${base}/base/storage/dialogList" module="navTab" title="仓库" lookupgroup="storage" lookuppk="id" width="600" height="410" ctarget="dialog" url="${base}/common/dateDialog" ctitle="查询条件" aimTabId="proDetailBillView" aimTitle="商品明细账本" aimUrl="${base}/stock/stockStatus/proDetailBill" width2="300" height2="250" ><span>明细账本</span></a>
+	<!-- <a class="button" href="${base}/common/priceWay" param="priceWay" aimDiv="stockDistributedList" target="dialog" rel="priceWay"  width="220" height="300"><span>价格方式</span></a>  -->
+	<a class="button" href="${base}/common/unitPattern" param="unitPattern" aimDiv="stockDistributedList" target="dialog" rel="unitPattern"  width="220" height="300"><span>单位选择</span></a>
+	<!-- <a class="buttonDisabled" href="javascript:;"><span>我的查询</span></a> -->
+	
+	<a class="button" aimtabid="stockDistributedView" aimurl="${base}/reports/stock/stockDistributed" aimtitle="库存状况分布 " height="210" width="400" rel="report_product_filtter" href="${base}/base/product/toReportBaseFilter/pagerForm-product" target="dialog">
+		<span>商品筛选</span>
+	</a>
+	
+	<#if supId?? && supId!=0>
+		<a class="button" href="${base}/reports/stock/stockDistributed/list/${pSupId!0}-${supId!0}" serialize="true" type="post" target="ajax" rel="stockDistributedList"><span>上级</span></a>
+	<#else>
+		<a class="buttonDisabled" href="javascript:;"><span>上级</span></a>
+	</#if>
+		
+</div>
+<div style="float: right;">
+    <#assign privs = '5-81-513-p'/>
+	<#assign href = '${base}/reports/stock/stockDistributed/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

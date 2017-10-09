@@ -1,0 +1,63 @@
+<div class="pageContent">
+   <form action="${base}/common/searchDialog/go" method="post" class="tableForm" enctype="text/plain" onsubmit="return validateCallback(this,aioDialogPostCallBreak)">
+      <input type="hidden" id="aimTabId" name="aimTabId"  value=""/>
+      <input type="hidden" id="aimUrl"   name="aimUrl"   value=""/>
+      <input type="hidden" id="aimTitle" name="aimTitle"  value=""/>
+      <input type="hidden" id=aimDiv name="aimDiv" value="">
+      
+      <!-- 动态需要的参数 -->
+      <#if paraMap?exists>
+          <#list paraMap.keySet() as k>
+          	<input type="hidden" id="${k}" name="${k}" value="${paraMap.get(k)}"/>
+          </#list>
+      </#if>
+      
+      <div layoutH="35">
+	       <fieldset layoutH="50">
+			    <legend>选择条件</legend>
+				   <table align="right" height="180px;">
+				   <#include "/WEB-INF/template/common/base/reports/productReportLink.html"/>
+					   	<#--<tr>
+					   		<td align="right">商品全名：</td>
+					   		<td>
+					   			<input type="hidden" id="productId" name="product.id" value=""/>
+				   	    		<input class="required" name="product.fullName" lookName="product" lookId="product.id" />
+				        		<a class="btnLook" id="productLook" href="${base}/base/product/option" warn="商品" lookupgroup="product" lookuppk="id" width="600" height="410">商品</a>
+				        	</td>
+					   	</tr>-->
+					   	<tr>
+					   		<td align="right">批号：</td>
+					   		<td>
+					   			<input style="width:130px;" name="batchNum"/>
+				   			</td>
+					   	</tr>
+					   	<tr>
+					   		<td align="right">开始日期：</td>
+					   		<td>
+					   			<input type="text" class="date required" name="startTime" dateFmt="yyyy-MM-dd" value="${startTime!''}" hasClear="no" readonly="readonly"/>
+				   			</td>
+					   	</tr>
+					   	<tr>
+					   		<td align="right">结束日期：</td>
+					   		<td>
+					   			<input type="text" class="date required" name="endTime" dateFmt="yyyy-MM-dd" value="${endTime!''}" hasClear="no" readonly="readonly"/>
+				   			</td>
+					   	</tr>
+					   	<tr>
+					   		<td colspan="2" align="center">
+					   			<div align="center"><input name="userSearchDate" type="checkbox" checked="checked" value="checked"/>保存时间条件</div>
+					   		</td>
+					   	</tr>
+				   </table>
+		   </fieldset>
+	 </div>
+	 <!--提交按钮  -->
+	 <div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+		</ul>
+	 </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

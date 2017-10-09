@@ -1,0 +1,20 @@
+ <#assign width = 110/>
+ <#assign left = 100/>
+ <#if typeNum==5>
+   <#assign width = 150/>
+   <#assign left = 140/>
+ </#if>
+<div style="float:left; width:${width}px;border:solid 1px #CCC;padding:1px;" layoutH="170">
+	<div style=""  layoutH="170" class="typeList">
+	  <ul target="ajax" id="permissionTypeUl">
+	       <#list typeList as type>
+	          <#if type.pid?? && type.pid == typeNum>
+	                 <li style="cursor: pointer;padding:2px;padding-top:8px;height:20px;"><a href="${base}/sys/permission/toPermission/${type.id!}-${typeNum!}-{userId}" target="ajax"  rel="permissionList${typeNum!}">${(type.name)!}</a></li>
+	          </#if>
+		   </#list>
+       </ul>
+	</div>
+</div>
+<div id="permissionList${typeNum!}"  style="margin-left:${left}px;" layoutH="170">
+     <#include "permission.html"/> 
+</div>

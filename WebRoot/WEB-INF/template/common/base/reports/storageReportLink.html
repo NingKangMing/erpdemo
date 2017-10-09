@@ -1,0 +1,15 @@
+<!--报表   基本信息查询框 -->
+<#--<#include "/WEB-INF/template/common/base/reports/storageReportLink.html"/>-->
+<tr style="height: 30px;">
+   <td style="text-align: right;">仓库全名:</td>
+   <td>
+       <input type="hidden" name="storage.id" id ="storageId"/>
+       <input type="hidden" name="storage.code" id="storageCode"/>
+       <input class="textInput" id="storageName" size="30" name="storage.fullName" 
+       <#if click??>ondblclick="alertMutilStorageDialog(this,'${base}','om_loginUser_storage_id');"</#if> lookName="storage" lookId="storage.id"/>
+       <a class="btnLook" id="storageLook" type="POST" href="${base}/base/storage/dialogList"
+       <#if btnPattern??>btnPattern = "${btnPattern}"</#if>
+       <#if click??>onclick="$('#om_loginUser_storage').dblclick();"</#if>
+       warn="仓库" lookupgroup="storage" lookuppk="id" width="600" height="410">仓库</a>                
+   </td>
+</tr>

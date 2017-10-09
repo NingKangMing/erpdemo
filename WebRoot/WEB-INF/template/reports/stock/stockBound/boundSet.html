@@ -1,0 +1,30 @@
+<div class="pageContent">
+	<h2 class="contentTitle">${storageName!}报警设置</h2>
+	<form action="${base}/reports/stock/stockBound/boundSet" class="tableForm" enctype="text/plain" method="post" onsubmit="return validateCallback(this,aioDialogAjaxDone)">
+        <input type="hidden" name="stockBound.productId"  value="${productId!0}"/>
+		<input type="hidden" name="stockBound.storageId" value="${storageId!0}"/>
+		<input type="hidden" name="stockBound.id" value="${(stockBound.id)!0}"/>
+		
+		
+		<input type="hidden" id="confirmType" value="reloadNavTab"/><!-- 关闭时触发 -->
+		<input type="hidden" id="aimUrl" value="${base}/reports/stock/stockBound"/><!-- 当前是查询状态关闭dialog时刷新NavTab -->
+		<input type="hidden" id="isSearch" value="${isSearch!0}"/><!-- 是否查询 -->
+		
+		<div class="pageFormContent" layoutH="100">
+			<div style="line-height: 50px;" align="center">
+				上限报警为：
+				<input class="number" name="stockBound.max" value="${(stockBound.max)!}"/>
+			</div>
+			<div style="line-height: 50px;" align="center">
+				下限报警为：
+				<input class="number" name="stockBound.min" value="${(stockBound.min)!}"/>
+			</div>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>

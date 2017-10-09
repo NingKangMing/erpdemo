@@ -1,0 +1,56 @@
+<div class="pageContent">
+   <form action="${base}/sys/permission/password" method="post" class="pageForm tableForm" enctype="text/plain" onsubmit="return validateCallback(this,dialogReloadDialog)">
+      <input type="hidden" name="userId" value="${(userId)!}"/>
+       <h2 class="contentTitle">复制所选用户的权限</h2>
+     
+       <table class="table" layoutH="95"  targetType="dialog">
+               <thead>
+					<tr>
+						<th width="50px">
+							行号
+						</th>
+						<th width="100px">
+							职员编号
+						</th>
+						<th width="100px">
+							职员全称
+						</th>
+						<th  width="100px">
+							登录名
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#list userList as user>
+					
+					   <tr  target="id" rel="${user.id}" cTarget="ajaxBack" url="${base}/sys/permission/copy/${user.id}-${userId!}" callback="dialogPartTrigger">
+				
+						<td>
+							${user_index+1}
+						</td>
+						<td>
+							${(user.staffCode)!}
+						</td>
+						<td>
+							${(user.staffName)!}
+						</td>
+						<td>
+							${(user.username)!}
+						</td>
+					  </tr>
+					</#list>
+					
+				</tbody>
+       </table>
+	
+	 
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent" onclick="selectTrdbClick()"><button type="button">确定</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+		</ul>
+	  </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

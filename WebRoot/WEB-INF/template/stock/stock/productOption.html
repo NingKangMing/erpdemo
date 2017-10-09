@@ -1,0 +1,150 @@
+<!-- 单据录入  库存商品 -->
+<div id="b_product_dialog_paging">
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/stock/stock/orderDialog/page-${supId!0}" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${(pageMap.get('pageNum'))}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.get('numPerPage'))!}" />
+	<input type="hidden" name="orderField" value="${orderField!'product.rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <input type="hidden" name="selectedObjectId" id="selectedObjectId" value="${objectId!0}"/>        <!--   默认选中行对象的Id -->
+    
+    <input type="hidden" name="oldSelectCheckBoxIds" id="b_dialog_product_oldpage_checkboxIds" value="${selectCheckboxObjs!''}"> <!-- 翻页记录旧checkbox  ids -->
+    <input type="hidden" name="selectCheckBoxIds" id="b_dialog_product_page_checkboxIds" value="${selectCheckboxObjs!''}">  <!-- 翻页记录 新checkbox  ids -->
+    
+    
+    <input type="hidden" id="moudle" name="moudle"  value="${moudle}">  <!-- 参数数据模块 -->
+    <input type="hidden" id="handleDate" name="handleDate"  value="${handleDate}">  <!-- 参数操作日期 -->
+    <input type="hidden" id="storageId" name="storageId"  value="${storageId}">  <!-- 参数仓库ID -->
+    <input type="hidden" name="aimTabId" id="aimTabId" value="${aimTabId!}"/>	     <!-- 设置目标Tab组件ID -->				
+    <input type="hidden" name="aimUrl" id="aimUrl" value="${aimUrl!}"/>	         <!-- 设置目标URl -->				
+    <input type="hidden" name="aimTitle" id="aimTitle" value="${aimTitle!}"/>         <!-- 设置目标标题 -->
+    <input type="hidden" name="billType" id="billType" value="${billType!}"/><!-- 单据类型-->
+    <input type="hidden" name="unitId" id="unitId" value="${unitId!0}"/><!-- 往来单位-->
+    
+    <input type="hidden" name="term" id="term" value="${term!}"/>
+    <input type="hidden" name="termVal" id="termVal" value="${termVal!}"/>
+</form>
+<div class="pageHeader">
+	<form rel="pagerForm"  method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/stock/stock/orderDialog/search" onsubmit="return dwzSearch(this, 'dialog');">
+	<input name="opterate" value="${(opterate)!}" type="hidden"><!-- dialog显示类型 -->
+	<input type="hidden" name="oldSelectCheckBoxIds" value="${selectCheckboxObjs!''}">                                      <!-- 翻页记录旧checkbox  ids -->
+    <input type="hidden" name="selectCheckBoxIds" id="b_dialog_product_search_checkboxIds" value="${selectCheckboxObjs!''}">  <!-- 翻页记录 新checkbox  ids -->
+	<input type="hidden" name="aimTabId" id="aimTabId" value="${aimTabId!}"/>	     <!-- 设置目标Tab组件ID -->				
+    <input type="hidden" name="aimUrl" id="aimUrl" value="${aimUrl!}"/>	         <!-- 设置目标URl -->				
+    <input type="hidden" name="aimTitle" id="aimTitle" value="${aimTitle!}"/>         <!-- 设置目标标题 -->    
+     <input type="hidden" name="storageId"  value="${storageId}">  <!-- 参数仓库ID -->
+     <input type="hidden" name="billType"  value="${billType!}"/><!-- 单据类型-->
+    <input type="hidden" name="unitId" value="${unitId!0}"/><!-- 往来单位-->
+    
+    <!--<input type="hidden" name="term" value="${term!}"/>
+    <input type="hidden" name="termVal" value="${termVal!}"/>
+	--><div class="searchBar">
+	   <ul class="searchContent">
+		   <li>
+		    <select name="term">
+		       <option <#if term?? && 'quick'==term>selected="selected"</#if> value="quick">快速查询</option>
+		       <option <#if term?? && 'code'==term>selected="selected"</#if>  value="code">按商品编号查询</option>
+		       <option <#if term?? && 'fullName'==term>selected="selected"</#if> value="fullName">按商品全名查询</option>
+		       <option <#if term?? && 'spell'==term>selected="selected"</#if> value="spell">按商品拼音码查询</option>
+		       <option <#if term?? && 'standard'==term>selected="selected"</#if> value="standard">按规格查询</option>
+		       <option <#if term?? && 'model'==term>selected="selected"</#if> value="model">按型号查询</option>
+		       <option <#if term?? && 'field'==term>selected="selected"</#if> value="field">按产地查询</option>
+		    </select>
+		    &nbsp;&nbsp;
+		    </li>
+		    <li>
+		    <input class="textInput" type="text" name="termVal" value="${termVal!''}" size="40"/>&nbsp;&nbsp;
+		    </li>
+		    <li>
+		    <div class="button"><div class="buttonContent"><button type="submit">查询</button></div></div>
+		    <#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+		    </li>
+	    </ul>
+	</div>
+	</form>
+</div>
+<form>
+ <input type="hidden" name="aimTabId" id="aimTabId" value="${aimTabId!}"/>	     <!-- 设置目标Tab组件ID -->				
+ <input type="hidden" name="aimUrl" id="aimUrl" value="${aimUrl!}"/>	         <!-- 设置目标URl -->				
+ <input type="hidden" name="aimTitle" id="aimTitle" value="${aimTitle!}"/>         <!-- 设置目标标题 -->
+<div class="pageContent">
+	<table class="table" layoutH="130"  targetType="dialog">
+		<thead>
+			<tr>
+				<th width="40" align="center">行号</th> 
+				<#if opterate=="select"><th width="30" align="center"><input class="checkboxCtrl" type="checkbox" group="productIdArr" onclick="checkAllVersa(this,'b_dialog_product_page_checkboxIds','b_dialog_product_search_checkboxIds');"/></th></#if>
+				<#list rowList as row>
+				   <th  width="${(row.width)!100}px" <#if row.isOrder?? && row.isOrder==2> orderField="${row.code}"  <#if orderField?? && row.code==orderField>class="${(orderDirection)!'asc'}"<#else>class="asc"</#if> </#if>>
+					 ${(row.showName)!(row.name)!}
+				   </th>
+			    </#list>
+			</tr>
+		</thead>
+		<tbody id="b_product_dialog_tbody">
+		    <#list pageMap.pageList as product>
+		    <#if product.product.node==2>
+		    <!-- selectCheckboxObjs   要选中的checkBox -->
+			<tr objectId="${objectId!0}" title="商品" type="POST" relevancyIds="storageId,aimTabId,aimUrl,aimTitle,billType,unitId" selectCheckboxObjs="${selectCheckboxObjs!''}" rel="${product.product.id!0}" target="id" drel="b_product_dialog" whichDialog="xsddProdcut" cTarget="dialog" newCheckboxId="b_dialog_product_page_checkboxIds"  url="${base}/stock/stock/orderDialog/down-${product.product.id}-${opterate!''}-${selectCheckboxObjs!''}-${selectCheckboxObjs!''}">
+			<#else>
+			    <#if aimTabId?? && aimTabId=='pricesManageView'>
+			      <tr>
+			   <#else>
+			      <tr objectId="${objectId!0}" selectCheckboxObjs="${selectCheckboxObjs!''}" rel="${product.product.id!0}"  drel="b_product_dialog" cTarget="dialog" whichDialog="xsddProdcut" single="singleObj" target="checkedBack" url="${base}/stock/stock/searchBack/${product.product.id!0}" callback="billCallBack">
+			   </#if>
+			</#if>
+				<td><a>${product_index+1+pageMap.limit}</a><#if product.product.node==2>..</#if></td>
+				<#if opterate=="select"><td><input type="checkbox" name="productIdArr"  value="${product.product.id!0}" onclick="getProductIdList(this,'b_dialog_product_page_checkboxIds','b_dialog_product_search_checkboxIds');"/></td></#if>
+				<#list rowList as row>
+				<#if row.code?? && 'product.code'==row.code>
+			    <td>${product.product.code!''}</td>
+			    <#elseif row.code?? && 'product.fullName'==row.code>
+				<td>${product.product.fullName!''}</td>
+				<#elseif row.code?? && 'product.smallName'==row.code>
+				<td>${(product.product.smallName)!''}</td> 
+				<#elseif row.code?? && 'product.spell'==row.code>
+				<td>${(product.product.spell)!''}</td> 
+				<#elseif row.code?? && 'product.standard'==row.code>
+				<td>${(product.product.standard)!''}</td>
+				 <#elseif row.code?? && 'product.model'==row.code>
+				<td>${(product.product.model)!''}</td> 
+				<#elseif row.code?? && 'product.field'==row.code>
+				<td>${(product.product.field)!''}</td> 
+				<#elseif row.code?? && 'product.calculateUnit1'==row.code>
+				<td>${(product.product.calculateUnit1)!''}</td> 
+				<#elseif row.code?? && 'samount'==row.code>
+				<td>${(product.product.samount)!''}</td> 
+				<#elseif row.code?? && 'product.helpUnit'==row.code>
+				<td>${(product.product.helpUnit)!''}</td> 
+				<#elseif row.code?? && 'product.barCode1'==row.code>
+				<td>${(product.product.barCode1)!''}</td>
+				</#if>
+				</#list>
+			</tr>
+			</#list>
+		</tbody>
+	</table>
+</div>
+<#include "/WEB-INF/template/unitl/dialogpage.html"/>
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+   <#if aimTabId?? && aimTabId=='pricesManageView'>
+       <a class="button"  fresh="true" hasBeforCall="checkedProductBeforCall" onclick="fristOpenNavTabAfterLoadData(this)"><span>选中</span></a>
+   <#else>
+      <a  class="button"  url="${base}/stock/stock/searchBack/" target="checkedBack" opterate="${opterate}" irel="b_dialog_product_page_checkboxIds" callback="billCallBack"><span>选中</span></a>
+   </#if>
+	
+    <#if btnPattern?? && btnPattern!="">
+	    <@shiro.hasPermission name='1-201-a'>
+	    <a  style="<#if btnPattern?index_of("optionAdd") == -1 >display:none;</#if>  " class="button" href="${base}/base/product/optionAdd/${supId!0}" href1="${base}/common/baseInfo/verifyBaseAddPrivs/${supId!0}-product" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" rel="b_product_id" target="dialog"  mask="true" width="570" height="450"><span>新增</span></a>
+	    </@shiro.hasPermission>
+	</#if>
+	<#if supId?? && supId!=0>
+	   <a  relevancyIds="storageId,aimTabId,aimUrl,aimTitle" class="button" href="${base}/stock/stock/orderDialog/up-${pSupId!0}-${supId!0}-${selectCheckboxObjs!''}-${opterate!''}" target="aioUpAjax"  newCheckBoxsId="b_dialog_product_page_checkboxIds"  rel="b_product_dialog_paging"><span>上级</span></a>
+    <#else>
+       <a class="buttonDisabled" href="javascript:void(0);"><span>上级</span></a>
+    </#if>
+    
+	<div style="float: right;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+</div>
+</form>
+</div>

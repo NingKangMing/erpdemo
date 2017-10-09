@@ -1,0 +1,24 @@
+
+<div>
+   <form id="form2" action="${base}/user/souPing" class="tableForm pageForm" enctype="multipart/form-data" enctype="text/plain" method="post" onsubmit="return validateCallback(this,suoPingCallBark);">
+           <table>
+		      <tr style="height: 40px;">
+		         <td style="text-align: right;">密码:</td>
+		         <td>
+		             <input type="hidden" name="whichDbId" value="${whichDbId!}"/>
+		             <input type="hidden" name="username" value="${username!}"/>
+		             <input type="password" name="password" size="30"/>
+		         </td>
+		      </tr>
+		   </table>
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		 <ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+		 </ul>
+      </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>
+
+

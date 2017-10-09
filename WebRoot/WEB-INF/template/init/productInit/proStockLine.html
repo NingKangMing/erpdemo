@@ -1,0 +1,101 @@
+<div class="pageContent" id="proStockLinePage">
+	<div class="textContent center">
+	     <div>
+	         <span style="font-size: 18px;line-height: 30px;">库存状况列表</span>
+	     </div>
+	     <div>
+	     	<fieldset style="width: 260px; float: left;">
+	     		<legend>批次</legend>
+	     		<ul>
+	     			<li style="line-height: 40px;float:left; width: 130px; text-align: center;">
+	    			<input type="radio" target=ajax rel="proStockLinePage" name="batchPattern" id="batchPattern1" value="merge" <#if batchPattern?? && batchPattern=="merge">checked</#if> /><label for="batchPattern1">合并批次</label>
+	    			</li>
+	     			<li style="line-height: 40px;float:left; width: 130px; text-align: center;">
+	    			<input type="radio" target=ajax rel="proStockLinePage" name="batchPattern" id="batchPattern2" value="split" <#if batchPattern?? && batchPattern=="split">checked</#if> /><label for="batchPattern2">拆分批次</label>
+	    			</li>
+	     		</ul>
+	     	</fieldset>
+	     	<span style="float: left; margin-left:30px; line-height: 70px;">仓库：${storageName!''}</span>
+	     </div>
+	</div>
+	<div class="panelBar"></div>
+	<div id="proStockLine">
+		<form id="pagerForm" enctype="text/plain" onsubmit="return divSearch(this, 'proStockLinePage');" action="${base}/stock/stockStatus/proStockLinePage" method="post">
+			<input type="hidden" name="pageNum" value="${pageMap.pageNum!1}" />
+			<input type="hidden" name="numPerPage" value="${pageMap.numPerPage!15}" />
+			<input type="hidden" name="orderField" value="${orderField!'sck.id'}" /><!--查询排序-->
+		    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+			
+			<input type="hidden" name="selectedObjectId" id="selectedObjectId" value="${objectId!0}" /><!--   默认选中对象的Id -->
+			<input type="hidden" id="storageId" name="storageId" value="${storageId!0}"/>
+			<input type="hidden" id="storagePids" name="storagePids" value="${storagePids!'{0}'}"/>
+			<input type="hidden" id=batchPattern name="batchPattern" value="${batchPattern!'merge'}"/>
+			<input type="hidden" id=searchPar name="searchPar" value="${searchPar!''}"/>
+			<input type="hidden" id=searchVal name="searchVal" value="${searchVal!''}"/>
+		</form>
+		<table class="table" rel="proStockLine" layoutH="280">
+						<thead>
+							<tr>
+								<th width="45" align="center" >行号</th>
+								<th width="100" align="center"  orderField="pro.code" <#if orderField?? && 'pro.code'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >商品编号</th>
+								<th width="200" align="center"  orderField="pro.fullName" <#if orderField?? && 'pro.fullName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >商品全名</th>
+								<th width="200" align="center"  orderField="pro.assistUnit" <#if orderField?? && 'pro.assistUnit'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >辅助单位</th>
+								<th width="100" align="center"  orderField="avgPrice" <#if orderField?? && 'pro.avgPrice'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >成本单价</th>
+								<th width="100" align="center"  orderField="pro.barCode1" <#if orderField?? && 'pro.barCode1'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >基本条码</th>
+								<th width="100" align="center"  orderField="pro.calculateUnit1" <#if orderField?? && 'pro.calculateUnit1'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >基本单位</th>
+								<th width="100" align="center"  orderField="amounts" <#if orderField?? && 'amounts'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >库存数量</th>
+								<th width="100" align="center" >辅助数量</th>
+								<th width="100" align="center"  orderField="moneys" <#if orderField?? && 'moneys'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >库存金额</th>
+								<th width="100" align="center" orderField="sck.batchNum" <#if orderField?? && 'sck.batchNum'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >批号</th>
+								<th width="100" align="center" orderField="sck.produceDate" <#if orderField?? && 'sck.produceDate'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >生产日期</th>
+								
+							</tr>
+						</thead>
+						<tbody>
+							<#list pageMap.pageList as recode>
+							<tr objectId="${objectId!0}" relevancyIds="storageId,selectedObjectId" target="pid" rel="${recode.pro.id!me}" isSelect="true"  url="${base}/common/dateDialog" aimTabId="proDetailBillView" aimTitle="商品明细账本" aimUrl="${base}/stock/stockStatus/proDetailBill" caption="选择时间" cTarget="dialog" rel="dateDialog" widths="300" heights="250" >
+								<td>${recode_index+1+pageMap.limit}</td>
+								<td>${recode.pro.code!}</td>
+								<td>${recode.pro.fullName!}</td>
+								<td>${recode.pro.assistUnit!}</td>
+								<td>${recode.avgPrice!}</td>
+								<td>${recode.pro.barCode1!}</td>
+								<td>${recode.pro.calculateUnit1!}</td>
+								<td>${recode.amounts!}</td>
+								<td>${recode.helpAmout!}</td>
+								<td>${recode.moneys!}</td>
+								<td>${recode.sck.batchNum!}</td>
+								<td>${recode.sck.produceDate!}</td>
+							</tr>
+							</#list>
+						</tbody>
+						<tfoot>
+						       <tr isSelect="false" style="border-top: #D0D0D0 solid 1px">
+							       <td align="center">合计</td>
+							       <td align="center"></td>
+							       <td align="center"></td>
+							       <td align="center"></td>
+							       <td align="center"></td>
+							       <td align="center"></td>
+							       <td align="center"></td>
+							       <td align="center" hasCount="true"></td>
+							       <td align="center"></td>
+							       <td align="center" hasCount="true"></td>
+							       <td align="center"></td>
+							       <td align="center"></td>
+						       </tr>
+					    </tfoot>
+		</table>
+	
+		<#include "/WEB-INF/template/unitl/paging.html"/>
+		
+		<div class="divider"></div>
+		<div>
+			<a class="button" href="${base}/common/dateDialog" param="storageId,selectedObjectId" verify="selectedObjectId" verifyText="没有选中商品" aimTabId="proDetailBillView" aimTitle="商品明细账本" aimUrl="${base}/stock/stockStatus/proDetailBill" caption="选择日期" target="dialog" rel="dateDialog" mask="true" width="300" height="250"><span>明细账本</span></a>
+		</div>
+		<div style="float: right;">
+			<a class="buttonDisabled" href="javascript:;"><span>打印</span></a>
+			<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+		</div>
+	</div>
+</div>

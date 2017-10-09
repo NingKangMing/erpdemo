@@ -1,0 +1,157 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/finance/arap/arapMoneyCheck/dialogSearch/page" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+	<input type="hidden" name="orderField" value="${orderField!'t.recodeDate'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <!-- ID用于树点击参数 -->
+	
+	<input type="hidden" id="billType" name="billType" value="${billType}"/>
+	<input type="hidden" id="checkBy" name="checkBy" value="${checkBy}"/>
+	<input type="hidden" id="filter" name="filter" value="${filter}"/>
+	<input type="hidden" id="unit.id" name="unit.id" value="${unitId}"/>               <!-- 单位ID -->
+	<input type="hidden" id="staff.id" name="staff.id" value="${staffId}"/>            <!-- 职员ID -->
+	<input type="hidden" id="unit.fullName" name="unit.fullName" value="${unitFullName}"/>            
+	<input type="hidden" id="staff.name" name="staff.name" value="${staffFullName}"/>     
+	<input type="hidden" id="startDate" name="startDate" value="${startDate}"/>        <!--开始日期  -->
+	<input type="hidden" id="endDate" name="endDate" value="${endDate}"/>            <!-- 结束日期 -->
+</form>
+<#include "/WEB-INF/template/common/columnConfig/tableTotalWidthLink.html"/>
+<table class="table"  layoutH="230">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody id="reports_prdsellreturncount_body">
+		<#if pageMap??&&pageMap.pageList??>
+		<#list pageMap.pageList as obj>
+	    <tr target="billId" rel="${obj.billId!}-${obj.billTypeId!}" title="${obj.billTypeName!}" url="${base}/common/bill/lookBill/${obj.billId!}-${obj.billTypeId!}" cTarget="openNavTab" <#if obj.billIsRCW==2>style="color: red;"</#if> >
+			<td><a>${obj_index+1+pageMap.limit}</a></td>
+			<#list rowList as row>
+		    <#if row.code?? && 'unit.code'==row.code>
+			<td>${obj.unit.code!''}</td>
+			<#elseif row.code?? && 'unit.fullName'==row.code>
+			<td>${obj.unit.fullName!''}</td>
+			<#elseif row.code?? && 'staff.code'==row.code>
+			<td>${obj.staff.code!''}</td>
+			<#elseif row.code?? && 'staff.fullName'==row.code>
+			<td>${obj.staff.fullName!''}</td>
+			<#elseif row.code?? && 'unit.areaFullName1'==row.code>
+			<td>${obj.area.fullName!''}</td>
+			<#elseif row.code?? && 'dept.code'==row.code>
+			<td>${obj.dept.code!''}</td>
+			<#elseif row.code?? && 'dept.fullName'==row.code>
+			<td>${obj.dept.fullName!''}</td>
+			<#elseif row.code?? && 'sto.code'==row.code>
+			<td>${obj.sto.code!''}</td>
+			<#elseif row.code?? && 'sto.fullName'==row.code>
+			<td>${obj.sto.fullName!''}</td>
+			<#elseif row.code?? && 't.recodeDate'==row.code>
+			<td>${obj.recodeDate!''}</td>
+			<#elseif row.code?? && 't.billTypeName'==row.code>
+			<td>${obj.billTypeName!''}</td>
+			<#elseif row.code?? && 't.billCode'==row.code>
+			<td>${obj.billCode!''}</td>
+			
+			
+			
+			<#elseif row.code?? && 'pro.code'==row.code>
+			<td>${obj.pro.code!''}</td>
+			<#elseif row.code?? && 'pro.fullName'==row.code>
+			<td>${obj.pro.fullName!''}</td>
+			<#elseif row.code?? && 'pro.smallName'==row.code>
+			<td>${obj.pro.smallName!''}</td>
+			<#elseif row.code?? && 'pro.spell'==row.code>
+			<td>${obj.pro.spell!''}</td>
+			<#elseif row.code?? && 'pro.standard'==row.code>
+			<td>${obj.pro.standard!''}</td>
+			<#elseif row.code?? && 'pro.model'==row.code>
+			<td>${obj.pro.model!''}</td>
+			<#elseif row.code?? && 'pro.field'==row.code>
+			<td>${obj.pro.field!''}</td>
+			<#elseif row.code?? && 'pro.savePath'==row.code>
+			<td>${obj.pro.savePath!''}</td>
+			<#elseif row.code?? && 'helpAmount'==row.code>
+			<td>${obj.helpAmount!''}</td>
+			<#elseif row.code?? && 'amount'==row.code>
+			<td><#if obj.amount??&&obj.amount!=0>${obj.amount!''}</#if></td>
+			<#elseif row.code?? && 'baseUnit'==row.code>
+			<td>${obj.baseUnit!''}</td>
+			<#elseif row.code?? && 'taxPrice'==row.code>
+			<td>
+			    <@shiro.hasPermission name='1101-s'>
+			    ${obj.taxPrice!''}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				<#if obj.billTypeName=='其它出库单'||obj.billTypeName=='其它入库单'||obj.billTypeName=='进货单'||obj.billTypeName=='进货退货单'||obj.billTypeName=='进货换货单'>
+			    	***
+			    <#else>
+			    	${obj.taxPrice!''}
+			    </#if>
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'accounts.code'==row.code>
+			<td>${obj.accounts.code!''}</td>
+			<#elseif row.code?? && 'accounts.fullName'==row.code>
+			<td>${obj.accounts.fullName!''}</td>
+			<#elseif row.code?? && 'getMoney1'==row.code>
+			<td>
+				<@shiro.hasPermission name='1101-s'>
+			    <#if obj.getMoney1??&&obj.getMoney1!=0>${obj.getMoney1!''}</#if>
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				<#if obj.billTypeName=='其它出库单'||obj.billTypeName=='其它入库单'||obj.billTypeName=='进货单'||obj.billTypeName=='进货退货单'||obj.billTypeName=='进货换货单'>
+			    	***
+			    <#else>
+			    	<#if obj.getMoney1??&&obj.getMoney1!=0>${obj.getMoney1!''}</#if>
+			    </#if>
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'payMoney1'==row.code>
+			<td>
+			    <@shiro.hasPermission name='1101-s'>
+			    <#if obj.payMoney1??&&obj.payMoney1!=0>${obj.payMoney1!''}</#if>
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				<#if obj.billTypeName=='其它出库单'||obj.billTypeName=='其它入库单'||obj.billTypeName=='进货单'||obj.billTypeName=='进货退货单'||obj.billTypeName=='进货换货单'>
+			    	***
+			    <#else>
+			    	<#if obj.payMoney1??&&obj.payMoney1!=0>${obj.payMoney1!''}</#if>
+			    </#if>
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'lastMoney'==row.code>
+			<td>
+				<@shiro.hasPermission name='1101-s'>
+			    ${obj.lastMoney!''}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				<#if obj.billTypeName=='其它出库单'||obj.billTypeName=='其它入库单'||obj.billTypeName=='进货单'||obj.billTypeName=='进货退货单'||obj.billTypeName=='进货换货单'>
+			    	***
+			    <#else>
+			    	${obj.lastMoney!''}
+			    </#if>
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'billRemark'==row.code>
+			<td>${obj.billRemark!''}</td>
+			<#elseif row.code?? && 'billMemo'==row.code>
+			<td>${obj.billMemo!''}</td>
+			</#if>
+			</#list>
+		</tr>
+		</#list>
+		</#if>
+	</tbody>
+	<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+
+<div class="divider"></div>
+<div>
+    <a class="button" target="dialog" href="${base}/reports/finance/arap/arapMoneyCheck/toSearchDialog/" rel="prdSellReturnCountSearchDialog" width="330" height="380" aimTitle="往来对账" aimUrl="${base}/reports/finance/arap/arapMoneyCheck/dialogSearch/search" aimTabId="cw_r_arapMoneyCheckView"><span>查询条件</span></a>
+    <a class="button" dynamic="true" target="navTab" href="${base}/common/bill/lookBill/{billId}"><span>查看单据</span></a>
+</div>
+<div style="float: right;">
+	<#assign privs = '6-103-622-p'/>
+	<#assign href = '${base}/reports/finance/arap/arapMoneyCheck/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

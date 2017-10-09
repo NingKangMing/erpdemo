@@ -1,0 +1,55 @@
+<div class="panel">
+	<div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">按单结算</span></label>
+				</li>
+			</ul>
+			<ul class="searchContent" style="margin-top: 5px;">
+				<li>
+					<span style="margin-left: 10px;">往来单位:</span><#if unitFullName=="">全部单位</#if>${unitFullName} 
+					<span style="margin-left: 50px;">经手人:</span><#if staffFullName=="">全部职员</#if>${staffFullName} 
+				</li>
+			</ul>
+			<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+			<ul class="searchContent">
+				<li>
+				    单据类型 
+				    <select onchange="xsReportAmountChange(this,'billType','pagerForm','${listID}');">
+				       <option <#if billType=="all">selected="selected"</#if> value="all">所有单据</option>
+				       <option <#if billType=="5">selected="selected"</#if> value="5">进货单</option>
+				       <option <#if billType=="6">selected="selected"</#if> value="6">进货退货单</option>
+				       <option <#if billType=="12">selected="selected"</#if> value="12">进货换货单</option>
+				       <option <#if billType=="4">selected="selected"</#if> value="4">销售单</option>
+				       <option <#if billType=="7">selected="selected"</#if> value="7">销售退货单</option>
+				       <option <#if billType=="13">selected="selected"</#if> value="13">销售换货单</option>
+				       <option <#if billType=="18">selected="selected"</#if> value="18">其他收入单</option>
+				       <option <#if billType=="22">selected="selected"</#if> value="22">费用单</option>
+				       <option <#if billType=="23">selected="selected"</#if> value="23">固定资产购置单</option>
+				       <option <#if billType=="25">selected="selected"</#if> value="25">固定资产变卖单</option>
+				       <option <#if billType=="26">selected="selected"</#if> value="26">应收款减少</option>
+				       <option <#if billType=="27">selected="selected"</#if> value="27">应收款增加</option>
+				       <option <#if billType=="28">selected="selected"</#if> value="28">应付款减少</option>
+				       <option <#if billType=="29">selected="selected"</#if> value="29">应付款增加</option>
+				       <option <#if billType=="initGet">selected="selected"</#if> value="initGet">期初应收</option>
+				       <option <#if billType=="initPay">selected="selected"</#if> value="initPay">期初应付</option>
+				    </select>
+				</li>
+				<li style="float: right;">
+					单据过滤<select onchange="xsReportAmountChange(this,'isOver','pagerForm','${listID}');">
+				       <option <#if isOver=="all">selected="selected"</#if> value="all">全部显示</option>
+				       <option <#if isOver=="over">selected="selected"</#if> value="over">只显示已完成的单据</option>
+				       <option <#if isOver=="no">selected="selected"</#if> value="no">只显未完成的单据</option>
+				    </select> 
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div id="${listID}" layoutH="87">
+		<#include "/WEB-INF/template/reports/finance/arap/settlementByOrder/list.html" />
+	</div>
+</div>
+
+
+

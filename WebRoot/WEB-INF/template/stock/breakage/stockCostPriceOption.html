@@ -1,0 +1,33 @@
+<div class="pageContent">
+   <form action="#">
+	<table class="table" layoutH="57"  targetType="dialog">
+		<thead>
+		<tr>
+		   <th width="40">行号</th>
+		   <th align="center" width="100">商品编号</th>
+		   <th align="center" width="100">商品全名</th>
+		   <th align="center" width="100">单位</th>
+		   <th align="center" width="100">价格</th>
+		</tr>
+	  </thead>
+	  <tbody>
+	    <#list recordList as record>
+		<tr>
+		   <input name="trIndex" type="hidden" value="${record.trIndex}"/>
+		   <td><a>${record_index+1}</a></td>
+		   <td>${record.productCode!}</td>
+		   <td>${record.productName!}</td>
+		   <td>${record.productUnit!}</td>
+		   <td><input name="price" class="stealth required number" type="text" /></td>
+		</tr>
+		</#list>
+	  </tbody>
+	</table>
+	</form>
+</div>
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+    <a style="margin-left: 160px;" class="button" onclick="nagetiveStockPrice2();"><span>确定</span></a>
+	<div style="margin-left: 30px;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+</div>

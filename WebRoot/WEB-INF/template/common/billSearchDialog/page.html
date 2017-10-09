@@ -1,0 +1,171 @@
+<div  class="pageContent">
+   <form action="${base}/common/billSearchDialog/go" method="post" class="pageForm required-validate" enctype="text/plain" onsubmit="return validateCallback(this,aioDialogSearchNavTab)">
+      <input type="hidden" id="aimTabId" name="aimTabId"  value=""/>
+      <input type="hidden" id="aimUrl"   name="aimUrl"   value=""/>
+      
+      <div layoutH="35">
+      	  <fieldset style="margin-top: 12px;">
+      	   		 <table>
+			   		<tr>
+				   		<td width="70px;" height="37px;" align="right">单位全名</td>
+				   		<td>
+					    	<input type="hidden" name="unit.id" value="${unitId!}"/>
+					        <input type="text" name="unit.fullName" lookName="unit" lookId="unit.id" value="${(unit.fullName)!}"/>
+					        <a class="btnLook" id="unitLook" type="POST" btnPattern="selectMany" href="${base}/base/unit/option" module="dialog" warn="单位" lookupgroup="unit" lookuppk="id" width="600" height="410"></a>
+					    </td>
+					    
+					    <td width="70px;" height="37px;" align="right">职员全名</td>
+				   		<td>
+				   			<input type="hidden" name="staff.id" value="${staffId!}"/>
+	        				<input type="hidden" name="staff.name" value="${(staff.fullName)!}"/>
+				   			<input type="text" name="staff.name" class="enter" value="${(staff.fullName)!}"/>
+	        				<a class="btnLook" id="staffLook" type="POST" btnPattern="selectMany" href="${base}/base/staff/dialogChild" module="dialog" warn="职员" lookupgroup="staff" lookuppk="id" width="600" height="410"></a>
+        				</td>
+			   		</tr>
+			   		<tr>
+				   		<td width="70px;" height="37px;" align="right">商品全名</td>
+				   		<td>
+				   			<input type="hidden" name="product.id" value="${productId!}"/>
+					        <input type="text" name="product.fullName" lookName="product" lookId="product.id" value="${(product.fullName)!}"/>
+					        <a class="btnLook" id="proLook" type="POST" btnPattern="selectMany" href="${base}/base/product/option" module="dialog" warn="商品" lookupgroup="product" lookuppk="id" width="600" height="410"></a>
+					    </td>
+					    
+					    <td width="70px;" height="37px;" align="right" width="80px;" align="right">仓库全名</td>
+				   		<td>
+				   			<input type="hidden" name="storage.id" value="${storageId!}"/>
+				     	    <input type="text" name="storage.fullName"  lookName="storage" lookId="storage.id" value="${(storage.fullName)!}"/>
+					        <a class="btnLook" id="storageLook" type="POST" btnPattern="selectMany" href="${base}/base/storage/dialogList" module="dialog" warn="仓库" lookupgroup="storage" lookuppk="id" width="600" height="410">仓库</a>
+        				</td>
+			   		</tr>
+			   		<tr>
+				   		<td width="70px;" height="37px;" align="right">部门全名</td>
+				   		<td>
+				   			<input type="hidden" name="department.id" value="${departmentId!}"/>
+				            <input type="text" name="department.fullName" lookName="department" lookId="department.id" value="${(department.fullName)!}"/>    
+				            <a class="btnLook" id="departmentLook" type="POST" btnPattern="selectMany" href="${base}/base/department/option" module="dialog" warn="部门" lookupgroup="department" lookuppk="id" width="600" height="410">部门</a>       
+				        </td>
+					    
+					    <td width="70px;" height="37px;" align="right">账&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;户</td>
+				   		<td>
+        					<input type="hidden" name="account.id" value="${accountId!}"/>
+							<input type="hidden" name="account.fullName" value="${(account.fullName)!}"/>
+							<input class="enter" type="text" name="account.fullName" value="${(account.fullName)!}"/>
+							<a class="btnLook" id="accountLook" param="3,4" type="POST" btnPattern="selectMany" href="${base}/base/accounts/option" module="dialog" warn="会计科目选择" lookupgroup="account" lookuppk="id" width="600" height="410">会计科目选择</a>
+        				</td>
+			   		</tr>
+			   		
+      	   		 	<tr>
+				   		<td width="70px;" height="37px;" align="right">单据类型</td>
+				   		<td>
+				   			<input type="hidden" name="billType.id" value="${billTypeId!}"/>
+					      	<input type="text" name="billType.name" lookName="billType" lookId="billType.id" value="${(billType.name)!}"/>
+					      	<a class="btnLook" id="billTypeLook" type="POST" backParam="jsOperate" jsFn="optionIsDisable()" screenType="isBusiness" btnPattern="selectMany" href="${base}/sys/billType/dialogList" warn="单据类型" lookupgroup="billType" lookuppk="id" width="600" height="410">单据类型</a>
+				        </td>
+				        
+					    <td id="isMember" width="70px;" height="37px;" align="right" <#if (billType.itemNum)?? && billType.itemNum?index_of("0")==-1>style="color: gray;"</#if> >会员卡情况</td>
+				   		<td>
+				   			<select style="width: 152px;" name="isMember" <#if (billType.itemNum)?? && billType.itemNum?index_of("0")==-1>disabled="disabled"</#if> >
+				   				<option value="0" <#if isMember?number == 0 >selected="selected"</#if> >全部单据</option>
+				   				<option value="1" <#if isMember?number == 1 >selected="selected"</#if> >使用会员卡的单据</option>
+				   				<option value="2" <#if isMember?number == 2 >selected="selected"</#if> >未使用会员卡的单据</option>
+				   			</select>
+        				</td>
+			   		</tr>
+				   		<tr>
+					   		<td width="70px;" height="37px;" align="right">单据编号</td>
+					   		<td colspan="3">
+						        <input type="text" name="billCode"  value="${billCode!}" style="width:375px;"/>
+						    </td>
+				   		</tr>
+				   		<tr>
+					   		<td width="70px;" height="37px;" align="right">摘要</td>
+					   		<td colspan="3">
+						        <input type="text" name="remark"  value="${remark!}" style="width:375px;"/>
+						    </td>
+				   		</tr>
+				   		<tr>
+					   		<td width="70px;" height="37px;" align="right">附加说明</td>
+					   		<td colspan="3">
+						        <input type="text" name="memo"  value="${memo!}" style="width:375px;"/>
+						    </td>
+				   		</tr>
+				   		
+				   		<tr>
+				   			<td id="isCoupon" width="70px;" height="37px;" align="right" <#if (billType.itemNum)?? && billType.itemNum?index_of("1")==-1>style="color: gray;"</#if> >优惠情况</td>
+					   		<td>
+					   			<select style="width: 152px;" name="isCoupon" <#if (billType.itemNum)?? && billType.itemNum?index_of("1")==-1>disabled="disabled"</#if> >
+					   				<option value="0" <#if isCoupon?number == 0 >selected="selected"</#if> >全部单据</option>
+					   				<option value="1" <#if isCoupon?number == 1 >selected="selected"</#if> >有优惠的单据</option>
+					   				<option value="2" <#if isCoupon?number == 2 >selected="selected"</#if> >没有优惠的单据</option>
+					   			</select>
+	        				</td>
+				   
+        					<td id="price" width="70px;" height="37px;" align="right" <#if (billType.itemNum)?? && billType.itemNum?index_of("2")==-1>style="color: gray;"</#if> >商品单价</td>
+				   			<td>
+					   			<select style="width:80px;" name="priceCase" onchange="selectChanage(this,'price')" <#if (billType.itemNum)?? && billType.itemNum?index_of("2")==-1>disabled="disabled"</#if> >
+					   				<option value="0" <#if priceCase?number == 0 >selected="selected"</#if> >不关心</option>
+					   				<option value="1" <#if priceCase?number == 1 >selected="selected"</#if> >大于</option>
+					   				<option value="2" <#if priceCase?number == 2 >selected="selected"</#if> >等于</option>
+					   				<option value="3" <#if priceCase?number == 3 >selected="selected"</#if> >小于</option>
+					   				<option value="4" <#if priceCase?number == 4 >selected="selected"</#if> >小于等于</option>
+					   				<option value="5" <#if priceCase?number == 5 >selected="selected"</#if> >大于等于</option>
+					   			</select>
+					   			<input style="width:62px;" name="price" id="price" isNotRese="true" value="${price!0}" <#if priceCase?number == 0 >disabled="disabled"</#if> />
+        					</td>
+				   		</tr>
+				   		
+				   		<tr>
+				   			<td id="discount" width="70px;" height="37px;" align="right" <#if (billType.itemNum)?? && billType.itemNum?index_of("3")==-1>style="color: gray;"</#if> >商品折扣</td>
+				   			<td>
+					   			<select style="width:80px;" name="discountCase" onchange="selectChanage(this,'discount')" <#if (billType.itemNum)?? && billType.itemNum?index_of("3")==-1>disabled="disabled"</#if> >
+					   				<option value="0" <#if discountCase?number == 0 >selected="selected"</#if> >不关心</option>
+					   				<option value="1" <#if discountCase?number == 1 >selected="selected"</#if> >大于</option>
+					   				<option value="2" <#if discountCase?number == 2 >selected="selected"</#if> >等于</option>
+					   				<option value="3" <#if discountCase?number == 3 >selected="selected"</#if> >小于</option>
+					   				<option value="4" <#if discountCase?number == 4 >selected="selected"</#if> >小于等于</option>
+					   				<option value="5" <#if discountCase?number == 5 >selected="selected"</#if> >大于等于</option>
+					   			</select>
+					   			<input style="width:62px;" name="discount" id="discount" isNotRese="true" value="${discount!0}" <#if discountCase?number == 0 >disabled="disabled"</#if> />
+        					</td>
+        					
+        					<td id="taxrate" width="70px;" height="37px;" align="right" <#if (billType.itemNum)?? && billType.itemNum?index_of("4")==-1>style="color: gray;"</#if> >商品税率</td>
+				   			<td>
+					   			<select style="width:80px;" name="taxrateCase"  onchange="selectChanage(this,'taxrate')" <#if (billType.itemNum)?? && billType.itemNum?index_of("4")==-1>disabled="disabled"</#if> >
+					   				<option value="0" <#if taxrateCase?number == 0 >selected="selected"</#if> >不关心</option>
+					   				<option value="1" <#if taxrateCase?number == 1 >selected="selected"</#if> >大于</option>
+					   				<option value="2" <#if taxrateCase?number == 2 >selected="selected"</#if> >等于</option>
+					   				<option value="3" <#if taxrateCase?number == 3 >selected="selected"</#if> >小于</option>
+					   				<option value="4" <#if taxrateCase?number == 4 >selected="selected"</#if> >小于等于</option>
+					   				<option value="5" <#if taxrateCase?number == 5 >selected="selected"</#if> >大于等于</option>
+					   			</select>
+					   			<input style="width:62px;" name="taxrate" id="taxrate" isNotRese="true" value="${taxrate!0}" <#if taxrateCase?number == 0 >disabled="disabled"</#if> />
+        					</td>
+				   		</tr>
+				   		
+				   		
+				   		<tr>
+				   			<td width="70px;" height="37px;" align="right">开始日期</td>
+				   			<td>
+				   				<input style="width:145px;" type="text" class="date" name="startDate" dateFmt="yyyy-MM-dd" value="${startDate!''}" readonly="readonly"/>
+				   			</td>
+				   			<td width="70px;" height="37px;" align="right">结束日期</td>
+				   			<td>
+				   				<input style="width:145px;" type="text" class="date" name="endDate" dateFmt="yyyy-MM-dd" value="${endDate!''}" readonly="readonly"/>
+				   			</td>
+				   		</tr>
+				   		
+				   </table>
+      	   </fieldset>
+	 </div>
+	 
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="reseBillSearchFrom(this)">重设条件</button></div></div></li>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+		</ul>
+	  </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

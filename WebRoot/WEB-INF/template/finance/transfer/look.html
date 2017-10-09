@@ -1,0 +1,140 @@
+<!-- 内部转款单添加  -->
+<div class="pageContent">
+<form id="transferBillForm">
+	<div id="hasFujianClassId" <#if orderFuJianIds?length gt 0>class="textContent center fujianClass"<#else>class="textContent center"</#if>>
+	      <div>
+	         <span style="font-size: 18px;">内部转款单</span>
+	         <input type="hidden" name="billId" value="${(bill.id)!}"/>
+			 <span style="float: right;">
+			                录单日期
+			     <input type="text"  <#if isRCW==true>style="color: red;"</#if>  name="transferBill.recodeDate" dateFmt="yyyy-MM-dd HH:mm:ss" value="${(bill.recodeDate)?string('yyyy-MM-dd HH:mm:ss')}" readonly="readonly"/>
+			                单据编号
+			     <input class="line" type="text" style="width: 200px" name="transferBill.code" <#if isRCW==true>style="color: red;"</#if> value="${(bill.code)!}" readonly="readonly"/>
+		     </span>
+	     </div>
+	     <div>
+	       	经手人 
+	        <input class="line" type="text" <#if isRCW==true>style="color: red;"</#if> name="staff.name"  value="${(bill.getBillStaff(session.loginConfigId).name)!}" readonly="readonly"/>
+	                            部门 
+	        <input type="text" class="line" <#if isRCW==true>style="color: red;"</#if>  name="department.fullName" value="${(bill.getBillDepartment(session.loginConfigId).fullName)!}" readonly="readonly"/>          
+	     </div>
+	     <div>
+	                           摘要
+	        <input class="line" <#if isRCW==true>style="color: red;"</#if> type="text" name="transferBill.remark" value="${(bill.remark)!}" readonly="readonly"/>
+	                           附加说明
+	        <input class="line" <#if isRCW==true>style="color: red;"</#if> type="text" name="transferBill.memo" value="${(bill.memo)!}" readonly="readonly"/>
+	     	<div style="float: right;">
+	           <#include "/WEB-INF/template/common/lookBillPreOrNext/page.html"/>
+	           <img style="margin-top: 5px;" onclick="openOrderFujianDialog('${base}','${tableId}','0','${(bill.id)!}');" title="单据附件" src="${base}/img/bill/fujian.jpg" alt="单据附件">
+	           <input type="hidden" id="orderFuJianIds" name="orderFuJianIds" value="${orderFuJianIds!}"/>
+	        </div>
+	     </div>
+	</div>
+	<div class="divider"></div>
+	<div class="pageContent">
+	   <#assign showWidth = 0/>
+	   <#list rowList as row>
+	     <#if row.width??>
+	      <#assign showWidth = showWidth+row.width/>
+	     </#if>
+	   </#list>
+	   <table class="table" model="order"  layoutH="220" width="${showWidth!}px">
+	   
+	        <thead>
+			 <tr>
+				<th width="50px" >
+					行号
+				</th>
+				<#list rowList as row>
+				   <th width="${(row.width)!100}px"> 
+					 ${(row.showName)!(row.name)!}
+				   </th>
+				</#list>
+			</tr>
+		  </thead>
+		  <tbody id="transferBillbody" preDataName="transferDetail">
+		     <#list detailList as detail>
+		     <tr <#if isRCW==true>style="color: red;"</#if> >
+		       <td>${detail_index+1}</td>
+		       <!--  -->
+		     <#list rowList as row>
+		       <#if row.code?? && 'accountsCode'==row.code>
+		       <!-- 科目编号-->
+		       <td>
+		             ${(detail.accounts.code)!}
+		       </td> 
+		       <#elseif row.code?? && 'accountsFullName'==row.code>
+		       <!-- 科目名称 -->
+		       <td>
+		             ${(detail.accounts.fullName)!}
+		       </td>
+		       <#elseif row.code?? && 'accountsSmallName'==row.code>
+		       <!-- 科目简称 -->
+		       <td>
+		            ${(detail.accounts.smallName)!}
+		       </td>
+		       <#elseif row.code?? && 'accountsSpell'==row.code>
+		       <!-- 科目拼音码 -->
+		       <td>${(detail.accounts.spell)!}</td>
+		       <#elseif row.code?? && 'accountsMemo'==row.code>
+		       <!-- 科目备注 -->
+		       <td>${(detail.accounts.memo)!}</td>
+		       <#elseif row.code?? && 'money'==row.code>
+		       <!-- 金额 -->
+		       <td> ${(detail.money)!}</td>
+		       <#elseif row.code?? && 'orderMemo'==row.code>
+		       <!-- 单据备注 -->
+		       <td> ${(detail.memo)!}</td>
+		       <#elseif row.code?? && 'message'==row.code>
+		       <!-- 附加信息 -->
+		       <td>${(detail.message)!}</td>
+		       <#else>
+		         <td></td>
+		       </#if>
+		      </#list>
+		    
+		     </tr>
+		     </#list>
+		  </tbody>
+		  <tfoot>
+		       <tr style="border-top: #D0D0D0 solid 1px">
+		       <td>合计</td>
+		       <#list rowList as row>
+		            <#if row.code?? && 'money'==row.code>
+		             <!-- 金额 -->
+		             <td <#if isRCW==true>style="color: red;"</#if> >${(bill.moneys)!}</td>
+		            <#else>
+		            <td></td>
+		            </#if>
+		       </#list>
+		      
+		       </tr>
+		  </tfoot>
+	   </table>
+	   <div class="divider"></div> 
+	   <div class="textContent center">
+	     <div>
+	         <span>
+	                               付款账户
+             <input name="account.fullName" class="line <#if isRCW==true>isRCW</#if> " type="text" value="${(bill.getBillAccount(session.loginConfigId).fullName)!}" readonly="readonly"/>
+	                               实付金额
+	         <input name="transferBill.payMoney" class="line number <#if isRCW==true>isRCW</#if> " type="text" value="${(bill.payMoney)!}" readonly="readonly"/> 
+	         </span>
+			 <span style="float: right;">
+		                  合计：<input type="text" class="stealth <#if isRCW==true>isRCW</#if> " id="privilegeMoney" value="${(bill.moneys)!0}" style="width: 100px" readonly="readonly"/>
+		    </span>
+	     </div>
+	   </div>
+		<div class="divider"></div> 
+		<div>
+	     <div style="float: right;">
+		    <#assign privs = '605-p'/>
+	<#assign href = '${base}/finance/transfer/print'/>
+	<#assign formId = 'transferBillForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	        <a class="button" href="javascript:void(0);" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a>
+	     </div>
+	    </div>
+	</div>
+</form>
+</div>

@@ -1,0 +1,90 @@
+
+<div class="pageContent">
+    <form action="${base}/sys/billCodeConfig/global" method="post" class="tableForm pageForm"  enctype="text/plain"  onsubmit="return validateCallback(this,aioDialogAjaxDone)">
+    <div style="margin-top: 10px;" layoutH="40">
+       <div class="tabs" layoutH="45" >
+            <div class="tabsHeader">
+				  <div class="tabsHeaderContent">
+				     <ul>
+				         <li class="selected"><a href="javascript:void(0)"><span>生成规则</span></a></li>
+				         <li><a href="javascript:void(0)"><span>使用规则</span></a></li>
+				     </ul>
+				  </div>
+			</div>
+			<div class="tabsContent">
+			    <div class="pageFormContent">
+			        <div style=" margin-top: 10px">
+			            <span>单据编号自定义字符设置为：</span>
+                         <span style="float: right;margin-right: 10px;margin-top: -5px">
+                           <input name="codeCustomChar" value="${codeCustomChar!}" style="width: 30px;" maxlength="4"/>
+			             <span style="color: blue;">【最长四位字符】</span>
+			             </span>
+			        </div>
+			        <div style=" margin-top: 10px">
+			                 
+			                    <span>日期分隔符设置   &nbsp;&nbsp; </span>
+			                    <select  name="codeDateSep" style="float: right;margin-right: 130px;margin-top: -5px">
+		                            <option value="0">&nbsp;&nbsp;-&nbsp;&nbsp;</option>
+		                            <option <#if codeDateSep?? && codeDateSep=="1">selected="selected"</#if> value="1">&nbsp;&nbsp;.&nbsp;&nbsp;</option>
+		                            <option <#if codeDateSep?? && codeDateSep=="2">selected="selected"</#if> value="2">中文</option>
+		                            <option <#if codeDateSep?? && codeDateSep=="3">selected="selected"</#if> value="3">&nbsp;无&nbsp;</option>
+		                            <option <#if codeDateSep?? && codeDateSep=="4">selected="selected"</#if> value="4">空格</option>
+	                           </select>
+	                        
+			        </div>
+			        <div style=" margin-top: 10px">
+			                        <span>流水号长度   &nbsp;&nbsp; </span>
+			                        <select name="codeFlowLen" style="float: right;margin-right: 170px;margin-top: -5px">
+		                            <option <#if codeFlowLen?? && codeFlowLen=="3">selected="selected"</#if> value="3">3</option>
+		                            <option <#if codeFlowLen?? && codeFlowLen=="4">selected="selected"</#if> value="4">4</option>
+		                            <option <#if codeFlowLen?? && codeFlowLen=="5">selected="selected"</#if> value="5">5</option>
+		                            <option <#if codeFlowLen?? && codeFlowLen=="6">selected="selected"</#if> value="6">6</option>
+		                            <option <#if codeFlowLen?? && codeFlowLen=="7">selected="selected"</#if> value="7">7</option>
+		                            <option <#if codeFlowLen?? && codeFlowLen=="8">selected="selected"</#if> value="8">8</option>
+		                            <option <#if codeFlowLen?? && codeFlowLen=="9">selected="selected"</#if> value="9">9</option>
+		                            <option <#if codeFlowLen?? && codeFlowLen=="10">selected="selected"</#if> value="10">10</option>
+	                               </select>
+			        </div>
+			        <div style=" margin-top: 10px">
+			                <span style="display:inline-block;height:50px;margin-top: 20px"> 流水号递增规则：   </span>
+                            <fieldset style="width: 100px;float: right;margin-right: 80px;">
+                                    <div><input type="radio" <#if codeIncreaseRule?? && codeIncreaseRule=="0"> checked="checked"</#if> name="codeIncreaseRule" value="0"/>每日编号递增</div>
+                                    <div><input type="radio" <#if codeIncreaseRule?? && codeIncreaseRule=="1"> checked="checked"</#if> name="codeIncreaseRule" value="1"/>每月编号递增</div>
+                                    <div><input type="radio" <#if codeIncreaseRule?? && codeIncreaseRule=="2"> checked="checked"</#if> name="codeIncreaseRule" value="2"/>全年编号递增</div>
+                           </fieldset>
+			        </div>
+			        <div style=" margin-top: 10px">
+			                <span style="display:inline-block;height:50px;margin-top: 20px"> 单据编号生成规则：   </span>
+                            <fieldset style="width: 190px;float: right;">
+                                    <div><input type="radio" <#if codeCreateRule?? && codeCreateRule=="0"> checked="checked"</#if> name="codeCreateRule" value="0"/>可以废弃，单据保存后生效</div>
+                                    <div><input type="radio" <#if codeCreateRule?? && codeCreateRule=="1"> checked="checked"</#if> name="codeCreateRule" value="1"/>不能废弃，单据编号生成后生效</div>
+                                    <div><input type="radio" <#if codeCreateRule?? && codeCreateRule=="2"> checked="checked"</#if> name="codeCreateRule" value="2"/>可以废弃，单据过账后生效</div>
+                           </fieldset>
+			        </div>
+			    </div>
+			    <div class="pageFormContent">
+			        <div style=" margin-top: 10px"><input type="radio" <#if codeSelfCreate?? && codeSelfCreate=="0"> checked="checked"</#if> name="codeSelfCreate" value="0"/>系统自动生成单据编号</div>
+			        <div style=" margin-top: 10px"><input type="radio" <#if codeSelfCreate?? && codeSelfCreate=="1"> checked="checked"</#if> name="codeSelfCreate" value="1"/>用户输入单据编号</div>
+			        <div style=" margin-top: 10px"><input type="checkbox" <#if codeAllowEdit?? && codeAllowEdit=="1"> checked="checked"</#if>  name="codeAllowEdit" value="1" />禁止修改系统自动产生的编号</div>
+			        <#if hasOpenAccount?? && hasOpenAccount=="1"> 
+			        <div style=" margin-top: 10px;color: gray"><input type="checkbox" disabled="disabled" <#if codeCurrentFit?? && codeCurrentFit=="0"> checked="checked"</#if> name="codeCurrentFit" value="0" />录单日期必须和当前日期一致    <span style="color: blue;float: right;margin-right: 20px;margin-top: 5px">【开账后禁止修改】</span></div>
+			        <div style=" margin-top: 10px;color: gray"><input type="checkbox" disabled="disabled" <#if codeAllowRep?? && codeAllowRep=="0"> checked="checked"</#if> name="codeAllowRep" value="0" />允许单据编号重复     <span style="color: blue;float: right;margin-right: 20px;margin-top: 5px">【开账后禁止修改】</span></div>
+			        <#else>
+			             <div style=" margin-top: 10px"><input type="checkbox" <#if codeCurrentFit?? && codeCurrentFit=="0"> checked="checked"</#if> name="codeCurrentFit" value="0" />录单日期必须和当前日期一致   <span style="color: blue;float: right;margin-right: 20px;margin-top: 5px">【开账后禁止修改】</span></div>
+			             <div style=" margin-top: 10px"><input type="checkbox" <#if codeAllowRep?? && codeAllowRep=="0"> checked="checked"</#if> name="codeAllowRep" value="0" />允许单据编号重复        <span style="color: blue;float: right;margin-right: 20px;margin-top: 5px">【开账后禁止修改】</span></div>
+			        </#if>
+			    </div>
+			</div>
+			<div class="tabsFooter">
+                <div class="tabsFooterContent"></div>
+           </div>
+       </div>
+    </div>
+    <div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+		</ul>
+    </div>
+  </form>
+</div>

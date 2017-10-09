@@ -1,0 +1,31 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/upload/toOrderFujianUpLoad/${ids!''}">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+	
+	<input type="hidden" id="dialogTableId" name="tableId" value="${tableId}"/>
+	
+	<input type="hidden" id="fuJianIds" name="fuJianIds" value="${ids!''}"/>
+	
+</form>
+<table class="table" pattern="dialog" rel="${listID}" targetType="dialog" layoutH="180">
+	<thead>
+		<tr>
+			<th width="50" align="center">行号</th>  
+			<th width="100" align="center">文件名</th>
+			<th width="150" align="center">创建时间</th>
+			<th width="150" align="center">备注</th>
+		</tr>
+	</thead>
+	<tbody>
+		<#list pageMap.pageList as obj>
+		<tr target="id" rel="${obj.id!0}" >
+			<td><a>${obj_index+1+pageMap.limit}</a></td>
+			<td>${obj.sourceName!''}</td>
+			<td>${(obj.updateTime?string('yyyy-MM-dd HH:mm:ss'))}</td>
+			<td>${obj.memo!''}</td>
+		</tr>
+	    </#list>
+	</tbody>
+</table>
+<#include "/WEB-INF/template/unitl/dialogpage.html"/>
+

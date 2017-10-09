@@ -1,0 +1,211 @@
+<#import "/WEB-INF/template/common/base/header/addCommonPage.html" as orderHead>
+<!-- 收款单添加  -->
+<div class="pageContent" id="boughtPage" >
+   <input id="whichCallBack" type="hidden" value="getMoney"/><!-- 用于区分不同模块库存商品带回进不同函数     ID是写死，value用于区分 -->
+   <input id="basePathId" type="hidden" value="${base}"/><!-- 用于手工指定法    弹出窗体url -->
+   <input type="hidden" id="billType" value="table1"/><!-- 用于多表格，确认选中的哪个表格 -->
+   <form id="cw_getMoneyForm" class="tableForm pageForm" enctype="text/plain" method="post" action="${base}/finance/getMoney/add" onsubmit="return validateCallback(this, navTabAjaxDoneDialog)">
+	<input type="hidden" id="billNum" name="getMoneyBill.codeIncrease" value="${codeIncrease!}"/>
+	<input type="hidden" id="billCode"  name="billCode" value="${code!}"/>
+	<div id="hasFujianClassId" class="textContent center">
+	
+	<@orderHead.billCode title="收款单" billName="getMoneyBill"/>
+	      <#--<div>
+	         <span style="font-size: 18px;">收款单</span>
+			 <span style="float: right;">
+		                 录单日期
+		     <input type="text" class="date required" name="getMoneyBill.recodeDate" dateFmt="yyyy-MM-dd HH:mm:ss" value="${todayTime!}" hasClear="no" readonly="readonly"/>
+		                单据编号
+		    <input id="showBillCode" class="line required textInput" type="text" style="width: 200px" name="getMoneyBill.code"  value="${code!}" <#if codeAllowEdit?? && codeAllowEdit=="1">readonly="readonly"</#if>/>
+		    </span>
+	     </div>-->
+	     <div>
+	     
+	     <@orderHead.unitTag text="付款单位" required="required" backParam="getOrderByUnit"/>
+	                      <#--    付款单位
+            <#if settlementType=="order">
+            <#assign getOrder = 'true'/>
+		    <#elseif settlementType=="money">
+		    </#if>
+		    <#include "/WEB-INF/template/common/base/unit/billLink.html"/>-->
+		    
+		     <@orderHead.staffTag />   
+	                         <#--  经手人 
+	        <#include "/WEB-INF/template/common/base/staff/billLink.html"/>-->
+	        
+	        <@orderHead.dept />
+	                       <#--     部门    
+	        <#include "/WEB-INF/template/common/base/dept/billLink.html"/> -->       
+	     </div>
+	     <div>
+	     
+	                      
+	        <@orderHead.summary billName="getMoneyBill" />         
+	     <#--
+	                          摘要
+	        <input style="width: 250px;" class="line" type="text" name="getMoneyBill.remark" value=""/>
+	                          附加说明
+	        <input style="width: 250px;" class="line" type="text" name="getMoneyBill.memo" value="" id="memo"/>-->
+	        <#include "/WEB-INF/template/common/columnConfig/billRowConfigLink.html"/>
+	        
+	        <@orderHead.attachment />
+	        <#--<span style="float: right;">
+		        <div style="float: right;">
+		        <img style="margin-top: 5px;" onclick="openOrderFujianDialog('${base}','${tableId}');" title="单据附件" src="${base}/img/bill/fujian.jpg" alt="单据附件">
+		        <input type="hidden" id="orderFuJianIds" name="orderFuJianIds"/>
+		        </div>
+		    </span>-->
+	     </div>
+	</div>
+	<div class="divider"></div>
+	<div class="pageContent" layoutH="181">
+	   <#assign showWidth = 0/>
+	   <#list rowList as row>
+	     <#if row.width??>
+	      <#assign showWidth = showWidth+row.width/>
+	     </#if>
+	   </#list>
+	   <#if settlementType=="order">
+	   <table class="table" model="order"  layoutH="398" width="${showWidth!}px">
+	   <#elseif settlementType=="money">
+	   <table class="table" model="order"  layoutH="227" width="${showWidth!}px">
+	   </#if>
+	        <thead>
+			 <tr>
+				<th width="50px" >
+					行号
+				</th>
+				<#list rowList as row>
+				   <th width="${(row.width)!100}px"> 
+					 ${(row.showName)!(row.name)!}
+				   </th>
+				</#list>
+				<th width="45px">
+				   <a title="添加一行" class="btnAdd" target="addTr" href="javascript:void(0);" rel="sellbody"></a>
+				</th>
+			</tr>
+		  </thead>
+		  <tbody id="getMoneyBillbody" preDataName="getMoneylDetail" type="table1">
+		     <#list 1..15 as td>
+		     <tr>
+		       <td>${td_index+1}</td>
+		       <!--  -->
+		     <#list rowList as row>
+		       <#if row.code?? && 'accountsCode'==row.code>
+		       <!-- 科目编号-->
+		       <td cname="accountsCode" validateAttr="" maxlength="50" onBlur="objDelOrClear(this,'accountsCode');"  cTarget="dialog"  title="会计科目选择" warn="会计科目选择"   enterSearch="true" searchUrl="${base}/base/accounts/accountsOneRecord/" editUrl="${base}/base/accounts/accountsDialogEdit/" url="${base}/base/accounts/accountsDialog/" rel="cw_account_dialog" dwidth="570" dheight="450"></td> 
+		       <#elseif row.code?? && 'accountsFullName'==row.code>
+		       <!-- 科目名称 -->
+		       <td cname="accountsFullName" validateAttr=""  maxlength="50" onBlur="objDelOrClear(this,'accountsFullName');"  cTarget="dialog"  title="会计科目选择" warn="会计科目选择" enterSearch="true" searchUrl="${base}/base/accounts/accountsOneRecord/" editUrl="${base}/base/accounts/accountsDialogEdit/" url="${base}/base/accounts/accountsDialog/" rel="cw_account_dialog" dwidth="570" dheight="450"></td>
+		       <#elseif row.code?? && 'accountsSmallName'==row.code>
+		       <!-- 科目简称 -->
+		       <td cname="accountsSmallName" readonly="readonly"></td>
+		       <#elseif row.code?? && 'accountsSpell'==row.code>
+		       <!-- 科目拼音码 -->
+		       <td cname="accountsSpell"  readonly="readonly"></td>
+		       <#elseif row.code?? && 'accountsMemo'==row.code>
+		       <!-- 科目备注 -->
+		       <td cname="accountsMemo" readonly="readonly"  maxlength="50"></td>
+		       <#elseif row.code?? && 'money'==row.code>
+		       <!-- 金额 -->
+		       <td cname="money" validateAttr="number" requiredData="need"  maxlength="50" onBlur="inputAccountsMoney(this)"> </td>
+		       <#elseif row.code?? && 'orderMemo'==row.code>
+		       <!-- 单据备注 -->
+		       <td cname="memo" validateAttr=""  requiredData="need" maxlength="50"> </td>
+		       <#elseif row.code?? && 'message'==row.code>
+		       <!-- 附加信息 -->
+		       <td cname="message" validateAttr="" requiredData="need" maxlength="200"></td>
+		       <#else>
+		         <td>列名配置错误</td>
+		       </#if>
+		      </#list>
+		       <td><a title="删除本行" class="btnDel" href="javascript:void(0);" onclick="removeTr(this);"></a></td>
+		     </tr>
+		     </#list>
+		  </tbody>
+		  <tfoot>
+		       <tr style="border-top: #D0D0D0 solid 1px">
+		       <td>合计</td>
+		       <#list rowList as row>
+		            <#if row.code?? && 'money'==row.code>
+		             <!-- 金额 -->
+		             <td><input name="getMoneyBill.moneys" class="stealth" id="moneys" readonly="readonly"/></td>
+		            <#else>
+		            <td></td>
+		            </#if>
+		       </#list>
+		       <td></td>
+		       </tr>
+		  </tfoot>
+	   </table>
+	   
+	   <#if settlementType=="order">
+	   <div class="divider" style="height: 20px;"></div> 
+	   <table class="table" model="order" width="${showWidth!}px">
+	        <thead drag=false>
+			 <tr>
+				<th width="50px">行号</th>
+				<th width="150px">单据编号</th>
+				<th width="150px">日期</th>
+				<th width="200px">摘要</th>
+				<th width="100px">金额</th>
+				<th width="100px">余额</th>
+				<th width="100px">结算金额</th>
+				<th width="50px">选择</th>
+			</tr>
+		  </thead>
+		  <tbody id="moneyBillOrderbody" preDataName="orderUitl2" type="table2">
+		     <#list 1..5 as td>
+		     <tr target="tid" rel="" sameId="cw_getMoneyLooKOrder" isBill="yes" title="" url="${base}/common/bill/lookBill/" cTarget="openNavTab">
+		       <td cname="trIndex" requiredData="need" readonly="readonly"></td>
+		       <td cname="code" readonly="readonly"></td>
+		       <td cname="recodeDate" readonly="readonly"></td>
+		       <td cname="remark" readonly="readonly"></td>
+		       <td cname="money" readonly="readonly"></td>
+		       <td cname="lastMoney" requiredData="need" readonly="readonly"></td>
+		       <td cname="settlementAmount" validateAttr="number" requiredData="need" onBlur="inputAccountsSettlementMoney(this)"></td>
+		       <td cname="select" readonly="readonly" isSelectTrue="false" onclick="accountSettleMentAmouont(this);"></td>
+		       <td></td>
+		       <span ></span>
+		     </tr>
+		     </#list>
+		  </tbody>
+	   </table>
+	   </#if>
+  </div>
+  <div class="divider"></div> 
+	   <div class="textContent center">
+	     <div style="margin-top: 13px;">
+	         <a style="display: none;" class="button"><span><button type="button" onclick="accountsChangePreGetMoney(this);">预收账款</button></span></a>
+	         <input type="hidden" id="hasPreGetMoney" value="no">
+	         <input type="hidden" class="stealth" id="preGetMoney" name="getMoneyBill.preGetMoney" value="0" style="width: 100px" readonly="readonly"/>
+			 <span style="float: right;">
+		                优惠金额<input class="line number" type="text" id="privilege"  name="getMoneyBill.privilege" value="0" onblur="getMoneyPrivilegeMoneyOnblur();"/> 
+		               可分配金额：<input type="text" class="stealth" id="canAssignMoney" name="getMoneyBill.canAssignMoney" value="0" style="width: 100px" readonly="readonly"/>
+		              合计：<input type="text" class="stealth" id="privilegeMoney" name="getMoneyBill.privilegeMoney" value="0" style="width: 100px" readonly="readonly"/>
+		    </span>
+	     </div>
+	   </div>
+	   <div class="divider"></div> 
+		<div>
+	     <div style="float: right;">
+	        <#if isFreeVersion != "yes">
+	   		<a id="cw_getMoneyLooKOrder" class="button" target="navTab" href="${base}/common/bill/lookBill/{tid}"><span>查看单据</span></a>
+	   		<a class="button" onclick="accountsAutoSettlementMoney();"><span>自动分配</span></a>
+	   		</#if>
+	   		<@shiro.hasPermission name='601-t'>
+	        <a class="button"><span><button type="button" onclick="$('#cw_getMoneyForm').submit();">保存</button></span></a>
+	        </@shiro.hasPermission>
+	        <#if isFreeVersion != "yes">
+	        <a class="button" href="${base}/finance/getMoney/draft/add" target="submit"><span>保存草稿</span></a>
+	        </#if>
+	        <#assign privs = '601-p'/>
+			<#assign href = '${base}/finance/getMoney/print'/>
+			<#assign formId = 'cw_getMoneyForm'/>
+			<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	        <a class="button" href="javascript:void(0);" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a>
+	     </div>
+	    </div>
+	
+  </form>
+</div>

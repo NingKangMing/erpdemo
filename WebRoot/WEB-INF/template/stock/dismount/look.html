@@ -1,0 +1,409 @@
+<div class="pageContent">
+  <form id="dismountBillForm" class="tableForm pageForm" enctype="text/plain" method="post">
+	<input type="hidden" name="billId" value="${(bill.id)!}"/>
+   <input type="hidden" id="billType" value="out"/><!-- 用于多表格，确认选中的哪个表格 -->
+	<div id="hasFujianClassId" <#if orderFuJianIds?length gt 0>class="textContent center fujianClass"<#else>class="textContent center"</#if>>
+	      <div>
+	         <span style="font-size: 18px;">生产拆装单</span>
+			 <span style="float: right;">
+		                 录单日期
+		     <input id="recodeTime" type="text" class="date required"  dateFmt="yyyy-MM-dd HH:mm:ss" value="<#if bill.recodeDate??>${(bill.recodeDate)?string("yyyy-MM-dd HH:mm:ss")}</#if>" readonly="readonly"/>
+		                单据编号
+		    <input class="line textInput" type="text" style="width: 200px" value="${(bill.code)!}" readonly="readonly" maxlength="100"/>
+		    </span>
+	     </div>
+	     <div>
+	                          发货仓库
+	        <input class="line"  name="outStorage.fullName" value="${(bill.getBillOutStorage(session.loginConfigId).fullName)!}" readonly="readonly"/>
+	                           经手人 
+	        <input class="line" type="text" name="staff.name" id="staffName" value="${(bill.getBillStaff(session.loginConfigId).name)!}" readonly="readonly"/>
+	                        部门    
+	        <input type="text" class="line"  name="department.fullName" value="${(bill.getBillDepartment(session.loginConfigId).fullName)!}" readonly="readonly"/> 
+	     </div>
+	     
+	     <div>
+	                   入货 仓库
+	        <input class="line"  name="inStorage.fullName" value="${(bill.getBillInStorage(session.loginConfigId).fullName)!}" readonly="readonly"/>    
+	                          摘要
+	         <input  style="width: 250px;" class="line" type="text" name="dismountBill.remark" id="remark" value="${(bill.remark)!}" readonly="readonly"/>
+	                          附加说明
+	        <input style="width: 250px;" class="line" type="text" id="memo" name="dismountBill.memo" value="${(bill.memo)!}" readonly="readonly"/>
+	        <#include "/WEB-INF/template/common/columnConfig/billRowConfigLink.html"/>
+	        <div style="float: right;">
+	              <#include "/WEB-INF/template/common/lookBillPreOrNext/page.html"/>
+	              <img style="margin-top: 5px;" onclick="openOrderFujianDialog('${base}','${tableId}','0','${(bill.id)!}');" title="单据附件" src="${base}/img/bill/fujian.jpg" alt="单据附件">
+	              <input type="hidden" id="orderFuJianIds" name="orderFuJianIds" value="${orderFuJianIds!}"/>
+	        </div>
+	     </div>
+	</div>
+	<div class="divider"></div>
+	<div class="pageContent">
+	   <#assign showWidth = 0/>
+	   <#list rowList as row>
+	     <#if row.width??>
+	      <#assign showWidth = showWidth+row.width/>
+	     </#if>
+	   </#list>
+	   <table class="table" model="order" layoutH="555" width="${showWidth!}px">
+	        <thead>
+			 <tr>
+				<th width="50px">
+					行号
+				</th>
+				<#list rowList as row>
+				   <th align="center" width="${(row.width)!100}px">
+				     <#if row.code?? && 'code'==row.code || 'fullName'==row.code>
+				                    出库 ${(row.showName)!(row.name)!}
+				     <#else>
+				         ${(row.showName)!(row.name)!}
+				     </#if>
+					
+				   </th>
+				</#list>
+				
+			</tr>
+		  </thead>
+		  <tbody id="dismountDetailOutBody" preDataName="dismountOutDetail" type="out">
+		     <#list detailOutList as detail>
+		     <tr>
+		       <td>${detail_index+1}</td>
+		      <#list rowList as row>
+		       <#if row.code?? && 'code'==row.code>
+		       <!-- 商品编号 -->
+		       <td>${(detail.product.code)!}</td>
+		       <#elseif row.code?? && 'fullName'==row.code>
+		       <!-- 商品名称 -->
+		       <td>${(detail.product.fullName)!}</td>
+		       <#elseif row.code?? && 'smallName'==row.code>
+		       <!-- 商品简称 -->
+		       <td>${(detail.product.smallName)!''}</td>
+		       <#elseif row.code?? && 'spell'==row.code>
+		       <!-- 商品拼音 -->
+		       <td>${(detail.product.spell)!''}</td>
+		       <#elseif row.code?? && 'standard'==row.code>
+		       <!-- 规格 -->
+		       <td>${(detail.product.standard)!''}</td>
+		       <#elseif row.code?? && 'model'==row.code>
+		       <!-- 型号 -->
+		       <td>${(detail.product.model)!''}</td>
+		       <#elseif row.code?? && 'field'==row.code>
+		       <!-- 产地 -->
+		       <td>${(detail.product.field)!''}</td>
+		       <#elseif row.code?? && 'savePath'==row.code>
+		       <!-- 图片 -->
+		       <td>
+					<#if (detail.product.savePath)??>
+					    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(detail.product.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(detail.product.savePath)!}"  width="20px" height="20px"/>
+		            </#if>
+				</td>
+		       <#elseif row.code?? && 'storageCode'==row.code>
+		       <!-- 仓库编号 -->
+		       <td>${(detail.storage.code)!}</td>
+		       <#elseif row.code?? && 'storageName'==row.code>
+		       <!-- 仓库全名-->
+		       <td>${(detail.storage.fullName)!}</td>
+		       <#elseif row.code?? && 'unit'==row.code>
+		       <!-- 单位 -->
+		       <td>${(detail.selectUnit)!}</td>
+		       <#elseif row.code?? && 'helpUnit'==row.code>
+		       <!-- 辅助单位 -->
+		       <td>${(detail.product.assistUnit)!}</td>
+		       <#elseif row.code?? && 'produceDate'==row.code>
+		       <!-- 生产日期 -->
+		       <td><#if detail.produceDate??>${(detail.produceDate)?string("yyyy-MM-dd")}</#if></td>
+		        <#elseif row.code?? && 'produceEndDate'==row.code>
+		       <!-- 结束日期 -->
+		       <td><#if detail.produceEndDate??>${(detail.produceEndDate)?string("yyyy-MM-dd")}</#if></td>
+		       <#elseif row.code?? && 'batch'==row.code>
+		       <!-- 批号 -->
+		       <td>${(detail.batch)!}</td>
+		       <#elseif row.code?? && 'helpAmount'==row.code>
+		       <!-- 辅助数量 -->
+		       <td>${(detail.helpAmount)!}</td>
+		       <#elseif row.code?? && 'amount'==row.code>
+		       <!-- 数量 -->
+		       <td>${(detail.amount)!}</td>
+		       <#elseif row.code?? && 'baseAmount'==row.code>
+		       <!-- 基本数量-->
+		       <td>${(detail.getOtherAmount(session.loginConfigId,1))!} ${(detail.product.calculateUnit1)!}</td>
+		       <#elseif row.code?? && 'baseAmount1'==row.code>
+		       <!-- 辅助数量1 -->
+		       <td>${(detail.getOtherAmount(session.loginConfigId,2))!} ${(detail.product.calculateUnit2)!}</td>
+		       <#elseif row.code?? && 'baseAmount2'==row.code>
+		       <!-- 辅助数量2 -->
+		       <td>${(detail.getOtherAmount(session.loginConfigId,3))!} ${(detail.product.calculateUnit3)!}</td>
+		       <#elseif row.code?? && 'price'==row.code>
+		       <!-- 单价 -->
+		       <td>
+		         <#if detail.id??>
+		         <@shiro.hasPermission name='1101-s'>
+		            ${(detail.price)!}
+				 </@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					***
+				 </@shiro.lacksPermission>
+				 </#if>
+		       </td>
+		       <#elseif row.code?? && 'money'==row.code>
+		       <!-- 金额 -->
+		       <td>
+		         <#if detail.id??>
+		         <@shiro.hasPermission name='1101-s'>
+		            ${(detail.money)!}
+				 </@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					***
+				 </@shiro.lacksPermission>
+				 </#if>
+		       </td>
+		       <#elseif row.code?? && 'memo'==row.code>
+		       <!-- 备注 -->
+		       <td>${(detail.memo)!}</td>
+		       <#elseif row.code?? && 'status'==row.code>
+		       <!-- 状态 -->
+		       <td><#if detail.id?? && (!detail.price?? || detail.price==0)>
+		                                     赠品
+		           </#if>
+		       </td>
+		       <#elseif row.code?? && 'barCode'==row.code>
+		       <!--条码 -->
+		       <td>${(detail.product["barCode"+detail.selectUnitId])!}</td>
+		       <#elseif row.code?? && 'message'==row.code>
+		       <!-- 附加信息 -->
+		       <td>${(detail.message)!}</td>
+		       <#else>
+		         <td></td>
+		       </#if>
+		      </#list>
+		       
+		     </tr>
+		     </#list>
+		  </tbody>
+		  <tfoot>
+		       <tr style="border-top: #D0D0D0 solid 1px">
+		       <td>合计</td>
+		       <#list rowList as row>
+		            <#if row.code?? && 'amount'==row.code>
+		            <!-- 总数 -->
+		            <td>${(bill.outAmount)!}</td>
+		            <#elseif row.code?? && 'money'==row.code>
+		            <!-- 总价 -->
+		            <td>
+		              <@shiro.hasPermission name='1101-s'>
+			            ${(bill.outMoney)!}
+					  </@shiro.hasPermission>
+					  <@shiro.lacksPermission name='1101-s'>
+						***
+					  </@shiro.lacksPermission>
+		            </td>
+		            <#else>
+		            <td></td>
+		            </#if>
+		       </#list>
+		       </tr>
+		 </tfoot>
+	   </table>
+	   <div class="divider"></div> 
+	   <div class="center">
+	      <span style="float: right;">
+		               出库数量：<input type="text" class="stealth" id="outAmount" name="dismountBill.outAmount" value="${(bill.outAmount)!0}" style="width: 100px" readonly="readonly"/>
+		              出库金额：
+		              <@shiro.hasPermission name='1101-s'>
+			            <input type="text" class="stealth" id="outMoney" name="dismountBill.outMoney" value="${(bill.outMoney)!0}" style="width: 100px" readonly="readonly"/>
+					  </@shiro.hasPermission>
+					  <@shiro.lacksPermission name='1101-s'>
+						<input type="text" class="stealth" id="outMoney" name="dismountBill.outMoney" value="***" style="width: 100px" readonly="readonly"/>
+					  </@shiro.lacksPermission>
+		   </span>
+	   </div>
+	   <div class="divider"></div> 
+	   <table class="table" model="order" layoutH="555" width="${showWidth!}px">
+	        <thead>
+			 <tr>
+				<th width="50px">
+					行号
+				</th>
+				<#list rowList as row>
+				   <th align="center" width="${(row.width)!100}px">
+				     <#if row.code?? && 'code'==row.code || 'fullName'==row.code>
+				                      入库 ${(row.showName)!(row.name)!}
+				     <#else>
+				         ${(row.showName)!(row.name)!}
+				     </#if>
+					
+				   </th>
+				</#list>
+				
+			</tr>
+		  </thead>
+		  <tbody id="dismountDetailInBody" preDataName="dismountInDetail" type="in">
+		     <#list detailInList as detail>
+		     <tr>
+		       <td>${detail_index+1}</td>
+		      <#list rowList as row>
+		       <#if row.code?? && 'code'==row.code>
+		       <!-- 商品编号 -->
+		       <td>${(detail.product.code)!}</td>
+		       <#elseif row.code?? && 'fullName'==row.code>
+		       <!-- 商品名称 -->
+		       <td>${(detail.product.fullName)!}</td>
+		       <#elseif row.code?? && 'smallName'==row.code>
+		       <!-- 商品简称 -->
+		       <td>${(detail.product.smallName)!''}</td>
+		       <#elseif row.code?? && 'spell'==row.code>
+		       <!-- 商品拼音 -->
+		       <td>${(detail.product.spell)!''}</td>
+		       <#elseif row.code?? && 'standard'==row.code>
+		       <!-- 规格 -->
+		       <td>${(detail.product.standard)!''}</td>
+		       <#elseif row.code?? && 'model'==row.code>
+		       <!-- 型号 -->
+		       <td>${(detail.product.model)!''}</td>
+		       <#elseif row.code?? && 'field'==row.code>
+		       <!-- 产地 -->
+		       <td>${(detail.product.field)!''}</td>
+		       <#elseif row.code?? && 'savePath'==row.code>
+		       <!-- 图片 -->
+		       <td>
+					<#if (detail.product.savePath)??>
+					    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(detail.product.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(detail.product.savePath)!}"  width="20px" height="20px"/>
+		            </#if>
+				</td>
+		       <#elseif row.code?? && 'storageCode'==row.code>
+		       <!-- 仓库编号 -->
+		       <td>${(detail.storage.code)!}</td>
+		       <#elseif row.code?? && 'storageName'==row.code>
+		       <!-- 仓库全名-->
+		       <td>${(detail.storage.fullName)!}</td>
+		       <#elseif row.code?? && 'unit'==row.code>
+		       <!-- 单位 -->
+		       <td>${(detail.selectUnit)!}</td>
+		       <#elseif row.code?? && 'helpUnit'==row.code>
+		       <!-- 辅助单位 -->
+		       <td>${(detail.product.assistUnit)!}</td>
+		       <#elseif row.code?? && 'produceDate'==row.code>
+		       <!-- 生产日期 -->
+		       <td><#if detail.produceDate??>${(detail.produceDate)?string("yyyy-MM-dd")}</#if></td>
+		       <#elseif row.code?? && 'batch'==row.code>
+		       <!-- 批号 -->
+		       <td>${(detail.batch)!}</td>
+		       <#elseif row.code?? && 'helpAmount'==row.code>
+		       <!-- 辅助数量 -->
+		       <td>${(detail.helpAmount)!}</td>
+		       <#elseif row.code?? && 'amount'==row.code>
+		       <!-- 数量 -->
+		       <td>${(detail.amount)!}</td>
+		       <#elseif row.code?? && 'baseAmount'==row.code>
+		       <!-- 基本数量-->
+		       <td>${(detail.getOtherAmount(session.loginConfigId,1))!} ${(detail.product.calculateUnit1)!}</td>
+		       <#elseif row.code?? && 'baseAmount1'==row.code>
+		       <!-- 辅助数量1 -->
+		       <td>${(detail.getOtherAmount(session.loginConfigId,2))!} ${(detail.product.calculateUnit2)!}</td>
+		       <#elseif row.code?? && 'baseAmount2'==row.code>
+		       <!-- 辅助数量2 -->
+		       <td>${(detail.getOtherAmount(session.loginConfigId,3))!} ${(detail.product.calculateUnit3)!}</td>
+		       <#elseif row.code?? && 'price'==row.code>
+		       <!-- 单价 -->
+		       <td>
+		          <#if detail.id??>
+		          <@shiro.hasPermission name='1101-s'>
+		            ${(detail.price)!}
+				  </@shiro.hasPermission>
+				  <@shiro.lacksPermission name='1101-s'>
+					***
+				  </@shiro.lacksPermission>
+				  </#if>
+		       </td>
+		       <#elseif row.code?? && 'money'==row.code>
+		       <!-- 金额 -->
+		       <td>
+		          <#if detail.id??>
+		          <@shiro.hasPermission name='1101-s'>
+		            ${(detail.money)!}
+				  </@shiro.hasPermission>
+				  <@shiro.lacksPermission name='1101-s'>
+					***
+				  </@shiro.lacksPermission>
+				  </#if>
+		       </td>
+		       <#elseif row.code?? && 'memo'==row.code>
+		       <!-- 备注 -->
+		       <td>${(detail.memo)!}</td>
+		       <#elseif row.code?? && 'status'==row.code>
+		       <!-- 状态 -->
+		       <td><#if detail.id?? && (!detail.price?? || detail.price==0)>
+		                                     赠品
+		           </#if>
+		       </td>
+		       <#elseif row.code?? && 'barCode'==row.code>
+		       <!--条码 -->
+		       <td>${(detail.product["barCode"+detail.selectUnitId])!}</td>
+		       <#elseif row.code?? && 'message'==row.code>
+		       <!-- 附加信息 -->
+		       <td>${(detail.message)!}</td>
+		       <#else>
+		         <td></td>
+		       </#if>
+		      </#list>
+		       
+		     </tr>
+		     </#list>
+		  </tbody>
+		  <tfoot>
+		       <tr style="border-top: #D0D0D0 solid 1px">
+		       <td>合计</td>
+		       <#list rowList as row>
+		            <#if row.code?? && 'amount'==row.code>
+		             <!-- 总数 -->
+		             <td>${(bill.inAmount)!}</td>
+		            <#elseif row.code?? && 'money'==row.code>
+		            <!-- 总价 -->
+		            <td>
+		              <@shiro.hasPermission name='1101-s'>
+			            ${(bill.inMoney)!}
+					  </@shiro.hasPermission>
+					  <@shiro.lacksPermission name='1101-s'>
+						***
+					  </@shiro.lacksPermission>
+		            </td>
+		            <#else>
+		            <td></td>
+		            </#if>
+		       </#list>
+		       </tr>
+		 </tfoot>
+	   </table>
+	   <div class="divider"></div>
+		<div class="center">
+	     <div>
+	         <span style="margin-left: 20px">
+	                       &nbsp;       
+	         </span>
+			 <span style="float: right;">
+		                入库数量：<input type="text" class="stealth" id="inAmount" name="dismountBill.inAmount" value="${(bill.inAmount)!0}" style="width: 100px" readonly="readonly"/>
+		             入库金额：
+		              <@shiro.hasPermission name='1101-s'>
+			            <input type="text" class="stealth" id="inMoney" name="dismountBill.inMoney" value="${(bill.inMoney)!0}" style="width: 100px" readonly="readonly"/>
+					  </@shiro.hasPermission>
+					  <@shiro.lacksPermission name='1101-s'>
+						<input type="text" class="stealth" id="inMoney" name="dismountBill.inMoney" value="***" style="width: 100px" readonly="readonly"/>
+					  </@shiro.lacksPermission>
+		             
+		    </span>
+	     </div>
+	     </div>
+	    <div class="divider"></div> 
+		<div>
+	     <div style="float: right;">
+	         <#include "/WEB-INF/template/common/base/accountDetailCommomLink.html"/>
+		     <#assign privs = '5-510-p'/>
+	<#assign href = '${base}/stock/dismount/print'/>
+	<#assign formId = 'dismountBillForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	        <a class="button" href="javascript:void(0);" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a>
+	     </div>
+	    </div>
+	</div>
+   </form>
+</div>
+

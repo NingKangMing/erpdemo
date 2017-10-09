@@ -1,0 +1,421 @@
+#splitBar {
+	display: none;
+}
+
+#container {
+	position: absolute;
+	top: 55px;
+	left: 0px;
+}
+#guideLeft h3{
+	background:#efefef;
+	color:#666;
+	height:20px;
+	line-height:20px;
+	text-align:center;
+}
+#guideLeft a {
+	display: block;
+	font-weight: bold;
+	margin: 0 auto;
+	width: 160px;
+	line-height: 35px;
+	text-align: center;
+	overflow: hidden;
+	position: relative;
+	cursor: pointer;
+	font-size: 14px;
+	color: #333;
+	padding-top:10px;
+}
+
+#guideLeft span {
+	display: block;
+	font-weight: bold;
+	margin: 0 auto;
+	width: 160px;
+	line-height: 35px;
+	text-align: center;
+	overflow: hidden;
+}
+
+.pageContent h1 {
+	font-size: 14px;
+	font-weight: bold;
+	margin-left: 30px;
+	margin-top: 20px;
+}
+
+.dialog .pageHeader {
+	margin: 1px;
+}
+
+.dialog .panelBar {
+	margin: 1px;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:link {
+	text-decoration: none;
+}
+
+a:active: {
+	text-decoration: none;
+}
+
+a:visited {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+a.btnLook {
+	display: block;
+	float: right;
+}
+
+.leftTreeBox {
+	float: left;
+	display: block;
+	overflow: auto;
+	width: 240px;
+	border: 1px solid rgb(204, 204, 204);
+	line-height: 21px;
+	background: none repeat scroll 0% 0% rgb(255, 255, 255);
+}
+
+input.line {
+	border: none;
+	border-bottom: 1px solid #005;
+	background: transparent;
+}
+
+input.line.focus {
+	border: none;
+	border-bottom: 1px solid #005;
+	background: transparent;
+}
+
+input.stealth {
+	border: none;
+	background: transparent;
+	width: 100%;
+	
+}
+input.readonly.stealth{
+	text-align: center
+}
+input.stealth.focus {
+	border: none;
+	background: transparent;
+	width: 100%
+}
+
+.textContent {
+	display: block;
+	position: relative;
+	overflow: auto;
+}
+
+.textContent div {
+	margin: 2px;
+	height: 25px;
+}
+
+.display {
+	display: none;
+}
+
+.typeList ul .selected {
+	background-color: #c3dffd;
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+input.error,textarea.error {
+	border-color: #F80C11 #FB7E81 #FB7E81 #F80C11;
+}
+
+.isRCW {
+	color: red;
+}
+
+#header {
+	height: 104px;
+	background: #478ede;
+	color: #fff;
+}
+
+#header .logo-img{float:left;margin-top:20px;}
+
+#leftside,#container,#splitBar,#splitBarProxy {
+	top: 104px
+}
+
+#menu-top {
+	float: left;
+	margin-left: 20px;
+	margin-top: 32px;
+}
+
+#menu-top .mtu {
+	
+}
+
+#menu-top .mtu .mtul {
+	float: left;
+	padding: 50px 10px 10px;
+	cursor: pointer;
+}
+
+#menu-top .mtu .basic {
+	background: url(../img/index/menu-basic.png) center 10px no-repeat;
+}
+
+#menu-top .mtu .init {
+	background: url(../img/index/menu-init.png) center 10px no-repeat;
+}
+
+#menu-top .mtu .bought {
+	background: url(../img/index/menu-bought.png) center 10px no-repeat;
+}
+
+#menu-top .mtu .sell {
+	background: url(../img/index/menu-sell.png) center 10px no-repeat;
+}
+
+#menu-top .mtu .stock {
+	background: url(../img/index/menu-stock.png) center 10px no-repeat;
+}
+
+#menu-top .mtu .money {
+	background: url(../img/index/menu-money.png) center 10px no-repeat;
+}
+
+#menu-top .mtu .doc {
+	background: url(../img/index/menu-doc.png) center 10px no-repeat;
+}
+
+#menu-top .mtu .assist {
+	background: url(../img/index/menu-assist.png) center 10px no-repeat;
+}
+
+#menu-top .mtu .sys {
+	background: url(../img/index/menu-sys.png) center 10px no-repeat;
+}
+
+#menu-top .mtu .help {
+	background: url(../img/index/menu-help.png) center 10px no-repeat;
+}
+
+#menu-top .mtu .hover {
+	background-color: #2f7cd4;
+}
+
+#menu-top .mtu .selected {
+	background-color: #2f7cd4;
+}
+
+#menu-top .submenu {
+	display: none;
+	background: #2f7cd4;
+	position: absolute;
+	top: 104px;
+	z-index: 9;
+}
+
+#menu-top .submenu>li {
+	
+}
+
+#menu-top .submenu ul span {
+	cursor: pointer;
+	background: url(../img/index/menu-arrow-right.png) right center
+		no-repeat;
+	padding: 5px 10px;
+	display:block;
+}
+
+#menu-top .submenu>li>ul>li {
+	text-align: left;
+	padding-right:4px;
+}
+
+#menu-top .submenu li ul ul {
+	display: none;
+	position: absolute;
+	background: #478ede;
+	z-index: 10;
+}
+
+#menu-top .submenu li ul ul li {
+	width: 128px;
+	padding-right:4px;
+}
+
+#menu-top .submenu li.hover {
+	background-color: #6ca3e0;
+}
+
+#menu-top .submenu li ul a {
+	color: #fff;
+	padding: 5px 10px;
+	display:block;
+}
+
+#guideLeft {
+	background: #fff;
+	border-right: 2px solid #eee;
+	float: left;
+	overflow: auto;
+}
+
+#guideLeft a.hover {
+	color: #f4a023;
+}
+
+#guideLeft a.selected {
+	background-color: #3594ee;
+	color: #fff;
+}
+
+.panel .panelHeaderContent h1 a {
+	color: #fff;
+}
+
+.grid table th div {
+	color: #000;
+}
+
+#footer span {
+	float: right;
+	margin-top: 6px;
+	margin-right: 20px;
+}
+
+#menu-sys {
+	float: right;
+	margin-right: 24px;
+	margin-top: 10px;
+	overflow: hidden;
+	width: 110px;
+}
+
+#menu-sys div {
+	float: right;
+	font-weight: bold;
+	margin-top: 10px;
+	margin-right: 10px;
+}
+
+#menu-sys div a {
+	color: #fff;
+}
+
+.panelBar {
+	padding: 1px;
+}
+
+.nav-content {
+	margin: 20px auto 0;
+	text-align: center;
+	overflow:hidden;
+}
+.nav-content1 {
+	margin: 20px auto 0;
+	width: 600px;
+	text-align: center;
+}
+
+.nav-btn {
+	display: block;
+	background: #6ca3e0;
+	width: 100px;
+	height: 100px;
+	float: left;
+	margin-left: 110px;
+	margin-top: 50px;
+}
+
+.nav-btn img {
+	margin-top: 16px;
+	height:60px;
+	width:60px;
+}
+
+.nav-btn span {
+	margin-top: 2px;
+	display: block;
+	color: #fff;
+}
+
+.nav-btn:hover {
+	background: #f4a023;
+}
+
+#guideReport {
+	width: 200px;
+	float: right;
+}
+#guideReport>div{
+	border-left: 1px dashed #888;
+}
+
+.nav-report {
+	
+}
+
+.nav-report h3 {
+	border-bottom: 1px dashed #888;
+	font-size: 16px;
+	padding: 10px 4px;
+}
+
+.nav-report a {
+	border-bottom: 1px dashed #888;
+	display: block;
+	padding: 10px 8px;
+}
+
+#guideRight {
+	float: left;
+}
+
+.mw1024{
+	margin-left:2px;
+}
+
+.mw1280{
+	margin-left: 20px;
+}
+
+.nw1024{
+	margin-left:80px;
+	margin-top:50px;
+}
+.nw1280{
+	margin-left:130px;
+	margin-top:50px;
+}
+.fw1024{
+	margin-left:170px;
+}
+.fw1280{
+	margin-left:244px;
+}
+.fcw1024{
+	width:620px;
+}
+.fcw1280{
+	width:800px;
+}
+
+
+.fujianClass{background-image: url(../img/config/fujian.png); background-repeat: no-repeat; background-position: 85% 20px;}

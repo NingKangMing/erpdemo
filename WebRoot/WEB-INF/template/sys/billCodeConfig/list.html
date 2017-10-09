@@ -1,0 +1,37 @@
+
+<form id="pagerForm" onsubmit="return divSearch(this, 'billSortList');" action="${base}/sys/billCodeConfig/list/${sortId!}" method="post">
+	<input type="hidden" name="pageNum" value="${(pageMap.get('pageNum'))}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.get('numPerPage'))!}" />
+</form>
+<table class="table" rel="billSortList" layoutH="310">
+	<thead>
+		<tr>
+			<th width="50px">
+				行号
+			</th>
+			<th width="100px">
+			    单据类型
+			</th>
+			<th width="200px">
+			    单据样式
+			</th>
+			<th width="300px">
+			    样式预览
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<#list pageMap.pageList as sort>
+		  <tr target="id" rel="${sort.id}" title="单据编号设置窗口" crel="billSortDialog"  cTarget="dialog" url="${base}/sys/billCodeConfig/toConfig/${sort.id!}" widths="340" heights="410">
+		     <td>${sort_index+1+pageMap.limit}</td>
+		     <td>${sort.name}</td>
+		     <td>
+		          ${(sort.config.format1)!}${(sort.config.format2)!}${(sort.config.format3)!}${(sort.config.format4)!}${(sort.config.format5)!}${(sort.config.format6)!}
+		          ${(sort.config.format7)!}${(sort.config.format8)!}${(sort.config.format9)!}${(sort.config.format10)!}
+		     </td>
+		     <td>${(sort.preview)!}</td>
+		  </tr>
+		</#list>
+	</tbody>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>

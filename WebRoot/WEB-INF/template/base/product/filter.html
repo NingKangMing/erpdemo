@@ -1,0 +1,55 @@
+<div class="pageContent">
+	<h2 class="contentTitle">查询</h2>
+	<form  action="${base}/base/product/filter" class="pageForm required-validate" enctype="text/plain" method="post" onsubmit="return validateCallback(this, filter)">
+		<div class="pageFormContent" layoutH="100">
+			<p>
+				<label>查询条件：</label>
+				<select id="b_product_dfilter_attr" name="searchPar1" style="height:23px;width:165px;">
+					<option value="all">快速查询</option>
+					<option value="code">按编号查询</option>
+					<option value="smallName">按简称查询</option>
+					<option value="fullName">按全名查询</option>
+					<option value="spell">按拼音码查询</option>
+					<option value="barCode">按条码查询</option>
+					<option value="status">按状态查询</option>
+				</select>
+			</p>
+			<p>
+				<label>查询信息：</label>
+				<input id="b_product_dfilter_value" type="text" name="searchValue1" style="width:160px;">  
+			</p>	
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">查询</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+$(function(){
+   //一进来加载上次选择的值    这个要写在这个页面上，代表一进来就加载
+   var attr1=$("#b_product_filter_attr").val();
+   var value1=$("#b_product_filter_value").val();
+   
+   //下拉    文本值
+   if(attr1!=""){
+       var attrArray=attr1.split("#");
+       var valueArray=value1.split("#");
+       $("#b_product_dfilter_attr").val(attrArray[attrArray.length-1]);
+       $("#b_product_dfilter_value").val(valueArray[valueArray.length-1]);
+   }
+   
+});
+
+
+function filter(json){
+    $.pdialog.close("b_product_filter");  //关掉筛选dialog
+    $("#pagerForm").attr("action","${base}/base/product/filterData");
+    $("#b_product_filter_attr").val(json.searchPar1);
+    $("#b_product_filter_value").val(json.searchValue1);
+    navTabAjaxDone(json);
+}
+</script>

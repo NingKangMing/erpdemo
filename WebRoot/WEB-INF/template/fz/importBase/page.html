@@ -1,0 +1,29 @@
+<div class="pageContent">
+	<h1>导入基本信息</h1>
+	<div style="margin:auto; margin-top:22px; width: 455px; height: 210px;">
+		<div style="border: 1px solid #DDDDDD;width: 455px; height: 200px;">
+			<p style="text-indent:3em; width: 450px;margin:auto;">
+				<span style="line-height: 25px;">
+					    关于导入基本信息说明：</br>
+					 1、使用导入基本信息的导入功能时，必须使用本软件提供的数据模板进行数据导入！并按提示按要求录入数据。</br>
+					 2、如果您还没有生成数据模板，请先创建模板！</br>
+					 3、在选择准备导入的信息时，请正确选择对应的数据模板！导入时会打回错误数据改正再次导入即可！</br>
+					 4、尽量不要在创建的模板中插入、删除Excel工作表、更改 工作表列字段、以及对存在的工作表重命名，尽量不修改模板中工作表的顺序和表约束！</br>
+				</span>
+			</p>
+		</div>
+	</div>
+	<form action="${base}/fz/importBase/importExcel" method="post" enctype="multipart/form-data" onsubmit="return iframeCallback(this,iframeAjaxCallBack)">
+		
+		<div style="margin-top: 10px;margin-left: 20px;">
+			选择导入文件：<input type="file" name="impExcel" id="impExcel" />
+		</div>
+		<!--提交按钮  -->
+		<div class="formBar" style="float: right; margin-top: 20px;">
+			<a style="margin-right: 10px;" class="button" target="ajaxPost" href="${base}/fz/importBase/exportTmpExcel" ><span>创建模板</span></a>
+			<div style="margin-right: 10px;" class="buttonActive"><div class="buttonContent"><button type="button" onclick="aioImportExcel(this,'impExcel')">导入数据</button></div></div>
+			<div style="margin-right: 20px;" class="buttonActive"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+		</div>
+		<!--end 提交按钮  -->
+	</form>
+</div>

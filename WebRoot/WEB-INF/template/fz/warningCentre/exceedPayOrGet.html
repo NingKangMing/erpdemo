@@ -1,0 +1,82 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/fz/warningCentre/exceedPayOrGet/${modelType}" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+	<input type="hidden" name="orderField" value="${orderField!'recodeDate'}" />
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" />
+    
+    <input type="hidden" id="listID" value="${listID}"/>
+    
+    <!-- 主页面过滤条件 -->
+	<input type="hidden" id="warn" name="warn" value="${warn!''}"/>           
+	<input type="hidden" id="stopDate" name="stopDate" value="${stopDate!''}"/>            <!-- 结束日期 -->
+	<input type="hidden" id="unitId" name="unitId" value="${unitId!0}"/>            <!-- 过滤条件  -->
+    <input type="hidden" id="aheadDay" name="aheadDay" value="${aheadDay!0}"/>
+    <input type="hidden" name="modelType" value="${modelType}"/>
+</form>
+<table class="table" rel="${listID}" layoutH="170">
+	<thead>
+		<tr>
+			<th width="80" align="center" >行号</th>
+			<th width="160" orderField="code" <#if orderField?? && 'code'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>单据编号</th>
+			<th width="100" orderField="unitCode" <#if orderField?? && 'unitCode'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>单位编号</th>
+			<th width="130" orderField="unitFullName" <#if orderField?? && 'unitFullName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>单位全名</th>
+			<th width="100" orderField="taxMoneys" <#if orderField?? && 'taxMoneys'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>价税合计</th>
+			<th width="100" orderField="hasMoney" <#if orderField?? && 'hasMoney'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>已收金额</th>
+			<th width="100" orderField="termDate" <#if orderField?? && 'termDate'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>期限日期</th>
+			<th width="100" orderField="delayTermDate" <#if orderField?? && 'delayTermDate'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>延期日期</th>
+			<th width="100" orderField="hasNoMoney" <#if orderField?? && 'hasNoMoney'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>欠款金额</th>
+			<th width="100">原因</th>
+		</tr>
+	</thead>
+	<tbody id="reports_prdsellcount_body">
+		<#if pageMap??&&pageMap.pageList??>
+		<#list pageMap.pageList as obj>
+		<tr target="billId" rel="${obj.billId!}-${obj.billTypeId!}" title="${obj.navTabTitile!}" url="${base}/common/bill/lookBill/${obj.billId!}-${obj.billTypeId!}" cTarget="openNavTab" >
+			<td><a>${obj_index+1+pageMap.limit}</a></td>
+			<td>${obj.code!''}</td>
+			<td>${obj.unitCode!''}</td>
+			<td>${obj.unitFullName!''}</td>
+			<td><#if obj.taxMoneys??&&obj.taxMoneys!=0>${obj.taxMoneys!''}</#if></td>
+			<td><#if obj.hasMoney??&&obj.hasMoney!=0>${obj.hasMoney!''}</#if></td>
+			<td><#if obj.termDate??>${obj.termDate!''}</#if></td>
+			<td><#if obj.delayTermDate??>${obj.delayTermDate!''}</#if></td>
+			<td><#if obj.hasNoMoney??&&obj.hasNoMoney!=0>${obj.hasNoMoney!''}</#if></td>
+			<td><#if obj.isWarn==1>取消报警<#elseif obj.termDate!=obj.delayTermDate>延迟报警</#if></td>
+		</tr>
+		</#list>
+		</#if>
+	</tbody>
+	<tfoot>
+	       <tr isSelect="false" style="border-top: #D0D0D0 solid 1px">
+		       <td align="center">合计</td>
+		       <td align="center"></td>
+		       <td align="center"></td>
+		       <td align="center"></td>
+		       <td align="center" hascount="true"></td>
+		       <td align="center" hascount="true"></td>
+		       <td align="center"></td>
+		       <td align="center"></td>
+		       <td align="center" hascount="true"></td>
+		       <td align="center"></td>
+	       </tr>
+    </tfoot>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+
+	
+<div class="divider"></div>
+<div>
+    <form class="tableForm">
+                    
+    <a style="float: left;">提前报警天数 <input  class="digits" onblur="navTabPageBreak({aheadDay:this.value},'${(pageMap.listID)!''}')" value="${aheadDay!0}" size="5" maxlength="5"/></a>
+    <a class="button" dynamic="true" target="navTab" href="${base}/common/bill/lookBill/{billId}"><span>查看单据</span></a>
+
+   </form>
+</div>
+<div style="float: right;">
+     <#assign privs = '8-807-p'/>
+	<#assign href = '${base}/fz/warningCentre/exceedPrint'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

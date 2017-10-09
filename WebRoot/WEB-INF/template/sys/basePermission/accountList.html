@@ -1,0 +1,83 @@
+
+<form id="pagerForm" onsubmit="return divSearch(this, 'accountPermissionList');" action="${base}/sys/basePermission/account" method="post">
+	<input type="hidden" name="pageNum" value="${(accountPageMap.get('pageNum'))}" />
+	<input type="hidden" name="numPerPage" value="${(accountPageMap.get('numPerPage'))!}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <input type="hidden" name="userId" value="${userId!}">
+    <input type="hidden" name="pSupId" value="${supId!-1}">
+</form>
+<table class="table" rel="accountPermissionList" layoutH="200">
+	<thead>
+		<tr>
+			<th width="50px">
+				行号
+			</th>
+			<th width="150px" align="center" orderField="code" <#if orderField?? && 'code'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+				科目编号
+			</th>
+			<th width="150px" align="center" orderField="fullName" <#if orderField?? && 'fullName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+				科目全称
+			</th>
+			<th width="150px" align="center" orderField="status" <#if orderField?? && 'status'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+				状态
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<#list accountPageMap.pageList as account>
+		  <#if account.node==2>
+		  <tr objectId="${objectId!0}" target="accountId" rel="${account.id}"  crel="accountPermissionList" cTarget="ajax" url="${base}/sys/basePermission/account/${account.id}-{userId}">
+		  <#else>
+		   <tr objectId="${objectId!0}" target="accountId" rel="${account.id}">
+		  </#if>
+			<td><a>${account_index+1+accountPageMap.limit}</a>
+				<#if account.node==2>..</#if>
+			</td>
+			<td>
+				${account.code!''}
+			</td>
+			<td>
+				${account.fullName!''}
+			</td>
+	
+			<td onclick="tdRelevanceTr(this,'accountChoose');">
+				<#if account.privs==3>
+				       ★
+				<#elseif account.privs==2>
+				       ☆
+				</#if>
+			</td>
+		</tr>
+		</#list>
+	</tbody>
+</table>
+<div class="panelBar">
+		 <div class="pages">
+			<span>显示</span>  
+			<select class="combox" name="numPerPage" onchange="navTabPageBreak({pageNum:${(accountPageMap.pageNum)!1},numPerPage:this.value},'${(accountPageMap.listID)!''}')">
+				<option <#if accountPageMap.numPerPage?number == 15>selected</#if> value="15">15</option>
+				<option <#if accountPageMap.numPerPage?number == 20>selected</#if> value="20">20</option>
+				<option <#if accountPageMap.numPerPage?number == 50>selected</#if> value="50">50</option>
+				<option <#if accountPageMap.numPerPage?number == 100>selected</#if> value="100">100</option>
+			</select>
+			<span>条，共${(accountPageMap.totalCount)!0}条</span>
+		</div>
+		<div class="pagination" rel="${(accountPageMap.listID)!''}" target="ajaxTodo"  totalCount="${(accountPageMap.totalCount)!0}" numPerPage="${(accountPageMap.numPerPage)!15}" pageNumShown="5" currentPage="${(accountPageMap.pageNum)!1}"></div>
+</div>
+<!--divider虚线-->
+	<div class="divider"></div>
+	<div>
+			<a class="button" id="accountChoose" href="${base}/sys/basePermission/choose/{userId}-{baseType}-{accountId}" target="ajaxTodo"  callback="reloadNavTabDiv"><span>选中</span></a>
+			<a class="button" href="${base}/sys/basePermission/allChoose/{userId}-{baseType}-{accountId}" target="ajaxTodo"  callback="reloadNavTabDiv"><span>全选</span></a>
+			<a class="button" href="${base}/sys/basePermission/empty/{userId}-{baseType}-{accountId}" target="ajaxTodo"  callback="reloadNavTabDiv"><span>清空</span></a>
+			<#if supId?? && supId!=-1>
+			 <a class="button" href="${base}/sys/basePermission/account?pSupId=${pSupId!0}&objectId=${supId!0}" relevancyIds="userId" target="ajax" rel="accountPermissionList"><span>上级</span></a>
+	        <#else>
+	        <a class="buttonDisabled" href="javascript:void(0);"><span>上级</span></a>
+	        </#if>
+	        
+	</div>
+	<div style="float: right;">
+			<a class="button" href="javascript:void(0);" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a>
+	</div>

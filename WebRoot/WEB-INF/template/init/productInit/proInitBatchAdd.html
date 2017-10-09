@@ -1,0 +1,61 @@
+<div  class="pageContent">
+   <form action="${base}/init/productInit/initBatch${action!'Add'}" method="post" class="tableForm" enctype="text/plain" onsubmit="return validateCallback(this,${callBack!'dialogReloadDialog'})">
+      <input type="hidden" id="storageId" name="storageId" value="${storageId!0}"/>
+      <input type="hidden" id="productId" name="productId" value="${productId!0}"/>
+      <input type="hidden" id="validity"  value="${validity!0}"/>
+      <h1>期初库存商品批次录入</h1>
+      <div  layoutH="70">
+      	<div style="text-align:center;margin-top: 20px;">
+		      <table style="margin:auto; width:80%;">
+		      	<tr height="40px;">
+		      		<td>
+			      		数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;量
+			      		<input class="postNumber" maxlength="28" id="amount" name="stockInit.amount" onchange="countTwoModelVal('amount','mul','price','money')" value="${(stockInit.amount)!0}" />
+		      			<input type="hidden" name="stockInit.id" value="${(stockInit.id)!0}"/>
+		      		</td>
+		      	</tr>
+		      	<tr height="40px;">
+		      		<td>
+		      			单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;价
+		      			<input class="postNumber" maxlength="28" id="price" name="stockInit.price" onchange="countTwoModelVal('amount','mul','price','money')" value="${(stockInit.price)!0}" />
+		      		</td>
+		      	</tr>
+		      	<tr height="40px;">
+		      		<td>
+		      			金&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;额
+		      			<input class="postNumber" maxlength="28" id="money" name="stockInit.money" onchange="countTwoModelVal('money','div','amount','price')" value="${(stockInit.money)!0}" />
+		      		</td>
+		      	</tr>
+		      	<tr height="40px;">
+		      		<td>
+		      			批&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号
+		      			<input id="batch" name="stockInit.batch" value="${(stockInit.batch)!''}" />
+		      		</td>
+		      	</tr>
+		      	<tr height="40px;">
+		      		<td>
+		      			生产日期
+		      			<input style="width: 150px;" type="text" class="date" dateFmt="yyyy-MM-dd" where="initProduct" readonly="readonly" id="produceDate" name="stockInit.produceDate" value="<#if stockInit?? && stockInit.produceDate??>${stockInit.produceDate?string("yyyy-MM-dd")}</#if>" />
+		      		</td>
+		      	</tr>
+		      	<#--到期日期demo-->
+		      	<tr height="40px;">
+		      		<td>
+		      			到期日期
+		      			<input style="width: 150px;" type="text" class="date" dateFmt="yyyy-MM-dd" readonly="readonly" id="produceEndDate" name="stockInit.produceEndDate" value="<#if stockInit?? && stockInit.produceEndDate??>${stockInit.produceEndDate?string("yyyy-MM-dd")}</#if>" />
+		      		</td>
+		      	</tr>
+		      </table>
+	     </div>
+      </div>
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		<ul>
+			<li><a class="button" href="${base}/base/product/recordAmount" param="productId,amount" target="dialog" rel="proRecordAmount" width="350" height="200"><span>辅助数量</span></a></li>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+		</ul>
+	  </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

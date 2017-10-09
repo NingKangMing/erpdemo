@@ -1,0 +1,70 @@
+<div class="pageContent">
+	<h2 class="contentTitle">备份列表</h2>
+	<form action="${base}/sys/backup/autoBackup" class="pageForm required-validate" enctype="text/plain" method="post" onsubmit="return validateCallback(this, dialogAjaxDone1)">
+	  <div class="pageFormContent" layoutH="100">
+	  <!-- 多个tab -->
+	  <div class="tabs">
+      <div class="tabsHeader">
+         <div class="tabsHeaderContent">
+            <ul>
+               <li class="selected"><a href="#"><span>数据库列表</span></a></li>
+               <li><a href="#"><span>备份计划设置</span></a></li>
+            </ul>
+         </div>
+      </div>
+      <div class="tabsContent" style="height:250px; background-color: white;">
+         <!-- 数据库列表 -->
+         <div>
+             <div style="clear: both; height: 30px;">
+                  <span style="float: left; line-height: 25px;">计划</span>
+                  <span style="float: left; margin-left: 10px; margin-right: 10px;"><input type="text" name="planName" value="${(plan.name)!}"/></span>
+                  <span style="float: left; line-height: 25px;">要备份的数据库如下</span>
+             </div>
+             <div>
+                 <table class="table" layoutH="220">
+					<thead>
+						<tr>
+							<th width="50" align="center">行号</th>  
+							<th width="30px;"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+							<th width="300" align="center">数据库</th>
+						</tr>
+					</thead>
+					<tbody>
+						<#list list as obj>
+						<tr target="id"  rel="${obj.id!''}" selectCheckboxObjs="${(plan.databaseIds)!''}" isSelect="true">
+							<td><a>${obj_index+1}</a></td>
+							<td><input name="ids" value="${obj.id}"  type="checkbox"/></td>
+							<td>${obj.dataBaseName!''}</td>
+						</tr>
+					    </#list>
+					</tbody>
+				</table>
+             </div>
+         </div>
+         <!--end 数据库列表 -->
+         <!--备份计划设置 -->
+         <div>
+              <div style="clear: both; height: 30px;">
+                  <span style="float: left; line-height: 25px;">发生于每天</span>
+                  <span style="float: left; margin-left: 10px;"><input type="text" name="autoBackupTime" value="${(date?string('HH:mm:ss'))!(plan.startTime)!}" class="date" dateFmt="HH:mm:ss" readonly="true"/></span>
+              </div>
+         </div>
+         <!--end 备份计划设置 -->
+      </div>
+      <div class="tabsFooter">
+         <div class="tabsFooterContent"></div>
+      </div>
+	  </div>
+	  <!--end 多个tab -->	 
+		</div>
+		<div class="formBar">
+			<ul>
+			    <#if !plan??>
+				<li><a class="button" href="${base}/sys/backup/autoBackup" target="submit"><span>确定</span></a></li>
+				</#if> 
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>
+

@@ -1,0 +1,36 @@
+<div class="pageContent">
+   <form action="${base}/common/dateDialog/go" method="post" class="pageForm required-validate" enctype="text/plain" onsubmit="return validateCallback(this,aioDialogOpenNavTab)">
+      <input type="hidden" id="aimTabId" name="aimTabId"  value=""/>
+      <input type="hidden" id="aimUrl"   name="aimUrl"   value=""/>
+      <input type="hidden" id="aimTitle" name="aimTitle"  value=""/>
+      
+      <!-- 动态需要的参数 -->
+      <#if paraMap?exists>
+          <#list paraMap.keySet() as k>
+          	<input type="hidden" id="${k}" name="${k}" value="${paraMap.get(k)}"/>
+          </#list>
+      </#if>
+      
+      <div layoutH="35">
+	       <fieldset>
+			    <legend>选择日期</legend>
+				   <div align="center" style="line-height: 60px;">
+				   		开始日期：<input type="text" class="date" name="startTime" dateFmt="yyyy-MM-dd" value="${startTime!''}" hasClear="no" readonly="readonly"/>
+				   </div>
+				   <div align="center" style="line-height: 60px;">
+				   		结束日期：<input type="text" class="date" name="endTime" dateFmt="yyyy-MM-dd" value="${endTime!''}" hasClear="no" readonly="readonly"/>
+				   </div>
+				   <div align="center"><input name="userSearchDate" type="checkbox" checked="checked" value="checked"/>保存时间条件</div>
+		   </fieldset>
+	 </div>
+	 
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+		</ul>
+	  </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

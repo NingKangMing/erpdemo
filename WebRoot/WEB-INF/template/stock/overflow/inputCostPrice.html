@@ -1,0 +1,22 @@
+<div class="pageContent">
+   <form action="${base}/stock/overflow/inputCostPrice" method="post" class="pageForm required-validate" enctype="text/plain" onsubmit="return validateCallback(this,billInputCostPrice)">
+      <input type="hidden" id="trIndex" name="trIndex" value="${trIndex!}">
+      <input type="hidden" id="proId" name="proId" value="${proId!}">
+      <input type="hidden" id="proUnitId" name="proUnitId" value="${proUnitId!}">
+      <div layoutH="35">
+      	<div style="text-align:center;margin:0 auto;margin-top: 15px;">
+	       <p>编号：${proCode!}；商品：${proName!}；商品单位：${proUnit!}</p>
+	       <input style="width: 220px;margin-top: 10px;" type="text" class="required number" name="proPrice"/>
+	  	</div>
+	  </div>
+	 
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+		</ul>
+	  </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

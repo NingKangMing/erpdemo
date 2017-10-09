@@ -1,0 +1,17 @@
+<!--列配置  合计html-->
+<#--<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>-->
+<tfoot>
+  <tr isSelect="false" style="border-top: #D0D0D0 solid 1px">
+    <td align="center">合计</td>
+    <#if columnType?? && 'djzx501'==columnType>
+    <td></td>
+    </#if>
+    <#list rowList as row>
+    <#if row.isCount?? && 2==row.isCount>
+    <td align="center" hascount="true"></td>
+    <#else>
+    <td></td>
+    </#if>
+    </#list>
+  </tr>
+</tfoot>

@@ -1,0 +1,41 @@
+<div class="panel">
+	<div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">${modelTypeName}单统计</span></label>
+				</li>
+			</ul>
+			<ul class="searchContent" style="margin-top: 5px;">
+				<li>
+					<span style="margin-left: 10px;">查询时间：</span>${startTime}至${endTime}
+				</li>
+			</ul>
+			<ul class="searchContent">
+				<li>
+					<span style="margin-left: 50px;">内部职员:</span><#if staffFullName=="">全部职员</#if>${staffFullName} 
+					<span style="margin-left: 50px;">出库仓库:</span><#if outStorageFullName=="">全部仓库</#if>${outStorageFullName} 
+					<span style="margin-left: 50px;">入库仓库:</span><#if inStorageFullName=="">全部仓库</#if>${inStorageFullName} 
+				</li>
+				<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+				<li style="float: right;">
+				    过滤<select onchange="xsReportAmountChange(this,'aimDiv','pagerForm','${listID}');">
+				       <option <#if aimDiv=="all">selected="selected"</#if> value="all">显示所有</option>
+				       <option <#if aimDiv=="notEq">selected="selected"</#if> value="notEq">不显示数量为0的行</option>
+				    </select>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div layoutH="80">
+		<div style="float:left; display:block; overflow:auto; width:210px; border:solid 1px #CCC; line-height:21px; background:#fff" layoutH="100">
+			<ul id="${ztreeID}" target="ztree" selectNodeId="${supId!0}" relevancyIds="product.id,unit.id,staff.id,storage.id,startTime,endTime,aimDiv" class="ztree" url="${base}/reports/stock/sameOrDiffPrice/tree?modelType=${modelType}" rel="${listID}" ctarget="ajax"></ul>
+		</div>
+		<div id="${listID}" style="margin-left: 220px;padding:2px; padding-top: 0px;" layoutH="87">
+			<#include "/WEB-INF/template/reports/stock/sameOrDiffPrice/list.html" />
+		</div>
+	</div>
+</div>
+
+
+

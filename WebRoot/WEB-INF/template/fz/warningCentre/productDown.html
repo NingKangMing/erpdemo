@@ -1,0 +1,54 @@
+<form id="pagerForm" enctype="text/plain" onsubmit="return divSearch(this, 'warningList');" action="${base}/fz/warningCentre/productDown/" method="post">
+  <input type="hidden" name="pageNum" value="${pageMap.pageNum!1}" />
+   <input type="hidden" name="numPerPage" value="${pageMap.numPerPage!15}" />
+   <input type="hidden" name="orderField" value="${orderField!'pro.rank'}" /><!--查询排序-->
+   <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+
+    <input type="hidden" name="selectedObjectId" id="selectedObjectId" value="${objectId!0}" /><!--   默认选中对象的Id -->
+	<input type="hidden" id="storage.id" name="storage.id" value="${storageId!0}"/>
+	<input type="hidden" id="storage.pids" name="storage.pids" value="${storagePids!'{0}'}"/>
+
+	<#include "/WEB-INF/template/base/baseSearchComDialog/searchConditionInputs.html"/><!--报表基本信息筛选条件保存 -->
+</form>
+
+<table class="table" rel="warningList" layoutH="150">
+	<thead>
+		<tr>
+			<th width="45" align="center" >行号</th>
+			<th width="100" align="center"  orderField="pro.code" <#if orderField?? && 'pro.code'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >商品编号</th>
+			<th width="200" align="center"  orderField="pro.fullName" <#if orderField?? && 'pro.fullName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >商品全名</th>
+			<th width="100" align="center"  orderField="sckAmount" <#if orderField?? && 'sckAmount'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >库存数量</th>
+			<th width="100" align="center"  orderField="minNum" <#if orderField?? && 'minNum'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >库存下限</th>
+			<th width="100" align="center"  orderField="adjust" <#if orderField?? && 'adjust'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >调整数量</th>
+		</tr>
+	</thead>
+	<tbody>
+		<#list pageMap.pageList as recode>
+		<tr objectId="${objectId!0}" target="pid" rel="${recode.pro.id}" isSelect="true">
+			<td align="center"><a>${recode_index+1+pageMap.limit}</a><#if recode.pro.node==2>..</#if></td>
+			<td align="center">${recode.pro.code!}</td>
+			<td align="center">${recode.pro.fullName!}</td>
+			<td align="center"><#if recode.sckAmount?? && recode.sckAmount !=0 >${recode.sckAmount!}</#if></td>
+			<td align="center"><#if recode.minNum?? && recode.minNum !=0 >${recode.minNum!}</#if></td>
+			<td align="center"><#if recode.adjust?? && recode.adjust !=0 >${recode.adjust!}</#if></td>
+		</tr>
+		</#list>
+	</tbody>
+</table>
+
+<#include "/WEB-INF/template/unitl/paging.html"/>
+	
+<div class="divider"></div>
+<div>
+	<a class="button" href="${base}/base/storage/dialogList" module="navTab" isReload=true reloadId="warningList" showNameId="storgeName" warn="仓库" lookupgroup="storage" btnPattern="selectAll" lookuppk="id" width="600" height="410"><span>选择仓库</span></a>
+	<a class="button" aimDiv="warningList" aimurl="${base}/fz/warningCentre/productDown" height="210" width="400" rel="report_product_filtter" href="${base}/base/product/toReportBaseFilter/pagerForm-product" target="dialog">
+		<span>商品筛选</span>
+	</a>
+</div>
+<div style="float: right;">
+     <#assign privs = '8-807-p'/>
+	<#assign href = '${base}/fz/warningCentre/productDownPrint'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

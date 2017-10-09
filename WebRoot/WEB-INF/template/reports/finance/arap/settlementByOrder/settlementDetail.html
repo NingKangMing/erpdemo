@@ -1,0 +1,44 @@
+<div class="pageContent">
+	<table class="table"  layoutH="60">
+	<thead>
+		<tr>
+			<th width="50" align="center">行号</th>
+			<th width="90" align="center">单据类型</th>
+			<th width="180" align="center">单据编号</th>
+			<th width="130" align="center">日期</th>
+			<th width="100" align="center">收付款日期</th>
+			<th width="100" align="center">摘要</th>
+			<th width="100" align="center">金额</th>
+			<th width="100" align="center">余额</th>
+		</tr>
+	</thead>
+	<tbody>
+		<#if list??>
+		<#list list as obj>
+		<tr target="billId" rel="${obj.id!}-${obj.billTypId!}" title="${obj.orderTypeName!}" url="${base}/common/bill/lookBill/${obj.id!}-${obj.billTypId!}" cTarget="openNavTab" >
+		    <td>${obj_index+1}</td>
+			<td>${obj.orderTypeName!''}</td>
+			<td>${obj.code!''}</td>
+			<td>${obj.recodeDate!''}</td>
+			<td><#if obj.deliveryDate??>${obj.deliveryDate!}</#if></td>
+			<td>${obj.remark!''}</td>
+			<td>${obj.accountMoney!''}</td>
+			<td>${obj.lastMoney!''}</td>
+		</tr>
+		</#list>
+		</#if>
+	</tbody>
+</table>
+<div class="formBar">
+	<ul>
+		<li><a class="button" dynamic="true" target="navTab" href="${base}/common/bill/lookBill/{billId}"><span>查看单据</span></a></li>
+		<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+	</ul>
+</div>
+</div>
+
+
+
+
+
+

@@ -1,0 +1,46 @@
+<div class="pageContent">
+	<h2 class="contentTitle">查询条件</h2>
+	<form action="${base}/reports/finance/arap/unitArap/searcDialog" method="post" class="pageForm required-validate" enctype="text/plain" onsubmit="return validateCallback(this,aioDialogPostCallBreak)">
+	    <input type="hidden" name="aimTabId" id="aimTabId"/>	     <!-- 设置目标Tab组件ID -->				
+	    <input type="hidden" name="aimUrl" id="aimUrl"/>	         <!-- 设置目标URl -->				
+	    <input type="hidden" name="aimTitle" id="aimTitle"/>         <!-- 设置目标标题 -->
+	    
+	    
+	    <input type="hidden" name="isPost" value=true><!-- 区别表单提交 -->
+	    					
+		<div class="pageFormContent" layoutH="100">
+			<fieldset style="width: 90%;margin:0px auto;">
+				<legend>选择基本信息</legend>
+				<table style="margin:0px auto;">
+					<tr height="40px;">
+						<td>单位全名</td>
+						<td>
+							<input type="hidden" name="unit.id"/>
+	        				<input type="hidden" name="unit.fullName"/>
+	        				<input type="hidden" name="unit.pids"/>
+	        				<input class="textInput enter" type="text" style="width: 150px;" name="unit.fullName"/>
+	        				<a class="btnLook" id="unitLook" href="${base}/base/unit/option" warn="单位" lookupgroup="unit" type="post" btnPattern="selectMany,selectAll" lookuppk="id" width="600" height="410">单位</a>
+						</td>
+					</tr>
+					<tr height="40px;">
+						<td>地区全名</td>
+						<td>
+							<input type="hidden"  name="area.id"/>
+							<input type="hidden"  name="area.fullName"/>
+							<input type="hidden"  name="area.pids"/>
+		         			<input class="textInput" type="text" style="width: 150px;"  name="area.fullName" lookName="area" lookId="area.id"/>
+		        			<a class="btnLook" href="${base}/base/area/dialogList/0" type="POST" warn="地区" lookupgroup="area" lookuppk="id" width="600" height="410">地区</a>
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确认</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>
+

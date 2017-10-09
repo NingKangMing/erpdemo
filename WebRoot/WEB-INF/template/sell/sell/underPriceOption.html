@@ -1,0 +1,50 @@
+<!--报损单保存负库存提示 -->
+<div>
+	<div class="pageHeader">
+		<div class="searchBar">
+		   <ul class="searchContent">
+		       <li><h2 class="contentTitle">以下商品售价低于${wayName!}，请确定操作是否继续进行？</h2></li>
+		    </ul>
+		</div>
+	</div>
+	<input type="hidden" id="dialogId" value="bsd_nagetive_price_info"/>
+	<div class="pageContent">
+		<table class="table" layoutH="100"  targetType="dialog">
+			<thead>
+				<tr>
+					<th width="40">行号</th> 
+					<th align="center" width="60">所在行号</th>
+					<th align="center" width="100">商品编号</th>
+					<th align="center" width="150">商品全名</th>
+					<th align="center" width="100">商品单位</th>
+					<th align="center" width="100">售价</th>
+					<th align="center" width="100">${wayName!}</th>
+					<th align="center" width="100">仓库编号</th>
+					<th align="center" width="100">仓库全名</th>
+				</tr>
+			</thead>
+			<tbody>
+			   <#list rList as r>
+				<tr>
+					<td>${r_index+1}</td>
+					<td>${r.trIndex}</td>
+					<td>${r.productCode!}</td>
+					<td>${r.productName!}</td>
+					<td>${r.selectUnit!}</td>
+					<td>${r.sellPrice!}</td>
+					<td>${r.price!}</td>
+					<td>${r.storageCode}</td>
+					<td>${r.storageName}</td>
+				</tr>
+				</#list>
+			</tbody>
+		</table>
+	</div>
+	<input type="hidden" id="way" name="way" value="${way!}"/>
+	<!--divider虚线-->
+	<div class="divider"></div>
+	<div>
+	    <a style="margin-left: 440px;" class="button" onclick="sellUnPriceConfim()"><span>确定</span></a>
+		<div style="margin-left: 20px;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+	</div>
+</div>

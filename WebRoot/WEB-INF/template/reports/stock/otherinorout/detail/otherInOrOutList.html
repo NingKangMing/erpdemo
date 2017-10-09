@@ -1,0 +1,102 @@
+<input type="hidden" id="projectBasePath" value="${base}"/>
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/stock/other/otherInOrOutDetail?modelType=${modelType}" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+	<input type="hidden" name="orderField" value="${orderField!'recodeDate'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <input type="hidden" name="id" value="${id!'0'}"/>
+    
+    <!-- ID用于树点击参数 -->
+    <input type="hidden" name="modelType" value="${modelType}">
+	<input type="hidden" id="unit.id" name="unit.id" value="${unitId!'0'}"/>               <!-- 单位ID -->
+	<input type="hidden" id="product.id" name="product.id" value="${productId!'0'}"/>      <!-- 商品ID -->
+	<input type="hidden" id="storage.id" name="storage.id" value="${storageId!'0'}"/>      <!-- 仓库ID -->
+	<input type="hidden" id="startTime" name="startTime" value="${startTime!''}"/>        <!--开始日期  -->
+	<input type="hidden" id="endTime" name="endTime" value="${endTime}"/>            <!-- 结束日期 -->
+	<input type="hidden" id="aimDiv" name="aimDiv" value="${aimDiv!''}"/>                                   <!-- 过滤条件     all eq gt 下拉框改变赋值 -->
+ 
+ 
+    <input type="hidden" name="whereComeDetail" value="self">
+</form>
+<#include "/WEB-INF/template/common/columnConfig/tableTotalWidthLink.html"/>
+<table class="table" rel="${listID}" layoutH="230">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody id="${listID}table">
+		<#if pageMap??&&pageMap.pageList??>
+		<#list pageMap.pageList as data>
+		<tr target="tid" rel="${(data.billId)}-${data.billTypeId}" cTarget="openNavTab"  sameId="cc_otherInOrOunt_detailBtnId" <#if data.isRCW!=0> style="color: red;" </#if>>
+			<td><a>${data_index+1+pageMap.limit}</a></td>
+			<#list rowList as row>
+			<#if row.code?? && 'modelType'==row.code>
+			<td>
+			   <#if modelType=='in'> 其它入库单<#elseif modelType=='out'> 其它出库单 </#if> 
+			</td>
+			<#elseif row.code?? && 'recodeDate'==row.code>
+			<td>${(data.recodeDate?string('yyyy-MM-dd HH:mm:ss'))}</td>
+			<#elseif row.code?? && 'billCode'==row.code>
+			<td>${(data.billCode)!''}</td>
+			<#elseif row.code?? && 'pro.code'==row.code>
+			<td>${(data.pro.code)!''}</td>
+			<#elseif row.code?? && 'pro.fullName'==row.code>
+			<td>${(data.pro.fullName)!''}</td>
+			<#elseif row.code?? && 'pro.smallName'==row.code>
+			<td>${(data.pro.smallName)!''}</td>
+			<#elseif row.code?? && 'pro.spell'==row.code>
+			<td>${(data.pro.spell)!''}</td> 
+			<#elseif row.code?? && 'pro.standard'==row.code>
+			<td>${(data.pro.standard)!''}</td> 
+			<#elseif row.code?? && 'pro.model'==row.code>
+			<td>${(data.pro.model)!''}</td> 
+			<#elseif row.code?? && 'pro.field'==row.code>
+			<td>${(data.pro.field)!''}</td> 
+			<#elseif row.code?? && 'pro.savePath'==row.code>
+			<td>
+			<#if (data.pro.savePath)??>
+			    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(data.pro.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(data.pro.savePath)!}"  width="20px" height="20px"/>
+            </#if>
+			</td>
+			<#elseif row.code?? && 'sto.code'==row.code>
+			<td>${(data.sto.code)!''}</td>
+			<#elseif row.code?? && 'sto.fullName'==row.code>
+			<td>${(data.sto.fullName)!''}</td>
+			<#elseif row.code?? && 'unit.code'==row.code>
+			<td>${(data.unit.code)!''}</td>
+			<#elseif row.code?? && 'unit.fullName'==row.code>
+			<td>${(data.unit.fullName)!''}</td>
+			<#elseif row.code?? && 'acc.code'==row.code>
+			<td>${(data.acc.code)!''}</td>
+			<#elseif row.code?? && 'acc.fullName'==row.code>
+			<td>${(data.acc.fullName)!''}</td>
+			<#elseif row.code?? && 'amounts'==row.code>
+			<td>${(data.amounts)!''}</td>
+			<#elseif row.code?? && 'moneys'==row.code>
+			<td>
+				<@shiro.hasPermission name='1101-s'>
+			    ${(obj.baseMoneys)!''}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'billRemark'==row.code>
+			<td>${(data.billRemark)!''}</td>
+			</#if>
+			</#list>
+		</tr>
+		</#list>
+		</#if> 
+	</tbody>
+	<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+	
+<div class="divider"></div>
+<div>
+    <a id="cc_otherInOrOunt_detailBtnId" class="button" dynamic="true" target="navTab" href="${base}/common/bill/lookBill/{tid}"><span>查看单据</span></a>
+</div>
+<div style="float: right;">
+	<#assign href = '${base}/reports/stock/other/otherInOrOutDetailPrint'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

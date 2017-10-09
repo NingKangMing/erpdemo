@@ -1,0 +1,94 @@
+<#--<#import "/WEB-INF/template/common/base/header/addCommonPage.html" as orderHead> -->
+<#macro billCode title billName module="">
+	      <div>
+	         <span style="font-size: 18px;">${title}</span>
+	         <#if module!="">
+	         <input id="module" type="hidden" value="${module}"/>
+	         </#if> 
+			 <span style="float: right;">
+		                 录单日期
+		     <input id="recodeTime" type="text" class="date required" name="${billName}.recodeDate" dateFmt="yyyy-MM-dd HH:mm:ss" value="${todayTime!recodeTime!''}" hasClear="no" readonly="readonly"/>
+		                单据编号
+		    <input id = "showBillCode" class="line required textInput" type="text" style="width: 200px" name="${billName}.code" value="${code!}" maxlength="100" <#if codeAllowEdit?? && codeAllowEdit=="1">readonly="readonly"</#if>/>
+		    </span>
+	     </div>
+</#macro>
+
+<#-- 单位 -->
+<#macro unitTag text required="" backParam=""  href="${base}/base/unit/option?actionType=first&supId=0">
+${text}
+<input type="hidden" id="unitId" name="unit.id" value="${(bill.getBillUnit(session.loginConfigId).id)!0}"/>
+<input class="line ${required}" 
+id="unitName" type="text" name="unit.fullName" lookName="unit" lookId="unit.id"/>
+<a class="btnLook" id="unitLook" type="POST" btnPattern="optionAdd" <#if backParam!="">backParam="${backParam}"</#if>
+ href="${href}" module="navTab" warn="单位" lookupgroup="unit" lookuppk="id" width="600" height="410">单位</a>
+
+</#macro>
+
+<#macro staffTag text="经手人" required="">
+${text}
+<input type="hidden" name="staff.id" id="staffId" value="${(bill.getBillStaff(session.loginConfigId).id)!(staff.id)!0}"/><#-- ${(purchaseReturnBill.staffId)!(staff.id)!}-->
+<input type="hidden" name="staff.name" value="${(bill.getBillStaff(session.loginConfigId).name)!(staff.name)!}"/>
+<#if notEditStaff?? && notEditStaff==true>
+<input class="line" readonly="readonly" type="text" name="staff.name" value="${(staff.fullName)!}"/>
+<#else>
+<input <#if baseUnitStyle??&&baseUnitStyle=='has'>class="enter" ${required} size="13"<#else>class="line ${required} enter"</#if> type="text" name="staff.name" id="staffName" value="${(bill.getBillStaff(session.loginConfigId).name)!(staff.name)!}"/>
+<a class="btnLook" id="staffLook"  type="POST" <#if baseUnitStyle??&&baseUnitStyle=='has'><#else>btnPattern="optionAdd"</#if> href="${base}/base/staff/dialogChild" <#if baseUnitStyle??&&baseUnitStyle=='has'>module="dialog" <#else>module="navTab"</#if> warn="员工" lookupgroup="staff" lookuppk="id" width="600" height="410">职员</a>
+</#if>  
+</#macro>
+
+<#-- 部门 -->
+<#macro dept text="部门">
+${text}
+<input type="hidden" id="departmentId" name="department.id" value="<#if notEditStaff?? && notEditStaff==true>${(depm.id)!}<#else>${(bill.getBillDepartment(session.loginConfigId).id)!0}</#if>"/>
+<input type="text" class="line" id="departmentName"  name="department.fullName" value="<#if notEditStaff?? && notEditStaff==true>${(depm.fullName)!}</#if>" lookName="department" lookId="department.id"/>    
+<a class="btnLook" id="departmentLook" type="POST" btnPattern="optionAdd" href="${base}/base/department/option" module="navTab" warn="部门" lookupgroup="department" lookuppk="id" width="600" height="410">部门</a>       
+</#macro>
+
+<#-- 仓库 -->
+<#macro storageTag text >
+${text}
+<input type="hidden" name="storage.id" id ="storageId" value="${(bill.getBillStorage(session.loginConfigId).id)!(storage.id)!0}"/>
+<input type="hidden" name="storage.code" id="storageCode" value="${(bill.getBillStorage(session.loginConfigId).code)!(storage.code)!}"/>
+<input type="hidden" name="storage.supId" id="storageSupId" value="${(bill.getBillStorage(session.loginConfigId).code)!(storage.code)!}"/>
+<input class="line textInput" id="storageName" name="storage.fullName" value="${(bill.getBillStorage(session.loginConfigId).fullName)!(storage.fullName)!}"  lookName="storage" lookId="storage.id"/>
+<a class="btnLook" id="storageLook" type="POST" btnPattern="optionAdd" href="${base}/base/storage/dialogList" module="navTab" warn="仓库" lookupgroup="storage" lookuppk="id" width="600" height="410">仓库</a>
+</#macro>
+
+<#-- 摘要部分 -->
+<#macro summary billName >
+   摘要
+<input style="width: 250px;" class="line" type="text" id="remark" name="${billName}.remark" value="" maxlength="500"/>
+附加说明
+<input style="width: 250px;" class="line" type="text" id="memo" name="${billName}.memo" value="" maxlength="500"/>
+
+</#macro>
+
+<#-- 附件 -->
+<#macro attachment bodyid="">
+	<div style="float: right;">
+	<#if bodyid!="">
+		<img style="margin-top: 5px;" onclick="productMerge(this);" title="商品合并" bodyid="${bodyid}" src="${base}/img/bill/merge.jpg" alt="商品合并">
+	</#if>
+		<img style="margin-left: 7px;" onclick="openOrderFujianDialog('${base}','${tableId}');" title="单据附件" src="${base}/img/bill/fujian.jpg" alt="单据附件">
+		<input type="hidden" id="orderFuJianIds" name="orderFuJianIds"/>
+	</div>
+</#macro>
+
+<#macro outStorage text="换出仓库">
+    ${text}
+	        <input type="hidden" name="outStorage.id" id ="outStorageId" />
+	        <input type="hidden" name="outStorage.code" id="outStorageCode" />
+	        <input type="hidden" name="outStorage.supId" id="outStorageSupId" />
+     	    <input class="line textInput" id="outStorageName" name="outStorage.fullName" lookName="outStorage" lookId="outStorage.id"/>
+	        <a class="btnLook" id="outStorageLook" type="POST" btnPattern="optionAdd" href="${base}/base/storage/dialogList" module="navTab" warn="仓库" lookupgroup="outStorage" lookuppk="id" width="600" height="410">仓库</a>
+</#macro>
+
+<#macro inStorage text="换入仓库">
+ ${text}
+ <input type="hidden" name="inStorage.id" id ="inStorageId"/>
+ <input type="hidden" name="inStorage.code" id="inStorageCode" />
+ <input type="hidden" name="inStorage.supId" id="inStorageSupId" />
+ <input class="line textInput" id="inStorageName" name="inStorage.fullName"  lookName="inStorage" lookId="inStorage.id"/>
+  <a class="btnLook" id="inStorageLook" type="POST" btnPattern="optionAdd" href="${base}/base/storage/dialogList" module="navTab" warn="仓库" lookupgroup="inStorage" lookuppk="id" width="600" height="410">仓库</a>
+</#macro>

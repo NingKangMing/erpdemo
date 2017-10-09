@@ -1,0 +1,29 @@
+<div class="panel">
+	<div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">${modelTypeName}销售优惠统计</span></label>
+				</li>
+			</ul>
+			<ul class="searchContent" style="margin-top: 5px;">
+				<li>
+					<span style="margin-left: 10px;">查询时间：</span>${startDate}至${endDate}
+				</li>
+			</ul>
+			<ul class="searchContent">
+				<li>
+					<span style="margin-left: 10px;">往来单位:</span><#if unitFullName=="">全部单位</#if>${unitFullName} 
+					<span style="margin-left: 50px;">内部职员:</span><#if staffFullName=="">全部职员</#if>${staffFullName} 
+				</li>
+				<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+			</ul>
+		</div>
+	</div>
+	<div id="xs_sellPrivilegeCount" layoutH="87">
+		<#include "/WEB-INF/template/reports/sell/sellPrivilegeCount/list.html" />
+	</div>
+</div>
+
+
+

@@ -1,0 +1,237 @@
+<#import "/WEB-INF/template/common/base/header/addCommonPage.html" as orderHead> 
+<div class="pageContent" id="boughtPage" >
+   <input type="hidden" id="whichCallBack" value="bought">
+   <form id="boughtBillForm" class="tableForm pageForm" enctype="text/plain" method="post" action="${base}/bought/bought/add" onsubmit="return validateCallback(this, navTabAjaxDone)">
+	  <input type="hidden" name="boughtBill.codeIncrease" value="${codeIncrease!}"/>
+	  <input type="hidden" id="billCode"  name="billCode" value="${code!}"/>
+	<div id="hasFujianClassId" class="textContent center">
+	
+		<@orderHead.billCode title="进货订单" billName="boughtBill" />
+	     	     
+	     <div>
+	     <@orderHead.unitTag text="供货单位" required = "required"/>
+	     
+	     <@orderHead.staffTag text="经手人" />
+	        
+	                           交货日期
+	        <input type="text" class="date" name="boughtBill.deliveryDate"  dateFmt="yyyy-MM-dd" value="${today!}" hasClear="no" readonly="readonly"/>
+	        
+	     </div>
+	     <div>
+	     
+	     <@orderHead.storageTag text="收货仓库" />
+	     
+	     <@orderHead.summary billName="boughtBill" />
+	       
+	      <#if showDiscount?? && showDiscount>                
+			 整单折扣
+			<input style="width: 50px;" class="line number" type="text" id="discounts" onblur="inputAllDiscounts(this,{tbody:'boughtbody'})"  value="" max="10" maxlength="10"/>
+		  </#if>       
+	        <#include "/WEB-INF/template/common/columnConfig/billRowConfigLink.html"/>
+	        
+	        <@orderHead.attachment bodyid="boughtbody" />
+	        
+	     </div>
+	</div>
+	<div class="divider"></div>
+	<div class="pageContent">
+	   <#assign showWidth = 0/>
+	   <#list rowList as row>
+	     <#if row.width??>
+	      <#assign showWidth = showWidth+row.width/>
+	     </#if>
+	   </#list>
+	   <table class="table" model="order" layoutH="200" width="${showWidth!}px">
+	        <thead>
+			 <tr>
+				<th width="50px">
+					行号
+				</th>
+				<#list rowList as row>
+				   <th align="center" width="${(row.width)!100}px">
+					 ${(row.showName)!(row.name)!}
+				   </th>
+				</#list>
+				<th width="50px">
+				   <a title="添加一行" class="btnAdd" target="addTr" href="javascript:void(0);" rel="boughtbody"></a>
+				</th>
+			</tr>
+		  </thead>
+		  <tbody id="boughtbody" preDataName="boughtDetail">
+		     <#include "/WEB-INF/template/common/columnConfig/costLookConfigLink.html"/>
+		     <#list 1..15 as td>
+		     <tr>
+		       <td>${td_index+1}</td>
+		      <#list rowList as row>
+		       <#if row.code?? && 'code'==row.code>
+		       <!-- 商品编号 -->
+		       <td cTarget="dialog"  title="商品" warn="商品" billType="1" unitId="unitId" storageId="storageId" productId="productId" enterSearch="true" productSupId="supId" searchUrl="${base}/stock/stock/orderOneRecord/" editUrl="${base}/stock/stock/orderDialogEdit/" url="${base}/stock/stock/orderDialog/" rel="b_product_dialog" dwidth="680" dheight="450" type="text" requiredData="not"  onBlur="objDelOrClear(this,'code');" cname="code">
+		       </td>
+		       <#elseif row.code?? && 'fullName'==row.code>
+		       <!-- 商品名称 -->
+		       <td cTarget="dialog"  title="商品" warn="商品" billType="1" unitId="unitId" storageId="storageId" productId="productId" enterSearch="true" productSupId="supId" searchUrl="${base}/stock/stock/orderOneRecord/" editUrl="${base}/stock/stock/orderDialogEdit/" url="${base}/stock/stock/orderDialog/" rel="b_product_dialog" dwidth="680" dheight="450" type="text" requiredData="not"  onBlur="objDelOrClear(this,'fullName');" cname="fullName"></td>
+
+		       <#elseif row.code?? && 'smallName'==row.code>
+		       <!-- 商品简称 -->
+		       <td type="text"  validateAttr="" readonly="readonly" maxlength="50" cname="smallName"></td>
+		       <#elseif row.code?? && 'spell'==row.code>
+		       <!-- 商品拼音 -->
+		       <td type="text"  validateAttr="" readonly="readonly" maxlength="50" cname="spell"></td>
+		       <#elseif row.code?? && 'standard'==row.code>
+		       <!-- 规格 -->
+		       <td type="text"  validateAttr="" readonly="readonly" maxlength="50" cname="standard"></td>
+		       <#elseif row.code?? && 'model'==row.code>
+		       <!-- 型号 -->
+		       <td type="text"  validateAttr="" readonly="readonly" maxlength="50" cname="model"></td>
+		       <#elseif row.code?? && 'field'==row.code>
+		       <!-- 产地 -->
+		       <td type="text"  validateAttr="" readonly="readonly" maxlength="50" cname="field"></td>
+		       <#elseif row.code?? && 'savePath'==row.code>
+		       <!-- 图片 -->
+		       <td type="text"  validateAttr="" readonly="readonly" cname="savePath"></td>
+		       
+		       <#elseif row.code?? && 'unit'==row.code>
+		       <!-- 单位 -->
+		       <td cname="baseUnit" validateAttr="" readonly="readonly" maxlength="50" billType="1" unitId="unitId" cTarget="dialog" hasDialog="dialogNotNull" productId="productId" title="单位" rel="b_product_dialog"  url="${base}/base/product/calculateUnit/" dwidth="300" dheight="200"></td>
+		       <#elseif row.code?? && 'helpUnit'==row.code>
+		       <!-- 辅助单位 -->
+		       <td type="text"  readonly="readonly"  cname="assistUnit" ></td>
+		       <#elseif row.code?? && 'produceDate'==row.code>
+		       <!-- 生产日期 -->
+		       <td requiredData="need" type="text" validateAttr="dateISO"  cname="produceDate" needEndDate="yes"></td>
+		       <#elseif row.code?? && 'produceEndDate'==row.code>
+		       <!-- 结束日期 -->
+		       <td requiredData="need" type="text" validateAttr="dateISO"  cname="produceEndDate" where="abc"></td>
+		       <#elseif row.code?? && 'batch'==row.code>
+		       <!-- 批号 -->
+		       <td requiredData="need" type="text"  cname="batch" maxlength="50"></td>
+		       <#elseif row.code?? && 'helpAmount'==row.code>
+		       <!-- 辅助数量 -->
+		       <td type="text" readonly="readonly" cname="helpAmount"></td>
+		       <#elseif row.code?? && 'amount'==row.code>
+		       <!-- 数量 -->
+		       <td cTarget="dialog" hasDialog="dialogNotNull" productId="productId" baseUnit="selectUnitId" title="数量" rel="b_product_dialog"  url="${base}/base/product/recordAmount/" dwidth="350" dheight="200" type="text" validateAttr="number" cname="amount" requiredData="need" maxlength="20" onBlur="amountPriceDiscountChange(this)"></td>
+		       <#elseif row.code?? && 'baseAmount'==row.code>
+		       <!-- 基本数量-->
+		       <td type="text"  cname="baseAmount" readonly="readonly"></td>
+		       <#elseif row.code?? && 'baseAmount1'==row.code>
+		       <!-- 辅助数量1 -->
+		       <td type="text"  cname="baseAmount1" readonly="readonly"></td>
+		       <#elseif row.code?? && 'baseAmount2'==row.code>
+		       <!-- 辅助数量2 -->
+		       <td type="text"  cname="baseAmount2" readonly="readonly"></td>
+		       <#elseif row.code?? && 'price'==row.code>
+		       <!-- 单价 -->
+		       <td cTarget="dialog" costLookPermission="${costLookPermission!}"  hasDialog="dialogNotNull" storageId="storageId" productId="productId" baseUnit="selectUnitId" title="请选择价格" rel="selectPricesDialog"  url="${base}/stock/stock/getProductPrics/" dwidth="300" dheight="280" type="text" requiredData="need" validateAttr="number" cname="price" maxlength="20" onBlur="amountPriceDiscountChange(this)"></td>
+		       <#elseif row.code?? && 'money'==row.code>
+		       <!-- 金额 -->
+		       <td type="text" costLookPermission="${costLookPermission!}" requiredData="need" validateAttr="number" cname="money" maxlength="20" onBlur="moneyChange(this)"></td>
+		       <#elseif row.code?? && 'discount'==row.code>
+		       <!-- 折扣 -->
+		       <td type="text" requiredData="need" validateAttr="number" cname="discount" maxlength="20" onBlur="amountPriceDiscountChange(this)"></td>
+		       <#elseif row.code?? && 'discountPrice'==row.code>
+		       <!-- 折后单价 -->
+		       <td type="text" costLookPermission="${costLookPermission!}" requiredData="need" validateAttr="number" cname="discountPrice" maxlength="20" onBlur="discountPriceChange(this)"></td>
+		       <#elseif row.code?? && 'discountMoney'==row.code>
+		       <!-- 折后金额 -->
+		       <td type="text" costLookPermission="${costLookPermission!}" requiredData="need" validateAttr="number" cname="discountMoney" maxlength="20" onBlur="discountMoneyChange(this)"></td>
+		       <#elseif row.code?? && 'taxRate'==row.code>
+		       <!-- 税率 -->
+		       <td type="text" requiredData="need" validateAttr="number" cname="taxRate" maxlength="20" onBlur="taxRateChange(this)"></td>
+		       <#elseif row.code?? && 'taxPrice'==row.code>
+		       <!-- 含税单价 -->
+		       <td type="text" costLookPermission="${costLookPermission!}" requiredData="need" validateAttr="number" cname="taxPrice" maxlength="20" onBlur="taxPriceChange(this)"></td>
+		       <#elseif row.code?? && 'tax'==row.code>
+		       <!-- 税额 -->
+		       <td type="text" costLookPermission="${costLookPermission!}" requiredData="need" cname="taxes" readonly="readonly"></td>
+		       <#elseif row.code?? && 'taxMoney'==row.code>
+		       <!-- 含税金额 -->
+		       <td type="text" costLookPermission="${costLookPermission!}" requiredData="need" validateAttr="number" cname="taxMoney" maxlength="20" onBlur="taxMoneyChange(this)"></td>
+		       <#elseif row.code?? && 'memo'==row.code>
+		       <!-- 备注 -->
+		       <td type="text" requiredData="need" maxlength="500" cname="memo"></td>
+		       <#elseif row.code?? && 'status'==row.code>
+		       <!-- 状态 -->
+		       <td type="text"  cname="status" readonly="readonly"></td>
+		       <#elseif row.code?? && 'arrivalAmount'==row.code>
+		       <!-- 到货数量 -->
+		       <td type="text" requiredData="need" validateAttr="number" cname="arrivalAmount" readonly="readonly"></td>
+		       <#elseif row.code?? && 'barCode'==row.code>
+		       <!--条码 -->
+		       <td type="text" requiredData="not" cname="barCode" readonly="readonly"></td>
+		       <#elseif row.code?? && 'message'==row.code>
+		       <!-- 附加信息 -->
+		       <td type="text" requiredData="need" cname="message" maxlength="100"></td>
+		       <#else>
+		         <td></td>
+		       </#if>
+		      </#list>
+		       <td>
+		       	  <a title="删除本行" class="btnDel" href="javascript:void(0);" onclick="removeTr(this);"></a>
+		       </td>
+		     </tr>
+		     </#list>
+		  </tbody>
+		  <tfoot>
+		       <tr style="border-top: #D0D0D0 solid 1px">
+		       <td>合计</td>
+		       <#list rowList as row>
+		            <#if row.code?? && 'amount'==row.code>
+		             <!-- 总数 -->
+		             <td><input  name="boughtBill.amounts" class="stealth" id="amounts" readonly="readonly"/></td>
+		            <#elseif row.code?? && 'money'==row.code>
+		            <!-- 总价 -->
+		            <td>
+		                <input type="${costInputType!'text'}" name="boughtBill.moneys" class="stealth" id="moneys" readonly="readonly"/>
+		                <@shiro.lacksPermission name='1101-s'>
+							***
+						</@shiro.lacksPermission>
+		            </td>
+		            <#elseif row.code?? && 'discountMoney'==row.code>
+		            <!-- 折后总价 -->
+		            <td>
+		                <input type="${costInputType!'text'}" name="boughtBill.discountMoneys" class="stealth" id="discountMoneys" readonly="readonly"/>
+		                <@shiro.lacksPermission name='1101-s'>
+							***
+						</@shiro.lacksPermission>
+		            </td>
+		            <#elseif row.code?? && 'tax'==row.code>
+		             <!-- 税额 -->
+		            <td>
+		               <input type="${costInputType!'text'}" name="boughtBill.taxes" class="stealth" id="taxes" readonly="readonly"/>
+		               <@shiro.lacksPermission name='1101-s'>
+							***
+						</@shiro.lacksPermission>
+		            </td>
+		            <#elseif row.code?? && 'taxMoney'==row.code>
+		            <!-- 含税金额 -->
+		            <td>
+		                <input type="${costInputType!'text'}" name="boughtBill.taxMoneys" class="stealth" id="taxMoneys" readonly="readonly"/>
+		                <@shiro.lacksPermission name='1101-s'>
+							***
+						</@shiro.lacksPermission>
+		            </td>
+		            <#else>
+		            <td></td>
+		            </#if>
+		       </#list>
+		       <td></td>
+		       </tr>
+		 </tfoot>
+	   </table>
+	   <div class="divider"></div> 
+		<div>
+	     <input type="checkbox" name="boughtBill.status" value="2" disabled="disabled"/><span style="color: gray">订单完成</span>
+	     <div style="float: right;">
+	        <a class="button" href="${base}/bought/bought/add" target="submit"><span>保存</span></a>
+	        <#assign privs = '301-p'/>
+			<#assign href = '${base}/bought/bought/print'/>
+			<#assign formId = 'boughtBillForm'/>
+			<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	        <a class="button" href="javascript:void(0);" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a>
+	     </div>
+	    </div>
+	</div>
+  </form>
+</div>
+

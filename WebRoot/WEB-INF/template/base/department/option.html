@@ -1,0 +1,95 @@
+<div id="searchDempList">
+	<div class="pageHeader">
+		<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/base/department/search" onsubmit="return dwzSearch(this, 'dialog');">
+			<input type="hidden" name="pageNum" value="${(pageMap.get('pageNum'))!}" />
+			<input type="hidden" name="numPerPage" value="${(pageMap.get('numPerPage'))!}" />
+			<input type="hidden" name="orderField" value="${orderField!'rank'}" /><!--查询排序-->
+		    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+		    <input type="hidden" id="supId" name="supId" value="${supId!0}" />
+		    
+			<input type="hidden" name="selectedObjectId" id="selectedObjectId" value="${objectId!0}"/><!--默认选中对象的Id-->
+			<input type="hidden" name="showLastPage" id="showLastPage" />   <!-- 跳转到最后一页 -->
+			
+			<input type="hidden" name="btnPattern" id="btnPattern" value="${btnPattern!''}"/><!--显示按钮模式-->
+			<div class="searchBar">
+			   <ul class="searchContent">
+				   <li>
+				    <select name="term">
+				       <option value="quick">快速查询</option>
+				       <option value="code" <#if term?? && term=='code'> selected="selected"</#if>>按部门编号查询</option>
+				       <option value="fullName" <#if term?? && term=='fullName'> selected="selected"</#if>>按部门全称查询</option>
+				       <option value="spell" <#if term?? && term=='spell'> selected="selected"</#if>>按部门拼音码查询</option>
+				    </select>
+				    &nbsp;&nbsp;
+				    </li>
+				    <li>
+				    <input class="textInput" type="text" name="termVal" value="${termVal!}" size="40"/>&nbsp;&nbsp;
+				    </li>
+				    <li>
+				    	<div class="buttonActive"><div class="buttonContent"><button type="submit">查询</button></div></div>
+				    	<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+				    </li>
+			    </ul>
+			</div>
+		</form>
+	</div>
+	<div class="pageContent">
+		<table class="table" layoutH="130" targetType="dialog">
+			<thead>
+				<tr>
+					<th width="50"  align="center">行号</th>
+					<#list rowList as row>
+					   <th  width="${(row.width)!100}px" <#if row.isOrder?? && row.isOrder==2> orderField="${row.code}"  <#if orderField?? && row.code==orderField>class="${(orderDirection)!'asc'}"<#else>class="asc"</#if> </#if>>
+						 ${(row.showName)!(row.name)!}
+					   </th>
+				    </#list>				</tr>
+			</thead>
+			<tbody>
+			    <#list pageMap.pageList as depm>
+			    <#if depm.node==2>
+			        <tr objectId="${objectId!0}" rel="${depm.id}" title="部门" cTarget="dialog" relevancyIds="btnPattern" url="${base}/base/department/search/${depm.id}" result="{id:'${depm.id}',supId:'${depm.supId}', fullName:'${depm.fullName!}',code:'${depm.code!}'}">
+			    <#else>
+			        <tr objectId="${objectId!0}"  rel="${depm.id}"  ondblclick="javascript:$.bringBack({id:'${depm.id}', fullName:'${depm.fullName!}', code:'${depm.code!}'})">
+			    </#if>
+					<td><a>${depm_index+1+pageMap.limit}</a><#if depm.node==2>..</#if></td>
+					<#list rowList as row>
+						<#if row.code?? && 'code'==row.code>
+					    <td>${(depm.code)!}</td>
+					    <#elseif row.code?? && 'fullName'==row.code>
+						<td>${(depm.fullName)!}</td>
+						<#elseif row.code?? && 'spell'==row.code>
+						<td>${(depm.spell)!}</td> 
+						<#elseif row.code?? && 'memo'==row.code>
+						<td>${(depm.memo)!}</td> 
+						</#if>
+					</#list>
+				</tr>
+				</#list>
+			</tbody>
+		</table>
+		<#include "/WEB-INF/template/unitl/dialogpage.html" />
+	</div>
+
+	<!--divider虚线-->
+	<div class="divider"></div>
+	<div>
+	    <div style="margin-left: 10px;" class="button"><div class="buttonContent" onclick="selectTrClick()"><button type="button" class="button">选中</button></div></div>
+	    <#if btnPattern?? && btnPattern!="">
+		    <@shiro.hasPermission name='1-22-204-a'>
+			    <a   style=" <#if btnPattern?index_of("optionAdd") == -1 >display:none;</#if>  " class="button" href="${base}/base/department/optionAdd/${supId!0}" href1="${base}/common/baseInfo/verifyBaseAddPrivs/${supId!0}-depm" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" rel="b_department_add" target="dialog"  mask="true"  width="430" height="360"><span>新增</span></a>
+			</@shiro.hasPermission>
+		    <div style=" <#if btnPattern?index_of("selectMany") == -1 >display:none;</#if> " class="button"><div class="buttonContent" onclick="selectTrSortClick()"><button type="button" class="button">选中一类</button></div></div>
+		    <div style=" <#if btnPattern?index_of("selectAll") == -1 >display:none;</#if> " class="button"><div class="buttonContent" onclick="javascript:$.bringBack({id:0,fullName:'全部部门',pids:'{0}'})"><button type="button" class="button">全部</button></div></div>
+		</#if>
+		
+		<#if supId?? && supId!=0>
+		   <a class="button" href="${base}/base/department/search/${pSupId!0}-${supId!0}" relevancyIds="btnPattern" target="ajax"  rel="searchDempList"><span>上级</span></a>
+	    <#else>
+		   <a class="buttonDisabled" href="javascript:void(0);"><span>上级</span></a>
+	    </#if>
+		
+	</div>
+	<div style="float: right; margin-right: 10px;">
+		   <div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+	</div>
+</div>

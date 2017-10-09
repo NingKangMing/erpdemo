@@ -1,0 +1,113 @@
+<div class="pageContent">
+	<h2 class="contentTitle">公试设置</h2>
+	<form action="${base}/fz/priceDiscountTrack/formulaSet" class="tableForm" enctype="text/plain" method="post" onsubmit="return validateCallback(this,aioDialogAjaxDone)">
+		<input type="hidden" name="unit.id" value="${unitId!0}">
+		<input type="hidden" name="product.id" value="${productId!0}">
+		<input type="hidden" name="aimDiv" value="${aimDiv!'all-all'}">
+		
+		<input type="hidden" name="costPrice.id" value="${(costPrice.id)!}"/>
+		<input type="hidden" name="sellPrice.id" value="${(sellPrice.id)!}"/>
+		<input type="hidden" name="costDiscount.id" value="${(costDiscount.id)!}"/>
+		<input type="hidden" name="sellDiscount.id" value="${(sellDiscount.id)!}"/>
+		<div class="pageFormContent" layoutH="100">
+			<fieldset>
+				<legend>公式设置</legend>
+				<table style="margin:0px auto;">
+					<tr height="35px;">
+						<td width="100px;">最&nbsp;&nbsp;近&nbsp;&nbsp;进&nbsp;&nbsp;价&nbsp;&nbsp;=</td>
+						<td>
+							<select name="costPrice.item" onchange="selectChangeJs(this,'costPriceOperation')">
+								<option <#if costPrice??&&costPrice.item?number == 0>selected</#if> value="0">无公式</option>
+								<option <#if costPrice??&&costPrice.item?number == 1>selected</#if> value="1">零售价</option>
+								<option <#if costPrice??&&costPrice.item?number == 2>selected</#if> value="2">最近进价</option>
+								<option <#if costPrice??&&costPrice.item?number == 3>selected</#if> value="3">库存均价</option>
+								<option <#if costPrice??&&costPrice.item?number == 4>selected</#if> value="4">预设售价1</option>
+								<option <#if costPrice??&&costPrice.item?number == 5>selected</#if> value="5">预设售价2</option>
+								<option <#if costPrice??&&costPrice.item?number == 6>selected</#if> value="6">预设售价3</option>
+							</select>
+						</td>
+						<td width="80px;">
+							<select name="costPrice.operate" id="costPriceOperation" style="margin-left: 20px;" >
+								<option <#if costPrice??&&costPrice.operate == '+'>selected</#if> value="+">加</option>
+								<option <#if costPrice??&&costPrice.operate == '-'>selected</#if> value="-">减</option>
+								<option <#if costPrice??&&costPrice.operate == '*'>selected</#if> value="*">乘</option>
+								<option <#if costPrice??&&costPrice.operate == '/'>selected</#if> value="/">除</option>
+							</select>
+						</td>
+						<td><input name="costPrice.param" class="number" style="width: 80px;" value="${(costPrice.param)!1}"  onblur="inputNullRepZero(this)"/></td>
+					</tr>
+					<tr height="35px;">
+						<td width="100px;">最&nbsp;&nbsp;近&nbsp;&nbsp;售&nbsp;&nbsp;价&nbsp;&nbsp;=</td>
+						<td>
+							<select name="sellPrice.item" onchange="selectChangeJs(this,'sellPriceOperation')">
+								<option <#if sellPrice??&&sellPrice.item?number == 0>selected</#if> value="0">无公式</option>
+								<option <#if sellPrice??&&sellPrice.item?number == 1>selected</#if> value="1">零售价</option>
+								<option <#if sellPrice??&&sellPrice.item?number == 10>selected</#if> value="10">最近折扣售价</option>
+								<option <#if sellPrice??&&sellPrice.item?number == 3>selected</#if> value="3">库存均价</option>
+								<option <#if sellPrice??&&sellPrice.item?number == 4>selected</#if> value="4">预设售价1</option>
+								<option <#if sellPrice??&&sellPrice.item?number == 5>selected</#if> value="5">预设售价2</option>
+								<option <#if sellPrice??&&sellPrice.item?number == 6>selected</#if> value="6">预设售价3</option>
+							</select>
+						</td>
+						<td width="80px;">
+							<select name="sellPrice.operate" id="sellPriceOperation" style="margin-left: 20px;" >
+								<option <#if sellPrice??&&sellPrice.operate == '+'>selected</#if> value="+">加</option>
+								<option <#if sellPrice??&&sellPrice.operate == '-'>selected</#if> value="-">减</option>
+								<option <#if sellPrice??&&sellPrice.operate == '*'>selected</#if> value="*">乘</option>
+								<option <#if sellPrice??&&sellPrice.operate == '/'>selected</#if> value="/">除</option>
+							</select>
+						</td>
+						<td><input name="sellPrice.param" class="number" style="width: 80px;" value="${(sellPrice.param)!1}"  onblur="inputNullRepZero(this)"/></td>
+					</tr>
+					
+					
+					<tr height="35px;">
+						<td width="100px;">最近进货折扣=</td>
+						<td>
+							<select name="costDiscount.item" onchange="selectChangeJs(this,'costDiscountOperation')">
+								<option <#if costDiscount??&&costDiscount.item?number == 0>selected</#if> value="0">无公式</option>
+								<option <#if costDiscount??&&costDiscount.item?number == 9>selected</#if> value="9">1</option>
+								<option <#if costDiscount??&&costDiscount.item?number == 7>selected</#if> value="7">最近进货折扣</option>
+							</select>
+						</td>
+						<td width="80px;">
+							<select name="costDiscount.operate" id="costDiscountOperation" style="margin-left: 20px;" >
+								<option <#if costDiscount??&&costDiscount.operate == '+'>selected</#if> value="+">加</option>
+								<option <#if costDiscount??&&costDiscount.operate == '-'>selected</#if> value="-">减</option>
+								<option <#if costDiscount??&&costDiscount.operate == '*'>selected</#if> value="*">乘</option>
+								<option <#if costDiscount??&&costDiscount.operate == '/'>selected</#if> value="/">除</option>
+							</select>
+						</td>
+						<td><input name="costDiscount.param" class="number" style="width: 80px;" value="${(costDiscount.param)!1}"  onblur="inputNullRepZero(this)"/></td>
+					</tr>
+					<tr height="35px;">
+						<td width="100px;">最近销售折扣=</td>
+						<td>
+							<select name="sellDiscount.item" onchange="selectChangeJs(this,'sellDiscountOperation')">
+								<option <#if sellDiscount??&&sellDiscount.item?number == 0>selected</#if> value="0">无公式</option>
+								<option <#if sellDiscount??&&sellDiscount.item?number == 9>selected</#if> value="9">1</option>
+								<option <#if sellDiscount??&&sellDiscount.item?number == 8>selected</#if> value="8">最近销售折扣</option>
+							</select>
+						</td>
+						<td width="80px;">
+							<select name="sellDiscount.operate" id="sellDiscountOperation" style="margin-left: 20px;" >
+								<option <#if sellDiscount??&&sellDiscount.operate == '+'>selected</#if> value="+">加</option>
+								<option <#if sellDiscount??&&sellDiscount.operate == '-'>selected</#if> value="-">减</option>
+								<option <#if sellDiscount??&&sellDiscount.operate == '*'>selected</#if> value="*">乘</option>
+								<option <#if sellDiscount??&&sellDiscount.operate == '/'>selected</#if> value="/">除</option>
+							</select>
+						</td>
+						<td><input name="sellDiscount.param" class="number" style="width: 80px;" value="${(sellDiscount.param)!1}"  onblur="inputNullRepZero(this)"/></td>
+					</tr>
+				</table>
+			</fieldset>
+			<div align="center" style="color: red;">注意：本操作会应用到当前列表中的所有商品，请谨慎使用！</div>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>

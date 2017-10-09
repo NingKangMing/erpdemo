@@ -1,0 +1,85 @@
+<div class="panel" id="takeStockDisposePage">
+	<div class="pageContent">
+		<div class="textContent center">
+		     <div>
+		         <span style="font:bold 18px '宋体',Arial,Times;">盘点处理</span>
+		     </div>
+		     <div style="margin-top: 5px;">
+		     	 查询日期：${startDate!''}&nbsp;&nbsp;至&nbsp;&nbsp;${endDate!''}
+		     	<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+		     </div>
+		</div>
+		
+		<div>
+			<form id="pagerForm" onsubmit="return divSearch(this, 'takeStockDisposePage');" class="pageForm required-validate" enctype="text/plain" action="${base}/stock/takeStock/takeStockDisposePage" method="post">
+				<input type="hidden" name="pageNum" value="${pageMap.pageNum}" />
+				<input type="hidden" name="numPerPage" value="${pageMap.numPerPage}" />
+				<input type="hidden" name="orderField" value="${orderField!'takBill.createTime'}" /><!--查询排序-->
+			    <input type="hidden" name="orderDirection" value="${orderDirection!'desc'}" /><!--升序降序-->
+				
+				
+				<input type="hidden" name="startDate" id="startDate" value="${startDate!''}"/><!-- 开始日期-->
+				<input type="hidden" name="endDate" id="endDate"  value="${endDate!''}"/><!--结束日期 -->
+				<input type="hidden" name="storageId" value="${storageId!0}"><!-- 仓库ID -->
+			</form>
+			
+			<table class="table" rel="takeStockDisposePage" layoutH="160">
+				<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+				<tbody>
+					<#if pageMap?? && pageMap.pageList??>
+						<#list pageMap.pageList as tr>
+						<tr target="tid" rel="${tr.takBill.id!''}"  status="${tr.takBill.status!}" title="库存盘点单" url="${base}/stock/takeStock/editBill/${tr.takBill.id!''}" cTarget="openNavTab" >
+							<td>${tr_index+1+pageMap.limit}</td>
+							<#list rowList as row>
+								<#assign columnObj = "" />
+								<#if row.code?? && ((row.code)?index_of(".")>-1)>
+									<#assign columnObj = (row.code)?substring(0,(row.code)?index_of(".")) />
+									<#assign columnParam = (row.code)?substring((row.code)?index_of(".")+1) />
+								<#else>
+									<#assign columnParam = row.code />
+								</#if>
+								<#if row.code?? && 'takBill.createTime'==row.code>
+									<td>
+										<#if ((tr[columnObj])[columnParam])?? >${((tr[columnObj])[columnParam])?string("yyyy-MM-dd HH:mm:ss")}</#if>
+									</td>
+								<#elseif row.code?? && 'takBill.status'==row.code>
+									<td>
+										<#if tr.takBill.status == 2>已处理</#if>
+									</td>
+								<#else>
+									<#if columnObj?? && columnObj!="">
+										<td>${((tr[columnObj])[columnParam])!}</td>
+									<#else>
+										<td>${tr[columnParam]!}</td>
+									</#if>
+								</#if>
+							</#list>
+						</tr>
+						</#list>
+					</#if>
+				</tbody>
+			</table>
+				
+			<#include "/WEB-INF/template/unitl/paging.html"/>
+			
+			<div class="divider"></div>
+			<div>
+				<a class="button" href="${base}/stock/takeStock/searchTakeStock" aimTabId="takeStockDisposeView" aimTitle="盘点处理" aimUrl="${base}/stock/takeStock/takeStockDisposePage" caption="盘点查询" target="dialog" rel="searchTakeStockDialog" mask="true" width="400" height="300"><span>查询条件</span></a>
+				<a class="button" href="${base}/stock/takeStock" target="navTab" rel="takeStockView" title="库存盘点单"><span>添加单据</span></a>
+				<a class="button" href="${base}/stock/takeStock/editBill/{tid}" target="navTab" title="库存盘点单" ><span>修改单据</span></a>
+				<a class="button" href="${base}/stock/takeStock/delBill/{tid}" target="ajaxTodo" title="确定删除本张库存盘点单?"  callback="aioReloadForm"><span>删除单据</span></a>
+				<@shiro.hasPermission name='5-80-503-e'>
+					<a class="button" href="${base}/stock/takeStock/takeStockDispose/{tid}" status="{status}" target="statusToAjaxTodo" statusToconfirmTxt="该单据已经盘点处理过，你确定还要再次盘点处理吗？"  confirmTxt="确定要盘点处理吗？"  callback="aioReloadForm" ><span>盘点处理</span></a>
+				</@shiro.hasPermission>
+			</div>
+			<div style="float: right;">
+			    <#assign privs = '5-80-503-p'/>
+				<#assign href = '${base}/stock/takeStock/printReports'/>
+				<#assign formId = 'pagerForm'/>
+				<#include "/WEB-INF/template/common/print/printBtn.html"/>
+				<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a>
+			</div>
+			
+		</div>
+	</div>
+</div>

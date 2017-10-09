@@ -1,0 +1,109 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/finance/arap/ageAnalysis/searchDialog/page" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+	<input type="hidden" name="orderField" value="${orderField!'id'}" />
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" />
+    <!-- 主页面过滤条件 -->
+	<input type="hidden" id="stopDate" name="stopDate" value="${stopDate!''}"/>     
+	<input type="hidden" id="payOrGet" name="payOrGet" value="${payOrGet!''}"/>     
+	<input type="hidden" id="aimDiv" name="aimDiv" value="${aimDiv!'all'}"/>            
+	<input type="hidden" id="unitIds" name="unitIds" value="${unitIds!','}"/> 
+	           
+	<input type="hidden" id="day1" name="day1" value="${day1!30}"/>            
+	<input type="hidden" id="day2" name="day2" value="${day2!30}"/>            
+	<input type="hidden" id="day3" name="day3" value="${day3!30}"/>            
+	<input type="hidden" id="day4" name="day4" value="${day4!30}"/>            
+	<input type="hidden" id="day5" name="day5" value="${day5!30}"/>            
+	<input type="hidden" id="day6" name="day6" value="${day6!30}"/>            
+	<input type="hidden" id="day7" name="day7" value="${day7!30}"/>            
+	<input type="hidden" id="day8" name="day8" value="${day8!30}"/>            
+	<input type="hidden" id="day9" name="day9" value="${day9!30}"/>            
+	<input type="hidden" id="day10" name="day10" value="${day10!30}"/>            
+	<input type="hidden" id="day11" name="day11" value="${day11!30}"/>            
+	<input type="hidden" id="day12" name="day12" value="${day12!30}"/>            
+	<input type="hidden" id="day13" name="day13" value="${day13!30}"/>            
+</form>
+<table class="table" rel="${listID}" layoutH="200">
+	<thead>
+		<tr>
+			<th width="80" align="center" >行号</th>
+			<th width="100" orderField="code" <#if orderField?? && 'code'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>单位编号</th>
+			<th width="100" orderField="fullName" <#if orderField?? && 'fullName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>单位全名</th>
+			<th width="100">累计</th>
+			<th width="100">从1至${day1}天</th>
+			<th width="100">从${day1+1}至${day1+day2}天</th>
+			<th width="100">从${day1+day2+1}至${day1+day2+day3}天</th>
+			<th width="100">从${day1+day2+day3+1}至${day1+day2+day3+day4}天</th>
+			<th width="100">从${day1+day2+day3+day4+1}至${day1+day2+day3+day4+day5}天</th>
+			<th width="100">从${day1+day2+day3+day4+day5+1}至${day1+day2+day3+day4+day5+day6}天</th>
+			<th width="100">从${day1+day2+day3+day4+day5+day6+1}至${day1+day2+day3+day4+day5+day6+day7}天</th>
+			<th width="100">从${day1+day2+day3+day4+day5+day6+day7+1}至${day1+day2+day3+day4+day5+day6+day7+day8}天</th>
+			<th width="100">从${day1+day2+day3+day4+day5+day6+day7+day8+1}至${day1+day2+day3+day4+day5+day6+day7+day8+day9}天</th>
+			<th width="100">从${day1+day2+day3+day4+day5+day6+day7+day8+day9+1}至${day1+day2+day3+day4+day5+day6+day7+day8+day9+day9+day10}天</th>
+			<th width="100">从${day1+day2+day3+day4+day5+day6+day7+day8+day9+day10+1}至${day1+day2+day3+day4+day5+day6+day7+day8+day9+day10+day11}天</th>
+			<th width="100">从${day1+day2+day3+day4+day5+day6+day7+day8+day9+day10+day11+1}至${day1+day2+day3+day4+day5+day6+day7+day8+day9+day10+day11+day12}天</th>
+			<th width="100">从${day1+day2+day3+day4+day5+day6+day7+day8+day9+day10+day11+day12+1}天以上</th>
+		</tr>
+	</thead>
+	<tbody id="reports_prdsellcount_body">
+		<#if pageMap??&&pageMap.pageList??>
+		<#list pageMap.pageList as obj>
+		<tr target="unitId" rel="${obj.id!0}" >
+			<td><a>${obj_index+1+pageMap.limit}</a></td>
+			<td>${obj.code!''}</td>
+			<td>${obj.fullName!''}</td>
+			<td>${obj.countMoney!''}</td>
+			<td>${obj.money1!''}</td>
+			<td>${obj.money2!''}</td>
+			<td>${obj.money3!''}</td>
+			<td>${obj.money4!''}</td>
+			<td>${obj.money5!''}</td>
+			<td>${obj.money6!''}</td>
+			<td>${obj.money7!''}</td>
+			<td>${obj.money8!''}</td>
+			<td>${obj.money9!''}</td>
+			<td>${obj.money10!''}</td>
+			<td>${obj.money11!''}</td>
+			<td>${obj.money12!''}</td>
+			<td>${obj.money13!''}</td>
+		</tr>
+		</#list>
+		</#if>
+	</tbody>
+	<tfoot>
+	       <tr isSelect="false" style="border-top: #D0D0D0 solid 1px">
+		       <td align="center">合计</td>
+		       <td align="center"></td>
+		       <td align="center"></td>
+		       <td align="center" hascount="true"></td>
+		       <td align="center" hascount="true"></td>
+		       <td align="center" hascount="true"></td>
+		       <td align="center" hascount="true"></td>
+		       <td align="center" hascount="true"></td>
+		       <td align="center" hascount="true"></td>
+		       <td align="center" hascount="true"></td>
+		       <td align="center" hascount="true"></td>
+		       <td align="center" hascount="true"></td>
+		       <td align="center" hascount="true"></td>
+		       <td align="center" hascount="true"></td>
+		       <td align="center" hascount="true"></td>
+		       <td align="center" hascount="true"></td>
+		       <td align="center" hascount="true"></td>
+		       <td align="center" hascount="true"></td>
+	       </tr>
+    </tfoot>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+
+	
+<div class="divider"></div>
+<div>
+    <a class="button" target="dialog" href="${base}/reports/finance/arap/ageAnalysis/toSearchDialog" rel="dateDialog" width="620" height="530" aimTitle="帐龄分析" aimUrl="${base}/reports/finance/arap/ageAnalysis/searchDialog/search" aimTabId="cw_report_arapAgeAnalysis_view" aimDiv="${aimDiv}"><span>查询条件</span></a><!-- aimDiv值为all eq gt 下拉框改变赋值-->
+</div>
+<div style="float: right;">
+	<#assign privs = '6-103-623-p'/>
+	<#assign href = '${base}/reports/finance/arap/ageAnalysis/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

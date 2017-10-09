@@ -1,0 +1,93 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/base/product/option">
+	<input type="hidden" name="pageNum" value="${(pageMap.get('pageNum'))}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.get('pageSize'))!}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <input type="hidden"  name="supId" value="${supId!0}"/>
+    
+    <input type="hidden" name="btnPattern" id="btnPattern" value="${btnPattern!'optionAdd'}"/><!--显示按钮模式-->
+	
+</form>
+<div id="optionProductList">
+<div class="pageHeader">
+	<form rel="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/base/product/option" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden"  name="supId" value="0"/>
+	<input type="hidden" name="btnPattern" id="btnPattern" value="${btnPattern!'optionAdd'}"/><!--显示按钮模式-->
+	<div class="searchBar">
+	   <ul class="searchContent">
+		   <li>
+		    <select name="term">
+		       <option <#if term?? && 'quick'==term>selected="selected"</#if> value="quick">快速查询</option>
+		       <option <#if term?? && 'code'==term>selected="selected"</#if>  value="code">按商品编号查询</option>
+		       <option <#if term?? && 'fullName'==term>selected="selected"</#if> value="fullName">按商品全名查询</option>
+		       <option <#if term?? && 'spell'==term>selected="selected"</#if> value="spell">按商品拼音码查询</option>
+		       <option <#if term?? && 'standard'==term>selected="selected"</#if> value="address">按规格查询</option>
+		       <option <#if term?? && 'model'==term>selected="selected"</#if> value="phone">按型号查询</option>
+		       <option <#if term?? && 'field'==term>selected="selected"</#if> value="fax">按产地查询</option>
+		    </select>
+		    &nbsp;&nbsp;
+		    </li>
+		    <li>
+		    <input class="textInput" type="text" name="termVal" value="${termVal!''}" size="40"/>&nbsp;&nbsp;
+		    </li>
+		    <li>
+		    <div class="buttonActive"><div class="buttonContent"><button type="submit">查询</button></div></div>
+		    </li>
+	    </ul>
+	</div>
+	</form>
+</div>
+<div class="pageContent">
+
+	<table class="table" layoutH="128" targetType="dialog">
+		<thead>
+			<tr>
+				<th width="50" align="center">行号</th>
+				<th width="100" align="center" orderField="code" <#if orderField?? && 'code'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>商品编号</th>
+				<th width="100" align="center" orderField="smallName" <#if orderField?? && 'smallName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>商品简称</th>
+				<th width="100" align="center" orderField="fullName" <#if orderField?? && 'fullName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>商品全称</th>
+				<th width="60" align="center" orderField="calculateUnit1" <#if orderField?? && 'calculateUnit1'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>基本单位</th>
+				<th width="100" align="center" orderField="standard" <#if orderField?? && 'standard'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>规格</th>
+				<th width="100" align="center" orderField="model" <#if orderField?? && 'model'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>型号</th>
+			</tr>
+		</thead>
+		<tbody>
+		    <#list pageMap.pageList as product>
+		    <#if product.node==2>
+		        <tr objectId="${objectId!0}" rel="${product.id}" title="商品" relevancyIds="btnPattern" result="{id:'${product.id}',supId:'${product.supId}', fullName:'${product.fullName!}', code:'${product.code!}'}"  cTarget="dialog" url="${base}/base/product/option/${product.id}">
+		    <#else>
+		        <tr objectId="${objectId!0}"  rel="${product.id}"  ondblclick="javascript:$.bringBack({id:'${product.id}',supId:'${product.supId}', fullName:'${product.fullName!}', code:'${product.code!}'})">
+		    </#if>
+				<td>${product_index+1}<#if product.node==2>..</#if></td>
+				<td>${(product.code)!}</td>
+				<td>${(product.smallName)!}</td>
+				<td>${(product.fullName)!}</td>
+				<td>${(product.calculateUnit1)!}</td>
+				<td>${(product.standard)!}</td>
+				<td>${(product.model)!}</td>
+			</tr>
+			</#list>
+		</tbody>
+	</table>
+	<#include "/WEB-INF/template/unitl/dialogpage.html" />
+	
+</div>
+<!--divider虚线-->
+   <div class="divider"></div>
+    <div>
+        <div class="button"><div class="buttonContent" onclick="selectTrClick()"><button type="button" class="button">选中</button></div></div>
+	    <#if btnPattern?? && btnPattern!="">
+		    <div style="<#if btnPattern?index_of("selectMany") == -1 >display:none;</#if> " class="button"><div class="buttonContent" onclick="selectTrSortClick()"><button type="button" class="button">选中一类</button></div></div>
+		    <div style="<#if btnPattern?index_of("selectAll") == -1 >display:none;</#if> " class="button"><div class="buttonContent" onclick="javascript:$.bringBack({id:0,fullName:'全部商品',pids:'{0}'})"><button type="button" class="button">全部</button></div></div>
+		    <@shiro.hasPermission name='1-201-a'>
+		    <a  style="<#if btnPattern?index_of("optionAdd") == -1 >display:none;</#if>  " class="button" href="${base}/base/product/optionAdd/${supId!0}" href1="${base}/common/baseInfo/verifyBaseAddPrivs/${supId!0}-product" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" rel="b_product_id" target="dialog"  mask="true" width="570" height="450"><span>新增</span></a>
+		    </@shiro.hasPermission>
+		</#if>
+		<#if supId?? && supId!=0>
+		   <a class="button" href="${base}/base/product/option/${pSupId!0}-${supId!0}" relevancyIds="btnPattern" target="ajax"  rel="optionProductList"><span>上级</span></a>
+	    <#else>
+	       <a class="buttonDisabled" href="javascript:void(0);"><span>上级</span></a>
+	    </#if>
+		<div style="float:right;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+	</div>
+</div>

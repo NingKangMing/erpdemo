@@ -1,0 +1,23 @@
+<!--navTab  职员      eg:销售单头部选择职员-->
+<#--<#include "/WEB-INF/template/common/base/staff/billLink.html"/>-->
+
+<#--参数说明-->
+<#--notEditStaff:不能修改职员信息只读      eg:其它入库单-->
+<#--baseUnitStyle:样式区别        eg:基本单位信息   增加默认经手人-->
+
+<input type="hidden" name="staff.id" id="staffId" value="${(bill.getBillStaff(session.loginConfigId).id)!(staff.id)!0}"/>
+<input class="line" type="hidden" name="staff.name" id="staffName" value="${(bill.getBillStaff(session.loginConfigId).name)!(staff.name)!}"/>
+<#if notEditStaff?? && notEditStaff==true>
+	<input class="line" readonly="readonly" type="text" name="staff.name" value="${(staff.fullName)!}"/>
+<#else>
+	<input <#if baseUnitStyle??&&baseUnitStyle=='has'>class="enter" size="13"<#else>class="line enter"</#if> type="text" name="staff.name" id="staffName" value="${(bill.getBillStaff(session.loginConfigId).name)!(staff.name)!}"/>
+	<a class="btnLook" id="staffLook"  type="POST" <#if baseUnitStyle??&&baseUnitStyle=='has'><#else>btnPattern="optionAdd"</#if> href="${base}/base/staff/dialogChild" <#if baseUnitStyle??&&baseUnitStyle=='has'>module="dialog" <#else>module="navTab"</#if> warn="员工" lookupgroup="staff" lookuppk="id" width="600" height="410">职员</a>
+</#if> 
+
+
+
+
+
+
+
+

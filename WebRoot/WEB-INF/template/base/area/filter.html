@@ -1,0 +1,66 @@
+<div class="pageContent">
+   <div class="pageFormContent">
+	<form action="${base}/base/area/toFilter" method="post" onsubmit="return validateCallback(this,filter2)">
+		<table style="margin-left: 10px;">
+		  <tr height="25px">
+		     <td style="height: 20px">选择列</td>
+		     <td>过滤条件</td>
+		  </tr>
+		  <tr height="25px">
+		     <td>
+		        <select name="screenPara" id="areaFilter_filterPar" style="width: 150px;">
+					<option value="code">地区编号</option>
+					<option value="fullName">地区全名</option>
+					<option value="status">状态</option>
+				</select>
+		     </td>
+		     <td>
+		         <input type="text"  id="areaFilter_filterVal" name="screenVal" value="">
+		     </td>
+		  </tr>
+		  <tr height="130px">
+		     <td>
+		        <fieldset>
+						<legend>过滤条件</legend>
+						<div style="width:150px; height:80px;">
+						   <div ><input id="areaFilter_all" type="radio" name="scope" value="all" checked="checked">从全部过滤</div>
+						   <div style="margin-top: 20px"><input id="areaFilter_current" type="radio" name="scope" value="present">从当前过滤</div>
+						</div>		    
+				</fieldset> 
+		     </td>
+		     <td> 
+		       <ul style="margin-left: 20px">
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">筛选</button></div></div></li>
+				<li><div class="button" style="margin-left: 10px"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+			   </ul>
+		     </td>
+		  </tr>
+		</table>
+	</form>
+   </div>	
+</div>
+
+
+<script type="text/javascript">
+$(function(){
+   //一进来加载上次选择的值    这个要写在这个页面上，代表一进来就加载
+   var attr=$("#b_area_term_par").val();
+   var value=$("#b_area_term_val").val();
+   var scope=$("#b_area_term_scope").val();
+   
+   //下拉    文本值
+   if(attr!=""){
+       var attrArray=attr.split("#");
+       var valueArray=value.split("#");
+       $("#areaFilter_filterPar").val(attrArray[attrArray.length-1]);
+       $("#areaFilter_filterVal").val(valueArray[valueArray.length-1]);
+   }
+   
+   //单选框
+   if(scope==""||scope=="all"){
+      $("#areaFilter_all").attr("checked",true);
+   }else{
+      $("#areaFilter_current").attr("checked",true);
+   }
+});
+</script>

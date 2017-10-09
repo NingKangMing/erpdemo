@@ -1,0 +1,97 @@
+<!-- 库存仓库 -->
+<div id="b_product_dialog_paging">
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/stock/stock/storageDialog/page-${supId!0}" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${(pageMap.get('pageNum'))}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.get('numPerPage'))!}" />
+	<input type="hidden" name="orderField" value="${orderField!''}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <input type="hidden" name="selectedObjectId" id="selectedObjectId" value="${objectId!0}"/>        <!--   默认选中行对象的Id -->
+    <input type="hidden" id="storageProdcutId" name="productId" value="${productId!0}"/>
+    <input type="hidden" name="hasCheck" value="${hasCheck!'all'}"/>
+    <input type="hidden" id="case" name="case" value="${case!}"/>
+</form>
+<div class="pageHeader">
+	<form rel="pagerForm" id="stoageOptionFromId"  method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/stock/stock/storageDialog/search" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="productId" value="${productId!0}"/>
+	<input type="hidden" name="hasCheck" value="${hasCheck!'all'}"/>
+	 <input type="hidden" name="case" value="${case!}"/>
+	<div class="searchBar">
+	   <ul class="searchContent">
+		   <li>
+		    <select name="term">
+		       <option <#if term?? && 'quick'==term>selected="selected"</#if> value="quick">快速查询</option>
+		       <option <#if term?? && 'code'==term>selected="selected"</#if>  value="code">按仓库编号查询</option>
+		       <option <#if term?? && 'fullName'==term>selected="selected"</#if> value="fullName">按仓库全名查询</option>
+		       <option <#if term?? && 'spell'==term>selected="selected"</#if> value="spell">按仓库拼音码查询</option>
+		    </select>
+		    &nbsp;&nbsp;
+		    </li>
+		    <li>
+		    <input class="textInput" type="text" name="termVal" value="${termVal!''}" size="50"/>&nbsp;&nbsp;
+		    </li>
+		    <li>
+		    <div class="buttonActive"><div class="buttonContent"><button type="submit">查询</button></div></div>
+		    </li>
+	    </ul>
+	    <ul class="searchContent">
+	        <div style="float: right;">
+				<input type="checkbox"  <#if hasCheck=='has'>checked="checked"</#if> onclick="xshasProductStock(this,'stoageOptionFromId')"/>仅显示有货仓库	        
+	        </div>
+	    </ul>
+	</div>
+	</form>
+</div>
+<div class="pageContent">
+	<table class="table" layoutH="158"  targetType="dialog">
+		<thead>
+			<tr>
+			    <th width="40" align="center">行号</th> 
+				<th width="70" align="center">仓库编号</th>
+				<th width="100" align="center">仓库全名</th>
+				<th width="70" align="center">仓库简名</th>
+				<th width="70" align="center">仓库拼音码</th>
+				<th width="70" align="center">基本数量</th>
+				<th width="70" align="center">辅助数量</th>
+				<!--<th width="40px;">负责人</th>-->
+				<th width="70" align="center">负责人电话</th>
+				<th width="70" align="center">仓库地址</th>
+				<th width="100" align="center">仓库备注</th>
+			</tr>
+		</thead>
+		<tbody id="b_product_dialog_tbody">
+		    <#list pageMap.pageList as stock>
+		    <#if stock.storage.node==2>
+		    <!-- selectCheckboxObjs   要选中的checkBox -->
+			<tr objectId="${objectId!0}"  nodeType1="${stock.storage.node!2}"  rel="${stock.storage.id!0}" target="id" drel="cc_storage_dialog"  cTarget="dialog" whichDialog="xsdStorage" url="${base}/stock/stock/storageDialog/down-${productId!0}-${stock.storage.id}-${case!}">
+			<#else>
+			<tr objectId="${objectId!0}" param="${case!}" nodeType1="${stock.storage.node!1}"  rel="${stock.storage.id!0}"  drel="cc_storage_dialog" cTarget="dialog" whichDialog="xsdStorage" single="singleObj" target="checkedBack" url="${base}/stock/stock/storageSearchBack/${stock.storage.id!0}" callback="storageCheckBack">
+			</#if>
+				<td><a>${stock_index+1+pageMap.limit}</a><#if stock.storage.node==2>..</#if></td>
+				<td>${stock.storage.code!''}</td>
+				<td>${stock.storage.fullName!''}</td>
+				<td>${stock.storage.smallName!''}</td>
+				<td>${stock.storage.spell!''}</td>
+				<td>${stock.samount!''}</td>
+				<td>${(stock.helpUnit)!''}</td>
+				
+				<td>${stock.storage.phone!''}</td>
+				<td>${stock.storage.address!''}</td>
+				<td>${stock.storage.memo!''}</td>
+			</tr>
+			</#list>
+		</tbody>
+	</table>
+</div>
+<#include "/WEB-INF/template/unitl/dialogpage.html"/>
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+    <a class="button"  onclick="xscheckBack();" ><span>选中</span></a>
+	<#if supId?? && supId!=0>
+	   <a class="button" href="${base}/stock/stock/storageDialog/up-${pSupId!0}-${supId!0}-${productId!0}-${case!}" target="aioUpAjax"   rel="b_product_dialog_paging"><span>上级</span></a>
+    <#else>
+       <a class="button" href="javascript:void(0);"><span>上级</span></a>
+    </#if>
+	<div style="float: right;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+</div>
+</div>

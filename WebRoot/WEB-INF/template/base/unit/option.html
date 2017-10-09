@@ -1,0 +1,195 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/base/unit/option?actionType=page">
+	<input type="hidden" name="pageNum" value="${(pageMap.get('pageNum'))}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.get('pageSize'))!}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <input type="hidden"  name="supId" value="${supId!0}"/>
+	
+	<input type="hidden" name="selectedObjectId" id="selectedObjectId" value="${objectId!0}"/><!--默认选中对象的Id-->
+	<input type="hidden" name="showLastPage" id="showLastPage" />   <!-- 跳转到最后一页 -->
+	
+	<input type="hidden" name="btnPattern" id="btnPattern" value="${btnPattern!'optionAdd'}"/><!--显示按钮模式-->
+	
+	<input type="hidden" id="whichCallBack" name="whichCallBack" value="${whichCallBack!}">
+	
+</form>
+<div id="optionUnitList">
+<div class="pageHeader">
+	<form rel="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/base/unit/option?actionType=search" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${(pageMap.get('pageNum'))}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.get('pageSize'))!}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <input type="hidden"  name="supId" value="${supId!0}"/>
+	
+	<input type="hidden" name="selectedObjectId" id="selectedObjectId" value="${objectId!0}"/><!--默认选中对象的Id-->
+	<input type="hidden" name="showLastPage" id="showLastPage" />   <!-- 跳转到最后一页 -->
+	
+	<input type="hidden" name="btnPattern" id="btnPattern" value="${btnPattern!'optionAdd'}"/><!--显示按钮模式-->
+	
+	<input type="hidden" id="whichCallBack" name="whichCallBack" value="${whichCallBack!}">
+	<div class="searchBar">
+	   <ul class="searchContent">
+		   <li>
+		    <select name="term">
+		       <option <#if term?? && 'quick'==term>selected="selected"</#if> value="quick">快速查询</option>
+		       <option <#if term?? && 'code'==term>selected="selected"</#if>  value="code">按单位编号查询</option>
+		       <option <#if term?? && 'fullName'==term>selected="selected"</#if> value="fullName">按单位全名查询</option>
+		       <option <#if term?? && 'spell'==term>selected="selected"</#if> value="spell">按单位拼音码查询</option>
+		       <option <#if term?? && 'address'==term>selected="selected"</#if> value="address">按单位地址查询</option>
+		       <option <#if term?? && 'phone'==term>selected="selected"</#if> value="phone">按单位电话查询</option>
+		       <option <#if term?? && 'fax'==term>selected="selected"</#if> value="fax">按传真查询</option>
+		       <option <#if term?? && 'bank'==term>selected="selected"</#if> value="bank">按开户银行查询</option>
+		    </select>
+		    &nbsp;&nbsp;
+		    </li>
+		    <li>
+		    <input class="textInput" type="text" name="termVal" value="${termVal!''}" size="40"/>&nbsp;&nbsp;
+		    </li>
+		    <li>
+		    <div class="buttonActive"><div class="buttonContent"><button type="submit">查询</button></div></div>
+		    <#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+		    </li>
+	    </ul>
+	</div>
+	</form>
+</div>
+<div class="pageContent">
+
+	<table class="table" layoutH="130" targetType="dialog">
+		<thead>
+			<tr>
+				<th width="40" align="center">行号</th>
+				<!-- <th width="60" align="center" orderField="code" <#if orderField?? && 'code'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>单位编号</th>
+				<th width="100" align="center" orderField="fullName" <#if orderField?? && 'fullName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>单位名称</th>
+				 -->
+				 <#list rowList as row>
+				   <th  width="${(row.width)!100}px" <#if row.isOrder?? && row.isOrder==2> orderField="${row.code}"  <#if orderField?? && row.code==orderField>class="${(orderDirection)!'asc'}"<#else>class="asc"</#if> </#if>>
+					 ${(row.showName)!(row.name)!}
+				   </th>
+			    </#list>
+				<#if version gt 1>
+		        <th width="60" align="center" orderField="totalGets" <#if orderField?? && 'totalGets'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>应收金额</th>
+				<th width="60" align="center" orderField="totalPays" <#if orderField?? && 'totalPays'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>应付金额</th>
+		        <#else>
+		        </#if>
+				
+				
+				<#--
+				<th width="60" align="center" orderField="totalPreGets" <#if orderField?? && 'totalPreGets'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>预收金额</th>
+				<th width="60" align="center" orderField="totalPrePays" <#if orderField?? && 'totalPrePays'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>预付金额</th>
+			    -->
+			</tr>
+		</thead>
+		<tbody>
+		    <#list pageMap.pageList as unit>
+		    <#if unit.node==2>
+		        <tr objectId="${objectId!0}" rel="${unit.id}" title="单位" nodeType1="${unit.node!}" relevancyIds="btnPattern" result="{id:'${unit.id}',settlePeriod:'${unit.settlePeriod!0}',supId:'${unit.supId}', fullName:'${unit.fullName!}', code:'${unit.code!}',pids:'${unit.pids!}',staffId:'${unit.staffId!}',staffName:'${unit.staffFullName2!}',departmentId:'${unit.departmentId!}',departmentName:'${unit.departmentName!}'}"  cTarget="dialog" url="${base}/base/unit/option?actionType=down&supId=${unit.id}&whichCallBack=${whichCallBack!}">
+		    <#else>
+		        <#if whichCallBack?? && whichCallBack=='accountVoucher'>
+		           <tr objectId="${objectId!0}" nodeType1="${unit.node!}" rel="${unit.id}"  cTarget="ajaxBack" url="${base}/base/unit/checkedBack/${unit.id}" callback="unitCheckBack">
+		        <#else>
+		          <tr objectId="${objectId!0}"  rel="${unit.id}"  ondblclick="javascript:$.bringBack({id:'${unit.id}',settlePeriod:'${unit.settlePeriod!0}',supId:'${unit.supId}', fullName:'${unit.fullName!}', code:'${unit.code!}',pids:'${unit.pids!}',staffId:'${unit.staffId!}',staffName:'${unit.staffFullName2!}',departmentId:'${unit.departmentId!}',departmentName:'${unit.departmentName!}'})">
+		        </#if>
+		    </#if>
+				<td>${unit_index+1+pageMap.limit}<#if unit.node==2>..</#if></td>
+				<!-- <td>${(unit.code)!}</td>
+				<td>${(unit.fullName)!}</td>
+				 -->
+				<#list rowList as row>
+				<#if row.code?? && 'code'==row.code>
+			    <td>${(unit.code)!}</td>
+			    <#elseif row.code?? && 'fullName'==row.code>
+				<td>${(unit.fullName)!}</td>
+				<#elseif row.code?? && 'smallName'==row.code>
+				<td>${(unit.smallName)!}</td> 
+				<#elseif row.code?? && 'spell'==row.code>
+				<td>${(unit.spell)!}</td> 
+				<#elseif row.code?? && 'address'==row.code>
+				<td>${(unit.address)!}</td>
+				<#elseif row.code?? && 'phone'==row.code>
+				<td>${(unit.phone)!}</td> 
+				<#elseif row.code?? && 'email'==row.code>
+				<td>${(unit.email)!}</td> 
+				<#elseif row.code?? && 'contact1'==row.code>
+				<td>${(unit.contact1)!}</td> 
+				<#elseif row.code?? && 'mobile1'==row.code>
+				<td>${(unit.mobile1)!}</td> 
+				<#elseif row.code?? && 'contact2'==row.code>
+				<td>${(unit.contact2)!}</td> 
+				<#elseif row.code?? && 'mobile2'==row.code>
+				<td>${(unit.mobile2)!}</td>
+				<#elseif row.code?? && 'staffFullName2'==row.code>
+				<td>${(unit.staffFullName2)!}</td>
+				<#elseif row.code?? && 'bank'==row.code>
+				<td>${(unit.bank)!}</td>
+				<#elseif row.code?? && 'bankAccount'==row.code>
+				<td>${(unit.bankAccount)!}</td>
+				<#elseif row.code?? && 'zipCode'==row.code>
+				<td>${(unit.zipCode)!}</td>
+				<#elseif row.code?? && 'fax'==row.code>
+				<td>${(unit.fax)!}</td>
+				<#elseif row.code?? && 'tariff'==row.code>
+				<td>${(unit.tariff)!}</td>
+				<#elseif row.code?? && 'areaFullName2'==row.code>
+				<td>${(unit.areaFullName2)!}</td>
+				<#elseif row.code?? && 'fitPrice'==row.code>
+				<td>${(unit.fitPrice)!}</td>
+				</#if>
+				</#list>
+				
+				<#if version gt 1>
+				<td>
+				 <@shiro.hasPermission name='6-103-104-617-s'>
+	                ${(unit.totalGets)!}
+			     </@shiro.hasPermission>
+			     <@shiro.lacksPermission name='6-103-104-617-s'>
+			        ***
+			     </@shiro.lacksPermission>
+				</td>
+				<td>
+				 <@shiro.hasPermission name='6-103-104-617-s'>
+	                ${(unit.totalPays)!}
+			     </@shiro.hasPermission>
+			     <@shiro.lacksPermission name='6-103-104-617-s'>
+			        ***
+			     </@shiro.lacksPermission>
+				</td>
+		        <#else>
+		        </#if>
+				
+				<#--
+				<td>${(unit.totalPreGets)!}</td>
+				<td>${(unit.totalPrePays)!}</td>
+				-->
+			</tr>
+			</#list>
+		</tbody>
+	</table>
+	<#include "/WEB-INF/template/unitl/dialogpage.html" />
+	
+</div>
+<!--divider虚线-->
+   <div class="divider"></div>
+    <div>
+        <div class="button"><div class="buttonContent" onclick="selectTrdbClick()"><button type="button" class="button">选中</button></div></div>
+	    <#if btnPattern?? && btnPattern!="">
+		    <div style="<#if btnPattern?index_of("selectMany") == -1 >display:none;</#if> " class="button"><div class="buttonContent" onclick="selectTrSortClick()"><button type="button" class="button">选中一类</button></div></div>
+		    <div style="<#if btnPattern?index_of("selectAll") == -1 >display:none;</#if> " class="button"><div class="buttonContent" onclick="javascript:$.bringBack({id:0,fullName:'全部单位',pids:'{0}'})"><button type="button" class="button">全部</button></div></div>
+		    <@shiro.hasPermission name='1-21-203-a'>
+		    <#if actionType=="search">
+		    <a class="buttonDisabled" href="javascript:void(0);"><span>新增</span></a>
+		    <#else>
+		    <a   style="<#if btnPattern?index_of("optionAdd") == -1 >display:none;</#if>  " class="button" href="${base}/base/unit/optionAdd/${supId!0}" href1="${base}/common/baseInfo/verifyBaseAddPrivs/${supId!0}-unit" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate"  rel="b_unit_id" target="dialog"  mask="true" width="620" height="550"><span>新增</span></a>
+		    </#if>
+		    </@shiro.hasPermission>
+		</#if>
+	    <#if supId?? && supId!=0 && actionType!="search">
+		   <a class="button" href="${base}/base/unit/option?actionType=up&supId=${pSupId!0}&id=${supId!0}&whichCallBack=${whichCallBack!}" relevancyIds="btnPattern" target="ajax"  rel="optionUnitList"><span>上级</span></a>
+	    <#else>
+	    <a class="buttonDisabled" href="javascript:void(0);"><span>上级</span></a>
+		</#if>
+		
+		<div style="float:right;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+	</div>
+</div>

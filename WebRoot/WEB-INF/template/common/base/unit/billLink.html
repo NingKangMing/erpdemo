@@ -1,0 +1,20 @@
+<!--navTab 往来单位     eg:销售单   头表选择单位-->
+<#--<#include "/WEB-INF/template/common/base/unit/billLink.html"/>-->
+
+<#--参数说明-->
+<#--required:单位是不是必填项      eg:其它入库单-->
+<#--getOrder:选择单位带回对应的单据     eg:收款单-->
+
+<input type="hidden" id="unitId" name="unit.id" value="${(bill.getBillUnit(session.loginConfigId).id)!0}"/>
+<input <#if required??&&required=='false'>class="line"<#else>class="line required"</#if> type="text" id="unitName" name="unit.fullName" lookName="unit" lookId="unit.id" value="${(bill.getBillUnit(session.loginConfigId).fullName)!}"/>
+<a class="btnLook" id="unitLook" type="POST" btnPattern="optionAdd"  <#if getOrder??&&getOrder=='true'>backParam="getOrderByUnit"</#if> href="${base}/base/unit/option?actionType=first&supId=0" module="navTab" warn="单位" lookupgroup="unit" lookuppk="id" width="600" height="410">单位</a>
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,27 @@
+<div class="pageContent">
+	<h2 class="contentTitle">成本重算</h2>
+	<form action="${base}/sys/reloadCostPrice/reloadCostPrice" class="pageForm required-validate" enctype="text/plain" method="post" onsubmit="return validateCallback(this, dialogAjaxDone1)">
+		<div class="pageFormContent" layoutH="100">
+            <div>
+		      <fieldset style="margin-top: 10px;">
+			    <legend>成本重算</legend>
+			    <div>成本重算是非常重要的操作:</div>
+			    <div style="text-indent : 20px; line-height: 30px;">1.成本重算前，请先做数据备份！</div>
+			    <div style="text-indent : 20px; line-height: 30px;">2.成本重算过程中，其它用户暂停操作</div>
+			    <div style="text-indent : 20px; line-height: 30px;">3.所有跟商品成本有关的单据成本会重新计算一次</div>
+		      </fieldset>
+	       </div>
+		</div>
+		<div class="formBar">
+			<#if billCount==true>
+			<ul>
+			    <a callback="dialogReloadDialog" target="ajaxTodo" href="${base}/sys/reloadCostPrice/reloadBillCount" class="button"><span>合计重算</span></a>
+			</ul>
+			</#if>
+			<ul>
+			    <a callback="dialogReloadDialog" target="ajaxTodo" href="${base}/sys/reloadCostPrice/reloadCostPrice" class="button"><span>成本重算</span></a>
+			</ul>
+		</div>
+	</form>
+</div>
+

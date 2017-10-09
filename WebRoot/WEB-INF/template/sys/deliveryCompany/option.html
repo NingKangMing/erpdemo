@@ -1,0 +1,66 @@
+
+<div id="deliveryCompanypageContent">
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/sys/deliveryCompany/option" onsubmit="return dwzSearch(this, 'dialog');">
+	
+	<input type="hidden" name="pageNum" value="${(pageMap.get('pageNum'))!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.get('numPerPage'))!}" />
+	<input name="param" value="${param!}" type="hidden"/>
+
+</form>
+<div class="pageHeader">
+	<form rel="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/sys/deliveryCompany/option" onsubmit="return dwzSearch(this, 'dialog');">
+	<div class="searchBar">
+	   <ul class="searchContent">
+		    <li>
+		    <input class="textInput" name="param" value="${param!}" size="50"/>&nbsp;&nbsp;
+		    </li>
+		    <li>
+		    <div class="buttonActive"><div class="buttonContent"><button type="submit">查询</button></div></div>
+		    </li>
+	    </ul>
+	</div>
+	</form>
+</div>
+<div class="pageContent" >
+	<table class="table" layoutH="130" targetType="dialog">
+	<thead>
+		<tr>
+			<th width="50px">
+				行号
+			</th>
+			<th align="center" width="150px">
+				编号
+			</th>
+			<th align="center" width="200px">
+				全称
+			</th>
+			
+		</tr>
+	</thead>
+	<tbody>
+		<#list pageMap.pageList as company>
+		  
+		   <tr rel="${company.id}" ondblclick="javascript:$.bringBack({id:'${company.id}',name:'${company.name!}',code:'${company.code!}'})">
+		
+			<td>${company_index+1+pageMap.limit}
+				
+			</td>
+			<td>${company.code!''}
+			</td>
+			<td>${company.name!''}
+			</td>
+		</tr>
+		</#list>
+	</tbody>
+	</table>
+</div>
+<#include "/WEB-INF/template/unitl/dialogpage.html" />
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+    <div  class="button"><div class="buttonContent" onclick="selectTrClick()"><button type="button" class="button">选中</button></div></div>
+	<div style="float: right; margin-right: 10px;">
+	   <div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+	</div>
+</div>
+</div>

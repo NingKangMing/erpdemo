@@ -1,0 +1,23 @@
+<div class="panel">
+	<div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">销售订单执行情况</span></label>
+				</li>
+			</ul>
+			<ul class="searchContent" style="margin-top: 5px;">
+				<li>
+					<span style="margin-left: 10px;">查询时间：</span>${startDate!''}至${endDate!''}
+				</li>
+				<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+			</ul>
+		</div>
+	</div>
+	<div id="${listID}" layoutH="87">
+			<#include "/WEB-INF/template/reports/sell/sellBookCount/billSearch/excuteDetail/list.html"/>
+		</div>
+</div>
+
+
+

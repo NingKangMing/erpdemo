@@ -1,0 +1,63 @@
+<div class="pageContent">
+	<h2 class="contentTitle">通用简单公式生成器</h2>
+	<form id = "formulaForm" action="${base}/reports/stock/virtualStock/formula" class="tableForm pageForm" enctype="text/plain" method="post"  onsubmit="return validateCallback(this, dialogAjaxDone1)">
+	   <input type="hidden" value="reloadParentPage" id="confirmType" />
+	    					
+		<div class="pageFormContent" layoutH="100">
+            <table>
+               <tr>
+                  <td style="vertical-align: top;" rowspan="3">
+                      <fieldset style="width:150px;height: 210px">
+					    <legend>可用项目</legend>
+					    <div style="float:left; width:120px;border:solid 1px #CCC;padding:1px;height: 150px" class="typeList">
+					       <ul>
+						   
+						    <li style="cursor: pointer;padding:2px;padding-top:8px;height:20px;"><a href="#" value=" 库存数量" onclick="toValues(this,'formula')">库存数量</a></li>
+						    <li style="cursor: pointer;padding:2px;padding-top:8px;height:20px;"><a href="#" value=" 进货订货" onclick="toValues(this,'formula')">进货订货</a></li>
+						    <li style="cursor: pointer;padding:2px;padding-top:8px;height:20px;"><a href="#" value=" 销售订货" onclick="toValues(this,'formula')">销售订货</a></li>
+						    <li style="cursor: pointer;padding:2px;padding-top:8px;height:20px;"><a href="#" value=" 草稿数量" onclick="toValues(this,'formula')">草稿数量</a></li>
+					       </ul>
+					    </div>
+				      </fieldset>
+                  </td>
+               </tr>
+               <tr>
+                   <td style="vertical-align: top;">
+                      <fieldset style="width:250px;height:130px;margin-left: 5px">
+					    <legend>用户自定公式</legend>
+					    <textarea id="formula" class="required" name="formula"   maxlength="100" readonly="readonly" style="resize:none;background-color: white;width: 230px;height: 100px;overflow: auto;">${virtualStockFormula!}</textarea>
+				      </fieldset>
+                   </td>
+               </tr>
+               <tr>
+                   <td style="vertical-align: top;">
+                        <fieldset style="width:250px;height:50px;margin-left: 5px">
+					    <legend>运算符</legend>
+					    <div>
+					        <div class="button" style="height: 20px;width: 20px;margin-left: 15px;" value=" +" onclick="toValues(this,'formula')"><div class="buttonContent"><button type="button" >+</button></div></div>
+					        <div class="button" style="height: 20px;width: 20px;margin-left: 15px" value=" -" onclick="toValues(this,'formula')"><div class="buttonContent"><button type="button" >-</button></div></div>
+					        <div class="button" style="height: 20px;width: 20px;margin-left: 15px" value=" *" onclick="toValues(this,'formula')"><div class="buttonContent"><button type="button" >*</button></div></div>
+					        <div class="button" style="height: 20px;width: 20px;margin-left: 15px" value=" /" onclick="toValues(this,'formula')"><div class="buttonContent"><button type="button" >/</button></div></div>
+					        <div class="button" style="height: 20px;width: 20px;margin-left: 15px" value=" (" onclick="toValues(this,'formula')"><div class="buttonContent"><button type="button" >(</button></div></div>
+					        <div class="button" style="height: 20px;width: 20px;margin-left: 15px" value=" )" onclick="toValues(this,'formula')"><div class="buttonContent"><button type="button" >)</button></div></div>
+					        
+					    </div>
+				      </fieldset>
+                   </td>
+               </tr>
+            </table>			
+		</div>
+		<div class="divider"></div>
+		<div class="formBar">
+		    <ul style="float: left">
+				<li><div class="buttonActive" onclick="$('#formula').val('')"><div class="buttonContent"><button type="button">清空公式</button></div></div></li>
+				<li><div class="button" onclick="verifyFormula('formula')"><div class="buttonContent"><button type="button">公式检查</button></div></div></li>
+			</ul>
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="formulaSubmit('formula')">确认</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>
+

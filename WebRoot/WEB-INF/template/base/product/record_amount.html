@@ -1,0 +1,43 @@
+<!-- 销售订单   双击数量      填写支，包，箱数量 -->
+<div class="pageContent">
+    <form class="tableForm">
+	<table class="table " layoutH="57"  targetType="dialog">
+		<thead>
+		<tr>
+		   <th width="80" align="center">项目</th>
+		   <th width="70" align="center">单位名称</th>
+		   <th width="70" align="center">数量</th>
+		   <th width="70" align="center">单位关系</th>
+		</tr>
+	  </thead>
+	  <tbody id="record_amount_id">
+		<tr>
+		   <td>基本单位</td>
+		   <td>${calculateUnit1!''}</td>
+		   <td><input type="text" class="stealth number" name="amount1" value="${i1!''}"/></td>
+		   <td>${unitRelation1!''}</td>
+		</tr>
+		<tr>
+		   <td>辅助单位1</td>
+		   <td>${calculateUnit2!''}</td>
+		   <td><input type="text" class="stealth number" name="amount2" value="${i2!''}"/></td>
+		   <td>${unitRelation2!''}</td>
+		</tr>
+		<tr>
+		   <td>辅助单位2</td>
+		   <td>${calculateUnit3!''}</td>
+		   <td><input type="text" class="stealth number" name="amount3" value="${i3!''}"/></td>
+		   <td>${unitRelation3!''}</td>
+		</tr>
+	  </tbody>
+	</table>
+	</form>
+</div>
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+    <a style="margin-left: 100px;" class="button"  onclick="inputAmountDialog()"><span>确定</span></a>
+	<div style="margin-left: 30px;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+</div>
+
+	

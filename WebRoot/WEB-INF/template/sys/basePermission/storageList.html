@@ -1,0 +1,84 @@
+
+<form id="pagerForm" onsubmit="return divSearch(this, 'storagePermissionList');" action="${base}/sys/basePermission/storage" method="post">
+	<input type="hidden" name="pageNum" value="${(storagePageMap.get('pageNum'))}" />
+	<input type="hidden" name="numPerPage" value="${(storagePageMap.get('numPerPage'))!}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+	<input type="hidden" name="userId" value="${userId!}">
+    <input type="hidden" name="pSupId" value="${supId!-1}">
+</form>
+<table class="table" rel="storagePermissionList" layoutH="200">
+	<thead>
+		<tr>
+			<th width="50px">
+				行号
+			</th>
+			<th width="150px" align="center" orderField="code" <#if orderField?? && 'code'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+				仓库编号
+			</th>
+			<th width="150px" align="center" orderField="fullName" <#if orderField?? && 'fullName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+				仓库全称
+			</th>
+			<th width="150px" align="center" orderField="status" <#if orderField?? && 'status'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+				状态
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<#list storagePageMap.pageList as storage>
+		  <#if storage.node==2>
+		  <tr objectId="${objectId!0}" target="storageId" rel="${storage.id}"  crel="storagePermissionList" cTarget="ajax" url="${base}/sys/basePermission/storage/${storage.id}-{userId}">
+		  <#else>
+		   <tr objectId="${objectId!0}" target="storageId" rel="${storage.id}">
+		  </#if>
+			<td><a>${storage_index+1+storagePageMap.limit}</a>
+				<#if storage.node==2>..</#if>
+			</td>
+			<td>
+				${storage.code!''}
+			</td>
+			<td>
+				${storage.fullName!''}
+			</td>
+	
+			<td onclick="tdRelevanceTr(this,'storageChoose');">
+				<#if storage.privs==3>
+				       ★
+				<#elseif storage.privs==2>
+				       ☆
+				</#if>
+			</td>
+		</tr>
+		</#list>
+	</tbody>
+</table>
+<div class="panelBar">
+		 <div class="pages">
+			<span>显示</span>  
+			<select class="combox" name="numPerPage" onchange="navTabPageBreak({pageNum:${(storagePageMap.pageNum)!1},numPerPage:this.value},'${(storagePageMap.listID)!''}')">
+				<option <#if storagePageMap.numPerPage?number == 15>selected</#if> value="15">15</option>
+				<option <#if storagePageMap.numPerPage?number == 20>selected</#if> value="20">20</option>
+				<option <#if storagePageMap.numPerPage?number == 50>selected</#if> value="50">50</option>
+				<option <#if storagePageMap.numPerPage?number == 100>selected</#if> value="100">100</option>
+			</select>
+			<span>条，共${(storagePageMap.totalCount)!0}条</span>
+		</div>
+		<div class="pagination" rel="${(storagePageMap.listID)!''}" target="ajaxTodo"  totalCount="${(storagePageMap.totalCount)!0}" numPerPage="${(storagePageMap.numPerPage)!15}" pageNumShown="5" currentPage="${(storagePageMap.pageNum)!1}"></div>
+</div>
+
+<!--divider虚线-->
+	<div class="divider"></div>
+	<div>
+			<a class="button" id="storageChoose" href="${base}/sys/basePermission/choose/{userId}-{baseType}-{storageId}" target="ajaxTodo"  callback="reloadNavTabDiv"><span>选中</span></a>
+			<a class="button" href="${base}/sys/basePermission/allChoose/{userId}-{baseType}-{storageId}" target="ajaxTodo"  callback="reloadNavTabDiv"><span>全选</span></a>
+			<a class="button" href="${base}/sys/basePermission/empty/{userId}-{baseType}-{storageId}" target="ajaxTodo"  callback="reloadNavTabDiv"><span>清空</span></a>
+			<#if supId?? && supId!=-1>
+			 <a class="button" href="${base}/sys/basePermission/storage?pSupId=${pSupId!0}&objectId=${supId!0}" relevancyIds="userId" target="ajax"  rel="storagePermissionList"><span>上级</span></a>
+	        <#else>
+	        <a class="buttonDisabled" href="javascript:void(0);"><span>上级</span></a>
+	        </#if>
+	        
+	</div>
+	<div style="float: right;">
+			<a class="button" href="javascript:void(0);" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a>
+	</div>

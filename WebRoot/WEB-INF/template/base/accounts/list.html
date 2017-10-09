@@ -1,0 +1,198 @@
+<form id="pagerForm" class="pageForm required-validate" enctype="text/plain" onsubmit="return navTabSearch(this);" method="post" action="${base}/base/accounts/${toAction!'list'}/${accountType}-${supId}">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+
+	<!--筛选       第一次筛选结果条件保存   方便第二次过滤筛选 -->
+	<input id="b_accounts_filter_attr" type="hidden" name="searchPar1" value="${searchPar1!''}"/>
+	<input id="b_accounts_filter_value" type="hidden" name="searchValue1" value="${searchValue1!''}"/>
+	<input  type="hidden" name="supId" value="${supId!'all'}"/>   <!-- 点击树节点，搜索树下面的数据 -->
+	<input type="hidden"  name="node" value="${node!0}"/>
+	<!--end 第一次筛选结果条件保存   方便第二次过滤筛选 -->
+	
+	<input type="hidden" name="accountType" value="${accountType!}">
+	<input type="hidden" name="showLastPage" id="showLastPage" />   <!-- 新增，复制新增完成后跳转到最后一页 -->
+	<input type="hidden" name="selectedObjectId" id="selectedObjectId" />   <!-- 新增，复制新增完成后跳转到最后一页     选中的Id -->
+</form> 
+<#include "/WEB-INF/template/common/columnConfig/tableTotalWidthLink.html"/>
+<table class="table" rel="${refreshTable}" layoutH="140">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody>
+		<#list pageMap.pageList as accounts>
+	    <#if accounts.node==2>
+	    <!-- index,sequence用于上下移动参数 -->
+		<tr  objectId="${objectId!0}" status="false" order="${accounts.rank}" oldOrder="${accounts.rank}"  target="id" trel="${trel}" rel="${accounts.id}" crel="${refreshTable}" cTarget="ajax" url="${base}/base/accounts/list/${accountType}-${accounts.id}">
+		<#else>
+		<tr objectId="${objectId!0}" status="2" order="${accounts.rank}" oldOrder="${accounts.rank}" hasDel="${accounts.isSysRow!1}" target="id" rel="${accounts.id}" title="修改" crel="${refreshTable}" drel="unit_edit_${accounts.id}" 
+		<#if accountType="accounts">
+		    <@shiro.hasPermission name='1-211-u'>
+		    cTarget="dialog"
+			</@shiro.hasPermission>
+	    <#elseif accountType="property">
+		    <@shiro.hasPermission name='1-210-u'>
+		    cTarget="dialog"
+			</@shiro.hasPermission>
+	    <#elseif accountType="bank">
+		    <@shiro.hasPermission name='1-207-u'>
+		    cTarget="dialog"
+			</@shiro.hasPermission>
+	    <#elseif accountType="incomeType">
+		    <@shiro.hasPermission name='1-209-u'>
+		    cTarget="dialog"
+			</@shiro.hasPermission>
+	    <#elseif accountType="cost">
+		    <@shiro.hasPermission name='1-208-u'>
+		    cTarget="dialog"
+			</@shiro.hasPermission>
+	    </#if> 
+		widths="400" heights="330" url="${base}/base/accounts/edit/${accountType}-${accounts.id}">
+		</#if>
+			<td><a>${accounts_index+1+pageMap.limit}</a><#if accounts.node==2>..</#if></td>
+			<#list rowList as row>
+			<#if row.code?? && 'code'==row.code>
+			<td>${accounts.code!''}</td>
+			<#elseif row.code?? && 'smallName'==row.code>
+			<td>${accounts.smallName!''}</td>
+			<#elseif row.code?? && 'fullName'==row.code>
+			<td>${accounts.fullName!''}</td>
+			<#elseif row.code?? && 'spell'==row.code>
+			<td>${accounts.spell!''}</td>
+			<#elseif row.code?? && 'memo'==row.code>
+			<td>${accounts.memo!''}</td>
+			<#elseif row.code?? && 'status'==row.code>
+			<td id="status${accounts.id}">
+			<#if accounts.node?number == 1>
+				<#if accounts.status?number == 1>停用</#if>
+				<#if accounts.status?number == 2>启用</#if>
+			</#if>
+			</td>
+			</#if>
+			</#list>
+		</tr>
+		</#list>
+	</tbody>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+  <div align="left"> 
+  
+  
+    <#if accountType="accounts">
+	    <@shiro.hasPermission name='1-211-a'>
+		<a class="button" target="dialog" rel="b_accounts_id" href="${base}/base/accounts/add/${accountType}-${supId}" title="基本信息●会计科目" width="400" height="330"  maxable="false"><span>新增</span></a> 
+		<a class="button" target="dialog" rel="b_accounts_id" href="${base}/base/accounts/copyAdd/${accountType}-{id}"  width="400" height="330"><span>复制新增</span></a> 
+		<a class="button" verifyFun="bAccountListSort(this)" target="dialog" rel="b_accounts_id" href="${base}/base/accounts/sort/${accountType}-{id}" title="基本信息●会计科目" width="400" height="330"  maxable="false"><span>增加下级</span></a> 
+		</@shiro.hasPermission>
+    <#elseif accountType="property">
+	    <@shiro.hasPermission name='1-210-a'>
+		<a class="button" target="dialog" rel="b_accounts_id" href="${base}/base/accounts/add/${accountType}-${supId}" title="基本信息●会计科目" width="400" height="330"  maxable="false"><span>新增</span></a> 
+		<a class="button" target="dialog" rel="b_accounts_id" href="${base}/base/accounts/copyAdd/${accountType}-{id}"  width="400" height="330"><span>复制新增</span></a> 
+		<a class="button" verifyFun="bAccountListSort(this)" target="dialog" rel="b_accounts_id" href="${base}/base/accounts/sort/${accountType}-{id}" title="基本信息●会计科目" width="400" height="330"  maxable="false"><span>增加下级</span></a> 
+		</@shiro.hasPermission>
+    <#elseif accountType="bank">
+	    <@shiro.hasPermission name='1-207-a'>
+		<a class="button" target="dialog" rel="b_accounts_id" href="${base}/base/accounts/add/${accountType}-${supId}" title="基本信息●会计科目" width="400" height="330"  maxable="false"><span>新增</span></a> 
+		<a class="button" target="dialog" rel="b_accounts_id" href="${base}/base/accounts/copyAdd/${accountType}-{id}"  width="400" height="330"><span>复制新增</span></a> 
+		<a class="button" verifyFun="bAccountListSort(this)" target="dialog" rel="b_accounts_id" href="${base}/base/accounts/sort/${accountType}-{id}" title="基本信息●会计科目" width="400" height="330"  maxable="false"><span>增加下级</span></a> 
+		</@shiro.hasPermission>
+    <#elseif accountType="incomeType">
+	    <@shiro.hasPermission name='1-209-a'>
+		<a class="button" target="dialog" rel="b_accounts_id" href="${base}/base/accounts/add/${accountType}-${supId}" title="基本信息●会计科目" width="400" height="330"  maxable="false"><span>新增</span></a> 
+		<a class="button" target="dialog" rel="b_accounts_id" href="${base}/base/accounts/copyAdd/${accountType}-{id}"  width="400" height="330"><span>复制新增</span></a> 
+		<a class="button" verifyFun="bAccountListSort(this)" target="dialog" rel="b_accounts_id" href="${base}/base/accounts/sort/${accountType}-{id}" title="基本信息●会计科目" width="400" height="330"  maxable="false"><span>增加下级</span></a> 
+		</@shiro.hasPermission>
+    <#elseif accountType="cost">
+	    <@shiro.hasPermission name='1-208-a'>
+		<a class="button" target="dialog" rel="b_accounts_id" href="${base}/base/accounts/add/${accountType}-${supId}" title="基本信息●会计科目" width="400" height="330"  maxable="false"><span>新增</span></a> 
+		<a class="button" target="dialog" rel="b_accounts_id" href="${base}/base/accounts/copyAdd/${accountType}-{id}"  width="400" height="330"><span>复制新增</span></a> 
+		<a class="button" verifyFun="bAccountListSort(this)" target="dialog" rel="b_accounts_id" href="${base}/base/accounts/sort/${accountType}-{id}" title="基本信息●会计科目" width="400" height="330"  maxable="false"><span>增加下级</span></a> 
+		</@shiro.hasPermission>
+    </#if>
+    
+    
+    
+	<#if accountType="accounts">
+	    <@shiro.hasPermission name='1-211-u'>
+		<a class="button" target="dialog" rel="b_accounts_id" href="${base}/base/accounts/edit/${accountType}-{id}"  width="400" height="330"><span>修改</span></a> 
+		<a class="button"  onclick="bAccountListDel(this)" rel="${base}/base/accounts/delete/${accountType}" callback="removeTreeAjaxTodo" title="数据删除后不能恢复，确认删除？"><span>删除</span></a> 
+		</@shiro.hasPermission>
+    <#elseif accountType="property">
+	    <@shiro.hasPermission name='1-210-u'>
+		<a class="button" target="dialog" rel="b_accounts_id" href="${base}/base/accounts/edit/${accountType}-{id}"  width="400" height="330"><span>修改</span></a> 
+		<a class="button"  onclick="bAccountListDel(this)" rel="${base}/base/accounts/delete/${accountType}" callback="removeTreeAjaxTodo" title="数据删除后不能恢复，确认删除？"><span>删除</span></a> 
+		</@shiro.hasPermission>
+    <#elseif accountType="bank">
+	    <@shiro.hasPermission name='1-207-u'>
+		<a class="button" target="dialog" rel="b_accounts_id" href="${base}/base/accounts/edit/${accountType}-{id}"  width="400" height="330"><span>修改</span></a> 
+		<a class="button"  onclick="bAccountListDel(this)" rel="${base}/base/accounts/delete/${accountType}" callback="removeTreeAjaxTodo" title="数据删除后不能恢复，确认删除？"><span>删除</span></a> 
+		</@shiro.hasPermission>
+    <#elseif accountType="incomeType">
+	    <@shiro.hasPermission name='1-209-u'>
+		<a class="button" target="dialog" rel="b_accounts_id" href="${base}/base/accounts/edit/${accountType}-{id}"  width="400" height="330"><span>修改</span></a> 
+		<a class="button"  onclick="bAccountListDel(this)" rel="${base}/base/accounts/delete/${accountType}" callback="removeTreeAjaxTodo" title="数据删除后不能恢复，确认删除？"><span>删除</span></a> 
+		</@shiro.hasPermission>
+    <#elseif accountType="cost">
+	    <@shiro.hasPermission name='1-208-u'>
+		<a class="button" target="dialog" rel="b_accounts_id" href="${base}/base/accounts/edit/${accountType}-{id}"  width="400" height="330"><span>修改</span></a> 
+		<a class="button"  onclick="bAccountListDel(this)" rel="${base}/base/accounts/delete/${accountType}" callback="removeTreeAjaxTodo" title="数据删除后不能恢复，确认删除？"><span>删除</span></a> 
+		</@shiro.hasPermission>
+    </#if>
+    
+	<#if node?? && node == 1>
+		<a class="buttonDisabled" href="javascript:;"><span>列表</span></a>
+	<#else>
+		<a class="button" href="${base}/base/accounts/list/${accountType}-${supId}?actionType=line" target="ajax" rel="${refreshTable}"><span>列表</span></a> 
+	</#if>
+	<a class="button" target="dialog" rel="b_accounts_filter" href="${base}/base/accounts/filter/${accountType}" title="条件查询" width="400" height="210"><span>查询</span></a>
+	<#if supId!=topSupId && node != 1>
+      <a class="button" href="${base}/base/accounts/list/${accountType}-${pSupId!0}-${supId}" trel="${trel}" nodeId="${pSupId!0}"  target="ajax" rel="${refreshTable}"><span>上级</span></a>  
+    <#else>
+       <a class="buttonDisabled" href="javascript:void(0);"><span>上级</span></a>
+    </#if>
+	
+	<div style="float: right;">
+	<#if accountType="accounts">
+	    <@shiro.hasPermission name='1-211-u'>
+		<a class="button" verifyFun="bAccountListDisable(this)" target="ajaxTodo" href="${base}/base/accounts/disableOrEnable/{id}" isExec="{status}" warn="不能操作一类基础数据！" callback="editStatus"><span>停用/启用</span></a>
+		</@shiro.hasPermission>
+    <#elseif accountType="property">
+	    <@shiro.hasPermission name='1-210-u'>
+		<a class="button" verifyFun="bAccountListDisable(this)" target="ajaxTodo" href="${base}/base/accounts/disableOrEnable/{id}" isExec="{status}" warn="不能操作一类基础数据！" callback="editStatus"><span>停用/启用</span></a>
+		</@shiro.hasPermission>
+    <#elseif accountType="bank">
+	    <@shiro.hasPermission name='1-207-u'>
+		<a class="button" verifyFun="bAccountListDisable(this)" target="ajaxTodo" href="${base}/base/accounts/disableOrEnable/{id}" isExec="{status}" warn="不能操作一类基础数据！" callback="editStatus"><span>停用/启用</span></a>
+		</@shiro.hasPermission>
+    <#elseif accountType="incomeType">
+	    <@shiro.hasPermission name='1-209-u'>
+		<a class="button" verifyFun="bAccountListDisable(this)" target="ajaxTodo" href="${base}/base/accounts/disableOrEnable/{id}" isExec="{status}" warn="不能操作一类基础数据！" callback="editStatus"><span>停用/启用</span></a>
+		</@shiro.hasPermission>
+    <#elseif accountType="cost">
+	    <@shiro.hasPermission name='1-208-u'>
+		<a class="button" verifyFun="bAccountListDisable(this)" target="ajaxTodo" href="${base}/base/accounts/disableOrEnable/{id}" isExec="{status}" warn="不能操作一类基础数据！" callback="editStatus"><span>停用/启用</span></a>
+		</@shiro.hasPermission>
+    </#if>
+    <a class="button" href="javascript:void(0);" target="tableRowSort" rel="${refreshTable}" sort="up"><span>上移</span></a>
+    <a class="button" href="javascript:void(0);" target="tableRowSort" sort="down" rel="${refreshTable}"><span>下移</span></a> 
+    <a class="button" href="${base}/base/accounts/saveRank" target="tableRowSortSave" rel="${refreshTable}" warn="没有排序变更"><span>排序保存</span></a> 
+    <#if accountType="accounts">
+	    <#assign privs = '1-211-p'/>
+    <#elseif accountType="property">
+	    <#assign privs = '1-210-p'/>
+    <#elseif accountType="bank">
+	    <#assign privs = '1-207-p'/>
+    <#elseif accountType="incomeType">
+	    <#assign privs = '1-209-p'/>
+    <#elseif accountType="cost">
+   		<#assign privs = '1-208-p'/>
+    </#if>
+    <#assign href = '${base}/base/accounts/print'/>
+    <#assign formId = 'pagerForm'/>
+    <#include "/WEB-INF/template/common/print/printBtn.html"/>
+    <a class="button" href="#" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a> 
+	</div>
+  </div>
+</div>

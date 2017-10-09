@@ -1,0 +1,38 @@
+<div class="panel pageContent">
+   <div class="pageHeader">
+      <div>
+          <span style="font:bold 18px '宋体',Arial,Times;">进货订单统计</span>
+      </div>
+      <div style="margin-top: 10px;height: 50px">
+          <a>
+                             查询时间:&nbsp;${(params.startDate)!}&nbsp;&nbsp;至&nbsp;&nbsp;${(params.endDate)!}
+          </a><br/><br/>
+          <a>
+                                       商品：${productName!"全部商品"} <#if productName?? && ""==productName>全部商品</#if>&nbsp;&nbsp;&nbsp;&nbsp;
+                                       往来单位：${unitName!"全部单位"} <#if unitName?? && ""==unitName>全部单位</#if>&nbsp;&nbsp;&nbsp;&nbsp;
+                                       内部职员：${staffName!"全部职员"} <#if staffName?? && ""==staffName>全部职员</#if>&nbsp;&nbsp;&nbsp;&nbsp;
+                                       仓库：${storageName!"全部仓库"} <#if storageName?? && ""==storageName>全部仓库</#if>&nbsp;&nbsp;&nbsp;&nbsp;
+          </a>
+          <span  style="float: right;margin-left: 10px;margin-right: 10px">
+                   <#if params.way?? && params.way==2>
+				   <a href="${base}/fz/reportRow/search/cg5015" target="dialog" rel="reportRowView"  width="520" height="500"><img src="${base}/img/base/setting.png" width="20px" height="20px" title="列配置"/></a>
+		           <#elseif params.way?? && params.way==3>
+		           <a href="${base}/fz/reportRow/search/cg5016" target="dialog" rel="reportRowView"  width="520" height="500"><img src="${base}/img/base/setting.png" width="20px" height="20px" title="列配置"/></a>
+		           <#else>
+		           <a href="${base}/fz/reportRow/search/cg5014" target="dialog" rel="reportRowView"  width="520" height="500"><img src="${base}/img/base/setting.png" width="20px" height="20px" title="列配置"/></a>
+		           </#if>
+		 </span>
+          <a style="float:right;">过滤:
+              <select id="status" name="status" onchange="javascript:selectPost(this,'boughtBillReportsList','status');">
+                 <option value="">全部显示</option>
+                 <option <#if params.status?? && params.status=='1'>selected="selected"</#if>  value="1">未完成订单</option>
+                 <option <#if params.status?? && params.status=='2'>selected="selected"</#if> value="2">已完成订单</option>
+              </select>
+          </a>
+      </div>
+   </div>
+   <div id="boughtBillReportsList">
+      <#include "list.html"/> 
+   </div>
+</div>
+

@@ -1,0 +1,212 @@
+<div class="pageContent" id="cc_takeStockBill" >
+<input id="whichCallBack" type="hidden" value="takeStockBill"/><!-- 用于区分不同模块库存商品带回进不同函数     ID是写死，value用于区分 -->
+<input id="basePathId" type="hidden" value="${base}"/><!-- 弹出选择批次窗体url -->
+<form id="takeStockForm" class="tableForm pageForm" enctype="text/plain" method="post" action="${base}/stock/takeStock/add" onsubmit="return validateCallback(this, navTabAjaxDoneDialog)">
+	<input type="hidden" id="billNum" name="takeStockBill.codeIncrease" value="${codeIncrease!}"/>
+	<input type="hidden" id="billCode"  name="billCode" value="${code!}"/>
+	<div id="hasFujianClassId" class="textContent center">
+		    <div>
+		         <span style="font-size: 18px;">库存盘点单</span>
+		         <input id="module" type="hidden" value="takeStock"/><!-- 用于区分模块提交参数的校验 -->
+		     </div>
+		     <div>
+		     	盘点时间：
+			    <input type="text" name="takeStockBill.createTime" value="${createTime!''}" readonly="readonly" />
+			    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 单据编号：
+			    <input id="showBillCode" class="line required textInput"  style="width: 200px" type="text" name="takeStockBill.code" value="${code!''}" <#if codeAllowEdit?? && codeAllowEdit=="1">readonly="readonly"</#if> />
+			              经手人 ：
+	       	 	<input type="hidden" name="staff.id" id="staffId"  value="${(staff.id)!}"/>
+	        	<input type="hidden" name="staff.name" value="${(staff.name)!}"/>
+	        	<#if notEditStaff?? && notEditStaff==true>
+	        		<input class="line" readonly="readonly" type="text" name="staff.name" value="${(staff.fullName)!}"/>
+	        	<#else>
+	        		<input class="line required enter" type="text" name="staff.name" id="staffName" />
+	        		<a class="btnLook" id="staffLook" type="POST" btnPattern="optionAdd" href="${base}/base/staff/dialogChild" module="navTab" warn="员工" lookupgroup="staff" lookuppk="id" width="600" height="410">职员</a>          
+		     	</#if>
+		     </div>
+		     <div>
+		                          盘点仓库：
+		        <input type="hidden" id="storageId" name="storage.id" value="${(takeStock.storageId)!}"/>
+	     	    <input class="line required" name="storage.fullName" lookName="storage" lookId="storage.id" />
+		        <a class="btnLook" id="storageLook" type="POST" verifyFun="takeStockCutStorage()" btnPattern="optionAdd"  href="${base}/base/storage/dialogList" module="navTab" warn="仓库" lookupgroup="storage" lookuppk="id" width="600" height="410">仓库</a>
+		                          摘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;要：
+		        <input class="line" style="width: 310px;" name="takeStockBill.remark" type="text" value=""/>
+			    <#include "/WEB-INF/template/common/columnConfig/billRowConfigLink.html"/>
+		        <div style="float: right;">
+		            <img style="margin-left: 7px;" onclick="openOrderFujianDialog('${base}','${tableId}');" title="单据附件" src="${base}/img/bill/fujian.jpg" alt="单据附件">
+		        	<input type="hidden" id="orderFuJianIds" name="orderFuJianIds"/>
+		        </div>
+		     </div>
+		     
+	</div>
+	<div class="divider"></div>
+	<div class="pageContent">
+		   <#assign showWidth = 0/>
+		   <#list rowList as row>
+		     <#if row.width??>
+		      <#assign showWidth = showWidth+row.width/>
+		     </#if>
+		   </#list>
+	<table class="table" model="order" layoutH="200" width="${showWidth!}">
+	        <thead>
+			 <tr>
+				<th width="40">
+					行号
+				</th>
+				<#list rowList as row>
+				   <th  width="${(row.width)!100}" align="center">
+					 ${(row.showName)!(row.name)!}
+				   </th>
+				</#list>
+				<th width="50px;">
+			    	<a title="添加一行" class="btnAdd" target="addTr" href="javascript:void(0);" rel="kc_takeStock_tbody"></a>
+				</th>
+			</tr>
+		  </thead>
+		  <tbody id="kc_takeStock_tbody" preDataName="takeStockDetail">
+		     <#include "/WEB-INF/template/common/columnConfig/costLookConfigLink.html"/>
+		     <#list 1..15 as td>
+		     <tr>
+		       <td>${td_index+1}</td>
+		       <#list rowList as row>
+		       	
+		       	   <#if row.code?? && 'code'==row.code>
+		       	   <!-- 商品编号-->
+			       <td cname="code" relevancyIds="storageId" verify="storage.id" verifyText="请选择仓库" validateAttr="" maxlength="50" onBlur="objDelOrClear(this,'code');" storageId="storageId" cTarget="dialog"  title="商品" warn="商品"  productId="productId" enterSearch="true" productSupId="supId" searchUrl="${base}/stock/stock/orderOneRecord/" editUrl="${base}/stock/stock/orderDialogEdit/" url="${base}/stock/stock/orderDialog/" rel="b_product_dialog" dwidth="680" dheight="450"></td> 
+			       <#elseif row.code?? && 'fullName'==row.code>
+			       <!-- 商品名称 -->
+			       <td cname="fullName" relevancyIds="storageId" verify="storage.id" verifyText="请选择仓库" validateAttr=""  maxlength="50" onBlur="objDelOrClear(this,'fullName');" storageId="storageId" cTarget="dialog"  title="商品" warn="商品" productId="productId" enterSearch="true" productSupId="supId" searchUrl="${base}/stock/stock/orderOneRecord/" editUrl="${base}/stock/stock/orderDialogEdit/" url="${base}/stock/stock/orderDialog/" rel="b_product_dialog" dwidth="680" dheight="450"></td>
+   	   			   
+   	   			   <#elseif row.code?? && 'smallName'==row.code>
+				   <!-- 商品简称 -->
+				   <td type="text"  validateAttr="" readonly="readonly" maxlength="50" cname="smallName"></td>
+				   <#elseif row.code?? && 'spell'==row.code>
+				   <!-- 商品拼音 -->
+				   <td type="text"  validateAttr="" readonly="readonly" maxlength="50" cname="spell"></td>
+				   <#elseif row.code?? && 'standard'==row.code>
+				   <!-- 规格 -->
+				   <td type="text"  validateAttr="" readonly="readonly" maxlength="50" cname="standard"></td>
+				   <#elseif row.code?? && 'model'==row.code>
+				   <!-- 型号 -->
+				   <td type="text"  validateAttr="" readonly="readonly" maxlength="50" cname="model"></td>
+				   <#elseif row.code?? && 'field'==row.code>
+				   <!-- 产地 -->
+				   <td type="text"  validateAttr="" readonly="readonly" maxlength="50" cname="field"></td>
+				   <#elseif row.code?? && 'savePath'==row.code>
+				   <!-- 图片 -->
+				   <td type="text"  validateAttr="" readonly="readonly"  cname="savePath"></td>
+				   <#elseif row.code?? && 'baseUnit'==row.code>
+			       <!-- 基本单位 -->
+			       <td type="text"  validateAttr="" readonly="readonly" maxlength="50" cname="baseUnit"></td>
+			    
+			    
+		       	   <#elseif row.code?? && 'takeStockAmount'==row.code>
+			       <!-- 盘点数量 -->
+			       <td cname="amount" name="takeStockAmount" requiredData="need"  validateAttr="number"  maxlength="50" onBlur="inputTakeCount(this)" baseUnit="selectUnitId" cTarget="dialog" hasDialog="dialogNotNull" productId="productId" title="数量" rel="b_productAmount_dialog"  url="${base}/base/product/recordAmount/" dwidth="350" dheight="200"></td>
+				   <#elseif row.code?? && 'helpTakeStockAmount'==row.code>
+				   <!-- 辅助盘点数量 -->
+			       <td cname="helpAmount"  validateAttr=""  maxlength="50"  readonly="readonly"></td>
+			       <#elseif row.code?? && 'stockAmount'==row.code>
+			       <!-- 库存数量 -->
+			       <td cname="sckAmount" name="stockAmount" requiredData="need"  validateAttr="" maxlength="50" readonly="readonly"></td>
+			       <#elseif row.code?? && 'helpStockAmount'==row.code>
+			       <!-- 库存辅助数量 -->
+			       <td cname="sckHelpAmount" validateAttr="" maxlength="50" readonly="readonly"></td>
+			       <#elseif row.code?? && 'price'==row.code>
+			       <!-- 成本单价 -->
+			       <td cname="price" costLookPermission="${costLookPermission!}" isRedundancy=true requiredData="need"  validateAttr="" maxlength="50" readonly="readonly"></td>
+			       <#elseif row.code?? && 'money'==row.code>
+			       <!-- 库存金额 -->
+			       <td cname="sckMoney" costLookPermission="${costLookPermission!}" name="money" requiredData="need"  validateAttr="" maxlength="50" readonly="readonly"></td>
+			       <#elseif row.code?? && 'gainAndLossAmount'==row.code>
+			       <!-- 亏盈数量 -->
+			       <td cname="gainAndLossAmount" requiredData="need"  validateAttr="" maxlength="50" readonly="readonly"></td>
+			       <#elseif row.code?? && 'gainAndLossMoney'==row.code>
+			       <!-- 亏盈金额 -->
+			       <td cname="gainAndLossMoney" costLookPermission="${costLookPermission!}" requiredData="need"  validateAttr="" maxlength="50" readonly="readonly"></td>
+			       <#elseif row.code?? && 'batchNum'==row.code>
+			       <!-- 批号 -->
+			       <td cname="batch" requiredData="need" validateAttr="" maxlength="50" readonly="readonly" cTarget="dialog" tbodyId="kc_takeStock_tbody" manSel="true"  totalStorageId="storageId"></td>
+			       <#elseif row.code?? && 'creatDate'==row.code>
+			       <!-- 生产日期 -->
+			       <td cname="produceDate" requiredData="need" validateAttr="dateISO" maxlength="50" readonly="readonly" cTarget="dialog" tbodyId="kc_takeStock_tbody" manSel="true"  totalStorageId="storageId"></td>
+			       <#elseif row.code?? && 'produceEndDate'==row.code>
+			       <!-- 到期日期 -->
+			       <td cname="produceEndDate" requiredData="need" validateAttr="dateISO" maxlength="50" readonly="readonly" cTarget="dialog" tbodyId="kc_takeStock_tbody" manSel="true"  totalStorageId="storageId"></td>
+			       <#elseif row.code?? && 'barCode'==row.code>
+			       <!--条码 -->
+			       <td type="text" requiredData="not" cname="barCode" readonly="readonly"></td>
+			       <#elseif row.code?? && 'rlPrice'==row.code>
+			       <!-- 基本零售价 --><!-- isRedundancy是否是冗余字段 -->
+			       <td cname="proBaseRetailPrice"  isRedundancy=true  validateAttr="" maxlength="50" readonly="readonly"></td>
+			       <#elseif row.code?? && 'rlMoney'==row.code>
+			       <!-- 零售金额 -->
+			       <td cname="sckRetailMoney" validateAttr="" maxlength="50" readonly="readonly"></td>
+			       
+			       
+			       
+			       <#else>
+			         <td><input type="text" class="stealth"/></td>
+			       </#if>
+			       
+			    </#list>
+			       <td>
+			      	  <a title="删除本行" class="btnDel" href="javascript:;" onclick="removeTr(this);"></a>
+			       </td>
+		     </tr>
+		     </#list>
+		     
+		  </tbody>
+		  <tfoot>
+		       <tr style="border-top: #D0D0D0 solid 1px">
+			       <td>合计</td>
+			       <#list rowList as row>
+				       <#if row.code?? && 'takeStockAmount'==row.code>
+				       <!-- 合计盘点数量 -->
+				       <td><input name="takeStockBill.amounts" class="stealth" id="amounts" readonly="readonly"/></td>
+				       <#elseif row.code?? && 'stockAmount'==row.code>
+				       <!-- 合计库存量 -->
+				       <td><input name="takeStockBill.sckAmounts" class="stealth" id="sckAmounts" readonly="readonly"/></td>
+				       <#elseif row.code?? && 'money'==row.code>
+				       <!-- 合计库存金额 -->
+				       <td>
+				       		<input type="${costInputType!'text'}" name="takeStockBill.sckMoneys" class="stealth" id="sckMoneys" readonly="readonly"/>
+				       		<@shiro.lacksPermission name='1101-s'>
+								***
+							</@shiro.lacksPermission>
+				       </td>
+				       <#elseif row.code?? && 'gainAndLossAmount'==row.code>
+				       <!-- 合计盈亏数量 -->
+				       <td><input name="takeStockBill.gainAndLossAmounts" class="stealth" id="gainAndLossAmounts" readonly="readonly"/></td>
+				       <#elseif row.code?? && 'gainAndLossMoney'==row.code>
+				       <!-- 合计盈亏金额 -->
+				       <td>
+				       		<input type="${costInputType!'text'}" name="takeStockBill.gainAndLossMoneys" class="stealth" id="gainAndLossMoneys" readonly="readonly"/>
+    						<@shiro.lacksPermission name='1101-s'>
+								***
+							</@shiro.lacksPermission>
+				       </td>
+				       <#elseif row.code?? && 'rlMoney'==row.code>
+				       <!-- 合计零售金额 -->
+				       <td><input name="takeStockBill.sckRetailMoney" class="stealth" id="sckRetailMoneys" readonly="readonly"/></td>
+				       <#else>
+			           <td></td>
+			           </#if>
+			       </#list>
+			       <td></td>
+		       </tr>
+		 </tfoot>
+	</table>
+	<div  style=" padding-top: 10px;  width:100%;">
+		<div style="float: right;">
+			<a class="button"><span><button type="button" onclick="$('#takeStockForm').submit();">保存</button></span></a>
+        	<#assign privs = '5-80-502-p'/>
+			<#assign href = '${base}/stock/takeStock/print'/>
+			<#assign formId = 'takeStockForm'/>
+			<#include "/WEB-INF/template/common/print/printBtn.html"/>
+		    <a class="button" href="javascript:void(0);" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a>
+		</div>
+	</div>
+	</div>
+</form>
+</div>

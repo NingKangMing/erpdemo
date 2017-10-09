@@ -1,0 +1,104 @@
+<div class="pageContent">
+   <form action="${base}/base/staff/${toAction}" method="post" class="tableForm pageForm"  enctype="multipart/form-data" onsubmit="return validateCallback(this,${callback!'updateTodoAndTee'})">
+      <input type="hidden" name="staff.supId" value="${(staff.supId)!0}"/>
+      <input type="hidden" name="supId" value="${supId!0}"/>
+      <input type="hidden" name="staff.id" value="${(staff.id)!id!}"/>
+      <input type="hidden" name="staff.sysImgId" id="product_img_id" value="${(staff.sysImgId)!}"/>   
+      <input type="hidden" name="isCopy" value="${isCopy!}"/>
+      
+      <!-- dialog 新增加 -->
+      <input id="confirmType" name="confirmType" type="hidden" value="${confirmType!}"/><!-- dialog关闭时刷新dialog -->
+      <input type="hidden" name="selectedObjectId" id="selectedObjectId" /><!--默认选中对象的Id-->
+	  <input type="hidden" name="showLastPage" id="showLastPage" />   <!-- 跳转到最后一页 -->
+      <!-- end dialog 新增加 -->
+      
+      <table style="margin-left: 10px; margin-top: 15px;">
+		  <tr style="height:25px;">
+		     <td style="text-align: right;">职员全名:</td>
+		     <td colspan="3"><input type="text" maxlength="100" name="staff.name" id="name" value="${(staff.name)!}" onblur="pingyinCode('name','spell')" class="required textInput" size="60"/></td>
+		  </tr>
+		  <tr style="height:30px;" class="nowrap">
+		     <td style="text-align: right;">职员编号:</td>
+		     <td><input type="text" id="code" class="required textInput" maxlength="100" name="staff.code" value="${(staff.code)!code!}" /></td>
+		     <td style="text-align: right;">职员部门:</td>
+		     <td>  
+		         <input type="hidden" id="departmentId" name="depm.id" value="${(staff.depmId)!}"/>
+		         <input type="text "  name="depm.fullName" lookname="depm"  lookId="depm.id" value="${(staff.getDepartment(session.loginConfigId).fullName)!}"/>
+		         <a class="btnLook" id="departmentLook" module="dialog" type="POST" href="${base}/base/department/option/${(staff.depmId)!}" warn="部门" lookupgroup="depm" lookuppk="id" width="600" height="410">查找带回</a>
+		     </td>
+		  </tr>
+		  <tr style="height:30px;">
+		     <td style="text-align: right;">职员拼音码:</td>
+		     <td><input type="text" name="staff.spell" id="spell"  value="${(staff.spell)!}" maxlength="100"/></td>
+		     <td style="text-align: right;">生日:</td>
+		     <td>
+		       <#if staff?? && staff.birth??>
+		            <input type="text" name="staff.birth" class="date" dateFmt="yyyy-MM-dd" value="${(staff.birth)?string('yyyy-MM-dd')}" />
+		        <#else>
+		             <input type="text" name="staff.birth" class="date" dateFmt="yyyy-MM-dd" value="${(staff.birth)!}" />
+		       </#if>
+		    </td>
+		  </tr>
+		  <tr style="height:30px;">
+		     <td style="text-align: right;">职员电话:</td>
+		     <td><input type="text" name="staff.phone" value="${(staff.phone)!}" maxlength="100"/></td>
+		     <!-- <td style="text-align: right;">每单优惠限额:</td>
+		     <td><input type="text" name="staff.favoriteLimit" class="number" value="${(staff.favoriteLimit)!'0'}" maxlength="10"/></td>
+		  	  -->
+		  	  <td></td>
+		  	  <td></td>
+		  </tr>
+		  <tr style="height:30px;">
+		     <td style="text-align: right;">职员职务:</td>
+		     <td><input type="text" name="staff.role" value="${(staff.role)!}" maxlength="100"/></td>
+		     <td style="text-align: right;"><input  type="checkbox" name="staff.status" <#if staff?? && staff.status?? && staff.status==1>checked="checked"</#if> value="1"/>停用</td>
+		     <td><input type="checkbox" name="codeIncrement"  value="true" <#if codeIncrement?? && codeIncrement=="true">checked="checked"</#if> />编号递增</td>
+		  </tr>
+		  <tr style="height:30px;">
+		     <td style="text-align: right;">职员地址:</td>
+		     <td colspan="3"><input type="text" name="staff.address" value="${(staff.address)!}" size="40" maxlength="100"/></td>
+		  </tr>
+	 </table>
+	 <!-- tabs里面的内容 -->
+						<div class="pageFormContent">
+							<table style="margin-left: 10px;">
+								  <tr>
+								     <td>
+								       <fieldset>
+										    <legend>备注</legend>
+										    <textarea name="staff.memo" rows="6" cols="30">${(staff.memo)!}</textarea>
+									   </fieldset>   
+								     </td>
+								     <td>
+								       <fieldset>
+										    <legend> 图片</legend>
+										    <div id="b_showProductImg" style="width:200px; height:100px; background-color: gray;">
+										        <#if staff??>
+										          <#if staff.sysImgId??>
+										           <img style="width:200px; height:97px;" src="${base}/upLoadImg/${(staff.getAioerpFile(session.loginConfigId).savePath)!}"/>
+										          </#if>
+										        </#if>
+										    </div>
+										    <a class="button" href="${base}/base/staff/toUploadImg" target="dialog" rel="b_product_img" title="上传图片" width="420" height="250" mask="true" maxable="false"><span>图片管理</span></a>
+										    <a class="button"  onclick="deleteImg();"><span>删除图片</span></a>
+									   </fieldset>   
+								    </td>
+								  </tr>
+							</table>
+						<script type="text/javascript">
+						    function deleteImg(){
+						        $("#b_showProductImg").html("");
+						        $("#product_img_id").val("");
+						    }
+						</script>
+					<!--end tabs里面的内容 -->
+	  <!--提交按钮  -->
+	  <div class="formBar" style="margin-top: 10px;">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+		</ul>
+	  </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

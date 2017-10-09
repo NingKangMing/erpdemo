@@ -1,0 +1,48 @@
+<div>
+   <form action="${base}/base/accounts/${toAction!}" class="pageForm required-validate" enctype="text/plain" method="post" 
+        onsubmit="return validateCallback(this,<#if toAction='add'>aioDialogAjaxDone<#elseif toAction='copyAdd'>aioDialogAjaxDone<#elseif toAction='edit'>updateTodoAndTee<#elseif toAction='sort'>dialogTreeAjaxDone</#if>);">
+        <input type="hidden" name="accounts.id" <#if accounts??>value="${accounts.id!0}"</#if> />  <!-- 复制新增，修改，分类 -->  
+        <input type="hidden" name="accounts.supId" value="${supId!0}"/>  <!-- 空白增加 -->              
+        <input type="hidden" id="accountTypeId" name="accountType" value="${accountType!0}"/>             
+      
+        <fieldset>
+			  <legend>主要信息</legend>
+		<table style="margin-left: 10px; margin-top: 5px;">	  
+		  <tr style="height:25px;">
+		     <td style="text-align: right;">科目全名:</td>
+		     <td colspan="5"><input type="text" name="accounts.fullName" class="required" id="b_accounts_fullName" value="${(accounts.fullName)!}" maxlength="100" onblur="pingyinCode('b_accounts_fullName','b_accounts_spell','b_accounts_small')" style="width:98%;"/></td>
+		  </tr>
+		  <tr style="height:30px;">
+		     <td style="text-align: right;">科目编号:</td>
+		     <td><input type="text" id="code" name="accounts.code" value="${(accounts.code)!code!''}" maxlength="100" class="required" alt="" size="16"/></td>
+		     <td style="text-align: right;">科目简称:</td>
+		     <td><input type="text" id="b_accounts_small" name="accounts.smallName" value="${(accounts.smallName)!}" maxlength="100" size="16"/></td>
+		  </tr>
+		  <tr style="height:30px;">
+		     <td style="text-align: right;">科目拼音码:</td>
+		     <td><input type="text" name="accounts.spell" value="${(accounts.spell)!}" maxlength="100" id="b_accounts_spell" size="16"/></td>
+		     <td colspan="2" style="text-align: right;">
+		       <#if code??||accounts??&&numAutoAdd?number == 1>
+	             <input type="checkbox" name="numAutoAdd" checked="checked" value="1"/>编号递增
+	           <#else>
+	             <input type="checkbox" name="numAutoAdd" value="1"/>编号递增    
+	           </#if>   
+		     </td>
+		  </tr>
+		  </table>
+		  </fieldset> 
+		  <fieldset>
+			  <legend>备注</legend>
+			  <textarea style="margin-left: 20px; width:90%;" name="accounts.memo" rows="5" cols="52">${(accounts.memo)!}</textarea>
+		  </fieldset>
+	 
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		 <ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+		 </ul>
+      </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

@@ -1,0 +1,52 @@
+<!--  -->
+
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/base/staff/dialogLeaf/second" onsubmit="return divSearch(this, 'leafList');">
+
+	<input type="hidden" name="pageNum" value="${(pageMap.get('pageNum'))!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.get('numPerPage'))!}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+	
+	<input name="term" value="${term!}" type="hidden">
+	<input name="termVal" value="${termVal!}" type="hidden">
+</form>
+
+
+<table class="table" layoutH="150" rel="leafList" targetType="dialog">
+	<thead>
+		<tr>
+			<th width="50px">
+				行号
+			</th>
+			<th align="center" width="150px"  orderField="code" <#if orderField?? && 'code'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+				职员编号
+			</th>
+			<th align="center" width="150px" orderField="name" <#if orderField?? && 'name'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+				职员全称
+			</th>
+			<th align="center" width="150px" orderField="role" <#if orderField?? && 'role'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+				职员职务
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<#list pageMap.pageList as staff>
+		 
+		   <tr target="staffId" rel="${staff.id}"  cTarget="ajaxBack" url="${base}/sys/permission/addUser/${staff.id}" callback="dialogReloadDialog">
+		 
+			<td>${staff_index+1+pageMap.limit}
+			</td>
+			<td>${staff.code!''}
+			</td>
+			<td>${staff.name!''}
+			</td>
+			<td>${staff.role!''}
+			</td>
+		   </tr>
+		</#list>
+	</tbody>
+</table>
+
+<#include "/WEB-INF/template/unitl/dialogpage.html" />	
+
+

@@ -1,0 +1,9 @@
+<!--列配置  设置-->
+<#--<#include "/WEB-INF/template/common/columnConfig/billRowConfigLink.html"/>-->
+<@shiro.hasPermission name='8-802-s'>
+      <div  style="float: right;margin-left: 10px;margin-right: 10px">
+	   <a href="${base}/sys/billRow/dialog/${billRow!tableId!0}" target="dialog" rel="reportRowView" title="单据格式配置" width="520" height="500"><img src="${base}/img/base/setting.png" width="20px" height="20px" title="列配置"/></a>
+      </div>
+</@shiro.hasPermission>
+
+

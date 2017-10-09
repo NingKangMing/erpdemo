@@ -1,0 +1,82 @@
+
+<div class="pageContent">
+   <form id="pageForm" action="${base}/sys/permission/permission" class="tableForm pageForm" enctype="text/plain" method="post" onsubmit="return validateCallback(this, dialogAjaxDone)">
+    <h2 class="contentTitle" style="float:left;">用户及权限设置</h2>
+    <#--
+    <div style="float: right;overflow:hidden;"><span style="float:left;padding:6px;">权限分类定位：</span><input style="float:left;" name="location" id="billRowLocation" size="16"/>
+			<a class="btnLook" style="margin:0px;cursor: pointer"  href="#" onclick="locationObj('billRowLocation','permissionTypeUl')"></a></div>
+    -->
+    <div class="divider"></div>
+	<div layoutH="100">
+		<div id="userList"  style="padding-top: 0px; border:solid 1px #CCC;width: 300px;float: left;" layoutH="102">
+		     <#include "list.html"/> 
+		</div>
+		 <!-- 多个tab -->
+	   <div layoutH="102" style="float: right;">
+	          <div class="tabs" style="width: 600px;">
+	               <div class="tabsHeader" style="width: 600px;">
+			         <div class="tabsHeaderContent">
+			            <ul>
+			               <li class="selected"><a href="#"><span>全部单据</span></a></li>
+			               <li><a href="#"><span>全部报表</span></a></li>
+			               <li><a href="#"><span>全部权限</span></a></li>
+			               <!--<li><a href="#"><span>基本信息字段</span></a></li>
+			               <li><a href="#"><span>报表字段</span></a></li>
+			            --></ul>
+			         </div>
+			      </div>
+			      <div class="tabsContent">
+			      
+                    <div class="pageFormContent" style="width: 575px;height:90%">
+                       <#assign typeNum = 1/>
+                       <#include "type.html"/> 
+                    </div>
+                    <div class="pageFormContent" style="width: 575px;height:90%">
+                        <#assign typeNum = 2/>
+                        <#include "type.html"/> 
+                    </div>
+                    <div class="pageFormContent" style="width: 575px;height:90%">
+                        <#assign typeNum = 3/>
+                        <#include "type.html"/> 
+                    </div>
+                    <!--<div class="pageFormContent" style="width: 550px;height:90%">
+                        <#assign typeNum = 4/>
+                        <#include "type.html"/> 
+                    </div>
+                    <div class="pageFormContent" style="width: 550px;height:90%">
+                        <#assign typeNum = 5/>
+                        <#include "type.html"/> 
+                    </div>
+	             --></div>
+	             <div class="tabsFooter">
+				    <div class="tabsFooterContent"></div>
+			     </div>
+	          </div>
+	   </div>
+	    <!-- end多个tab -->
+   </div>
+   
+   <!--divider虚线-->
+  <div class="divider"></div>
+   <div>
+        <@shiro.hasPermission name='9-911-a'>
+		<a class="button" href="${base}/base/staff/dialogLeaf" target="dialog" rel="leafStaffDialog" width="600" height="410"><span>添加</span></a>
+		</@shiro.hasPermission>
+		<@shiro.hasPermission name='9-911-u'>
+		<a class="button" id="deleteUserHide" style="display: none;"  href="${base}/sys/permission/delUser/{userId}" title="数据删除后不能恢复，确认删除？" target="ajaxTodo"  callback="dialogReloadDialog"><span>删除</span></a>
+		<a class="buttonDisabled" id="deleteUserShow"><span>删除</span></a>
+		<a class="button" id="passUserHide" <#if session??&&session['user'].grade==1>style="display: none;"</#if> href="${base}/sys/permission/toPassword/{userId}" target="dialog" rel="userPasswordDialog" width="300" height="250"><span>密码</span></a>
+		<a class="buttonDisabled" <#if session??&&session['user'].grade!=1>style="display: none;"</#if> id="passUserShow"><span>密码</span></a>
+		<a class="button" id="copyUserHide" style="display: none;" href="${base}/sys/permission/toCopy/{userId}" target="dialog" rel="userCopyDialog" width="400" height="500"><span>复制</span></a>
+		<a class="buttonDisabled" id="copyUserShow"><span>复制</span></a>
+		<a class="button" id ="editStatusHide" style="display: none;" href="${base}/sys/permission/status/{userId}"  target="ajaxTodo"  callback="dialogReloadDialog"><span>更改状态</span></a>
+		<a class="buttonDisabled" id="editStatusShow"><span>更改状态</span></a>
+		<a class="button" id ="allPermissionHide" style="display: none;" href="${base}/sys/permission/allPermission/all-{userId}"  target="ajaxTodo"  callback="dialogReloadDialog"><span>全部权限</span></a>
+		<a class="buttonDisabled" id="allPermissionShow"><span>全部权限</span></a>
+		<a class="button" id ="noPermissionHide" style="display: none;" href="${base}/sys/permission/allPermission/no-{userId}"  target="ajaxTodo"  callback="dialogReloadDialog"><span>清空权限</span></a>
+		<a class="buttonDisabled" id="noPermissionShow"><span>清空权限</span></a>
+		</@shiro.hasPermission>
+		<div style="float: right;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+   </div>
+   </form>
+</div>

@@ -1,0 +1,31 @@
+<div class="panel">
+<div class="pageContent">
+	<div class="textContent center">
+	    <div>
+	         <span style="font:bold 18px '宋体',Arial,Times;">单位应<#if arapType==0>收<#else>付</#if>明细账本</span>
+	     </div>
+	     <div>
+	     	<span style="line-height: 30px;">
+	     	 查询时间：${startTime!''}&nbsp;&nbsp;至&nbsp;&nbsp;${endTime!''}
+  				<ul>
+  					<li style="float: left;">往来单位：${unitName!''}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+  					<li style="float: left; width: 200px;">此前应<#if arapType==0>收<#else>付</#if>余额：${bfArapMoney!0}</li>
+  					<!-- <li style="float: left; width: 200px;">此前预<#if arapType==0>付<#else>收</#if>余额：${bfPrepayMoney!0}</li> -->
+  				</ul>
+  				</span>
+	     	<div style="float: right;">
+    				红冲过滤：
+    				<select name="isRcw" onchange="javascript:selectPost(this,'arapDetailList','isRcw');">
+    					<option value="-1" <#if isRcw?? && isRcw==-1>selected="selected"</#if> >全部显示</option>
+    					<option value="0"  <#if isRcw?? && isRcw== 0>selected="selected"</#if> >不显示红冲单据</option>
+    				</select>
+					<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+			</div>
+	     </div>
+	</div>
+	
+	<div id="arapDetailList">
+		<#include "arapDetailList.html"/>
+	</div>
+</div>
+</div>

@@ -1,0 +1,25 @@
+<div class="panel">
+	<div class="pageContent">
+		<div class="textContent center" style="height: 80px;">
+		     <div>
+		         <span style="font:bold 18px '宋体',Arial,Times;">地区应收应付</span>
+		     </div>
+		     <div>
+		     	<span style="float: left; margin-left:30px; line-height: 30px;">
+		     		查询日期：${startTime!''}&nbsp;&nbsp;至&nbsp;&nbsp;${endTime!''}
+		     	</span>
+		     </div>
+		     <#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+		</div>
+		<div>
+			<div style="float:left; display:block; overflow:auto; width:210px; border:solid 1px #CCC; line-height:21px; background:#fff" layoutH="95">
+				<ul id="areaArapTree" target="ztree" selectNodeId="${supId!0}" class="ztree" url="${base}/reports/finance/arap/areaArap/tree/0" rel="areaArapList" ctarget="ajax"></ul>
+			</div>
+			
+			<div id="areaArapList" style="padding:0px 2px 0px 10px;" layoutH="30">
+				<#include "list.html" />
+			</div>
+			
+		</div>
+	</div>
+</div>

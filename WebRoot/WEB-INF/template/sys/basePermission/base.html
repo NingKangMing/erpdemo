@@ -1,0 +1,24 @@
+<input type="hidden" id="baseType" name="baseType" value="${baseType!}"/>
+<input type="hidden" id="userId" name="userId" value="${userId!0}"/>
+<div class="tabs">
+      <div class="tabsHeader">
+        <div class="tabsHeaderContent">
+           <ul>
+              <li <#if baseType=='product'> class="selected" </#if>><a href="#" onclick="replaceBaseType('product')"><span>商品授权</span></a></li>
+              <li <#if baseType=='unit'> class="selected" </#if>><a href="#" onclick="replaceBaseType('unit')"><span>单位授权</span></a></li>
+              <li <#if baseType=='area'> class="selected" </#if>><a href="#" onclick="replaceBaseType('area')"><span>地区授权</span></a></li>
+              <li <#if baseType=='storage'> class="selected" </#if>><a href="#" onclick="replaceBaseType('storage')"><span>仓库授权</span></a></li>
+              <li <#if baseType=='account'> class="selected" </#if>><a href="#" onclick="replaceBaseType('account')"><span>会计科目授权</span></a></li>
+              <li <#if baseType=='staff'> class="selected" </#if>><a href="#" onclick="replaceBaseType('staff')"><span>职员授权</span></a></li>
+              <li <#if baseType=='department'> class="selected" </#if>><a href="#" onclick="replaceBaseType('department')"><span>部门授权</span></a></li>
+           </ul>
+        </div>
+     </div>
+     <div class="tabsContent" layoutH="85" id="baseList">
+            
+            <#include "baseList.html"/>
+    </div>
+    <div class="tabsFooter">
+         <div class="tabsFooterContent"></div>
+    </div>
+</div>

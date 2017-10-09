@@ -1,0 +1,8 @@
+<!--列配置  表格总长度-->
+<#--<#include "/WEB-INF/template/common/columnConfig/tableTotalWidthLink.html"/>-->
+<#assign showWidth = 100/>
+<#list rowList as row>
+    <#if row.width??>
+     <#assign showWidth = showWidth+row.width/>
+    </#if>
+</#list>

@@ -1,0 +1,15 @@
+<div class="panelBar">
+		<div class="pages">
+			<span>显示</span>  
+			<select class="combox" name="numPerPage" onchange="dialogPageBreak({pageNum:${(pageMap.pageNum)!1},numPerPage:this.value},'${(pageMap.listID)!''}')">
+				<option <#if ((pageMap.numPerPage)!10?number) == 10>selected</#if> value="10">10</option>
+				<option <#if ((pageMap.numPerPage)!10?number) == 15>selected</#if> value="15">15</option>
+				<option <#if ((pageMap.numPerPage)!10?number) == 20>selected</#if> value="20">20</option>
+				<option <#if ((pageMap.numPerPage)!10?number) == 50>selected</#if> value="50">50</option>
+				<option <#if ((pageMap.numPerPage)!10?number) == 100>selected</#if> value="100">100</option>
+				<option <#if pageMap.numPerPage?number == pageMap.totalCount||pageMap.numPerPage==1>selected</#if> value="<#if (pageMap.totalCount)??&&pageMap.totalCount!=0>${(pageMap.totalCount)!1}<#else>1</#if>">全部</option>
+			</select>
+			<span>条，共${(pageMap.totalCount)!0}条</span>
+		</div>
+		<div class="pagination" rel="${(pageMap.listID)!''}"  targetType="dialog"  totalCount="${(pageMap.totalCount)!0}" numPerPage="${(pageMap.numPerPage)!10}" pageNumShown="3" currentPage="${(pageMap.pageNum)!1}"></div>
+</div>

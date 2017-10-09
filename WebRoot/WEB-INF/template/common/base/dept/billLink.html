@@ -1,0 +1,6 @@
+<!--navTab 部门      eg:销售单头部   选择部门 -->
+<#--<#include "/WEB-INF/template/common/base/dept/billLink.html"/>-->
+
+<input type="hidden" id="departmentId" name="department.id" value="<#if notEditStaff?? && notEditStaff==true>${(depm.id)!}<#else>${(bill.getBillDepartment(session.loginConfigId).id)!0}</#if>"/>
+<input type="text" id="departmentName" class="line"  name="department.fullName" value="<#if notEditStaff?? && notEditStaff==true>${(depm.fullName)!}<#else>${(bill.getBillDepartment(session.loginConfigId).fullName)!}</#if>" lookName="department" lookId="department.id"/>    
+<a class="btnLook" id="departmentLook" type="POST" btnPattern="optionAdd" href="${base}/base/department/option/" module="navTab" warn="部门" lookupgroup="department" lookuppk="id" width="600" height="410">查找带回</a>                        

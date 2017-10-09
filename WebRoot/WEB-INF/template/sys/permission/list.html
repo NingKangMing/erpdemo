@@ -1,0 +1,62 @@
+
+<table class="table"  rel="userList" layoutH="126" targetType="dialog">
+	<thead>
+		<tr>
+			<th width="25px">
+				行号
+			</th>
+			<th width="50px"  align="center">
+				职员编号
+			</th>
+			<th width="50px" align="center">
+				职员全名
+			</th>
+			<th width="50px" align="center">
+				登录名
+			</th>
+			<th width="40px">
+				级别
+			</th>
+			<th width="40px">
+			         状态
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	    <#if userList??>
+		<#list userList as user>
+		
+		   <tr objectId="${objectId!0}"  target="userId" rel="${user.id}" onclick="trRelevanceLi(this,${user.grade!3},${session['user'].grade})">
+	
+			<td>
+				${user_index+1}
+			</td>
+			<td>
+				${(user.staffCode)!}
+			</td>
+			<td>
+				${(user.staffName)!}
+			</td>
+			<td>
+				${(user.username)!}
+			</td>
+			<td>
+			   <#if user.grade?? && user.grade == 3>
+			                  超级
+			   <#elseif user.grade?? && user.grade == 2>
+			                高级
+			   <#else>
+			               普通
+			   </#if>
+			</td>
+			<td>
+			    <#if user.status?? && user.status == 1>
+			                  停用
+			   </#if>
+			</td>
+		</tr>
+		</#list>
+		</#if>
+	</tbody>
+</table>
+

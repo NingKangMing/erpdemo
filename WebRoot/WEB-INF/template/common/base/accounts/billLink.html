@@ -1,0 +1,7 @@
+<!--navTab 会计科目     eg:其它出入库单   选择会计科目 -->
+<#--<#include "/WEB-INF/template/common/base/accounts/billLink.html"/>-->
+
+<input type="hidden" name="account.id" id="accountId" value="${(bill.getBillAccounts(session.loginConfigId).id)!accountId!0}"/>
+<input class="line" type="hidden" name="account.fullName" id="accountName" value="${(bill.getBillAccounts(session.loginConfigId).fullName)!accountFullName!}"/>
+<input class="line enter required textInput" type="text" id="accountName" name="account.fullName" value="${(bill.getBillAccounts(session.loginConfigId).fullName)!accountFullName!}"/>
+<a class="btnLook" id="accountLook" type="post"  param="${accountTypeId!}"  href="${base}/base/accounts/option" module="navTab" warn="会计科目选择" lookupgroup="account" lookuppk="id" width="500" height="350">会计科目选择</a>

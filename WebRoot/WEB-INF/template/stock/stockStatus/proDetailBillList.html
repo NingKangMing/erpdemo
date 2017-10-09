@@ -1,0 +1,84 @@
+<form id="pagerForm" onsubmit="return divSearch(this, 'proDetailBill');" class="pageForm required-validate" enctype="text/plain" action="${base}/stock/stockStatus/proDetailBillList" method="post">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!1}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!15}" />
+	<input type="hidden" name="orderField" value="${orderField!'sckRos.recodeTime'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+	
+	
+	<input type="hidden" name="startTime" id="startTime" value="${startTime!''}"/>   <!-- 开始时间-->
+	<input type="hidden" name="endTime" id="endTime"  value="${endTime!''}"/>   <!--结束时间 -->
+	<input type="hidden" name="isRcw" id="isRcw"  value="${isRcw!-1}"><!-- 是否显示红冲 -->
+	<input type="hidden" name="storage.id" id="storage.id"  value="${storageId!0}"><!-- 仓库ID -->
+	<input type="hidden" name="selectedObjectId" id="selectedObjectId"  value="${productId!0}"><!-- 商品ID -->
+	
+</form>
+<table class="table" layoutH="240">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody>
+		<#if pageMap ? exists>
+			<#list pageMap.pageList as tr>
+			<tr target="id" rel="${tr.sckRos.billId!}-${tr.sckRos.billTypeId!}" cRel="${tr.bt.billTableName!}" title="${tr.bt.name!}" url="${base}/common/bill/lookBill/${tr.sckRos.billId!}-${tr.sckRos.billTypeId!}" cTarget="openNavTab" <#if tr.sckRos.isRCW?? &&  tr.sckRos.isRCW!=0 >style="color: red;"</#if> >
+				<td width="40px;">${tr_index+1+pageMap.limit}</td>
+				
+				<#list rowList as row>
+					<#assign columnObj = "" />
+					<#if row.code?? && ((row.code)?index_of(".")>-1)>
+						<#assign columnObj = (row.code)?substring(0,(row.code)?index_of(".")) />
+						<#assign columnParam = (row.code)?substring((row.code)?index_of(".")+1) />
+					<#else>
+						<#assign columnParam = row.code />
+					</#if>
+					
+					<#if row.code?? && 'sckRos.price'==row.code>
+						<td align="center">
+							<@shiro.hasPermission name='1101-s'>
+						    	${(tr.sckRos.price)!}
+						    </@shiro.hasPermission>
+							<@shiro.lacksPermission name='1101-s'>
+								***  
+						    </@shiro.lacksPermission>
+						</td>
+					<#elseif row.code?? && 'pro.savePath'==row.code>
+						<td>
+							<#if (tr.pro.savePath)??>
+							    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(tr.pro.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(tr.pro.savePath)!}"  width="20px" height="20px"/>
+				            </#if>
+						</td>
+					<#elseif row.code?? && 'sckMoney'==row.code>
+						<td>
+							<@shiro.hasPermission name='1101-s'>
+						    	${(tr.sckMoney)!}
+						    </@shiro.hasPermission>
+							<@shiro.lacksPermission name='1101-s'>
+								***  
+						    </@shiro.lacksPermission>
+						</td>
+					<#else>
+						<#if columnObj?? && columnObj!="">
+							<td>${((tr[columnObj])[columnParam])!}</td>
+						<#else>
+							<td>${tr[columnParam]!}</td>
+						</#if>
+					</#if>
+				</#list>
+				
+			</tr>
+			</#list>
+		</#if>
+	</tbody>
+	<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+
+	
+<#include "/WEB-INF/template/unitl/paging.html"/>
+
+<div class="divider"></div>
+<div>
+	<a class="button" dynamic="true" target="navTab" href="${base}/common/bill/lookBill/{id}"><span>查看单据</span></a>
+</div>
+<div style="float: right;">
+	<#assign href = '${base}/stock/stockStatus/printDetail'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a>
+</div>

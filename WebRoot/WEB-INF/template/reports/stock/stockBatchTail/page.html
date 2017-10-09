@@ -1,0 +1,31 @@
+<div class="panel">
+	<div class="pageContent" id="stockBatchTailPage">
+		<div class="textContent center" style="height: 80px;">
+		     <div>
+		         <span style="font:bold 18px '宋体',Arial,Times;">商品批次追踪</span>
+		     </div>
+		     <div>
+		     	<span style="float: left; margin-left:30px; line-height: 50px;">查询时间：${startTime!''}&nbsp;&nbsp;至&nbsp;&nbsp;${endTime!''}</span>
+		     	<span style="float: left; margin-left:50px; line-height: 50px;">商品：${productName!''}</span>
+		     </div>
+		     <#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+		</div>
+		
+		<div id="stockBatchTailList">
+			<#include "list.html"/>
+		</div>
+		
+		<div class="divider"></div>
+		<div>
+			<a class="button" href="${base}/reports/stock/stockBatchTail/in" aimTabId="stockBatchTailView" aimTitle="商品批次跟踪" aimUrl="${base}/reports/stock/stockBatchTail" caption="条件选择" target="dialog" rel="stockBatchTailSearchDialog" mask="true" width="300" height="320" ><span>查询条件</span></a>
+			<a class="button" dynamic="true" target="navTab" href="${base}/common/bill/lookBill/{id}"><span>查看单据</span></a>
+		</div>
+		<div style="float: right;">
+		    <#assign privs = '5-81-515-p'/>
+	<#assign href = '${base}/reports/stock/stockBatchTail/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+			<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+		</div>
+	</div>
+</div>

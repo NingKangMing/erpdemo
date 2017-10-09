@@ -1,0 +1,75 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/finance/accounts/costTotal/${action!operation}-second" onsubmit="return dwzSearch(this, 'costTotalList');">
+    <input type="hidden" name="action" value="${action!operation}"/>
+     <input type="hidden" name="id" value="${id!0}"/>
+</form>
+<table class="table" rel="costTotalList" layoutH="120">
+	<thead>
+		<tr>
+			<th width="50px">行号</th>
+			<th width="100px">科目编号</th>
+			<th width="150px" align="left">科目全名</th>
+			<th width="100px">本月发生额</th>
+			<th width="100px">累计金额</th>
+		</tr>
+	</thead>
+	<tbody>
+		<#list accountList as account>
+		  <tr target="accountId" rel="${(account.id)!0}">
+		     <td>${account_index+1}</td>
+		     <td>${(account.code)!}</td>
+		     <td>${(account.blank)!}${(account.fullName)!}</td>
+		     <td>
+		      
+		         ${(account.monthMoneys)!}
+		     </td>
+		     <td>
+			     <#assign allMoneys = 0/>
+		         <#assign setMoneys = 0/>
+		         <#if account.allMoneys??>
+		           <#assign allMoneys = account.allMoneys/>
+		         </#if>
+		         <#if account.setMoneys??>
+		           <#assign setMoneys = account.setMoneys/>
+		         </#if>
+		         <#if allMoneys!=0 || setMoneys !=0>
+			            ${allMoneys+setMoneys}
+		         </#if>
+		         
+		     </td>
+		  </tr>
+		</#list>
+	</tbody>
+</table>
+
+
+
+<div class="divider"></div>
+<div>
+    <a class="button" height="250" width="300" mask="true" rel="dateDialog" target="dialog" caption="查询条件" param="accountId" aimTabId="costTotalDetailView" aimTitle="明细账本" aimUrl="${base}/reports/finance/accounts/costTotal/detail" href="${base}/common/dateDialog"><span>明细账本</span></a>
+    <#if isFreeVersion != "yes">
+    <a class="button" height="500" width="400" href="${base}/reports/finance/accounts/costTotal/toHistory" mask="true" param="pageNum,numPerPage" rel="historyDialog" target="dialog" caption="月结存信息框" aimTabId="${view!}" 
+					 aimTitle="<#if action?? && action == 'operation'>
+					      利润表
+					 <#elseif action?? && action == 'cashBank'>
+					       现金银行
+					 <#elseif action?? && action == 'otherIncome'>
+					        其它收入
+					 <#elseif action?? && action == 'fixedAssets'>
+					        固定资产
+					 <#elseif action?? && action == 'assetsDebtTree'>
+					        资产负债表（树形表）
+					 <#elseif action?? && action == 'costTotal'> 
+					        费用合计统计
+					 <#else>  
+					      其它  
+					 </#if>"
+	aimUrl="${base}/reports/finance/accounts/costTotal/${action!}"><span>历史记录</span></a>
+    <a class="button" height="300" width="800" mask="true" rel="monthContrastDialog" target="dialog" href="${base}/reports/finance/accounts/costTotal/contrast/{accountId}"><span>每月对比</span></a>
+    </#if>
+</div>
+<div style="float: right;">
+	<#assign href = '${base}/reports/finance/accounts/costTotal/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

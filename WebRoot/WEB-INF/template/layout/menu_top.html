@@ -1,0 +1,820 @@
+<script type="text/javascript">
+$(document).ready(function(){
+	var wwidth=$(window).width();
+	if(wwidth<=1024){
+		$('.mtul').addClass('mw1024');
+		$('.nav-btn').addClass('nw1024');
+		$('.nav-fix').addClass('fw1024');
+		$('.nav-content').addClass('fcw1024');
+	}else{
+		$('.mtul').addClass('mw1280');
+		$('.nav-btn').addClass('nw1280');
+		$('.nav-fix').addClass('fw1280');
+		$('.nav-content').addClass('fcw1280');
+	}
+	$('.mtul').each(function(i){
+		$(this).click(function(event){
+			$('.mtul').removeClass('selected');
+			$('.submenu ul').hide();
+			$('.submenu').hide();
+			
+			$(this).addClass('selected');
+			$('.submenu').css({left:$(this).position().left+($(this).outerWidth(true)-$(this).outerWidth(false))}).show().children('li').hide().eq(i).show();
+			$('.submenu>li>ul').show();
+			event.stopImmediatePropagation();
+		}).hover(function(){
+			$(this).addClass('hover');
+		},function(){
+			$(this).removeClass('hover');
+		});
+	});
+	$('.submenu span').click(function(event){
+		var left = $(this).parent().position().left + $(this).parent().width();
+		var top = $(this).parent().position().top;
+		$(this).next().css({left:left+4,top:top}).show().parent().siblings().find('ul').hide();
+		event.stopImmediatePropagation();
+	});
+	$('.submenu a').click(function(){
+		$('.submenu ul').hide();
+	});
+	$('.submenu a,span').parent().hover(function(){
+		$(this).addClass('hover');
+	},function(){
+		$(this).removeClass('hover');
+	});
+	$('body').on('click',function(event){
+		if(event.currentTarget == this){
+			$('.mtul').removeClass('selected');
+			$('.submenu ul').hide();
+			$('.submenu').hide();
+		} 
+	});
+});
+</script>
+<ul class="mtu">
+    <@shiro.hasAnyRoles name='1-*'>
+	<li class="mtul basic">基本信息</li>
+	</@shiro.hasAnyRoles>
+	<@shiro.hasAnyRoles name='2-*'>
+	<li class="mtul init">期初数据</li>
+	</@shiro.hasAnyRoles>
+	<@shiro.hasAnyRoles name='3-*'>
+	<li class="mtul bought">进货管理</li>
+	</@shiro.hasAnyRoles>
+	<@shiro.hasAnyRoles name='4-*'>
+	<li class="mtul sell">销售管理</li>
+	</@shiro.hasAnyRoles>
+	<@shiro.hasAnyRoles name='5-*'>
+	<li class="mtul stock">库存管理 </li>
+	</@shiro.hasAnyRoles>
+	<#if version?? && version gte 2>
+	<@shiro.hasAnyRoles name='6-*'>
+	<li class="mtul money">财务管理</li>
+	</@shiro.hasAnyRoles>
+	</#if>
+	<@shiro.hasAnyRoles name='1104-s,1110-s'>
+	<li class="mtul doc">单据中心</li>
+	</@shiro.hasAnyRoles>
+	<@shiro.hasAnyRoles name='8-*'>
+	<li class="mtul assist">辅助功能</li>
+	</@shiro.hasAnyRoles>
+	<@shiro.hasAnyRoles name='9-*'>
+	<li class="mtul sys">系统维护</li>
+	</@shiro.hasAnyRoles>
+	<li class="mtul help">帮助中心</li>
+</ul>
+<ul class="submenu">
+    <@shiro.hasAnyRoles name='1-*'>
+	<li>
+		<ul>
+		    <@shiro.hasPermission name='1-201-s'>
+			<li><a href="${base}/base/product/list?whichRefresh=navTabRefresh" target="navTab" rel="b_product_info">商品信息</a></li>
+			</@shiro.hasPermission>
+			<@shiro.hasAnyRoles name='1-21-*'>
+			<li>
+				<span>地区单位</span>
+				<ul>
+				    <@shiro.hasPermission name='1-21-202-s'>
+					<li><a href="${base}/base/area/list?whichRefresh=navTabRefresh" target="navTab" rel="areaView">地区信息</a></li>
+					</@shiro.hasPermission>
+					<@shiro.hasPermission name='1-21-203-s'>
+					<li><a href="${base}/base/unit/list?whichRefresh=navTabRefresh" target="navTab" rel="b_unit_info">单位信息</a></li>
+					</@shiro.hasPermission>
+				</ul>
+			</li>
+			</@shiro.hasAnyRoles>
+			<@shiro.hasAnyRoles name='1-22-*'>
+			<li>
+				<span>部门职员</span>
+				<ul>
+				    <@shiro.hasPermission name='1-22-204-s'>
+					<li><a href="${base}/base/department/list?whichRefresh=navTabRefresh" target="navTab" rel="departmentView">部门信息</a></li>
+					</@shiro.hasPermission>
+					<@shiro.hasPermission name='1-22-205-s'>
+					<li><a href="${base}/base/staff/child?whichRefresh=navTabRefresh" target="navTab" rel="staffView">职员信息</a></li>
+					</@shiro.hasPermission>
+				</ul>
+			</li>
+			</@shiro.hasAnyRoles>
+			<@shiro.hasPermission name='1-206-s'>
+			<li><a href="${base}/base/storage/list?whichRefresh=navTabRefresh" target="navTab" rel="storageView">仓库信息</a></li>
+			</@shiro.hasPermission>
+			<@shiro.hasPermission name='1-207-s'>
+			<li><a href="${base}/base/accounts/list/bank?whichRefresh=navTabRefresh" target="navTab" rel="bankView">银行账户</a></li>
+			</@shiro.hasPermission>
+			<@shiro.hasPermission name='1-208-s'>
+			<li><a href="${base}/base/accounts/list/cost?whichRefresh=navTabRefresh" target="navTab" rel="costView">费用类型</a></li>
+			</@shiro.hasPermission>
+			<@shiro.hasPermission name='1-209-s'>
+			<li><a href="${base}/base/accounts/list/incomeType?whichRefresh=navTabRefresh" target="navTab" rel="b_incomeType_info">收入类型</a></li>
+			</@shiro.hasPermission>
+			<#if isFreeVersion != "yes">
+			<@shiro.hasPermission name='1-210-s'>
+			<li><a href="${base}/base/accounts/list/property?whichRefresh=navTabRefresh" target="navTab" rel="propertyView">固定资产</a></li>
+			</@shiro.hasPermission>
+			<@shiro.hasPermission name='1-211-s'>
+			<li><a href="${base}/base/accounts/list/accounts?whichRefresh=navTabRefresh" target="navTab" rel="b_accounts_info">会计科目</a></li>
+			</@shiro.hasPermission>
+			</#if>
+		</ul>
+	</li>
+	</@shiro.hasAnyRoles>
+	<@shiro.hasAnyRoles name='2-*'>
+	<li>
+		<ul>
+			<@shiro.hasPermission name='2-251-s'>
+			<li><a href="${base}/init/productInit" target="navTab" rel="productInitView">期初库存商品</a></li>
+			</@shiro.hasPermission>
+			<@shiro.hasPermission name='2-252-s'>
+			<li><a href="${base}/init/unitInit" target="navTab" rel="unitInitView">期初应收应付</a></li>
+			</@shiro.hasPermission>
+			<@shiro.hasPermission name='2-253-s'>
+			<li><a href="${base}/init/financeInit?m=bank" target="navTab" rel="bankInitView">期初现金银行</a></li>
+			</@shiro.hasPermission>
+			<#if isFreeVersion != "yes">
+			<@shiro.hasPermission name='2-254-s'>
+			<li><a href="${base}/init/financeInit?m=assets" target="navTab" rel="assetsInitView">期初固定资产</a></li>
+			</@shiro.hasPermission>
+			<@shiro.hasPermission name='2-255-s'>
+			<li><a href="${base}/init/financeInit" target="navTab" rel="financeInitView">期初财务数据</a></li>
+			</@shiro.hasPermission>
+			</#if>
+			<@shiro.hasPermission name='2-256-s'>
+			<li><a href="${base}/init/makeInit" target="dialog" rel="makeInitDialog"  mask="true" width="335" height="315">期初建账..开账</a></li>
+			</@shiro.hasPermission>
+		</ul>
+	</li>
+	</@shiro.hasAnyRoles>
+    <@shiro.hasAnyRoles name='3-*'>
+	<li>
+		<ul>
+		   <#if isFreeVersion != "yes">
+		   <@shiro.hasPermission name='3-301-e'>
+			<li><a href="${base}/bought/bought/" target="navTab" rel="boughtView" id="boughtView">进货订单</a></li>
+		   </@shiro.hasPermission>
+		   </#if>
+		   <@shiro.hasPermission name='3-302-e'>
+			<li><a href="${base}/bought/purchase/" target="navTab" rel="purchaseView" id="purchaseView">进货单</a></li>
+		   </@shiro.hasPermission>
+		   <@shiro.hasPermission name='3-303-e'>
+			<li><a href="${base}/bought/return/" target="navTab" rel="purchaseReturnView" id="purchaseReturnView">进货退货单</a></li>
+		   </@shiro.hasPermission>
+		   <#if isFreeVersion != "yes">
+		   <@shiro.hasPermission name='3-304-e'>
+			<li><a href="${base}/bought/barter" target="navTab" rel="purchaseBarterView" id="purchaseBarterView">进货换货单</a></li>
+		   </@shiro.hasPermission>
+		   </#if>
+		   <@shiro.hasAnyRoles name='3-41-*'>
+			<li>
+				<span>进货报表</span>
+				<ul>
+				    <@shiro.hasPermission name='3-41-305-s'>
+					<li><a href="${base}/reports/bought/purchase" target="dialog" rel="productPurchaseStatisticsDialog" width="460" height="400" aimTitle="商品进货统计" aimUrl="${base}/reports/bought/purchase/search" aimTabId="productPurchaseStatisticsView">商品进货统计</a></li>
+					</@shiro.hasPermission>
+					<@shiro.hasPermission name='3-41-306-s'>
+					<li><a href="${base}/reports/bought/purchase/unit" target="dialog" rel="unitPurchaseStatisticsDialog" width="460" height="400" aimTitle="单位进货统计" aimUrl="${base}/reports/bought/purchase/unit/search" aimTabId="unitPurchaseStatisticsView">单位进货统计</a></li>
+					</@shiro.hasPermission>
+					<@shiro.hasPermission name='3-41-307-s'>
+					<li><a href="${base}/reports/bought/return" target="dialog" rel="productReturnStatisticsDialog" width="350" height="390" aimTitle="商品进货退货统计" aimUrl="${base}/reports/bought/return/search" aimTabId="purchaseReturnStatisticsView" aimDiv="purchaseReturnStatisticsList">商品进货退货统计</a></li>
+            		</@shiro.hasPermission>
+            	    <@shiro.hasPermission name='3-41-308-s'>
+            		<li><a href="${base}/reports/bought/return" target="dialog" rel="unitProductReturnStatisticsDialog" width="350" height="390" aimTitle="单位进货退货统计" aimUrl="${base}/reports/bought/return/unit/search" aimTabId="unitPurchaseReturnStatisticsView" aimDiv="purchaseReturnUnitStatisticsList">单位进货退货统计</a></li>
+			 		</@shiro.hasPermission>
+			 		<@shiro.hasPermission name='3-41-309-s'>
+			 		<li><a href="${base}/reports/bought/purchase/privilege" target="dialog" rel="purchasePrivilegeStatisticsDialog" width="350" height="400" aimTitle="进货优惠统计" aimUrl="${base}/reports/bought/purchase/privilege/search" aimTabId="purchasePrivilegeStatisticsView" aimDiv="purchasePrivilegeStatisticsList">进货优惠统计</a></li>
+			    	</@shiro.hasPermission>
+			    	<#if isFreeVersion != "yes">
+			    	<@shiro.hasPermission name='3-41-310-s'>
+			    	<li><a href="${base}/reports/bought/purchase/unit/toSpread" target="dialog"  rel="unitPurchaseSpreadDialog" width="470" height="380" aimTitle="单位进货分布" aimUrl="${base}/reports/bought/purchase/unit/spread" aimTabId="unitPurchaseSpreadView" aimDiv="purchaseUnitSpreadList">单位进货分布</a></li>
+		            </@shiro.hasPermission>
+		            <@shiro.hasPermission name='3-41-311-s'>
+		            <li><a href="${base}/reports/bought/purchase/storage/toSpread" target="dialog" rel="storagePurchaseSpreadDialog" width="470" height="380"  aimTitle="仓库进货分布" aimUrl="${base}/reports/bought/purchase/storage/spread" aimTabId="storagePurchaseSpreadView" aimDiv="purchaseStorageSpreadList">仓库进货分布</a></li>
+				    </@shiro.hasPermission>
+				    </#if>
+				</ul>
+			</li>
+			</@shiro.hasAnyRoles>
+			<#if isFreeVersion != "yes">
+			<@shiro.hasAnyRoles name='3-42-*'>
+			<li>
+				<span>进货订单统计</span>
+		        <ul>
+		         <@shiro.hasPermission name='3-42-312-s'>
+		         <li><a href="${base}/bought/bought/search" target="navTab" rel="boughtSearchView">进货订单查询</a></li>
+		         </@shiro.hasPermission>
+		         <@shiro.hasPermission name='3-42-313-s'>
+		         <li><a href="${base}/reports/bought/" target="dialog" rel="boughtStatisticsDialog" mask="true" width="350" height="400">进货订单统计</a></li>
+		         </@shiro.hasPermission>
+		         <@shiro.hasPermission name='3-42-314-s'>
+		         <li><a href="${base}/reports/bought/detail/" target="dialog" rel="boughtDetailSearchDialog" mask="true" width="350" height="370">进货订单明细查询</a></li>
+		        </@shiro.hasPermission>
+		        </ul>
+			</li>
+			</@shiro.hasAnyRoles>
+			</#if>
+		</ul>
+	</li>
+	</@shiro.hasAnyRoles>
+	
+	
+	<@shiro.hasAnyRoles name='4-*'> 
+	<li>
+		<ul>
+		    <#if isFreeVersion != "yes">
+		    <@shiro.hasPermission name='4-401-e'>
+			<li><a href="${base}/sell/book/" target="navTab" rel="sell_book_info" id="sellBookView">销售订单</a></li>
+			</@shiro.hasPermission>
+			</#if>
+			<@shiro.hasPermission name='4-402-e'>
+		    <li><a href="${base}/sell/sell/" target="navTab" rel="sell_info" id="sellView">销售单</a></li>
+		    </@shiro.hasPermission>
+		    <@shiro.hasPermission name='4-403-e'>
+		    <li><a href="${base}/sell/return/" target="navTab" rel="sell_return_info" id="sellReturnView">销售退货单</a></li>
+		    </@shiro.hasPermission>
+		    <#if isFreeVersion != "yes">
+		    <@shiro.hasPermission name='4-404-e'>
+		    <li><a href="${base}/sell/barter/" target="navTab" rel="sell_barter_info" id="sell_barter_info">销售换货单</a></li>
+		    </@shiro.hasPermission>
+		    </#if>
+		    <@shiro.hasAnyRoles name='4-61-*'>
+		    <li>
+			    <span>销售报表</span>
+			    <ul>
+			        <@shiro.hasPermission name='4-61-405-s'>
+			    	<li><a href="${base}/reports/prdSellCount/toSearchDialog/prd" target="dialog" rel="prdSellCountSearchDialog" width="460" height="410" aimTitle="商品销售统计" aimUrl="${base}/reports/prdSellCount/dialogSearch/first" aimTabId="prdSellCountView">商品销售统计</a></li>
+					</@shiro.hasPermission>
+					<@shiro.hasPermission name='4-61-406-s'>
+					<li><a href="${base}/reports/prdSellCount/toSearchDialog/unit" target="dialog" rel="unitSellCountSearchDialog" width="460" height="410" aimTitle="单位销售统计" aimUrl="${base}/reports/prdSellCount/dialogSearch/first" aimTabId="unitSellCountView">单位销售统计</a></li>
+					</@shiro.hasPermission>
+					<@shiro.hasPermission name='4-61-406.5-s'>
+					<li><a href="${base}/reports/prdSellDetailCount/toSearchDialog/" target="dialog" rel="prdSellDetailCountSearchDialog" width="460" height="430" aimTitle="商品销售明细汇总表" aimUrl="${base}/reports/prdSellDetailCount/dialogSearch/first" aimTabId="prdSellDetailCountView">商品销售明细汇总表</a></li>
+					</@shiro.hasPermission>
+					<@shiro.hasPermission name='4-61-407-s'>
+					<li><a href="${base}/reports/sellReturnCount/toSearchDialog/prd" target="dialog" rel="prdSellReturnCountSearchDialog" width="330" height="400" aimTitle="商品销售退货统计" aimUrl="${base}/reports/sellReturnCount/dialogSearch/first" aimTabId="prdSellReturnCountView">商品销售退货统计</a></li>
+					</@shiro.hasPermission>
+					<@shiro.hasPermission name='4-61-408-s'>
+					<li><a href="${base}/reports/sellReturnCount/toSearchDialog/unit" target="dialog" rel="unitSellReturnCountSearchDialog" width="330" height="400" aimTitle="客户销售退货统计" aimUrl="${base}/reports/sellReturnCount/dialogSearch/first" aimTabId="unitSellReturnCountView">单位销售退货统计</a></li>
+					</@shiro.hasPermission>
+					<@shiro.hasPermission name='4-61-409-s'>
+					<li><a href="${base}/reports/sellPrivilegeCount/toSearchDialog/" target="dialog" rel="sellPrivilegeCountSearchDialog" width="330" height="430" aimTitle="销售优惠统计" aimUrl="${base}/reports/sellPrivilegeCount/dialogSearch/first" aimTabId="prdSellPrivilegeCountCountView">销售优惠统计</a></li>
+					</@shiro.hasPermission>
+					<#if isFreeVersion != "yes">
+					<@shiro.hasPermission name='4-61-410-s'>
+					<li><a href="${base}/reports/layout/toSearchDialog/unit" target="dialog" rel="unitSellLayoutCountSearchDialog" width="460" height="400" aimTitle="单位销售分布" aimUrl="${base}/reports/layout/dialogSearch/first" aimTabId="unitSellLayoutCountView">单位销售分布</a></li>
+			  	    </@shiro.hasPermission>
+					<@shiro.hasPermission name='4-61-411-s'>
+			  	    <li><a href="${base}/reports/layout/toSearchDialog/storage" target="dialog" rel="storageSellLayoutCountSearchDialog" width="460" height="400" aimTitle="仓库销售分布" aimUrl="${base}/reports/layout/dialogSearch/first" aimTabId="storageSellLayoutCountView">仓库销售分布</a></li>
+					</@shiro.hasPermission>
+					</#if>
+					<@shiro.hasPermission name='4-61-412-s'>
+					<li><a href="${base}/reports/prdSellCostCount/toSearchDialog/" target="dialog" rel="prdSellCostSearchDialog" width="330" height="400" aimTitle="商品销售毛利表" aimUrl="${base}/reports/prdSellCostCount/dialogSearch/first" aimTabId="prdSellCostCountView">商品销售毛利表</a></li>
+			        </@shiro.hasPermission>			        
+			    </ul>
+			</li>
+			</@shiro.hasAnyRoles>
+			<#if isFreeVersion != "yes">
+			<@shiro.hasAnyRoles name='4-62-*'>
+			<li>
+				<span>销售排行榜</span>
+				<ul>
+					<@shiro.hasPermission name='4-62-413-s'>
+				    <li><a href="${base}/reports/sellRankCount/toSearchDialog/prd" target="dialog" rel="prdSellRankCountSearchDialog" width="460" height="410" aimTitle="商品销售排行榜" aimUrl="${base}/reports/sellRankCount/dialogSearch/first" aimTabId="prdSellRankCountView">商品销售排行榜</a></li>
+				    </@shiro.hasPermission>
+					<@shiro.hasPermission name='4-62-414-s'>
+				    <li><a href="${base}/reports/sellRankCount/toSearchDialog/unit" target="dialog" rel="unitSellRankCountSearchDialog" width="460" height="410" aimTitle="客户销售排行榜" aimUrl="${base}/reports/sellRankCount/dialogSearch/first" aimTabId="unitSellRankCountView">客户销售排行榜</a></li>
+				    </@shiro.hasPermission>
+					<@shiro.hasPermission name='4-62-415-s'>
+				    <li><a href="${base}/reports/sellRankCount/toSearchDialog/staff" target="dialog" rel="staffSellRankCountSearchDialog" width="460" height="410" aimTitle="职员销售排行榜" aimUrl="${base}/reports/sellRankCount/dialogSearch/first" aimTabId="staffSellRankCountView">职员销售排行榜</a></li>
+				    </@shiro.hasPermission>
+					<@shiro.hasPermission name='4-62-416-s'>
+				    <li><a href="${base}/reports/sellRankCount/toSearchDialog/dept" target="dialog" rel="deptSellRankCountSearchDialog" width="460" height="410" aimTitle="部门销售排行榜" aimUrl="${base}/reports/sellRankCount/dialogSearch/first" aimTabId="deptSellRankCountView">部门销售排行榜</a></li>
+				    </@shiro.hasPermission>
+					<@shiro.hasPermission name='4-62-417-s'>
+				    <li><a href="${base}/reports/sellRankCount/toSearchDialog/storage" target="dialog" rel="storageSellRankCountSearchDialog" width="460" height="410" aimTitle="仓库销售排行榜" aimUrl="${base}/reports/sellRankCount/dialogSearch/first" aimTabId="storageSellRankCountView">仓库销售排行榜</a></li>
+				    </@shiro.hasPermission>
+					<@shiro.hasPermission name='4-62-418-s'>
+				    <li><a href="${base}/reports/sellRankCount/toSearchDialog/area" target="dialog" rel="areaSellRankCountSearchDialog" width="460" height="410" aimTitle="地区销售排行榜" aimUrl="${base}/reports/sellRankCount/dialogSearch/first" aimTabId="areaSellRankCountView">地区销售排行榜</a></li>
+				    </@shiro.hasPermission>
+				</ul>
+			</li>
+			</@shiro.hasAnyRoles>
+			</#if>
+			<#if isFreeVersion != "yes">
+			<@shiro.hasAnyRoles name='4-63-*'>	
+		    <li>
+				<span>销售订单统计</span>
+				<ul>
+					<@shiro.hasPermission name='4-63-419-s'>
+					<li><a href="${base}/reports/book/search/first" target="navTab" rel="xs_b_searchView">销售订单查询</a></li>
+				    </@shiro.hasPermission>
+					<@shiro.hasPermission name='4-63-420-s'>
+					<li><a href="${base}/reports/book/toCountSearch/" target="dialog" rel="sellbookCountSearchDialog" width="330" height="470" aimTitle="销售订单统计" aimUrl="${base}/reports/book/countSearch/first" aimTabId="sellbookCountCountView">销售订单统计</a></li>
+				    </@shiro.hasPermission>
+					<@shiro.hasPermission name='4-63-421-s'>
+				    <li><a href="${base}/reports/book/toSearchDetail/" target="dialog" rel="sellbookDetailSearchDialog" width="330" height="400" aimTitle="销售订单明细查询" aimUrl="${base}/reports/book/detailSearch/first" aimTabId="sellbookDetailCountView">销售订单明细查询</a></li>
+				    </@shiro.hasPermission>
+				</ul>
+			</li>
+			</@shiro.hasAnyRoles>
+			</#if>
+		</ul>
+	</li>
+	</@shiro.hasAnyRoles>
+	
+	<@shiro.hasAnyRoles name='5-*'>
+	<li>
+		<ul>
+		  <@shiro.hasAnyRoles name='5-80-*'>
+			<li>
+		    	<span>盘点管理</span>
+		    	<ul>
+		    	    <#if isFreeVersion != "yes">
+		    	    <@shiro.hasPermission name='5-80-502-e'>
+		    		<li><a href="${base}/stock/takeStock" target="navTab" rel="takeStockView">库存盘点单</a></li>
+		    		</@shiro.hasPermission>
+		    		<@shiro.hasPermission name='5-80-503-s'>
+		    		<li><a href="${base}/stock/takeStock/searchTakeStock"  aimTabId="takeStockDisposeView" aimTitle="盘点处理" aimUrl="${base}/stock/takeStock/takeStockDisposePage" caption="盘点查询" target="dialog" rel="takeStockDialog" mask="true" width="400" height="300">盘点处理</a></li>
+		         	</@shiro.hasPermission>
+		         	</#if>
+		    		<@shiro.hasPermission name='5-80-504-e'>
+		         	<li><a href="${base}/stock/breakage" target="navTab" rel="breakageBillView">报损单</a></li>
+		         	</@shiro.hasPermission>
+		    		<@shiro.hasPermission name='5-80-505-e'>
+		         	<li><a href="${base}/stock/overflow" target="navTab" rel="overflowBillView">报溢单</a></li>
+		         	</@shiro.hasPermission>
+		    	</ul>
+	    	</li>
+	    </@shiro.hasAnyRoles>
+	    <#if isFreeVersion != "yes">
+	    <@shiro.hasPermission name='5-506-e'>	
+	    <li><a href="${base}/stock/otherin" target="navTab" rel="stockotherin">其它入库单</a></li>
+	    </@shiro.hasPermission>
+	    <@shiro.hasPermission name='5-507-e'>
+	    <li><a href="${base}/stock/otherout" target="navTab" rel="stockotherout">其它出库单</a></li>
+	    </@shiro.hasPermission>
+	    </#if>
+	    <#if isFreeVersion != "yes">
+	    <@shiro.hasPermission name='5-508-e'>
+	    <li><a href="${base}/stock/parityAllot" target="navTab" rel="parityAllotView">同价调拨单</a></li>
+	    </@shiro.hasPermission>
+	    <@shiro.hasPermission name='5-509-e'>
+	    <li><a href="${base}/stock/difftAllot" target="navTab" rel="difftAllotView">变价调拨单</a></li>
+	    </@shiro.hasPermission>
+	    </#if>
+	    <#if isFreeVersion != "yes">
+	    <@shiro.hasPermission name='5-510-e'>
+	    <li><a href="${base}/stock/dismount" target="navTab" rel="dismountBillView">生产拆装单</a></li>
+	    </@shiro.hasPermission>
+	    </#if>
+	    <@shiro.hasPermission name='5-511-e'>
+		    <li><a href="${base}/finance/adjustCost/" target="navTab" rel="adjustCostView">成本调价单</a></li>
+		</@shiro.hasPermission>
+	   <@shiro.hasAnyRoles name='5-81-*'>
+       <li>
+    	<span>库存报表</span>
+    	<ul>
+	        <@shiro.hasPermission name='5-81-511-s'>
+    		<li><a href="${base}/stock/stockStatus" target="navTab" rel="stockStatusView">库存状况</a></li>
+    		</@shiro.hasPermission>
+    		<#if isFreeVersion != "yes">
+	        <@shiro.hasPermission name='5-81-512-s'>
+			<li><a href="${base}/common/proStockSearchDialog" aimTabId="virtualStockView" aimTitle="虚拟库存状况" aimUrl="${base}/reports/stock/virtualStock" caption="查询条件" target="dialog" rel="proStackSearchDialog" mask="true" width="300" height="250">虚拟库存状况</a></li>
+			</@shiro.hasPermission>
+	        <@shiro.hasPermission name='5-81-513-s'>
+			<li><a href="${base}/reports/stock/stockDistributed" target="navTab" rel="stockDistributedView">库存状况分布表</a></li>
+			</@shiro.hasPermission>
+			</#if>
+	        <@shiro.hasPermission name='5-81-514-s'>
+			<li><a href="${base}/reports/stock/stockLife/in" aimTabId="stockLifeView" aimTitle="商品保质期查询" aimUrl="${base}/reports/stock/stockLife" caption="查询条件" target="dialog" rel="stackLiftSearchDialog" mask="true" width="300" height="210" >商品保质期查询</a></li>
+			</@shiro.hasPermission>
+	        <@shiro.hasPermission name='5-81-515-s'>
+			<li><a href="${base}/reports/stock/stockBatchTail/in" aimTabId="stockBatchTailView" aimTitle="商品批次跟踪" aimUrl="${base}/reports/stock/stockBatchTail" caption="条件选择" target="dialog" rel="stockBatchTailSearchDialog" mask="true" width="300" height="320" >商品批次跟踪</a></li>
+			</@shiro.hasPermission>
+			<#if isFreeVersion != "yes">
+	        <@shiro.hasPermission name='5-81-516-s'>
+			<li><a href="${base}/reports/stock/stockBound" target="navTab" rel="stockBoundView">库存上下限报警设置</a></li>
+			</@shiro.hasPermission>
+	        <@shiro.hasPermission name='5-81-517-s'>
+			<li><a href="${base}/reports/stock/stockBound/maxPage" target="navTab" rel="stockMaxBoundView">库存商品上限报警</a></li>
+			</@shiro.hasPermission>
+	        <@shiro.hasPermission name='5-81-518-s'>
+			<li><a href="${base}/reports/stock/stockBound/minPage" target="navTab" rel="stockMinBoundView">库存商品下限报警</a></li>
+			</@shiro.hasPermission>
+			</#if>
+			<#if isFreeVersion != "yes">
+			<@shiro.hasPermission name='526-s'>
+	   	    <li><a href="${base}/reports/stock/jxcChange/toSearchDialog/remove" target="dialog" rel="reportjxcChangeCountSearchDialog" width="330" height="330" aimTitle="全能进销存变动报表" aimUrl="${base}/reports/stock/jxcChange/dialogSearch/first" aimTabId="reportjxcChangeCountView">全能进销存变动报表</a></li>
+	   	    </@shiro.hasPermission>
+	   	    </#if>
+    	</ul>
+    	</li>
+    	</@shiro.hasAnyRoles>
+    	 <@shiro.hasAnyRoles name='5-82-*'>
+	    <li>
+	    	<span>单据统计</span>
+	    	<ul>
+	    	    <#if isFreeVersion != "yes">
+	            <@shiro.hasPermission name='5-82-519-s'>
+				<li><a href="${base}/reports/stock/other/toSearchDialog/in" target="dialog" rel="reportOtherInCountSearchDialog" width="330" height="400" aimTitle="其他入库单统计" aimUrl="${base}/reports/stock/other/dialogSearch/first" aimTabId="reportOtherInCountView">其他入库单统计</a></li>
+				</@shiro.hasPermission>
+	            <@shiro.hasPermission name='5-82-520-s'>
+				<li><a href="${base}/reports/stock/other/toSearchDialog/out" target="dialog" rel="reportOtherOutCountSearchDialog" width="330" height="400" aimTitle="其他出库单统计" aimUrl="${base}/reports/stock/other/dialogSearch/first" aimTabId="reportOtherOutCountView">其他出库单统计</a></li>
+	    	    </@shiro.hasPermission>
+	    	    </#if>
+	    	    <@shiro.hasPermission name='5-82-521-s'>
+	    	    <li><a href="${base}/reports/stock/breakOrOverflow/toSearchDialog/out" target="dialog" rel="reportbreakCountSearchDialog" width="330" height="350" aimTitle="报损单统计" aimUrl="${base}/reports/stock/breakOrOverflow/dialogSearch/first" aimTabId="reportbreakCountView">报损单统计</a></li>
+	    	    </@shiro.hasPermission>
+	    	    <@shiro.hasPermission name='5-82-522-s'>
+	    	    <li><a href="${base}/reports/stock/breakOrOverflow/toSearchDialog/in" target="dialog" rel="reportoverflowCountSearchDialog" width="330" height="350" aimTitle="报溢单统计" aimUrl="${base}/reports/stock/breakOrOverflow/dialogSearch/first" aimTabId="reportoverflowCountView">报溢单统计</a></li>
+	    	    </@shiro.hasPermission>
+	    	    <#if isFreeVersion != "yes">
+	    	    <@shiro.hasPermission name='5-82-523-s'>
+	    	    <li><a href="${base}/reports/stock/sameOrDiffPrice/toSearchDialog/same" target="dialog" rel="reportSamePriceCountSearchDialog" width="330" height="400" aimTitle="同价调拨单统计" aimUrl="${base}/reports/stock/sameOrDiffPrice/dialogSearch/first" aimTabId="reportSamePriceCountView">同价调拨单统计</a></li>
+	    	    </@shiro.hasPermission>
+	    	    <@shiro.hasPermission name='5-82-524-s'>
+	    	    <li><a href="${base}/reports/stock/sameOrDiffPrice/toSearchDialog/diff" target="dialog" rel="reportDiffPirceCountSearchDialog" width="330" height="400" aimTitle="变价调拨单统计" aimUrl="${base}/reports/stock/sameOrDiffPrice/dialogSearch/first" aimTabId="reportDiffPriceCountView">变价调拨单统计</a></li>
+	    	    </@shiro.hasPermission>
+	    	    </#if>
+	    	    <#if isFreeVersion != "yes">
+	    	    <@shiro.hasPermission name='5-82-525-s'>
+	    	    <li><a href="${base}/reports/stock/dismonunt/toSearchDialog/remove" target="dialog" rel="reportRemoveCountSearchDialog" width="330" height="400" aimTitle="生产拆装单统计" aimUrl="${base}/reports/stock/dismonunt/dialogSearch/first" aimTabId="reportRemoveCountView">生产拆装单统计</a></li>
+	    	    </@shiro.hasPermission>
+	    	    </#if>
+	    	    <@shiro.hasPermission name='5-82-527-s'>
+    			<li><a href="${base}/reports/finance/changeCostPrice/toSearchDialog/out" target="dialog" rel="reportChangeCostPriceCountSearchDialog" width="330" height="350" aimTitle="成本调价单统计" aimUrl="${base}/reports/finance/changeCostPrice/dialogSearch/first" aimTabId="reportChangeCostPriceCountView">成本调价单统计</a></li>
+			    </@shiro.hasPermission>
+	    	</ul>
+	    </li>
+	    </@shiro.hasAnyRoles>
+	    </ul>
+	</li>
+	</@shiro.hasAnyRoles>
+		<#if version?? && version gte 2>
+	   <@shiro.hasAnyRoles name='6-*'>
+		<li>
+			<ul>
+            <@shiro.hasPermission name='6-601-e'> 
+			<li><a href="${base}/finance/getMoney/" target="navTab" rel="cw_getMoneyView" id="cw_getMoneyView">收款单</a></li>
+			</@shiro.hasPermission>
+			<@shiro.hasPermission name='6-602-e'> 
+			<li><a href="${base}/finance/payMoney/" target="navTab" rel="cw_payMoneyView" id="cw_payMoneyView">付款单</a></li>
+    		</@shiro.hasPermission>
+			<@shiro.hasPermission name='6-603-e'> 
+			<li><a href="${base}/finance/fee/" target="navTab" rel="cw_feeBillView">费用单</a></li>
+			</@shiro.hasPermission>
+			<@shiro.hasPermission name='6-604-e'> 
+			<li><a href="${base}/finance/otherEarn/" target="navTab" rel="otherEarnView">其它收入单</a></li>
+			</@shiro.hasPermission>
+			<@shiro.hasPermission name='6-605-e'> 
+			<li><a href="${base}/finance/transfer" target="navTab" rel="transferView">内部转款单</a></li>
+			</@shiro.hasPermission>
+			<@shiro.hasAnyRoles name='6-101-*'>
+			<#if isFreeVersion != "yes">
+			<li>
+			<span>固定资产管理</span>
+			<ul>
+			    <@shiro.hasPermission name='6-101-607-e'> 
+				<li><a href="${base}/finance/addAssets" target="navTab" rel="addAssetsView">固定资产购置</a></li>
+				</@shiro.hasPermission>
+			    <@shiro.hasPermission name='6-101-608-e'> 
+				<li><a href="${base}/finance/deprAssets" target="navTab" rel="deprAssetsView">固定资产折旧</a></li>
+				</@shiro.hasPermission>
+			    <@shiro.hasPermission name='6-101-609-e'> 
+				<li><a href="${base}/finance/subAssets" target="navTab" rel="subAssetsView">固定资产变卖</a></li>
+				</@shiro.hasPermission>
+			</ul>
+			</li>
+			</#if>
+		    </@shiro.hasAnyRoles>
+		   <@shiro.hasAnyRoles name='6-102-*'>
+		   <li>
+			<span>调账业务</span>
+			<ul>
+    			<@shiro.hasPermission name='6-102-610-e'>
+				<li><a href="${base}/finance/changeUnit/getDown" target="navTab" rel="cw_c_unitgetDown">应收减少</a></li>
+				</@shiro.hasPermission>
+    			<@shiro.hasPermission name='6-102-611-e'>
+				<li><a href="${base}/finance/changeUnit/getUp" target="navTab" rel="cw_c_unitgetUp">应收增加</a></li>
+				</@shiro.hasPermission>
+    			<@shiro.hasPermission name='6-102-612-e'>
+				<li><a href="${base}/finance/changeUnit/payDown" target="navTab" rel="cw_c_unitpayDown">应付减少</a></li>
+				</@shiro.hasPermission>
+    			<@shiro.hasPermission name='6-102-613-e'>
+				<li><a href="${base}/finance/changeUnit/payUp" target="navTab" rel="cw_c_unitpayUp">应付增加</a></li>
+				</@shiro.hasPermission>
+    			<@shiro.hasPermission name='6-102-615-e'>
+				<li><a href="${base}/finance/changeUnit/moneyDown" target="navTab" rel="cw_c_moneyDown">资金减少</a></li>
+				</@shiro.hasPermission>
+    			<@shiro.hasPermission name='6-102-614-e'>
+				<li><a href="${base}/finance/changeUnit/moneyUp" target="navTab" rel="cw_c_moneyUp">资金增加</a></li>
+			    </@shiro.hasPermission>
+			</ul>
+		   </li>
+		   </@shiro.hasAnyRoles>
+		   <#if isFreeVersion != "yes">
+    	   <@shiro.hasPermission name='6-616-e'>
+		   <li><a href="${base}/finance/accountVoucher/" target="navTab" rel="accountVoucherView">会计凭证</a></li>
+		   </@shiro.hasPermission>
+		   </#if>
+		   <@shiro.hasAnyRoles name='6-103-*'>
+		   <li>
+			<span>往来报表</span>
+			<ul>
+			    <@shiro.hasAnyRoles name='6-103-104-*'>
+				<li>
+					<span>应收应付</span>
+					<ul>
+    			        <@shiro.hasPermission name='6-103-104-617-s'>
+						<li><a href="${base}/reports/finance/arap/unitArap/searcDialog" title="查询条件" target="dialog" rel="searchDialog" width="320" height="250" aimTitle="单位应收应付" aimUrl="${base}/reports/finance/arap/unitArap" aimTabId="unitArapView" type="post">单位应收应付</a></li>
+						</@shiro.hasPermission>
+    			        <@shiro.hasPermission name='6-103-104-618-s'>
+						<li><a href="${base}/common/dateDialog" aimTabId="staffArapView" aimTitle="职员应收应付" aimUrl="${base}/reports/finance/arap/staffArap" caption="选择日期" target="dialog" rel="dateDialog" width="300" height="250" type="post">职员应收应付</a></li>
+						</@shiro.hasPermission>
+    			        <@shiro.hasPermission name='6-103-104-619-s'>
+						<li><a href="${base}/common/dateDialog" aimTabId="deptArapView" aimTitle="部门应收应付" aimUrl="${base}/reports/finance/arap/deptArap" caption="选择日期" target="dialog" rel="dateDialog" width="300" height="250" type="post">部门应收应付</a></li>
+						</@shiro.hasPermission>
+    			        <@shiro.hasPermission name='6-103-104-620-s'>
+						<li><a href="${base}/common/dateDialog" aimTabId="areaArapView" aimTitle="地区应收应付" aimUrl="${base}/reports/finance/arap/areaArap" caption="选择日期" target="dialog" rel="dateDialog" width="300" height="250" type="post">地区应收应付</a></li>
+						</@shiro.hasPermission>
+					</ul>
+				</li>
+				</@shiro.hasAnyRoles>
+				<#if isFreeVersion != "yes">
+    			<@shiro.hasPermission name='6-103-621-s'>
+				<li><a href="${base}/common/dateDialog" aimTabId="cw_report_arapanalysis_view" aimTitle="往来分析" aimUrl="${base}/reports/finance/arap/analysis/searchDialog/first" caption="选择日期" target="dialog" rel="dateDialog" mask="true" width="300" height="250">往来分析</a></li>
+				</@shiro.hasPermission>
+    			<@shiro.hasPermission name='6-103-622-s'>
+				<li><a href="${base}/reports/finance/arap/arapMoneyCheck/toSearchDialog/" target="dialog" rel="prdSellReturnCountSearchDialog" width="330" height="380" aimTitle="往来对账" aimUrl="${base}/reports/finance/arap/arapMoneyCheck/dialogSearch/first" aimTabId="cw_r_arapMoneyCheckView">往来对账</a></li>
+				</@shiro.hasPermission>
+    			<@shiro.hasPermission name='6-103-623-s'>
+				<li><a href="${base}/reports/finance/arap/ageAnalysis/toSearchDialog" aimTabId="cw_report_arapAgeAnalysis_view" aimTitle="帐龄分析" aimUrl="${base}/reports/finance/arap/ageAnalysis/searchDialog/first" caption="帐龄分析" target="dialog" rel="dateDialog" mask="true" width="620" height="530">帐龄分析</a></li>
+				</@shiro.hasPermission>
+    			<@shiro.hasPermission name='6-103-624-s'>
+				<li><a href="${base}/reports/finance/arap/settlementByOrder/toSearchDialog/" target="dialog" rel="prdSellReturnCountSearchDialog" width="330" height="350" aimTitle="按单结算查询" aimUrl="${base}/reports/finance/arap/settlementByOrder/dialogSearch/first" aimTabId="cw_r_settlementByOrderView">按单结算查询</a></li>
+				</@shiro.hasPermission>
+    			<@shiro.hasPermission name='6-103-625-s'>
+				<li><a href="${base}/reports/finance/arap/overPayGetMoney/search/get-first" target="navTab" rel="cw_report_overGetMoney">超期应收款</a></li>
+				</@shiro.hasPermission>
+    			<@shiro.hasPermission name='6-103-626-s'>
+				<li><a href="${base}/reports/finance/arap/overPayGetMoney/search/pay-first" target="navTab" rel="cw_report_overPayMoney">超期应付款</a></li>
+				</@shiro.hasPermission>
+				</#if>
+				<#if isFreeVersion != "yes">
+				<@shiro.hasAnyRoles name='6-103-105-*'>
+				<li>
+					<span>回款统计</span>
+					<ul>
+    			        <@shiro.hasPermission name='6-103-105-627-s'>
+						<li><a href="${base}/common/dateDialog" aimTabId="returnMoneyStaffView" aimTitle="经手人回款统计" aimUrl="${base}/reports/retmoney/staff/search" caption="查询条件" target="dialog" rel="dateDialog" mask="true" width="300" height="250">经手人回款统计</a></li>
+						</@shiro.hasPermission>
+    			        <@shiro.hasPermission name='6-103-105-628-s'>
+						<li><a href="${base}/common/dateDialog" aimTabId="returnMoneyUnitView" aimTitle="单位回款统计" aimUrl="${base}/reports/retmoney/unit/search" caption="查询条件" target="dialog" rel="dateDialog" mask="true" width="300" height="250">单位回款统计</a></li>
+						</@shiro.hasPermission>
+    			        <@shiro.hasPermission name='6-103-105-629-s'>
+						<li><a href="${base}/common/dateDialog" aimTabId="returnMoneyDepmView" aimTitle="部门回款统计" aimUrl="${base}/reports/retmoney/depm/search" caption="查询条件" target="dialog" rel="dateDialog" mask="true" width="300" height="250">部门回款统计</a></li>
+						</@shiro.hasPermission>
+    			        <@shiro.hasPermission name='6-103-105-630-s'>
+						<li><a href="${base}/common/dateDialog" aimTabId="returnMoneyAreaView" aimTitle="地区回款统计" aimUrl="${base}/reports/retmoney/area/search" caption="查询条件" target="dialog" rel="dateDialog" mask="true" width="300" height="250">地区回款统计</a></li>
+					    </@shiro.hasPermission>
+					    <@shiro.hasPermission name='6-103-105-630.1-s'>
+						<li><a href="${base}/common/dateDialog" aimTabId="returnMoneyUserView" aimTitle="制单人收款统计" aimUrl="${base}/reports/retmoney/user/search" caption="查询条件" target="dialog" rel="dateDialog" mask="true" width="300" height="250">制单人收款统计</a></li>
+					    </@shiro.hasPermission>
+					</ul>
+				</li>
+				</@shiro.hasAnyRoles>
+				<@shiro.hasAnyRoles name='6-103-106-*'>
+				<li>
+					<span>业务统计</span>
+					<ul>
+    			        <@shiro.hasPermission name='6-103-106-631-s'>
+						<li><a href="${base}/common/dateDialog" aimTabId="businessCountUnitView" aimTitle="单位业务统计" aimUrl="${base}/reports/finance/businessCount/unitBusiness" caption="查询条件" target="dialog" rel="dateDialog" mask="true" width="300" height="250">单位业务统计</a></li>
+						</@shiro.hasPermission>
+    			        <@shiro.hasPermission name='6-103-106-632-s'>
+						<li><a href="${base}/common/dateDialog" aimTabId="businessCountStaffView" aimTitle="职员业务统计" aimUrl="${base}/reports/finance/businessCount/staffBusiness" caption="查询条件" target="dialog" rel="dateDialog" mask="true" width="300" height="250">职员业务统计</a></li>
+						</@shiro.hasPermission>
+    			        <@shiro.hasPermission name='6-103-106-633-s'>
+						<li><a href="${base}/common/dateDialog" aimTabId="businessCountDeptView" aimTitle="部门业务统计" aimUrl="${base}/reports/finance/businessCount/deptBusiness" caption="查询条件" target="dialog" rel="dateDialog" mask="true" width="300" height="250">部门业务统计</a></li>
+						</@shiro.hasPermission>
+    			        <@shiro.hasPermission name='6-103-106-634-s'>
+						<li><a href="${base}/common/dateDialog" aimTabId="businessCountAreaView" aimTitle="地区业务统计" aimUrl="${base}/reports/finance/businessCount/areaBusiness" caption="查询条件" target="dialog" rel="dateDialog" mask="true" width="300" height="250">地区业务统计</a></li>
+					    </@shiro.hasPermission>
+					</ul>
+				</li>
+				</@shiro.hasAnyRoles>
+				</#if>
+			</ul>
+		</li>
+		</@shiro.hasAnyRoles>
+		<@shiro.hasAnyRoles name='6-107-*'>
+		<li>
+			<span>财务报表</span>
+			<ul>
+    			<@shiro.hasPermission name='6-107-635-s'>
+			    <li><a href="${base}/reports/finance/accounts/costTotal/cashBank" target="navTab" rel="cashBankStateView">现金银行</a></li>
+			    </@shiro.hasPermission>
+    			<@shiro.hasPermission name='6-107-636-s'>
+			    <li><a href="${base}/reports/finance/accounts/costTotal/otherIncome" target="navTab" rel="otherIncomeStateView">其它收入</a></li>
+			    </@shiro.hasPermission>
+			    <#if isFreeVersion != "yes">
+    			<@shiro.hasPermission name='6-107-637-s'>
+			    <li><a href="${base}/reports/finance/accounts/costTotal/fixedAssets" target="navTab" rel="fixedAssetsStateView">固定资产</a></li>
+			    </@shiro.hasPermission>
+			    </#if>
+    			<@shiro.hasPermission name='6-107-638-s'>
+			    <li><a href="${base}/reports/finance/accounts/costTotal/costTotal" target="navTab" rel="costTotalStateView">费用合计统计</a></li>
+			    </@shiro.hasPermission>
+			    <#if isFreeVersion != "yes">
+    			<@shiro.hasPermission name='6-107-639-s'>
+			    <li><a href="${base}/reports/finance/yearCost" target="navTab" rel="yearCostStateView">年度费用报表</a></li>
+			    </@shiro.hasPermission>
+			    </#if>
+			    <#if isFreeVersion != "yes">
+			    <@shiro.hasAnyRoles name='6-107-108-*'>
+			    <li>
+			       <span>费用分布</span>
+			       <ul>
+    			       <@shiro.hasPermission name='6-107-108-640.1-s'>
+			           <li><a href="${base}/common/dateDialog" aimTabId="costDistributionView" aimTitle="费用分布" aimUrl="${base}/reports/finance/costDistribution/depm" caption="查询条件" target="dialog" rel="dateDialog" mask="true" width="300" height="250">部门费用分布</a></li>
+			           </@shiro.hasPermission>
+    			       <@shiro.hasPermission name='6-107-108-640.2-s'>
+			           <li><a href="${base}/common/dateDialog" aimTabId="costDistributionView" aimTitle="费用分布" aimUrl="${base}/reports/finance/costDistribution/staff" caption="查询条件" target="dialog" rel="dateDialog" mask="true" width="300" height="250">职员费用分布</a></li>
+			           </@shiro.hasPermission>
+    			       <@shiro.hasPermission name='6-107-108-640.3-s'>
+			           <li><a href="${base}/common/dateDialog" aimTabId="costDistributionView" aimTitle="费用分布" aimUrl="${base}/reports/finance/costDistribution/area" caption="查询条件" target="dialog" rel="dateDialog" mask="true" width="300" height="250">地区费用分布</a></li>
+			           </@shiro.hasPermission>
+    			       <@shiro.hasPermission name='6-107-108-640.4-s'>
+			           <li><a href="${base}/common/dateDialog" aimTabId="costDistributionView" aimTitle="费用分布" aimUrl="${base}/reports/finance/costDistribution/unit" caption="查询条件" target="dialog" rel="dateDialog" mask="true" width="300" height="250">单位费用分布</a></li>
+			           </@shiro.hasPermission>
+			       </ul>
+			    </li>
+			    </@shiro.hasAnyRoles>
+			    </#if>
+    			<@shiro.hasPermission name='6-107-641-s'>
+				<li><a href="${base}/reports/finance/accounts/costTotal/operation" target="navTab" rel="operationStateView">利润表</a></li>
+				</@shiro.hasPermission>
+    			<@shiro.hasPermission name='6-107-642-s'>
+				<li><a href="${base}/reports/finance/accounts/assetDebtTotal" target="navTab" rel="assetDebtTotalStateView">资产负债表</a></li>
+				</@shiro.hasPermission>
+    			<!--<@shiro.hasPermission name='6-107-643-s'>
+				<li><a href="${base}/reports/finance/accounts/costTotal/assetsDebtTree" target="navTab" rel="assetsDebtTreeStateView">资产负债表（树形表）</a></li>
+				</@shiro.hasPermission>-->
+				<#if isFreeVersion != "yes">
+    			<@shiro.hasPermission name='6-107-644-s'>
+				<li><a href="${base}/reports/finance/yearCostTotal/yearEnd" aimTabId="yearCostTotalProfitView" aimTitle="年度利润表比较" aimUrl="${base}/reports/finance/yearCostTotal/profit" caption="年结存信息框" target="dialog" rel="yearEndDialog" mask="true" height="500" width="410">年度利润表比较</a></li>
+				</@shiro.hasPermission>
+    			<@shiro.hasPermission name='6-107-645-s'>
+				<li><a href="${base}/reports/finance/yearCostTotal/yearEnd" aimTabId="yearCostTotalAssetView" aimTitle="年度资产负债表比较" aimUrl="${base}/reports/finance/yearCostTotal/asset" caption="年结存信息框" target="dialog" rel="yearEndDialog" mask="true" height="500" width="410">年度资产负债表比较</a></li>
+			    </@shiro.hasPermission>
+			    </#if>
+			</ul>
+		</li>
+		</@shiro.hasAnyRoles>
+		</ul>
+	</li>
+	</@shiro.hasAnyRoles>
+	</#if>
+	<@shiro.hasAnyRoles name='1104-s,1110-s'>
+	<li>
+		<ul>
+		<#if isFreeVersion != "yes">
+		<@shiro.hasPermission name='1104-s'>
+		<li><a href="${base}/common/dateDialog" aimTabId="businessDraftView"  aimTitle="业务草稿" aimUrl="${base}/reports/businessDraft" caption="选择日期" target="dialog" rel="dateDialog"  mask="true" width="300" height="250">业务草稿</a></li>
+		</@shiro.hasPermission>
+		</#if>
+		<@shiro.hasPermission name='1110-s'>
+		<li><a href="${base}/common/dateDialog" aimTabId="billHistoryView" aimTitle="经营历程" aimUrl="${base}/reports/billHistory" caption="选择日期" target="dialog" rel="dateDialog" mask="true" width="300" height="250">经营历程</a></li>
+		</@shiro.hasPermission>
+		</ul>
+	</li>
+	</@shiro.hasAnyRoles>
+	<@shiro.hasAnyRoles name='8-*'>
+	<li>
+		<ul>
+		    <#if isFreeVersion != "yes">
+			<@shiro.hasPermission name='8-800-s'>
+			<li><a href="${base}/stock/stock/orderDialog/" title="商品选择" type="POST" aimParam="true" target="dialog" rel="b_product_dialog" width="570" height="450" aimTitle="物价管理" aimUrl="${base}/fz/pricesManage" aimTabId="pricesManageView">物价管理</a></li>
+			</@shiro.hasPermission>
+			<@shiro.hasPermission name='8-800.1-s'>
+			<li><a href="${base}/fz/produceTemplate" target="navTab" rel="porduceTemplateView">生产模板</a></li>
+			</@shiro.hasPermission>
+			</#if>
+			<@shiro.hasPermission name='8-801-s'>
+			<li><a href="${base}/sys/billCodeConfig" target="navTab" rel="billCodeConfigView">单据编号设置</a></li>
+			</@shiro.hasPermission>
+			<@shiro.hasPermission name='8-802-s'>
+			<li><a href="${base}/sys/billRow" target="dialog" rel="billRowView" width="700" height="500">单据格式配置</a></li>
+			</@shiro.hasPermission>
+			<#if isFreeVersion != "yes">
+			<@shiro.hasPermission name='8-803-s'>
+			<li><a href="${base}/fz/importBase" target="dialog" rel="importBaseDialog" width="510" height="400" >导入基本信息(EXCEL)</a></li>
+			</@shiro.hasPermission>
+			<@shiro.hasPermission name='8-804-s'>
+			<li><a href="${base}/fz/priceDiscountTrack/toSearchDialog" target="dialog" rel="fz_priceDiscountSearchDialog" width="320" height="250" aimTitle="价格折扣跟踪" aimUrl="${base}/fz/priceDiscountTrack/dialogSearch/first" aimTabId="fz_priceDiscountView">价格折扣跟踪</a></li>
+			</@shiro.hasPermission>
+			<@shiro.hasAnyRoles name='8-141-*'>
+			<li>
+			    <span>OM订单配置</span>
+			    <ul>
+			      <@shiro.hasPermission name='8-141-805-s'>
+			      <li><a href="${base}/aioerpom/user" target="navTab" rel="port_om_user">OM接口用户</a></li>
+			      </@shiro.hasPermission>
+				  <@shiro.hasPermission name='8-141-806-s'>
+			      <li><a href="${base}/aioerpom/set" target="dialog" rel="port_om_set_dialog" width="350" height="250">OM接口配置</a></li>
+			      </@shiro.hasPermission>
+			   </ul>
+			</li>
+			</@shiro.hasAnyRoles>
+			<@shiro.hasPermission name='8-808-s'>
+			<li>
+			    <span>基本信息数据搬移</span>
+			    <ul>
+			      <li><a href="${base}/fz/baseMove/product" target="navTab" rel="moveProView">商品信息数据搬移</a></li>
+			      <li><a href="${base}/fz/baseMove/unit" target="navTab" rel="moveUnitView">往来单位数据搬移</a></li>
+			      <li><a href="${base}/fz/baseMove/depm" target="navTab" rel="moveDepartmentView">部门数据搬移</a></li>
+			      <li><a href="${base}/fz/baseMove/staff" target="navTab" rel="moveStaffView">职员数据搬移</a></li>
+			      <li><a href="${base}/fz/baseMove/storage" target="navTab" rel="moveStorageView">仓库数据搬移</a></li>
+			   </ul>
+			</li>
+			</@shiro.hasPermission>
+			<@shiro.hasPermission name='8-807-s'>
+			<li><a href="${base}/fz/warningCentre" target="navTab" fresh="false" rel="warningCentreView">报警中心</a></li>
+			</@shiro.hasPermission>
+			</#if>
+		</ul>
+	</li>
+	</@shiro.hasAnyRoles>
+	<@shiro.hasAnyRoles name='9-*'>
+	<li>
+		<ul>
+    		<@shiro.hasPermission name='9-901-s'>
+			<li><a href="${base}/user/toEditPwd" target="dialog" rel="sys_editPwd" width="330" height="190">修改密码</a></li>
+			</@shiro.hasPermission>
+			<li><a href="${base}/sys/sysConfig" target="dialog" rel="sysConfigDialog" width="450" height="465">系统配置</a></li>
+			<#if isFreeVersion != "yes">
+			<@shiro.hasPermission name='9-911-s'>
+			<li><a href="${base}/sys/permission" target="dialog" rel="permissionDialog" width="920" height="600">用户及权限设置</a></li>
+			</@shiro.hasPermission>
+			<@shiro.hasPermission name='9-912-s'>
+			<li><a href="${base}/sys/basePermission" target="navTab" rel="basePermissionView">基本信息授权</a></li>
+			</@shiro.hasPermission>
+			</#if>
+    		<@shiro.hasPermission name='9-904-s'>
+			<li><a href="${base}/sys/backup/toBackup" target="dialog" rel="sys_backup" width="330" height="220">数据备份</a></li>
+			</@shiro.hasPermission>
+    		<@shiro.hasPermission name='9-905-s'>
+			<li><a href="${base}/sys/backup/toRecover" target="dialog" rel="sys_recover" width="550" height="460">数据恢复</a></li>
+			</@shiro.hasPermission>
+    		<@shiro.hasPermission name='9-906-s'>
+			<li><a href="${base}/sys/reSystem"  target="dialog" rel="sys_reSystem" width="470" height="480">系统重建</a></li>
+			</@shiro.hasPermission>
+			<@shiro.hasPermission name='9-906.5-s'>
+			<li><a href="${base}/sys/reloadCostPrice/toReloadCostPrice"  target="dialog" rel="sys_reloadCostPrice" width="470" height="280">成本重算</a></li>
+    		</@shiro.hasPermission>
+    		<#if isFreeVersion != "yes">
+    		<@shiro.hasPermission name='9-907-s'>
+			<li><a href="${base}/sys/monthEnd/index" href1="${base}/sys/monthEnd/vaildateHasOpenAccount" target="dialog" rel="sys_monthEnd" width="600" height="450" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate">月结存</a></li>
+			</@shiro.hasPermission>
+    		<@shiro.hasPermission name='9-908-s'>
+			<li><a href="${base}/sys/yearEnd/index" href1="${base}/sys/monthEnd/vaildateHasOpenAccount"  target="dialog" rel="sys_yearEnd" width="470" height="500" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate">年结存</a></li>
+			</@shiro.hasPermission>
+    		<@shiro.hasPermission name='9-909-s'>
+			<li><a href="${base}/sys/monthEnd/monthEndCount" href1="${base}/sys/monthEnd/vaildateHasOpenAccount" target="navTab" rel="sys_monthEnd_count" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate">月结存信息表</a></li>
+			</@shiro.hasPermission>
+    		<@shiro.hasPermission name='9-910-s'>
+			<li><a href="${base}/sys/yearEnd/yearEndCount" href1="${base}/sys/monthEnd/vaildateHasOpenAccount" target="navTab" rel="sys_yearEnd_count" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate">年结存信息表</a></li>
+			</@shiro.hasPermission>
+			</#if>
+		</ul>
+	</li>
+	</@shiro.hasAnyRoles>
+	<li>
+		<ul>
+			<li><a href="${base}/sys/about" target="dialog" rel="aboutUsView" width="400" height="460">版本信息</a></li>
+			<#if isFreeVersion != "yes">
+			<li><a href="${base}/sys/register" rel="sys_register" target="dialog" width="300" height="180">产品注册</a></li>
+			</#if>
+			<li><a href="${base}/tools/aioerp-print.exe" target="_blank">打印控件下载</a></li>
+			<li><a href="${base}/tools/aioerp-help.pdf" target="_blank">帮助文档下载</a></li>
+		</ul>
+	</li>
+</ul>

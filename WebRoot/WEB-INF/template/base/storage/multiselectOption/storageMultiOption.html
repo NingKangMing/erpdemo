@@ -1,0 +1,86 @@
+<!-- 仓库多选 -->
+<div id="b_product_dialog_paging">
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/base/storage/storageMultiOption/page-${supId!0}" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${(pageMap.get('pageNum'))}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.get('numPerPage'))!}" />
+	<input type="hidden" name="orderField" value="${orderField!'storage.rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <input type="hidden" name="selectedObjectId" id="selectedObjectId" value="${objectId!0}"/>        <!--   默认选中行对象的Id -->
+    
+    <input type="hidden" name="oldSelectCheckBoxIds" id="b_dialog_product_oldpage_checkboxIds" value="${selectCheckboxObjs!''}"> <!-- 翻页记录旧checkbox  ids -->
+    <input type="hidden" name="selectCheckBoxIds" id="b_dialog_product_page_checkboxIds" value="${selectCheckboxObjs!''}">  <!-- 翻页记录 新checkbox  ids -->
+    
+    
+</form>
+<div class="pageHeader">
+	<form rel="pagerForm"  method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/base/storage/storageMultiOption/search" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="oldSelectCheckBoxIds" value="${selectCheckboxObjs!''}">                                      <!-- 翻页记录旧checkbox  ids -->
+    <input type="hidden" name="selectCheckBoxIds" id="b_dialog_product_search_checkboxIds" value="${selectCheckboxObjs!''}">  <!-- 翻页记录 新checkbox  ids -->
+    
+	<div class="searchBar">
+	   <ul class="searchContent">
+		   <li>
+		    <select name="term">
+		       <option <#if term?? && 'quick'==term>selected="selected"</#if> value="quick">快速查询</option>
+		       <option <#if term?? && 'code'==term>selected="selected"</#if>  value="code">按仓库编号查询</option>
+		       <option <#if term?? && 'smallName'==term>selected="selected"</#if> value="smallName">按仓库简称查询</option>
+		       <option <#if term?? && 'fullName'==term>selected="selected"</#if> value="fullName">按仓库全名查询</option>
+		       <option <#if term?? && 'spell'==term>selected="selected"</#if> value="spell">按仓库拼音码查询</option>
+		       
+		    </select>
+		    &nbsp;&nbsp;
+		    </li>
+		    <li>
+		    <input class="textInput" name="termVal" value="${termVal!''}" size="40"/>&nbsp;&nbsp;
+		    </li>
+		    <li>
+		    <div class="button"><div class="buttonContent"><button type="submit">查询</button></div></div>
+		    </li>
+	    </ul>
+	</div>
+	</form>
+</div>
+<div class="pageContent">
+	<table class="table" layoutH="125"  targetType="dialog">
+		<thead>
+			<tr>
+				<th width="40" align="center">行号</th> 
+				<th width="30" align="center"><input class="checkboxCtrl" type="checkbox" group="productIdArr" onclick="checkAllVersa(this,'b_dialog_product_page_checkboxIds','b_dialog_product_search_checkboxIds');"/></th>
+				<th width="70" align="center">仓库编号</th>
+				<th width="100" align="center">仓库简称</th>
+				<th width="100" align="center">仓库全名</th>
+				<th width="100" align="center">仓库拼音码</th>
+			</tr>
+		</thead>
+		<tbody id="b_product_dialog_tbody">
+		    <#list pageMap.pageList as obj>
+		    <#if obj.node==2>
+		    <!-- selectCheckboxObjs   要选中的checkBox -->
+			<tr objectId="${objectId!0}"  selectCheckboxObjs="${selectCheckboxObjs!''}"  rel="${obj.id!0}" target="id" drel="b_storage_mutil_select_dialog" whichDialog="xsddProdcut" cTarget="dialog" newCheckboxId="b_dialog_product_page_checkboxIds"  url="${base}/base/storage/storageMultiOption/down-${obj.id}-${selectCheckboxObjs!''}-${selectCheckboxObjs!''}">
+			<#else>
+			<tr objectId="${objectId!0}" selectCheckboxObjs="${selectCheckboxObjs!''}" rel="${obj.id!0}"  url="${base}/base/storage/storageMultisearchBack/${obj.id!0}" ondblclick="storageMultiOptionSelected(this)">
+			</#if>
+				<td><a>${obj_index+1+pageMap.limit}</a><#if obj.node==2>..</#if></td>
+				<td><input type="checkbox" name="productIdArr"  value="${obj.id!0}" onclick="getProductIdList(this,'b_dialog_product_page_checkboxIds','b_dialog_product_search_checkboxIds');"/></td>
+				<td>${obj.code!''}</td>
+				<td>${obj.smallName!''}</td>
+				<td>${obj.fullName!''}</td>
+				<td>${obj.spell!''}</td>
+			</tr>
+			</#list>
+		</tbody>
+	</table>
+</div>
+<#include "/WEB-INF/template/unitl/dialogpage.html"/>
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+    <a class="button"  url="${base}/base/storage/storageMultisearchBack/" onclick="storageMultiOptionSelected(this)"><span>选中</span></a>
+	<#if supId?? && supId!=0>
+	   <a relevancyIds="storageId" class="button" href="${base}/base/storage/storageMultiOption/up-${pSupId!0}-${supId!0}-${selectCheckboxObjs!''}" target="aioUpAjax"  newCheckBoxsId="b_dialog_product_page_checkboxIds"  rel="b_product_dialog_paging"><span>上级</span></a>
+    <#else>
+       <a class="buttonDisabled" href="javascript:void(0);"><span>上级</span></a>
+    </#if>
+	<div style="float: right;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+</div>
+</div>

@@ -1,0 +1,80 @@
+<!-- 销售单选择商品      商品为手工指定法时     弹出窗体 -->
+<div>
+
+<input id="confirmType" type="hidden" value="xs_costArith"/>
+<input id="trIndexs" type="hidden" value="${trIndexs}"/>
+<input id="productIds" type="hidden" value="${productIds}"/>
+<input id="trcostAriths" type="hidden" value="${trcostAriths}"/>
+<input id="tbodyId" type="hidden" value="${tbodyId}"/>
+<input id="currentIndexTr" type="hidden" value="${currentIndexTr}"/>
+<input id="module" type="hidden" value="${module}"/>
+<div class="pageHeader">
+	<div class="searchBar">
+	   <ul class="searchContent">
+	       <li><h2 class="contentTitle">商品库存批次表</h2></li>
+	    </ul>
+	    <ul class="searchContent" style="margin-top: 10px;">
+	       <li>
+	           <div style="float: left;">
+	               <div style="float: left; margin-left: 10px;">商品:${productFullName}</div>    
+	               <div style="float: left; margin-left: 70px;">仓库:${storageFullName}</div>
+	           </div>
+	       </li>
+	    </ul>
+	</div>
+</div>
+<div class="pageContent">
+	<table class="table" layoutH="135"  targetType="dialog">
+		<thead>
+			<tr>
+				<th width="40" align="center">行号</th> 
+				<th width="60" align="center">数量</th>
+				<th width="70" align="center">单价</th>
+				<th width="60" align="center">金额</th>
+				<th width="90" align="center">生产日期</th>
+				<th width="60" align="center">批号</th>
+				<th width="90" align="center">到期日期</th>
+			</tr>
+		</thead>
+		<tbody>
+		    <#list stockList as stock>
+			<tr ondblclick="stockProductBatchCallBack('${tbodyId}','${currentIndexTr}','${module}');">
+				<td><a>${stock_index+1}</a></td>
+				<input type="hidden" name="amount" value="${(stock.amount)!''}"/>
+				<input type="hidden" name="costPrice" value="${(stock.costPrice)!''}"/>
+				<input type="hidden" name="money" value="${(stock.money)!''}"/>
+				<input type="hidden" name="produceDate" value="${(stock.produceDate)!''}"/>
+				<input type="hidden" name="produceEndDate" value="${(stock.produceEndDate)!''}"/>
+				<input type="hidden" name="batch" value="${(stock.batchNum)!''}"/>
+				<td ccname="amount">${(stock.amount)!''}</td>
+				<td ccname="costPrice">
+					<@shiro.hasPermission name='1101-s'>
+					${(stock.costPrice)!''}
+					</@shiro.hasPermission>
+					<@shiro.lacksPermission name='1101-s'>
+					***  
+					</@shiro.lacksPermission>
+				</td>
+				<td ccname="money">
+					<@shiro.hasPermission name='1101-s'>
+					${(stock.money)!''}
+					</@shiro.hasPermission>
+					<@shiro.lacksPermission name='1101-s'>
+					***  
+					</@shiro.lacksPermission>
+				</td>
+				<td ccname="produceDate">${(stock.produceDate)!''}</td>
+				<td ccname="batch">${(stock.batchNum)!''}</td>
+				<td ccname="produceEndDate">${(stock.produceEndDate)!''}</td>
+			</tr>
+			</#list>
+		</tbody>
+	</table>
+</div>
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+    <a style="margin-left: 200px;" class="button" onclick="stockProductBatchCallBack('${tbodyId}','${currentIndexTr}','${module!''}');"><span>选中</span></a>
+	<div style="margin-left: 30px;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+</div>
+</div>

@@ -1,0 +1,21 @@
+<!--销售管理-->
+<#if isFreeVersion != "yes">
+<div <#if version gt 1>class="nav-content"<#else>class="nav-content1"</#if> >
+   <a href="${base}/sell/book/" href1="${base}/common/verify/permittedVerify?key=4-401-e" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="navTab" rel="sell_book_info" class="nav-btn"><img alt="销售订单" src="${base}/img/base/sell-book.png"><span>销售订单</span></a>
+   <a href="${base}/sell/sell/" href1="${base}/common/verify/permittedVerify?key=4-402-e" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="navTab" rel="sell_info" class="nav-btn"><img alt="销售单" src="${base}/img/base/sell.png" ><span>销售单</span></a>
+   <a href="${base}/sell/return/" href1="${base}/common/verify/permittedVerify?key=4-403-e" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="navTab" rel="sell_return_info" class="nav-btn"><img alt="销售退货单" src="${base}/img/base/sell-return.png"><span>销售退货单</span></a>
+   <a href="${base}/sell/barter/" href1="${base}/common/verify/permittedVerify?key=4-404-e" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="navTab" rel="sell_barter_info" class="nav-btn <#if version gt 1>nav-fix</#if>"><img alt="销售换货单" src="${base}/img/base/barter.png"><span>销售换货单</span></a>
+   <#if version gt 1>
+   <a href="${base}/finance/getMoney/" href1="${base}/common/verify/permittedVerify?key=6-601-e" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="navTab" rel="cw_getMoneyView" title="收款单" class="nav-btn"><img alt="收款单" src="${base}/img/base/getMoney.png"><span>收款单</span></a>
+   </#if>
+</div>
+<#else>
+<div class="nav-content">
+   <a href="${base}/sell/sell/" href1="${base}/common/verify/permittedVerify?key=4-402-e" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="navTab" rel="sell_info" class="nav-btn"><img alt="销售单" src="${base}/img/base/sell.png" ><span>销售单</span></a>
+   <a href="${base}/sell/return/" href1="${base}/common/verify/permittedVerify?key=4-403-e" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="navTab" rel="sell_return_info" class="nav-btn"><img alt="销售退货单" src="${base}/img/base/sell-return.png"><span>销售退货单</span></a>
+   <#if version gt 1>
+   <a href="${base}/finance/getMoney/" href1="${base}/common/verify/permittedVerify?key=6-601-e" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="navTab" rel="cw_getMoneyView" title="收款单" class="nav-btn nav-fix"><img alt="收款单" src="${base}/img/base/getMoney.png"><span>收款单</span></a>
+   </#if>
+</div>
+</#if>
+

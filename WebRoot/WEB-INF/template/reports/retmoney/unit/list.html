@@ -1,0 +1,114 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/retmoney/unit/search/second" onsubmit="return dwzSearch(this, 'returnMomeyUnitList');">
+	
+	<input type="hidden" name="pageNum" value="${pageMap.pageNum!}" />
+	<input type="hidden" name="numPerPage" value="${pageMap.numPerPage!}" />
+	<input type="hidden" name="orderField" value="${(params.orderField)!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${(params.orderDirection)!'asc'}" /><!--升序降序-->
+
+	<input type="hidden" id="startTime" name="startTime" value="${(params.startTime)!}"/>        <!--开始日期  -->
+	<input type="hidden" id="endTime" name="endTime" value="${(params.endTime)!}"/>            <!-- 结束日期 -->
+	<input type="hidden" id="supId" name="supId" value="${(params.supId)!}"/>                               <!-- 父级ID -->
+	<input type="hidden" id="isRow" name="isRow" value="${isRow!'false'}">
+	<input type="hidden" name="totalCount" value="${(pageMap.totalCount)!0}"/>
+</form>
+<table class="table" rel="returnMomeyUnitList" layoutH="200">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody>
+		<#list pageMap.pageList as unit>
+		  <#if unit.node?? && unit.node==2>
+		  <tr  target="id" rel="${unit.id!0}" serialize="true"  trel="reports_returnMomeyUnit" crel="returnMomeyUnitList" cTarget="ajax" url="${base}/reports/retmoney/unit/search/child-${unit.id}">
+		  <#else> 
+		  <tr target="id" rel="${(unit.id)!0}" serialize="true" cTarget="openNavTab" cel="returnMoneyUnitAccountView" title="明细账本"  url="${base}/reports/retmoney/unit/account/${(unit.id)!0}">
+		  </#if>
+		    <td>${unit_index+1+pageMap.limit}
+		        <#if unit.node?? && unit.node==2>
+		          ..
+		        </#if>
+		         <#assign shouldGetMoneys = 0>
+                 <#assign shouldPayMoneys = 0>
+                 <#if unit.shouldGetMoneys??><#assign shouldGetMoneys = unit.shouldGetMoneys></#if>
+                 <#if unit.shouldPayMoneys??><#assign shouldPayMoneys = unit.shouldPayMoneys></#if>
+		    </td>
+		    <#list rowList as row>
+		    <#if row.code?? && 'code'==row.code>
+		    <td>${(unit.code)!}</td>
+		    <#elseif row.code?? && 'fullName'==row.code>
+		    <td>
+		         ${(unit.fullName)!} 
+		     </td>
+		    <#elseif row.code?? && 'area.code'==row.code>
+		    <td>${(unit.area.code)!}</td>
+		    <#elseif row.code?? && 'area.fullName'==row.code>
+		    <td>${(unit.area.fullName)!}</td>
+		    <#elseif row.code?? && 'sellMoneys'==row.code>
+		    <td>${(unit.sellMoneys)!}</td>
+		    <#elseif row.code?? && 'cashGetMoneys'==row.code>
+		    <td>${(unit.cashGetMoneys)!}</td>
+		    <#elseif row.code?? && 'bankGetMoneys'==row.code>
+		    <td>${(unit.bankGetMoneys)!}</td>
+		    <#elseif row.code?? && 'getMoneySum'==row.code>
+		    <td>
+		       <#assign cashGetMoneys = 0 />
+		       <#assign bankGetMoneys = 0 />
+		       <#if unit.cashGetMoneys??>
+		           <#assign cashGetMoneys = unit.cashGetMoneys/>
+		       </#if>
+		       <#if unit.bankGetMoneys??>
+		           <#assign bankGetMoneys = unit.bankGetMoneys/>
+		       </#if>
+		       <#if cashGetMoneys !=0 || bankGetMoneys!=0>
+		            ${cashGetMoneys+bankGetMoneys}
+		       </#if>
+            </td>
+            <#elseif row.code?? && 'getMoneys'==row.code>
+            <td>
+                 ${(unit.getMoneys)!}
+             </td>
+             <#elseif row.code?? && 'payMoneys'==row.code>
+             <td>
+                  ${(unit.payMoneys)!}
+             </td>
+             <#elseif row.code?? && 'shouldGetMoneys'==row.code>
+             <td>
+                
+                 
+                 <#assign isMaxGet = shouldGetMoneys-shouldPayMoneys>
+                 <#if isMaxGet gt 0>
+                     ${isMaxGet!}
+                 </#if>
+                
+             </td>
+             <#elseif row.code?? && 'shouldPayMoneys'==row.code>
+             <td>
+                 <#assign isMaxPay = shouldPayMoneys-shouldGetMoneys>
+                 <#if isMaxPay gt 0>
+                     ${isMaxPay!}
+                 </#if>
+             </td>
+             </#if>
+             </#list>
+		  </tr>
+		</#list>
+	</tbody>
+    <#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+
+
+<#include "/WEB-INF/template/unitl/paging.html"/>	
+<div class="divider"></div>
+<div>
+    <a class="button" height="250" width="300" mask="true" rel="dateDialog" target="dialog" caption="查询条件" aimTabId="returnMoneyUnitView" aimTitle="单位回款统计" aimUrl="${base}/reports/retmoney/unit/search" href="${base}/common/dateDialog"><span>查询条件</span></a>
+    <a class="button" serialize="true" target="navTab" rel="returnMoneyUnitAccountView" title="明细账本"  href="${base}/reports/retmoney/unit/account/{id}"><span>明细账本</span></a>
+    <#if isRow?? && isRow=='true'>
+    <a class="buttonDisabled" href="javascript:;"><span>列表</span></a>
+    <#else>
+      <a class="button" type="POST" serialize="true" target="ajax" rel="returnMomeyUnitList"  href="${base}/reports/retmoney/unit/search/row"><span>列表</span></a>
+    </#if>
+</div>
+<div style="float: right;">
+     <#assign privs = '6-103-105-628-p'/>
+	<#assign href = '${base}/reports/retmoney/unit/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

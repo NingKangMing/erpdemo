@@ -1,0 +1,32 @@
+
+<div>
+   <form id="form2" action="${base}/user/editPwd" class="pageForm" enctype="text/plain" method="post" 
+        onsubmit="return validateCallback(this,aioDialogAjaxDone);">
+           <table>
+		      <tr style="height: 40px;">
+		         <td style="text-align: right;">旧密码:</td>
+		         <td>
+		             <input type="password" name="oldPwd" class="required" value="${omDomainName!''}" size="30"/>
+		         </td>
+		      </tr>
+		      <tr style="height: 40px;">
+		         <td style="text-align: right;">新密码:</td>
+		         <td><input type="password" id="password" name="newPwd" class="required" size="30"/></td>
+		      </tr>
+		      <tr style="height: 40px;">
+		         <td style="text-align: right;">确认新密码:</td>
+		         <td><input type="password" id="password1" name="rePwd" class="required twoPwd"  size="30"/></td>
+		      </tr>
+		   </table>
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		 <ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+		 </ul>
+      </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>
+
+

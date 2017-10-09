@@ -1,0 +1,19 @@
+
+<div class="panel">
+  <div class="pageContent">
+	<div class="textContent center">
+	     <div>
+	         <span style="font:bold 18px '宋体',Arial,Times;">报警中心</span>
+	     </div>
+			     
+	</div>
+	<div class="divider"></div>
+	<div layoutH="20">
+		<div style="float:left; display:block; overflow:auto; width:210px; border:solid 1px #CCC; line-height:21px; background:#fff" layoutH="42">
+			<ul id="warningTree" target="ztree" selectNodeId="${supId!0}" class="ztree" url="${base}/fz/warningCentre/tree" rel="warningList" ctarget="ajax" ></ul>
+		</div>
+		<div id="warningList" style="margin-left: 220px;padding:2px;padding-top: 0px;" layoutH="40">
+		    <#include "productUp.html"/>
+		</div>
+ </div>
+</div>

@@ -1,0 +1,113 @@
+<input type="hidden" id="projectBasePath" value="${base}"/>
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/prdSellCostCount/dialogSearch/page" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${pageMap.pageNum!}" />
+	<input type="hidden" name="numPerPage" value="${pageMap.numPerPage!}" />
+	<input type="hidden" name="orderField" value="${orderField!'recodeDate'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <!-- ID用于树点击参数 -->
+	<input type="hidden" id="unit.id" name="unit.id" value="${unitId!}"/>               <!-- 单位ID -->
+	<input type="hidden" id="product.id" name="product.id" value="${productId!}"/>      <!-- 单位ID -->
+	<input type="hidden" id="staff.id" name="staff.id" value="${staffId!}"/>            <!-- 职员ID -->
+	<input type="hidden" id="storage.id" name="storage.id" value="${storageId!}"/>      <!-- 仓库ID -->
+	
+	
+	<input type="hidden" id="unit.id" name="unit.fullName" value="${unitFullName!}"/>               <!-- 单位ID -->
+	<input type="hidden" id="product.id" name="product.fullName" value="${productFullName!}"/>      <!-- 单位ID -->
+	<input type="hidden" id="staff.id" name="staff.name" value="${staffFullName!}"/>            <!-- 职员ID -->
+	<input type="hidden" id="storage.id" name="storage.fullName" value="${storageFullName!}"/>      <!-- 仓库ID -->
+	
+	
+	<input type="hidden" id="startDate" name="startDate" value="${startDate}"/>        <!--开始日期  -->
+	<input type="hidden" id="endDate" name="endDate" value="${endDate}"/>            <!-- 结束日期 -->
+	<input type="hidden" id="aimDiv" name="aimDiv" value="${aimDiv}"/>                                   <!-- 过滤条件     all eq gt 下拉框改变赋值 -->
+	
+	<input type="hidden" name="whereComeDetail" value="other"> 
+</form>
+<#include "/WEB-INF/template/common/columnConfig/tableTotalWidthLink.html"/>
+<table class="table" rel="${listID}" layoutH="225">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody id="reports_prdsellcount_body">
+		<#list pageMap.pageList as obj>
+		<tr target="tid" rel="${(obj.billId)}-${obj.billTypeId}"   cTarget="openNavTab"  sameId="reports_prd_xs_detail_id" <#if obj.isRCW!=0> style="color: red;" </#if>>
+			<td><a>${obj_index+1+pageMap.limit}</a></td>
+			<#list rowList as row>
+			<#if row.code?? && 'recodeDate'==row.code>
+			<td>${(obj.recodeDate?string('yyyy-MM-dd HH:mm:ss'))}</td>
+			<#elseif row.code?? && 'billTypeId'==row.code>
+			<td>
+			   <#if obj.billTypeId==4>
+			          销售单
+			   <#elseif obj.billTypeId==7>
+			           销售退货单
+			   <#elseif obj.billTypeId==13>
+			           销售换货单
+			   </#if> 
+			</td>
+			<#elseif row.code?? && 't.code'==row.code>
+			<td>${(obj.code)!''}</td>
+			<#elseif row.code?? && 'unit.code'==row.code>
+			<td>${(obj.unit.code)!''}</td>
+			<#elseif row.code?? && 'unit.fullName'==row.code>
+			<td>${(obj.unit.fullName)!''}</td>
+			<#elseif row.code?? && 'storage.code'==row.code>
+			<td>${(obj.storage.code)!''}</td>
+			<#elseif row.code?? && 'storage.fullName'==row.code>
+			<td>${(obj.storage.fullName)!''}</td>
+			<#elseif row.code?? && 'sellTaxMoney'==row.code>
+			<td><#if obj.sellTaxMoney??&&obj.sellTaxMoney!=0>${(obj.sellTaxMoney)!''}</#if></td>
+			<#elseif row.code?? && 'sellCostMoney'==row.code>
+			<td>
+				<@shiro.hasPermission name='1101-s'>
+				<#if obj.sellCostMoney??&&obj.sellCostMoney!=0>${(obj.sellCostMoney)!''}</#if>
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'sellWinMoney'==row.code>
+			<td>
+				<@shiro.hasPermission name='1101-s'>
+				<#if obj.sellWinMoney??&&obj.sellWinMoney!=0>${(obj.sellWinMoney)!''}</#if>
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'remark'==row.code>
+			<td>${(obj.remark)!''}</td>
+			<#elseif row.code?? && 'staff.code'==row.code>
+			<td>${(obj.staff.code)!''}</td>
+			<#elseif row.code?? && 'staff.fullName'==row.code>
+			<td>${(obj.staff.fullName)!''}</td>
+			<#elseif row.code?? && 'department.code'==row.code>
+			<td>${(obj.department.code)!''}</td>
+			<#elseif row.code?? && 'department.fullName'==row.code>
+			<td>${(obj.department.fullName)!''}</td>
+			</#if>
+			</#list>
+		</tr>
+		</#list>
+	</tbody>
+	<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+
+	
+<div class="divider"></div>
+<div>
+    <a class="button" target="dialog" href="${base}/reports/prdSellCostCount/toSearchDialog/" rel="prdSellCostSearchDialog" width="330" height="400" aimTitle="商品销售成本表" aimUrl="${base}/reports/prdSellCostCount/dialogSearch/search" aimTabId="prdSellCostCountView"  aimDiv="${aimDiv}"><span>查询条件</span></a><!-- aimDiv值为all eq gt 下拉框改变赋值-->
+    <a id="reports_prd_xs_detail_id" class="button" dynamic="true" target="navTab" href="${base}/common/bill/lookBill/{tid}"><span>查看单据</span></a>
+    <#--
+    <a class="button" aimTitle="成本明细清单" aimTabId="xs_detail_cost_list" aimUrl="${base}/reports/prdSellCostCount/prdXsCostDetail/{tid}"><span>成本明细</span></a>-->
+    <a class="button" href="${base}/reports/prdSellCostCount/prdXsCostDetail/{tid}" target="navTab" rel="xs_detail_cost_list"><span>成本明细</span></a>
+    
+    
+    
+</div>
+<div style="float: right;">
+	<#assign privs = '4-61-412-p'/>
+	<#assign href = '${base}/reports/prdSellCostCount/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

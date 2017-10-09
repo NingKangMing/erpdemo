@@ -1,0 +1,33 @@
+<div class="panel">
+	<div class="pageContent" id="stockLifePage">
+		<div class="textContent center" style="height: 80px;">
+		     <div>
+		         <span style="font:bold 18px '宋体',Arial,Times;">商品保质期查询</span>
+		     </div>
+		     <div>
+		     	<span style="float: left; margin-left:30px; line-height: 50px;">仓库：${storageName!''}</span>
+		     	<span style="float: left; margin-left:50px; line-height: 50px;">提前报警天数：${alertDay!''}</span>
+		     </div>
+		     <#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+		</div>
+		<div class="divider"></div>
+		
+		<div id="stockLifeList">
+			<#include "list.html"/>
+		</div>
+		
+		<div class="divider"></div>
+		<div>
+			<a class="button" href="${base}/reports/stock/stockLife/in" aimTabId="stockLifeView" aimTitle="商品保质期查询" aimUrl="${base}/reports/stock/stockLife" caption="查询条件" target="dialog" rel="stackLiftSearchDialog" mask="true" width="300" height="210"><span>查询条件</span></a>
+			<a class="button" target="dialog" href="${base}/base/product/toReportBaseFilter/pagerForm-product" rel="report_product_filtter" width="400" height="210" aimTitle="商品保质期查询" aimUrl="${base}/reports/stock/stockLife" aimTabId="stockLifeView"><span>商品筛选</span></a>
+			
+		</div>
+		<div style="float: right;">
+		    <#assign privs = '5-81-514-p'/>
+			<#assign href = '${base}/reports/stock/stockLife/print'/>
+			<#assign formId = 'pagerForm'/>
+			<#include "/WEB-INF/template/common/print/printBtn.html"/>
+			<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+		</div>
+	</div>
+</div>

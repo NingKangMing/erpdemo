@@ -1,0 +1,7 @@
+<div class="nav-report">
+	<h3>单据中心</h3>
+	<#if isFreeVersion != "yes">
+	<a href="${base}/common/dateDialog" href1="${base}/common/verify/permittedVerify?key=1104-s" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate"  aimTabId="businessDraftView" aimTitle="业务草稿" aimUrl="${base}/reports/businessDraft" caption="选择日期" target="dialog" rel="dateDialog" mask="true" width="300" height="250">业务草稿</a>
+	</#if>
+	<a href="${base}/common/dateDialog" href1="${base}/common/verify/permittedVerify?key=1110-s" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate"  aimTabId="billHistoryView" aimTitle="经营历程" aimUrl="${base}/reports/billHistory" caption="选择日期" target="dialog" rel="dateDialog" mask="true" width="300" height="250">经营历程</a>
+</div>

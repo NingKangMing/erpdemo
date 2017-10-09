@@ -1,0 +1,59 @@
+<form id="pagerForm" class="pageForm required-validate" enctype="text/plain" onsubmit="return navTabSearch(this);" method="post" action="${base}/aioerpom/user/${toAction!'list'}/">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+	
+	<!--筛选       第一次筛选结果条件保存   方便第二次过滤筛选 -->
+	<input id="port_om_user_filter_attr" type="hidden" name="searchPar1" value="${searchPar1!''}"/>
+	<input id="port_om_user_filter_value" type="hidden" name="searchValue1" value="${searchValue1!''}"/>
+	<input type="hidden" name="showLastPage" id="showLastPage" />   <!-- 新增，复制新增完成后跳转到最后一页 -->
+	<input type="hidden" name="selectedObjectId" id="selectedObjectId" />   <!-- 新增，复制新增完成后跳转到最后一页     选中的Id -->
+</form> 
+
+<table class="table" rel="${listID}" layoutH="130">
+	<thead>
+		<tr>
+			<th width="80" align="center">行号</th>
+			<th width="100" align="center">用户名</th>
+			<th width="100" align="center">单位编号</th>
+			<th width="200" align="center">单位全名</th>
+			<th width="200" align="center">仓库全名</th>
+			
+			<th width="100" align="center">状态</th>
+		</tr>
+	</thead>
+	<tbody>
+		<#list pageMap.pageList as obj>
+		<tr objectId="${objectId!0}" status="2" order="${(obj.rank)!}" oldOrder="${(obj.rank)!}" target="id" rel="${obj.id}" title="修改" crel="${listID}" drel="unit_edit_${obj.id}" cTarget="dialog" widths="500" heights="230" url="${base}/aioerpom/user/toEdit/${obj.id}">
+			<td><a>${obj_index+1+pageMap.limit}</a></td>
+			<td>${(obj.loginName)!}</td>
+			<td>${(obj.code)!}</td>
+			<td>${(obj.fullName)!}</td>
+			<td>${(obj.storageFullNames)!}</td>
+			<td id="status${obj.id}">
+				<#if obj.status?number == 1>停用</#if>
+			    <#if obj.status?number == 2>启用</#if>
+			</td>
+		</tr>
+		</#list>
+	</tbody>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+<!--divider虚线-->
+<div class="divider"></div>
+<div><div align="left"> 
+	<a class="button" target="dialog" rel="om_port_user_dialog" href="${base}/aioerpom/user/toAdd/"  width="500" height="270" maxable="false"><span>新增</span></a>
+	<#--<a class="button" target="dialog" rel="om_port_user_dialog" href="${base}/aioerpom/user/toCopyAdd/{id}" width="500" height="230" maxable="false"><span>复制新增</span></a>--> 
+	<a class="button" target="dialog" rel="om_port_user_dialog" href="${base}/aioerpom/user/toEdit/{id}" width="500" height="270" maxable="false"><span>修改</span></a> 
+	<a class="button" target="ajaxTodo" href="${base}/aioerpom/user/delete/{id}"  title="数据删除后不能恢复，确认删除？"><span>删除</span></a> 
+	<a class="button" target="ajaxTodo" href="${base}/aioerpom/user/reSetPwd/{id}"  title="确认密码重置吗？"><span>密码重置</span></a> 
+	
+    <a class="button" target="ajaxTodo" href="${base}/aioerpom/user/disableOrEnable/{id}" isExec="{status}" warn="不能操作一类基础数据！"  callback="editStatus"><span>停用/启用</span></a>
+    <a class="button" target="dialog" rel="b_unit_filter" href="${base}/aioerpom/user/toFilter" title="条件查询" width="400" height="210"><span>查询</span></a>
+    <a class="button" href="#" onclick="navTab.closeCurrentTab()" style="float: right;"><span>关闭</span> </a> 
+    <a class="button" href="${base}/aioerpom/user/saveRank" target="tableRowSortSave" rel="${listID}" warn="没有排序变更" style="float: right;"><span>排序保存</span></a> 
+    <a class="button" href="javascript:void(0);" target="tableRowSort" sort="down" rel="${listID}" style="float: right;"><span>下移</span></a> 
+    <a class="button" href="javascript:void(0);" target="tableRowSort" rel="${listID}" sort="up" style="float: right;"><span>上移</span></a></div>
+    
+</div>

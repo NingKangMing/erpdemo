@@ -1,0 +1,51 @@
+<div class="pageContent center">
+	<h2 class="contentTitle">查询</h2>
+	<form class="pageForm required-validate">
+	    <input type="hidden" name="aimTabId" id="aimTabId"/>	     <!-- 设置目标Tab组件ID -->				
+	    <input type="hidden" name="aimUrl" id="aimUrl"/>	         <!-- 设置目标URl -->				
+	    <input type="hidden" name="aimTitle" id="aimTitle"/>         <!-- 设置目标标题 -->
+	    <input type="hidden" name="aimDiv" id="aimDiv"/>
+	    
+	    <fieldset style="text-align: center;">
+         <legend>列表选择</legend> 					
+            <div style="height:30px;">
+                                             单位全名<input type="hidden" name="unit.id" value=""/>
+                 <input type="hidden" name="unit.fullName" value=""/>
+                 <input class="enter" type="text" name="unit.fullName" size="30" value="" disabled="disabled"/>
+                 <a class="btnLook" id="unitLook" style="visibility: hidden" href="${base}/base/unit/option/${(boughtBill.unitId)!0}"  warn="单位" lookupgroup="unit" type="post" lookuppk="id" width="600" height="410">单位</a>
+            </div>
+            <div style="height:30px;">
+          	       职员全名<input type="hidden" name="staff.id" value=""/>
+	           <input type="hidden" name="staff.name" value=""/>
+	           <input class="enter" type="text" name="staff.name" size="30" value=""/>
+	           <a class="btnLook" id="staffLook" type="POST" rel="staffLookDialog" href="${base}/base/staff/dialogChild/${(boughtBill.staffId)!0}"  warn="员工" lookupgroup="staff" lookuppk="id" width="600" height="410">职员</a>
+            </div>
+           </fieldset>
+           <fieldset style="text-align: center;">
+             <legend>列表选择</legend>
+             <div style="height:30px;">
+                 <input type="radio" name="billType" checked="checked" value="unit" onclick="billTypeChecked(this)"/>单位进货优惠统计表 
+                 <input type="radio" name="billType" <#if billType?? && billType=='department'> checked="checked" </#if> value="department" onclick="billTypeChecked(this)"/>部门进货优惠统计表
+             </div> 
+             <div> 
+                 <input type="radio" name="billType" <#if billType?? && billType=='staff'> checked="checked" </#if> value="staff" onclick="billTypeChecked(this)"/>职员进货优惠统计表 
+                 <a style="margin-left: 130px"></a>
+             </div> 	
+           </fieldset>
+           <fieldset style="text-align: center;">
+	  	     <legend>选择时间</legend>
+	  	       <div style="height:30px;">开始日期:<input class="date" type="text" name="startDate" value="${startDate!}" hasClear="no" readonly="readonly"/></div>
+	  	       <div style="height:30px;">结束日期:<input class="date" type="text" name="endDate" value="${endDate!}" hasClear="no" readonly="readonly"/></div>
+	  	        <div>
+								<input name="userSearchDate" type="checkbox" checked="checked" value="checked"/>保存时间条件
+			   </div>
+	  	   </fieldset>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="button" fresh="true" onclick="fristOpenNavTabAfterLoadData(this)">确认</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>
+

@@ -1,0 +1,44 @@
+<!-- eg:跳转库存盘点处理-->
+
+<div class="pageContent">
+<h2 class="contentTitle">库存盘点单查询</h2>
+   <form action="${base}/common/searchDialog/go" method="post" class="pageForm required-validate" enctype="text/plain" onsubmit="return validateCallback(this,aioDialogOpenNavTab)">
+      <input type="hidden" id="aimTabId" name="aimTabId"  value=""/>
+      <input type="hidden" id="aimUrl"   name="aimUrl"   value=""/>
+      <input type="hidden" id="aimTitle" name="aimTitle"  value=""/>
+      <input type="hidden" id=aimDiv name="aimDiv" value="">
+      
+      <div layoutH="75">
+	       <fieldset>
+	       		<table style="margin:0 auto;margin-top: 15px;">
+	       			<tr height="40px;">
+	       				<td>开始日期：</td>
+	       				<td><input type="text" class="date" name="startDate" dateFmt="yyyy-MM-dd" value="${startDate!''}" readonly="readonly"/></td>
+	       			</tr>
+	       			<tr height="40px;">
+	       				<td>结束日期：</td>
+	       				<td><input type="text" class="date" name="endDate" dateFmt="yyyy-MM-dd" value="${endDate!''}" readonly="readonly"/></td>
+	       			</tr>
+	       			<tr><td colspan="2" align="center"><input name="userSearchDate" type="checkbox" checked="checked" value="checked"/>保存时间条件</td></tr>
+	       			<tr height="40px;">
+	       				<td>盘点仓库：</td>
+	       				<td>
+	       				   <input type="hidden" id="storageId" name="storage.id" value="0"/>
+				     	   <input style="width: 130px;" name="storage.fullName" lookName="storage" lookId="storage.id" />
+					       <a class="btnLook" id="storageLook" btnPattern="selectMany,selectAll"  href="${base}/base/storage/dialogList"  warn="仓库" lookupgroup="storage" lookuppk="id" width="600" height="410">仓库</a>
+	       				</td>
+	       			</tr>
+	       		</table>
+		   </fieldset>
+	 </div>
+	 
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+		</ul>
+	  </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

@@ -1,0 +1,111 @@
+<form id="pagerForm" enctype="text/plain" onsubmit="return divSearch(this, 'virtualStockList');" action="${base}/reports/stock/virtualStock/list" method="post">
+	<input type="hidden" name="pageNum" value="${pageMap.pageNum!1}" />
+	<input type="hidden" name="numPerPage" value="${pageMap.numPerPage!15}" />
+	<input type="hidden" name="orderField" value="${orderField!'pro.rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+	
+	<input type="hidden" id="node" name="node" value="${node!2}"/>
+	<input type="hidden" id="supId" name="supId" value="${supId!0}"/>
+	<input type="hidden" name="selectedObjectId" id="selectedObjectId" value="${objectId!0}" /><!--   默认选中对象的Id -->
+	
+	<input type="hidden" id="productPids" name="productPids" value="${productPids!'{0}'}"/>
+	<input type="hidden" id="storagePids" name="storagePids" value="${storagePids!''}"/>
+	<input type="hidden" id="filterVal" name="filterVal" value="${filterVal!'all'}">
+</form>
+
+<#assign showWidth = 100/>
+<#list rowList as row>
+    <#if row.width??>
+     <#assign showWidth = showWidth+row.width/>
+    </#if>
+</#list>
+<table class="table" rel="virtualStockList" layoutH="230" width="${showWidth!}">
+		<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+		<tbody>
+			<#list pageMap.pageList as recode>
+			<#if recode.pro.node==2>
+			<tr objectId="${objectId!0}" target="pid" trel="virtualStockTree" rel="${recode.pro.id}"  crel="virtualStockList" serialize="true"  cTarget="ajax"  url="${base}/reports/stock/virtualStock/list/${recode.pro.id}"  isSelect="true">
+			<#else>
+			<tr objectId="${objectId!0}" target="pid" rel="${recode.pro.id}" isSelect="true">
+			</#if>
+				<td><a>${recode_index+1+pageMap.limit}</a><#if recode.pro.node==2>..</#if></td>
+				<#list rowList as row>
+					<#assign columnObj = "" />
+					<#if row.code?? && ((row.code)?index_of(".")>-1)>
+						<#assign columnObj = (row.code)?substring(0,(row.code)?index_of(".")) />
+						<#assign columnParam = (row.code)?substring((row.code)?index_of(".")+1) />
+					<#else>
+						<#assign columnParam = row.code />
+					</#if>
+					
+					<#if row.code?? && 'avgPrice'==row.code>
+						<td align="center">
+							<#if (recode.avgPrice)??>
+								<@shiro.hasPermission name='1101-s'>
+							    	${(recode.avgPrice)!}
+							    </@shiro.hasPermission>
+								<@shiro.lacksPermission name='1101-s'>
+									***  
+							    </@shiro.lacksPermission>
+						    </#if>
+						</td>
+					<#elseif row.code?? && 'pro.savePath'==row.code>
+						<td>
+							<#if (recode.pro.savePath)??>
+							    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(recode.pro.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(recode.pro.savePath)!}"  width="20px" height="20px"/>
+				            </#if>
+						</td>
+					<#elseif row.code?? && 'moneys'==row.code>
+						<td>
+							<#if (recode.moneys)??>
+								<@shiro.hasPermission name='1101-s'>
+							    	${(recode.moneys)!}
+							    </@shiro.hasPermission>
+								<@shiro.lacksPermission name='1101-s'>
+									***  
+							    </@shiro.lacksPermission>
+							</#if>
+						</td>
+					<#elseif row.code?? && ('ordeAmount'==row.code || 'draftAmount'==row.code || 'virtualAmount'==row.code)>
+						<td>
+							<#if recode[columnParam]?? && recode[columnParam] !=0 >${recode[columnParam]!}</#if>
+						</td>
+					<#else>
+						<#if columnObj?? && columnObj!="">
+							<td>${((recode[columnObj])[columnParam])!}</td>
+						<#else>
+							<td>${recode[columnParam]!}</td>
+						</#if>
+					</#if>
+				</#list>
+			</tr>
+			</#list>
+		</tbody>
+		<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+<div class="divider"></div>
+<div>
+	<a class="button" href="${base}/common/proStockSearchDialog" param="selectFilter" aimTabId="virtualStockView" aimTitle="虚拟库存查询" aimUrl="${base}/reports/stock/virtualStock" caption="查询条件" target="dialog" rel="proStackSearchDialog" mask="true" width="300" height="250"><span>查询条件</span></a>
+	<#if node?? && node == 1>
+		<a class="buttonDisabled" href="javascript:;"><span>列表</span></a>
+	<#else>
+		<a class="button" params="node" vals="1" target="linePost" rel="virtualStockList"><span>列表</span></a>
+	</#if>
+	<a class="button" href="${base}/stock/stockStatus/proDistribution" param="selectedObjectId" target="dialog" rel="proDistributionDialog" width="680" height="500"><span>商品分布</span></a>
+	<a class="button" href="${base}/reports/stock/virtualStock/toFormula" target="dialog" rel="virtualFormulaDialog" width="450" height="370"><span>公式设置</span></a>
+
+	<#if supId?? && supId!=0>
+		<a class="button" href="${base}/reports/stock/virtualStock/list/${pSupId!0}-${supId!0}" target="ajax" rel="virtualStockList" serialize="true" trel="virtualStockTree" nodeId="${pSupId!0}" ><span>上级</span></a>
+	<#else>
+		<a class="buttonDisabled" href="javascript:;"><span>上级</span></a>
+	</#if>
+</div>
+<div style="float: right;">
+	<#assign privs = '5-81-512-p'/>
+	<#assign href = '${base}/reports/stock/virtualStock/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

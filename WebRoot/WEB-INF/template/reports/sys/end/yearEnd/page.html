@@ -1,0 +1,54 @@
+<div class="panel" id="financeInitPage">
+	<div class="pageContent">
+		<div class="textContent center">
+		     <div>
+		         <span style="font:bold 18px '宋体',Arial,Times;">年结存信息表</span>
+		     </div>
+		</div>
+		<ul class="searchContent">
+			<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+		</ul>
+		<div class="divider"></div>
+		<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/sys/yearEnd/yearEndCount" onsubmit="return dwzSearch(this, 'dialog');">
+        </form>
+        <#include "/WEB-INF/template/common/columnConfig/tableTotalWidthLink.html"/>
+		<div style="padding:0px 2px 0px 10px;" layoutH="30">
+			<table class="table" layoutH="125">
+				<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+				<tbody>
+					<#list list as obj>
+			    	<tr>
+					     <td>${obj_index+1}</td>
+					     <#list rowList as row>
+						 <#if row.code?? && 'yearsName'==row.code>
+					     <td>${(obj.yearsName)!}</td>
+					     <#elseif row.code?? && 'startDate'==row.code>
+					     <td>${(obj.startDate)?string('yyyy-MM-dd')}</td>
+					     <#elseif row.code?? && 'endDate'==row.code>
+					     <td>${(obj.endDate)?string('yyyy-MM-dd')}</td>
+					     <#elseif row.code?? && 'billCount'==row.code>
+					     <td>${(obj.billCount)!}</td>
+					     </#if>
+						 </#list>
+					</tr>
+					</#list>
+				</tbody>
+			</table>
+			
+			<!--divider虚线-->
+			<div class="divider"></div>
+			<#--还未实现 
+			<@shiro.hasPermission name='9-901-u'>
+			<a class="button" target="ajaxTodo" href="${base}/base/unit/delete/{id}" callback="removeTreeAjaxTodo" title="【删除数据】是个很重要 的功能，请确保只有您 一人操作，删除后不能恢复"><span>删除数据</span></a> 
+			</@shiro.hasPermission>
+			-->
+			<div style="float: right;">
+				<#assign privs = '9-901-p'/>
+				<#assign href = '${base}/sys/yearEnd/print'/>
+				<#assign formId = 'pagerForm'/>
+				<#include "/WEB-INF/template/common/print/printBtn.html"/>
+				<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+			</div>
+		</div>
+	</div>
+</div>

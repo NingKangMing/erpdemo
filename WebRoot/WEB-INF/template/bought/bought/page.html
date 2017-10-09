@@ -1,0 +1,23 @@
+<div class="panel pageContent">
+   <div class="pageHeader">
+      <div>
+          <span style="font:bold 18px '宋体',Arial,Times;">进货订单查询</span>
+      </div>
+      <div style="margin-top: 10px">
+        
+		  <a style="float: right;margin-left: 10px;margin-right: 10px" href="${base}/fz/reportRow/search/cg5012" target="dialog" rel="reportRowView"  width="520" height="500"><img src="${base}/img/base/setting.png" width="20px" height="20px" title="列配置"/></a>
+		
+          <a style="float:right;">过滤:
+              <select name="boughtBill.status" onchange="javascript:selectPost(this,'boughtBillList','boughtBill.status');">
+                 <option value="">全部显示</option>
+                 <option value="1">未完成订单</option>
+                 <option value="2">已完成订单</option>
+              </select>
+          </a>
+      </div>
+   </div>
+   <div id="boughtBillList">
+      <#include "list.html"/> 
+   </div>
+</div>
+

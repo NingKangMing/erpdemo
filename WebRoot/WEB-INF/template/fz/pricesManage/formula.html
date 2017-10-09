@@ -1,0 +1,161 @@
+<div class="pageContent">
+	<h2 class="contentTitle">公试设置</h2>
+	<form action="${base}/fz/pricesManage/formula" class="tableForm pageForm" enctype="text/plain" method="post" onsubmit="return validateCallback(this,aioDialogAjaxDone)">
+		<input type="hidden" id="typeUnit" name="typeUnit" value="${typeUnit!}"/>
+        <#list productIds as productId>
+         <input type="hidden" name="productIdArr" value="${productId!}"/>
+       </#list>
+		<div class="pageFormContent" layoutH="100">
+			<fieldset>
+				<legend>公式设置</legend>
+				<table style="margin:0px auto;">
+				    <tr height="35px;">
+						<td width="100px;" align="right">预设售价1= &nbsp;&nbsp;</td>
+						<td>
+							<select name="defaultPrice1.item" onchange="formulaItemChange(this)">
+								<option <#if defaultPrice1??&&defaultPrice1.item?number == 0>selected</#if> value="0">无公式</option>
+								<option <#if defaultPrice1??&&defaultPrice1.item?number == 1>selected</#if> value="1">最近进价</option>
+								<option <#if defaultPrice1??&&defaultPrice1.item?number == 2>selected</#if> value="2">商品成本</option>
+								<option <#if defaultPrice1??&&defaultPrice1.item?number == 3>selected</#if> value="3">零售价</option>
+								<option <#if defaultPrice1??&&defaultPrice1.item?number == 4>selected</#if> value="4">预设售价1</option>
+								<option <#if defaultPrice1??&&defaultPrice1.item?number == 5>selected</#if> value="5">预设售价2</option>
+								<option <#if defaultPrice1??&&defaultPrice1.item?number == 6>selected</#if> value="6">预设售价3</option>
+							</select>
+						</td>
+						<td width="80px;">
+							<select name="defaultPrice1.operate"  style="margin-left: 20px;" <#if !defaultPrice1?? || defaultPrice1.item?number == 0>disabled="disabled"</#if>>
+								<option <#if defaultPrice1?? && defaultPrice1.operate?? && defaultPrice1.operate == '+'>selected</#if> value="+">加</option>
+								<option <#if defaultPrice1?? && defaultPrice1.operate?? && defaultPrice1.operate == '-'>selected</#if> value="-">减</option>
+								<option <#if defaultPrice1?? && defaultPrice1.operate?? && defaultPrice1.operate == '*'>selected</#if> value="*">乘</option>
+								<option <#if defaultPrice1?? && defaultPrice1.operate?? && defaultPrice1.operate == '/'>selected</#if> value="/">除</option>
+							</select>
+						</td>
+						<td><input name="defaultPrice1.param" class="number" maxlength="10" style="width: 80px;" value="${(defaultPrice1.param)!0}" <#if !defaultPrice1?? || defaultPrice1.item?number == 0>disabled="disabled"</#if> onblur="inputNullRepZero(this)"/></td>
+					</tr>
+					<tr height="35px;">
+						<td width="100px;" align="right">预设售价2= &nbsp;&nbsp;</td>
+						<td>
+							<select name="defaultPrice2.item" onchange="formulaItemChange(this)">
+								<option <#if defaultPrice2??&&defaultPrice2.item?number == 0>selected</#if> value="0">无公式</option>
+								<option <#if defaultPrice2??&&defaultPrice2.item?number == 1>selected</#if> value="1">最近进价</option>
+								<option <#if defaultPrice2??&&defaultPrice2.item?number == 2>selected</#if> value="2">商品成本</option>
+								<option <#if defaultPrice2??&&defaultPrice2.item?number == 3>selected</#if> value="3">零售价</option>
+								<option <#if defaultPrice2??&&defaultPrice2.item?number == 4>selected</#if> value="4">预设售价1</option>
+								<option <#if defaultPrice2??&&defaultPrice2.item?number == 5>selected</#if> value="5">预设售价2</option>
+								<option <#if defaultPrice2??&&defaultPrice2.item?number == 6>selected</#if> value="6">预设售价3</option>
+							</select>
+						</td>
+						<td width="80px;">
+							<select name="defaultPrice2.operate"  style="margin-left: 20px;" <#if !defaultPrice2?? || defaultPrice2.item?number == 0>disabled="disabled"</#if>>
+								<option <#if defaultPrice2?? && defaultPrice2.operate?? && defaultPrice2.operate == '+'>selected</#if> value="+">加</option>
+								<option <#if defaultPrice2?? && defaultPrice2.operate?? && defaultPrice2.operate == '-'>selected</#if> value="-">减</option>
+								<option <#if defaultPrice2?? && defaultPrice2.operate?? && defaultPrice2.operate == '*'>selected</#if> value="*">乘</option>
+								<option <#if defaultPrice2?? && defaultPrice2.operate?? && defaultPrice2.operate == '/'>selected</#if> value="/">除</option>
+							</select>
+						</td>
+						<td><input name="defaultPrice2.param" class="number" maxlength="10" style="width: 80px;" value="${(defaultPrice2.param)!0}" <#if !defaultPrice2?? || defaultPrice2.item?number == 0>disabled="disabled"</#if> onblur="inputNullRepZero(this)"/></td>
+					</tr>
+					<tr height="35px;">
+						<td width="100px;" align="right">预设售价3= &nbsp;&nbsp;</td>
+						<td>
+							<select name="defaultPrice3.item" onchange="formulaItemChange(this)">
+								<option <#if defaultPrice3??&&defaultPrice3.item?number == 0>selected</#if> value="0">无公式</option>
+								<option <#if defaultPrice3??&&defaultPrice3.item?number == 1>selected</#if> value="1">最近进价</option>
+								<option <#if defaultPrice3??&&defaultPrice3.item?number == 2>selected</#if> value="2">商品成本</option>
+								<option <#if defaultPrice3??&&defaultPrice3.item?number == 3>selected</#if> value="3">零售价</option>
+								<option <#if defaultPrice3??&&defaultPrice3.item?number == 4>selected</#if> value="4">预设售价1</option>
+								<option <#if defaultPrice3??&&defaultPrice3.item?number == 5>selected</#if> value="5">预设售价2</option>
+								<option <#if defaultPrice3??&&defaultPrice3.item?number == 6>selected</#if> value="6">预设售价3</option>
+							</select>
+						</td>
+						<td width="80px;" align="right">
+							<select name="defaultPrice3.operate"  style="margin-left: 20px;" <#if !defaultPrice3?? || defaultPrice3.item?number == 0>disabled="disabled"</#if>>
+								<option <#if defaultPrice3?? && defaultPrice3.operate?? && defaultPrice3.operate == '+'>selected</#if> value="+">加</option>
+								<option <#if defaultPrice3?? && defaultPrice3.operate?? && defaultPrice3.operate == '-'>selected</#if> value="-">减</option>
+								<option <#if defaultPrice3?? && defaultPrice3.operate?? && defaultPrice3.operate == '*'>selected</#if> value="*">乘</option>
+								<option <#if defaultPrice3?? && defaultPrice3.operate?? && defaultPrice3.operate == '/'>selected</#if> value="/">除</option>
+							</select>
+						</td>
+						<td><input name="defaultPrice3.param" class="number" maxlength="10" style="width: 80px;" value="${(defaultPrice3.param)!0}" <#if !defaultPrice3?? || defaultPrice3.item?number == 0>disabled="disabled"</#if> onblur="inputNullRepZero(this)"/></td>
+					</tr>
+					<tr height="35px;">
+						<td width="100px;" align="right">零售价= &nbsp;&nbsp;</td>
+						<td>
+							<select name="retailPrice.item" onchange="formulaItemChange(this)">
+								<option <#if retailPrice??&&retailPrice.item?number == 0>selected</#if> value="0">无公式</option>
+								<option <#if retailPrice??&&retailPrice.item?number == 1>selected</#if> value="1">最近进价</option>
+								<option <#if retailPrice??&&retailPrice.item?number == 2>selected</#if> value="2">商品成本</option>
+								<option <#if retailPrice??&&retailPrice.item?number == 3>selected</#if> value="3">零售价</option>
+								<option <#if retailPrice??&&retailPrice.item?number == 4>selected</#if> value="4">预设售价1</option>
+								<option <#if retailPrice??&&retailPrice.item?number == 5>selected</#if> value="5">预设售价2</option>
+								<option <#if retailPrice??&&retailPrice.item?number == 6>selected</#if> value="6">预设售价3</option>
+							</select>
+						</td>
+						<td width="80px;">
+							<select name="retailPrice.operate"  style="margin-left: 20px;" <#if !retailPrice?? || retailPrice.item?number == 0>disabled="disabled"</#if>>
+								<option <#if retailPrice?? && retailPrice.operate?? && retailPrice.operate == '+'>selected</#if> value="+">加</option>
+								<option <#if retailPrice?? && retailPrice.operate?? && retailPrice.operate == '-'>selected</#if> value="-">减</option>
+								<option <#if retailPrice?? && retailPrice.operate?? && retailPrice.operate == '*'>selected</#if> value="*">乘</option>
+								<option <#if retailPrice?? && retailPrice.operate?? && retailPrice.operate == '/'>selected</#if> value="/">除</option>
+							</select>
+						</td>
+						<td><input name="retailPrice.param" class="number" maxlength="10" style="width: 80px;" value="${(retailPrice.param)!0}" <#if !retailPrice?? || retailPrice.item?number == 0>disabled="disabled"</#if> onblur="inputNullRepZero(this)"/></td>
+					</tr>
+					<tr height="35px;">
+						<td width="100px;" align="right">最低售价= &nbsp;&nbsp;</td>
+						<td>
+							<select name="minSellPrice.item" onchange="formulaItemChange(this)" >
+								<option <#if minSellPrice??&&minSellPrice.item?number == 0>selected</#if> value="0">无公式</option>
+								<option <#if minSellPrice??&&minSellPrice.item?number == 1>selected</#if> value="1">最近进价</option>
+								<option <#if minSellPrice??&&minSellPrice.item?number == 2>selected</#if> value="2">商品成本</option>
+								<option <#if minSellPrice??&&minSellPrice.item?number == 3>selected</#if> value="3">零售价</option>
+								<option <#if minSellPrice??&&minSellPrice.item?number == 4>selected</#if> value="4">预设售价1</option>
+								<option <#if minSellPrice??&&minSellPrice.item?number == 5>selected</#if> value="5">预设售价2</option>
+								<option <#if minSellPrice??&&minSellPrice.item?number == 6>selected</#if> value="6">预设售价3</option>
+							</select>
+						</td>
+						<td width="80px;">
+							<select name="minSellPrice.operate"  style="margin-left: 20px;" <#if !minSellPrice?? || minSellPrice.item?number == 0>disabled="disabled"</#if>>
+								<option <#if minSellPrice?? && minSellPrice.operate?? && minSellPrice.operate == '+'>selected</#if> value="+">加</option>
+								<option <#if minSellPrice?? && minSellPrice.operate?? && minSellPrice.operate == '-'>selected</#if> value="-">减</option>
+								<option <#if minSellPrice?? && minSellPrice.operate?? && minSellPrice.operate == '*'>selected</#if> value="*">乘</option>
+								<option <#if minSellPrice?? && minSellPrice.operate?? && minSellPrice.operate == '/'>selected</#if> value="/">除</option>
+							</select>
+						</td>
+						<td><input name="minSellPrice.param" class="number" maxlength="10" style="width: 80px;" value="${(minSellPrice.param)!0}" <#if !minSellPrice?? || minSellPrice.item?number == 0>disabled="disabled"</#if> onblur="inputNullRepZero(this)"/></td>
+					</tr>
+					<tr height="35px;">
+						<td width="100px;" align="right">最近进价= &nbsp;&nbsp;</td>
+						<td>
+							<select name="lastCostPrice.item" onchange="formulaItemChange(this)">
+								<option <#if lastCostPrice??&&lastCostPrice.item?number == 0>selected</#if> value="0">无公式</option>
+								<option <#if lastCostPrice??&&lastCostPrice.item?number == 1>selected</#if> value="1">最近进价</option>
+								<option <#if lastCostPrice??&&lastCostPrice.item?number == 2>selected</#if> value="2">商品成本</option>
+								<option <#if lastCostPrice??&&lastCostPrice.item?number == 3>selected</#if> value="3">零售价</option>
+								<option <#if lastCostPrice??&&lastCostPrice.item?number == 4>selected</#if> value="4">预设售价1</option>
+								<option <#if lastCostPrice??&&lastCostPrice.item?number == 5>selected</#if> value="5">预设售价2</option>
+								<option <#if lastCostPrice??&&lastCostPrice.item?number == 6>selected</#if> value="6">预设售价3</option>
+							</select>
+						</td>
+						<td width="80px;">
+							<select name="lastCostPrice.operate"  style="margin-left: 20px;" <#if !lastCostPrice?? || lastCostPrice.item?number == 0>disabled="disabled"</#if>>
+								<option <#if lastCostPrice?? && lastCostPrice.operate?? && lastCostPrice.operate == '+'>selected</#if> value="+">加</option>
+								<option <#if lastCostPrice?? && lastCostPrice.operate?? && lastCostPrice.operate == '-'>selected</#if> value="-">减</option>
+								<option <#if lastCostPrice?? && lastCostPrice.operate?? && lastCostPrice.operate == '*'>selected</#if> value="*">乘</option>
+								<option <#if lastCostPrice?? && lastCostPrice.operate?? && lastCostPrice.operate == '/'>selected</#if> value="/">除</option>
+							</select>
+						</td>
+						<td><input name="lastCostPrice.param" class="number" maxlength="10" style="width: 80px;" value="${(lastCostPrice.param)!0}" <#if !lastCostPrice?? || lastCostPrice.item?number == 0>disabled="disabled"</#if> onblur="inputNullRepZero(this)"/></td>
+					</tr>
+				</table>
+			</fieldset>
+			<div align="center" style="color: red;">注意：本操作会应用到当前列表中的所有商品，请谨慎使用！</div>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>

@@ -1,0 +1,11 @@
+<!--报表   基本信息查询框 -->
+<#--<#include "/WEB-INF/template/common/base/reports/staffReportLink.html"/>-->
+<tr style="height: 30px;">
+     <td>职员全名:</td>
+     <td>
+         <input type="hidden" name="staff.id" id="staffId"/>
+		 <input class="line" type="hidden" name="staff.name" id="staffName"/>
+		 <input class="textInput enter" type="text" size="30" name="staff.name" id="staffName"/>
+		 <a class="btnLook" id="staffLook" type="POST" <#if btnPattern??>btnPattern = "${btnPattern}"</#if> href="${base}/base/staff/dialogChild/0" warn="员工" lookupgroup="staff" lookuppk="id" width="600" height="410">职员</a>
+     </td>
+  </tr>

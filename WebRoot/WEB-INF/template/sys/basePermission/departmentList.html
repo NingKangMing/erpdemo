@@ -1,0 +1,84 @@
+
+<form id="pagerForm" onsubmit="return divSearch(this, 'departmentPermissionList');" action="${base}/sys/basePermission/department" method="post">
+	<input type="hidden" name="pageNum" value="${(departmentPageMap.get('pageNum'))}" />
+	<input type="hidden" name="numPerPage" value="${(departmentPageMap.get('numPerPage'))!}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <input type="hidden" name="userId" value="${userId!}">
+    <input type="hidden" name="pSupId" value="${supId!-1}">
+</form>
+<table class="table" rel="departmentPermissionList" layoutH="200">
+	<thead>
+		<tr>
+			<th width="50px">
+				行号
+			</th>
+			<th width="150px" align="center" orderField="code" <#if orderField?? && 'code'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+				单位编号
+			</th>
+			<th width="150px" align="center" orderField="fullName" <#if orderField?? && 'fullName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+				单位全称
+			</th>
+			<th width="150px" align="center" orderField="status" <#if orderField?? && 'status'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+				状态
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<#list departmentPageMap.pageList as department>
+		  <#if department.node==2>
+		  <tr objectId="${objectId!0}" target="departmentId" rel="${department.id}"  crel="departmentPermissionList" cTarget="ajax" url="${base}/sys/basePermission/department/${department.id}-{userId}">
+		  <#else>
+		   <tr objectId="${objectId!0}" target="departmentId" rel="${department.id}">
+		  </#if>
+			<td><a>${department_index+1+departmentPageMap.limit}</a>
+				<#if department.node==2>..</#if>
+			</td>
+			<td>
+				${department.code!''}
+			</td>
+			<td>
+				${department.fullName!''}
+			</td>
+	
+			<td onclick="tdRelevanceTr(this,'departmentChoose');">
+				<#if department.privs==3>
+				       ★
+				<#elseif department.privs==2>
+				       ☆
+				</#if>
+			</td>
+		</tr>
+		</#list>
+	</tbody>
+</table>
+<div class="panelBar">
+		 <div class="pages">
+			<span>显示</span>  
+			<select class="combox" name="numPerPage" onchange="navTabPageBreak({pageNum:${(departmentPageMap.pageNum)!1},numPerPage:this.value},'${(departmentPageMap.listID)!''}')">
+				<option <#if departmentPageMap.numPerPage?number == 15>selected</#if> value="15">15</option>
+				<option <#if departmentPageMap.numPerPage?number == 20>selected</#if> value="20">20</option>
+				<option <#if departmentPageMap.numPerPage?number == 50>selected</#if> value="50">50</option>
+				<option <#if departmentPageMap.numPerPage?number == 100>selected</#if> value="100">100</option>
+			</select>
+			<span>条，共${(departmentPageMap.totalCount)!0}条</span>
+		</div>
+		<div class="pagination" rel="${(departmentPageMap.listID)!''}" target="ajaxTodo"  totalCount="${(departmentPageMap.totalCount)!0}" numPerPage="${(departmentPageMap.numPerPage)!15}" pageNumShown="5" currentPage="${(departmentPageMap.pageNum)!1}"></div>
+</div>
+
+<!--divider虚线-->
+	<div class="divider"></div>
+	<div>
+			<a class="button" id="departmentChoose" href="${base}/sys/basePermission/choose/{userId}-{baseType}-{departmentId}" target="ajaxTodo"  callback="reloadNavTabDiv"><span>选中</span></a>
+			<a class="button" href="${base}/sys/basePermission/allChoose/{userId}-{baseType}-{departmentId}" target="ajaxTodo"  callback="reloadNavTabDiv"><span>全选</span></a>
+			<a class="button" href="${base}/sys/basePermission/empty/{userId}-{baseType}-{departmentId}" target="ajaxTodo"  callback="reloadNavTabDiv"><span>清空</span></a>
+			<#if supId?? && supId!=-1>
+			<a class="button" href="${base}/sys/basePermission/department?pSupId=${pSupId!0}&objectId=${supId!0}" relevancyIds="userId" target="ajax"  rel="departmentPermissionList"><span>上级</span></a>
+	        <#else>
+	        <a class="buttonDisabled" href="javascript:void(0);"><span>上级</span></a>
+	        </#if>
+	        
+	</div>
+	<div style="float: right;">
+			<a class="button" href="javascript:void(0);" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a>
+	</div>

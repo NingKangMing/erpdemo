@@ -1,0 +1,49 @@
+
+<div class="pageContent">
+   <form id="pageForm" action="${base}/sys/sysConfig/save" class="tableForm" enctype="text/plain" method="post" onsubmit="return validateCallback(this, dialogAjaxDone1)">
+	   <h2 class="contentTitle">系统配置</h2>
+		
+	   <!-- 多个tab -->
+	   <div layoutH="80">
+          <div class="tabs" >
+             <div class="tabsHeader" >
+		         <div class="tabsHeaderContent">
+		            <ul>
+		               <#if isFreeVersion != "yes">
+		               <li class="selected"><a href="#"><span>用户信息</span></a></li>
+		               </#if>
+		               <li><a href="#"><span>配置信息</span></a></li>
+		               <li><a href="#"><span>系统设置</span></a></li>
+		            </ul>
+		         </div>
+		     </div>
+		     <div class="tabsContent">
+		           <#if isFreeVersion != "yes">
+                   <div class="pageFormContent" layoutH="145">
+                   	   <#include "user.html"/> 
+                   </div>
+                   </#if>
+                   <div class="pageFormContent" layoutH="145">
+                       <#include "config.html"/> 
+                   </div>
+                   <div class="pageFormContent" layoutH="145">
+                       <#include "sysSet.html"/> 
+                   </div>
+             </div>
+             <div class="tabsFooter">
+			    <div class="tabsFooterContent"></div>
+		     </div>
+          </div>
+	   </div>
+	   <!-- end多个tab -->
+   
+   	   <!--divider虚线-->
+	   <div class="divider"></div>
+	   <div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+		</ul>
+	  </div>
+   </form>
+</div>

@@ -1,0 +1,18 @@
+<#-- 引用方式:<#import "/WEB-INF/template/common/base/payOrGet/getOrPayTemplate.html" as footer> -->
+<#macro pageFooter field  accountName accountMoney payAccount="payTypeAccounts" isFinance="" title="多支付方式"> 
+<#-- field:需要提交的表单字段 -->
+  <span style="margin-left: 20px">
+	  ${accountName}
+	  <#if isFinance!=""> <input type="hidden" name="account.id" id="accountId" value="${payTypeId!0}"/> </#if>
+	  <input class="line" type="text" id="payTypeAccounts" 
+	  name="${payAccount}" value="${payTypeAccounts!}"  readonly="readonly"/>
+	  ${accountMoney}
+	  <input class="line number" type="text" value="${(bill.payMoney)!payOrgetMoneys!(bill.getMoney)!}" id="payTypeMoneys"  name="${field}" readonly="readonly" 
+	  ondblclick="aioOpenDialog(this,'payTypeIdStrs','payTypeMoneyStrs','payType')" rel="sys_payMoneyType" 
+	  href="${base}/payType/payType/option/" title="${title}" dwidth="400" dheight="300"/>
+	  <input type="hidden" id="payTypeIdStrs" name="payTypeIds" value="${payTypeIdStrs!}">
+      <input type="hidden" id="payTypeMoneyStrs" name="payTypeMoneys" value="${payTypeMoneyStrs!}">  
+	  <a class="btnLook" onclick="$('#payTypeMoneys').dblclick();"></a>   
+ </span>
+</#macro>
+

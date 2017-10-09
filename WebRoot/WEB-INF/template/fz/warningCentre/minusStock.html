@@ -1,0 +1,55 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/fz/warningCentre/minusStock" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" />
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" />
+    
+    <input type="hidden" id="storage.id" name="storage.id" value="${storageId!}"/>
+</form>
+<table class="table" rel="warningList" layoutH="170">
+	<thead>
+		<tr>
+			<th width="80" align="center" >行号</th>
+			<th width="160" orderField="product.code" <#if orderField?? && 'product.code'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>商品编号</th>
+			<th width="130" orderField="product.fullName" <#if orderField?? && 'product.fullName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>商品全名</th>
+			<th width="100" orderField="product.barCode1" <#if orderField?? && 'product.barCode1'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>基本条码</th>
+			<th width="100" orderField="amount" <#if orderField?? && 'amount'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>数量</th>
+		</tr>
+	</thead>
+	<tbody id="reports_prdsellcount_body">
+		<#if pageMap??&&pageMap.pageList??>
+		<#list pageMap.pageList as obj>
+		<tr>
+			<td><a>${obj_index+1+pageMap.limit}</a></td>
+			<td>${obj.product.code!''}</td>
+			<td>${obj.product.fullName!''}</td>
+			<td>${obj.product.barCode1!''}</td>
+			<td>${obj.amount!''}</td>
+		</tr>
+		</#list>
+		</#if>
+	</tbody>
+	<tfoot>
+	       <tr isSelect="false" style="border-top: #D0D0D0 solid 1px">
+		       <td align="center">合计</td>
+		       <td align="center"></td>
+		       <td align="center"></td>
+		       <td align="center"></td>
+		       <td align="center" hascount="true"></td>
+	       </tr>
+    </tfoot>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+
+	
+<div class="divider"></div>
+<div>
+    <a class="button" href="${base}/base/storage/dialogList" module="navTab" isReload=true reloadId="warningList" showNameId="storgeName" warn="仓库" lookupgroup="storage"  lookuppk="id" width="600" height="410"><span>选择仓库</span></a>
+</div>
+<div style="float: right;">
+     <#assign privs = '8-807-p'/>
+	<#assign href = '${base}/fz/warningCentre/minusStockPrint'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

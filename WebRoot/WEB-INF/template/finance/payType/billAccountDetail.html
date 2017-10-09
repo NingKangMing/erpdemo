@@ -1,0 +1,17 @@
+<div class="pageContent">
+	<table class="table" layoutH="40"  targetType="dialog">
+	    <#if list??>
+	    <#list list as obj>
+		<tr>
+		   <td style="width: 100px;">${(obj.accountFullName)!}</td>
+		   <td style="width: 100px;">${(obj.money)!}</td>
+		</tr>
+		</#list>
+		</#if>
+	</table>
+</div>
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+	<div style="float: right;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+</div>

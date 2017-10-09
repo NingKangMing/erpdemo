@@ -1,0 +1,158 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/bought/purchase/detailSearch" onsubmit="return dwzSearch(this, 'purchaseDetailAccountList');">
+	
+	<input type="hidden" name="pageNum" value="${pageMap.pageNum!}" />
+	<input type="hidden" name="numPerPage" value="${pageMap.numPerPage!}" />
+	<input type="hidden" name="orderField" value="${(params.orderField)!'recodeDate'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${(params.orderDirection)!'asc'}" /><!--升序降序-->
+	
+    <input type="hidden" id="orderTypes" name="orderTypes" value="${orderTypes!}"/>   <!--进货单,进货退货单,进货换货单,借转进货单,委托结算单-->
+    
+	<input type="hidden" id="startDate" name="startDate" value="${(params.startDate)!}"/>        <!--开始日期  -->
+	<input type="hidden" id="endDate" name="endDate" value="${(params.endDate)!}"/>            <!-- 结束日期 -->
+	<input type="hidden" id="notStatus" name="notStatus" value="${(params.notStatus)!}"/>         <!-- 过滤条件    下拉框改变赋值 -->
+	<input type="hidden" id="productId" name="productId" value="${(params.productId)!}"/>                               <!-- 商品ID -->
+	<input type="hidden" id="staffId" name="staffId" value="${(params.staffId)!}"/>   
+	<input type="hidden" id="storageId" name="storageId" value="${(params.storageId)!}"/> 
+   
+	<input type="hidden" id="unitId" name="unitId" value="${(params.unitId)!}"/>
+</form>
+<#assign showWidth = 100/>
+<#list rowList as row>
+    <#if row.width??>
+     <#assign showWidth = showWidth+row.width/>
+    </#if>
+</#list>
+<table class="table" rel="purchaseDetailAccountList" layoutH="230" width="${showWidth!}px">
+	<thead>
+		<tr>
+			<th width="50px" align="center" >行号</th>
+
+			<#list rowList as row>
+				   <th  width="${(row.width)!100}px" <#if row.isOrder?? && row.isOrder==2> orderField="${row.code}"  <#if params.orderField?? && row.code==params.orderField>class="${(params.orderDirection)!'asc'}"<#else>class="asc"</#if> </#if>>
+					 ${(row.showName)!(row.name)!}
+				   </th>
+			</#list>
+		</tr>
+	</thead>
+	<tbody>
+		<#list pageMap.pageList as bill>
+		<tr target="id" rel="${bill.billId!0}-${bill.type!0}"  url="${base}/reports/bought/purchase/look/${bill.billId!0}-${bill.type!0}" cTarget="openNavTab" 
+		   <#if bill.type?? && bill.type==5>cRel="purchaseLookView" title="进货单"<#elseif bill.type?? && bill.type==6>cRel="purchaseReturnLookView" title="进货退货单"<#elseif bill.type?? && bill.type==12> cRel="purchaseBarterLookView" title="进货换货单"</#if>
+		   <#if bill.isRCW?? && bill.isRCW!=0> style="color: red"</#if>
+		  >
+			<td><a>${bill_index+1+pageMap.limit}</a></td>
+			<#list rowList as row>
+			<#if row.code?? && 'type'==row.code>
+			<td>
+			   <#if bill.type?? && bill.type==5>
+			             进货单
+               <#elseif bill.type?? && bill.type==6>
+                                           进货退货单
+               <#elseif bill.type?? && bill.type==12>
+                                           进货换货单
+               <#else>
+                                           其它单据
+			   </#if>
+            </td>
+            <#elseif row.code?? && 'recodeDate'==row.code>
+            <td><#if bill.recodeDate??>${(bill.recodeDate)?string("yyyy-MM-dd")}</#if></td>
+            <#elseif row.code?? && 'detail.code'==row.code>
+            <td>${bill.code!}</td>
+            <#elseif row.code?? && 'remark'==row.code>
+            <td>${bill.remark!}</td>
+            <#elseif row.code?? && 'product.code'==row.code>
+            <td>${bill.product.code!}</td>
+            <#elseif row.code?? && 'product.fullName'==row.code>
+            <td>${bill.product.fullName!}</td>
+            <#elseif row.code?? && 'product.smallName'==row.code>
+            <td>${bill.product.smallName!''}</td>
+            <#elseif row.code?? && 'product.spell'==row.code>
+            <td>${bill.product.spell!''}</td>
+            <#elseif row.code?? && 'product.standard'==row.code>
+            <td>${bill.product.standard!''}</td>
+            <#elseif row.code?? && 'product.model'==row.code>
+            <td>${bill.product.model!''}</td>
+            <#elseif row.code?? && 'product.field'==row.code>
+            <td>${bill.product.field!''}</td>
+            <#elseif row.code?? && 'product.savePath'==row.code>
+            <td>
+			   <#if (bill.product.savePath)??>
+			    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(bill.product.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(bill.product.savePath)!}"  width="20px" height="20px"/>
+               </#if>
+			</td>
+			<#elseif row.code?? && 'storageCode'==row.code>
+            <td>${(bill.storageCode)!}</td>
+            <#elseif row.code?? && 'storageName'==row.code>
+            <td>${(bill.storageName)!}</td>
+            <#elseif row.code?? && 'unitCode'==row.code>
+            <td>${(bill.unitCode)!}</td>
+            <#elseif row.code?? && 'unitName'==row.code>
+            <td>${(bill.unitName)!}</td>
+            <#elseif row.code?? && 'pAmount'==row.code>
+            <td>${(bill.pAmount)!}</td>
+            <#elseif row.code?? && 'rAmount'==row.code>
+			<td>${(bill.rAmount)!}</td>
+			<#elseif row.code?? && 'basePrice'==row.code>
+			<td>
+			    <@shiro.hasPermission name='1101-s'>
+			      ${(bill.basePrice)!}
+			   </@shiro.hasPermission>
+			   <@shiro.lacksPermission name='1101-s'>
+			        ***
+			   </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'money'==row.code>
+			<td>
+			    <@shiro.hasPermission name='1101-s'>
+			      ${(bill.money)!}
+			   </@shiro.hasPermission>
+			   <@shiro.lacksPermission name='1101-s'>
+			        ***
+			   </@shiro.lacksPermission>
+			    
+			</td>
+			</#if>
+			</#list>
+		</tr>
+		</#list>
+	</tbody>
+    <tfoot>
+	   <tr isSelect="false" style="border-top: #D0D0D0 solid 1px">
+	   <td>合计</td>
+	   <#list rowList as row>
+	   <#if row.code?? && 'pAmount'==row.code>
+	   <td>${pAmounts!}</td>
+	   <#elseif row.code?? && 'rAmount'==row.code>
+	   <td>${rAmounts!}</td>
+	   <#elseif row.code?? && 'money'==row.code>
+	   <td>
+	      <@shiro.hasPermission name='1101-s'>
+			 ${moneys!}
+		  </@shiro.hasPermission>
+		 <@shiro.lacksPermission name='1101-s'>
+			 ***
+		 </@shiro.lacksPermission>
+	  
+	   </td>
+	   <#else>
+	   <td></td>
+	   </#if>
+
+	  </#list>
+	  </tr> 
+	</tfoot>
+</table>
+
+
+<#include "/WEB-INF/template/unitl/paging.html"/>	
+<div class="divider"></div>
+<div>
+    <a class="button" href="${base}/reports/bought/purchase/look/{id}" target="navTab" dynamic="true" title="进货单" rel="purchaseLookView"><span>查看单据</span></a>
+</div>
+<div style="float: right;">
+     <#assign privs = '3-41-305-p'/>
+	<#assign href = '${base}/reports/bought/purchase/printDetail'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

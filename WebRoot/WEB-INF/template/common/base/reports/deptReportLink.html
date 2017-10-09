@@ -1,0 +1,11 @@
+<!--报表   基本信息查询框 -->
+<#--<#include "/WEB-INF/template/common/base/reports/deptReportLink.html"/>-->
+
+<tr style="height:50px;">
+   <td style="text-align: right;">部门全名：</td>
+   <td>  
+       <input type="hidden" name="depm.id" value="${(model.departmentId)!}"/>
+   	   <input type="text"  name="depm.fullName" value="${(model.dept.fullName)!}" readonly="readonly" ondblclick="$('#depmLook').click();"/>
+   	   <a class="btnLook" id="depmLook" type="POST" href="${base}/base/department/option/${(record.deptId)!}" warn="部门" lookupgroup="depm" lookuppk="id" width="500" height="450">部门</a>
+   </td>
+</tr>

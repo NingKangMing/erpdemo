@@ -1,0 +1,179 @@
+
+<div class="pageContent">
+   <input id="whichCallBack" type="hidden" value="accountVoucher"/><!-- 用于区分不同模块库存商品带回进不同函数     ID是写死，value用于区分 -->
+   <input id="basePathId" type="hidden" value="${base}"/><!-- 用于手工指定法    弹出窗体url -->
+   <form id="accountVoucherBillForm" class="tableForm pageForm" enctype="text/plain" method="post" action="${base}/finance/accountVoucher/add" onsubmit="return validateCallback(this, navTabAjaxDoneDialog)">
+    <input type="hidden" name="accountVoucherBill.id" value="${(bill.id)!}"/>
+	<input type="hidden" name="draftId" value="${draftId!0}"/>
+	<input type="hidden" name="accountVoucherBill.codeIncrease" value="${bill.codeIncrease!}"/>
+	<input type="hidden" id="billCode"  name="billCode" value="${bill.code!''}"/> 
+	<input type="hidden" id="autoPost" name="autoPost" value="${autoPost!}"/><!-- 批量过账时自动提交 -->
+	
+	<div id="hasFujianClassId"  <#if orderFuJianIds?length gt 0>class="textContent center fujianClass"<#else>class="textContent center"</#if>>
+	      <div>
+	         <span style="font-size: 18px;">会计凭证</span>
+			 <span style="float: right;">
+		                 录单日期
+		     <input type="text"  name="accountVoucherBill.recodeDate" dateFmt="yyyy-MM-dd HH:mm:ss" value="<#if bill.recodeDate??>${(bill.recodeDate)?string("yyyy-MM-dd HH:mm:ss")}</#if>" hasClear="no" readonly="readonly"/>
+		                单据编号
+		     <input id="showBillCode" class="line required textInput" type="text" style="width: 200px" name="accountVoucherBill.code"  value="${(bill.code)!}" <#if codeAllowEdit?? && codeAllowEdit=="1">readonly="readonly"</#if>/>
+		     </span>
+	     </div>
+	     <div>
+	                           经手人 
+	         <input type="hidden" name="staff.id" value="${(bill.getBillStaff(session.loginConfigId).id)!}"/>
+	        <input type="hidden" name="staff.name" value="${(bill.getBillStaff(session.loginConfigId).name)!}"/>
+	        <#if notEditStaff?? && notEditStaff==true>
+	        	<input class="line" readonly="readonly" type="text" name="staff.name" value="${(bill.getBillStaff(session.loginConfigId).name)!}"/>
+	        <#else>
+		        <input class="line enter" type="text" name="staff.name" id="staffName" value="${(bill.getBillStaff(session.loginConfigId).name)!}"/>
+		        <a class="btnLook" id="staffLook" type="POST" btnPattern="optionAdd" rel="staffLookDialog" href="${base}/base/staff/dialogChild/${(bill.getBillStaff(session.loginConfigId).supId)!0}-${(bill.getBillStaff(session.loginConfigId).id)!0}" module="navTab" warn="员工" lookupgroup="staff" lookuppk="id" width="600" height="410">职员</a>
+	        </#if>
+	                    附加说明
+	        <input class="line" type="text" style="width: 250px;" name="accountVoucherBill.memo" value="${(bill.memo)!}" id="memo" maxlength="500"/>
+	     </div>
+	     <#include "/WEB-INF/template/common/columnConfig/billRowConfigLink.html"/> 
+	     <div style="float: right;">
+		        <img style="margin-left: 7px;" onclick="openOrderFujianDialog('${base}','${tableId}','1','${(bill.id)!}');" title="单据附件" src="${base}/img/bill/fujian.jpg" alt="单据附件">
+		        <input type="hidden" id="orderFuJianIds" name="orderFuJianIds" value="${orderFuJianIds!}"/> 
+         </div>
+	     <div>
+	                          摘要
+	        <input class="line" type="text" style="width:440px;" name="accountVoucherBill.remark" value="${(bill.remark)!}" maxlength="500"/>
+	                     
+	     </div>
+	</div>
+	<div class="divider"></div>
+	<div class="pageContent">
+	   <#assign showWidth = 0/>
+	   <#list rowList as row>
+	     <#if row.width??>
+	      <#assign showWidth = showWidth+row.width/>
+	     </#if>
+	   </#list>
+	   <table class="table" model="order"  layoutH="190" width="${showWidth!}px">
+	   
+	        <thead>
+			 <tr>
+				<th width="50px" >
+					行号
+				</th>
+				<#list rowList as row>
+				   <th width="${(row.width)!100}px"> 
+					 ${(row.showName)!(row.name)!}
+				   </th>
+				</#list>
+				<th width="45px">
+				   <a title="添加一行" class="btnAdd" target="addTr" href="javascript:void(0);" rel="accountVoucherBillbody"></a>
+				</th>
+			</tr>
+		  </thead>
+		  <tbody id="accountVoucherBillbody" preDataName="accountVoucherDetail">
+		     <#list detailList as detail>
+		     <tr>
+		       <td>${detail_index+1}</td>
+		       <!--  -->
+		     <#list rowList as row>
+		       <#if row.code?? && 'accountsCode'==row.code>
+		       <!-- 科目编号-->
+		       <td cname="accountsCode" validateAttr="" maxlength="50" onBlur="objDelOrClear(this,'accountsCode');"  cTarget="dialog"  title="会计科目选择" warn="会计科目选择"   enterSearch="true" searchUrl="${base}/base/accounts/accountsOneRecord/" editUrl="${base}/base/accounts/accountsDialogEdit/" url="${base}/base/accounts/accountsDialog/" rel="cw_account_dialog" dwidth="570" dheight="450">
+		           ${(detail.accounts.code)!}
+		       </td> 
+		       <#elseif row.code?? && 'accountsFullName'==row.code>
+		       <!-- 科目名称 -->
+		       <td cname="accountsFullName" validateAttr=""  maxlength="50" onBlur="objDelOrClear(this,'accountsFullName');"  cTarget="dialog"  title="会计科目选择" warn="会计科目选择" enterSearch="true" searchUrl="${base}/base/accounts/accountsOneRecord/" editUrl="${base}/base/accounts/accountsDialogEdit/" url="${base}/base/accounts/accountsDialog/" rel="cw_account_dialog" dwidth="570" dheight="450">
+		           ${(detail.accounts.fullName)!}
+		       </td>
+		       <#elseif row.code?? && 'accountsSmallName'==row.code>
+		       <!-- 科目简称 -->
+		       <td cname="accountsSmallName" readonly="readonly">${(detail.accounts.smallName)!}</td>
+		       <#elseif row.code?? && 'accountsSpell'==row.code>
+		       <!-- 科目拼音码 -->
+		       <td cname="accountsSpell"  readonly="readonly">${(detail.accounts.spell)!}</td>
+		       <#elseif row.code?? && 'accountsMemo'==row.code>
+		       <!-- 科目备注 -->
+		       <td cname="accountsMemo" readonly="readonly"  maxlength="50">${(detail.accounts.memo)!}</td>
+		       <#elseif row.code?? && 'accountsDetailName'==row.code>
+		        <!-- 明细科目 -->
+		       <td cname="accountsDetail" requiredData="need" readonly="readonly" maxlength="50" type="text" validateAttr=""  onBlur="objDelOrClear(this,'accountsDetail')" cTarget="dialog" <#if detail.accounts?? && detail.accounts.type?? && detail.accounts.type!='00013' && detail.accounts.type!='000413'> hasDialog="dialogNotNull" </#if>  title="单位" warn="单位"   url="${base}/base/unit/option?whichCallBack=accountVoucher" rel="unitDialog" dwidth="600" dheight="410">${(detail.accountsDetail)!}</td>
+		       <#elseif row.code?? && 'debitMoney'==row.code>
+		       <!-- 借方金额 -->
+		       <td cname="debitMoney" validateAttr="number" requiredData="need"  maxlength="50" onBlur="inputDebitMoney(this)">${(detail.debitMoney)!}</td>
+		       <#elseif row.code?? && 'lendMoney'==row.code>
+		       <!-- 贷方金额 -->
+		       <td cname="lendMoney" validateAttr="number" requiredData="need"  maxlength="50" onBlur="inputLendMoney(this)">${(detail.lendMoney)!}</td>
+		       <#elseif row.code?? && 'memo'==row.code>
+		       <!-- 摘要 -->
+		       <td cname="memo" validateAttr=""  requiredData="need" maxlength="50">${(detail.memo)!}</td>
+		       <#elseif row.code?? && 'message'==row.code>
+		       <!-- 附加信息 -->
+		       <td cname="message" validateAttr="" requiredData="need" maxlength="200">${(detail.message)!}</td>
+		       <#else>
+		         <td></td>
+		       </#if>
+		      </#list>
+		       <td>
+		           <a title="删除本行" class="btnDel" href="javascript:void(0);" onclick="removeTr(this);"></a>
+		           <#if detail.id??>
+		            <input class="stealth" type="hidden" value="${(detail.id)!}" cname="accountVoucherDetail[${detail_index}].id">
+		            <input class="stealth" type="hidden" value="${(detail.accounts.code)!}" maxlength="50" cname="accountsCode">
+					<input class="stealth" type="hidden" value="${(detail.accounts.fullName)!}" maxlength="50" cname="accountsFullName">
+					<input class="stealth" type="hidden" name="accountVoucherDetail[${detail_index}].accountsDetail" value="${(detail.accountsDetail)!}" maxlength="50"  cname="accountsDetail">
+					<input class="stealth" type="hidden" value="${(detail.detailId)!}" maxlength="50" cname="detailId" name="accountVoucherDetail[${detail_index}].detailId">
+					<input class="stealth" type="hidden" value="${(detail.accounts.smallName)!}" readonly="readonly" cname="accountsSmallName">
+					<input class="stealth" type="hidden" value="${(detail.accounts.spell)!}" readonly="readonly" cname="accountsSpell">
+					<input class="stealth" type="hidden" value="${(detail.accounts.memo)!}" maxlength="50" readonly="readonly" cname="accountsMemo">
+					<input class="stealth number" type="hidden" value="${(detail.debitMoney)!}" maxlength="50" name="accountVoucherDetail[${detail_index}].debitMoney" cname="debitMoney">
+					<input class="stealth number" type="hidden" value="${(detail.lendMoney)!}" maxlength="50" name="accountVoucherDetail[${detail_index}].lendMoney" cname="lendMoney">
+					<input class="stealth" type="hidden" value="${(detail.memo)!}" maxlength="50" name="accountVoucherDetail[${detail_index}].memo" cname="memo">
+					<input class="stealth" type="hidden" value="${(detail.message)!}" maxlength="200" name="accountVoucherDetail[${detail_index}].message" cname="message">
+					<input type="hidden" cname="accountsSupId" value="${(detail.accounts.supId)!}">
+					<input type="hidden" name="accountVoucherDetail[${detail_index}].accountsId" cname="accountsId" value="${(detail.accounts.id)!}">
+					<input type="hidden" cname="oldAccountsCode" value="${(detail.accounts.code)!}">
+					<input type="hidden" cname="oldAccountsFullName" value="${(detail.accounts.fullName)!}">
+					<input type="hidden" value="${detail_index}" name="helpUitl[${detail_index}].trIndex" cname="trIndex">
+					</#if>
+		       </td>
+		     </tr>
+		     </#list>
+		  </tbody>
+		  <tfoot>
+		       <tr style="border-top: #D0D0D0 solid 1px">
+		       <td>合计</td>
+		       <#list rowList as row>
+		            <#if row.code?? && 'debitMoney'==row.code>
+		             <!-- 借方金额 -->
+		             <td><input  class="stealth" name="accountVoucherBill.debitMoneys" id="debitMoneys" value="${(bill.debitMoneys)!}" readonly="readonly"/></td>
+		             <#elseif row.code?? && 'lendMoney'==row.code>
+		              <!-- 贷方金额 -->
+		             <td><input  class="stealth" name="accountVoucherBill.lendMoneys" id="lendMoneys" value="${(bill.lendMoneys)!}" readonly="readonly"/></td>
+		            <#else>
+		            <td></td>
+		            </#if>
+		       </#list>
+		       <td></td>
+		       </tr>
+		  </tfoot>
+	   </table>
+	   <div class="divider"></div> 
+
+		<div>
+	     <div style="float: right;">
+	      
+	   		<@shiro.hasPermission name='616-t'>
+	        <a class="button" href="${base}/finance/accountVoucher/add" target="submit"><span>保存</span></a>
+	        </@shiro.hasPermission>
+	        <@shiro.hasPermission name='6-616-e'>
+	        <a class="button" href="${base}/finance/accountVoucher/draft/edit" target="submit"><span>保存草稿</span></a>
+	        </@shiro.hasPermission>
+	        
+	        <#assign privs = '616-p'/>
+	<#assign href = '${base}/finance/accountVoucher/print'/>
+	<#assign formId = 'accountVoucherBillForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+			<a class="button" href="javascript:void(0);" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+	     </div>
+	    </div>
+	</div>
+  </form>
+</div>

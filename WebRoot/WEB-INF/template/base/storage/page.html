@@ -1,0 +1,14 @@
+<div class="panel">
+	<div style="height: 25px;">
+		<label><span style="font:bold 18px '宋体',Arial,Times; margin-left: 20px">仓库信息</span></label>
+		<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+	</div>
+	<div layoutH="20">
+		<div style="float:left; display:block; overflow:auto; width:210px; border:solid 1px #CCC; line-height:21px; background:#fff" layoutH="42">
+			<ul id="storageTree" target="ztree" selectNodeId="${supId!0}" class="ztree" url="${base}/base/storage/tree" rel="storageList" ctarget="ajax"></ul>
+		</div>
+		<div id="storageList" style="margin-left: 220px;padding:2px; padding-top: 0px;" layoutH="40">
+			<#include "list.html" />
+		</div>
+	</div>
+</div>

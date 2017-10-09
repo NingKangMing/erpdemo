@@ -1,0 +1,27 @@
+<div class="pageContent">
+	<h2 class="contentTitle">配置OM信息</h2>
+	<form action="${base}/aioerpom/set/edit" class="pageForm required-validate" enctype="text/plain" method="post" onsubmit="return validateCallback(this, dialogAjaxDone)">
+		<div class="pageFormContent" layoutH="100">
+		   <table>
+		      <tr style="height: 40px;">
+		         <td style="text-align: right;">OM域名:</td>
+		         <td><input type="text" name="omDomainName" value="${omDomainName!''}" size="30"/></td>
+		      </tr>
+		      <tr style="height: 40px;">
+		         <td style="text-align: right;">OM管理员密码:</td>
+		         <td><input type="password" name="omDomainNamePwd" size="30"/></td>
+		      </tr>
+		      <tr>
+		         <td colspan="2" style="color: red; text-align: center;"><div>备注【OM管理员密码在http://OM域名/user/toSet中使用】</div></td>
+		      </tr>
+		   </table>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submint">确认</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>
+

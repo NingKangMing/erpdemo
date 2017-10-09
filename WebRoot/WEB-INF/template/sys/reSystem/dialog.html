@@ -1,0 +1,38 @@
+<div class="pageContent">
+	<h2 class="contentTitle">系统重建</h2>
+	<form action="${base}/sys/reSystem/rebuild" class="pageForm required-validate" enctype="text/plain" method="post" onsubmit="return validateCallback(this, dialogAjaxDone1)">
+		<div class="pageFormContent" layoutH="100">
+            <div>
+		      <fieldset style="margin-top: 10px;">
+			    <legend>重建提示</legend>
+			    <div>系统重建是非常重要的操作，请用户根据需要选择重建项目:</div>
+			    <div style="text-indent : 20px; line-height: 30px;">1.所有明细账和单据将不再存在！多年账用户也会删除所有单据！</div>
+			    <div style="text-indent : 20px; line-height: 30px;">2.重建后不能查询重建以前的明细账本和往来账！</div>
+			    <div style="text-indent : 20px; line-height: 30px;">3.在做系统重建前，请先做数据备份！</div>
+			    <div style="text-indent : 20px; line-height: 30px;">4.在重建期请不要使用机器和账套，不要按动键盘</div>
+		      </fieldset>
+	       </div>
+	       <div>
+              <fieldset style="margin-top: 20px;">
+			    <legend>重建选项</legend>
+			    <div style="margin-left: 30px;">
+			        <p><label for="checkBase"><input type="checkbox" id="checkBase"  name="removeBase" value="1"/>清除基本信息</label></p>
+			        <p><label for="checkInit"><input type="checkbox" id="checkInit"  name="removeInit" value="1"/>清除期初值</label></p>
+			        <#if isFreeVersion != "yes">
+			        <p><label for="checkDraft"><input type="checkbox" id="checkDraft" name="removeDraft" value="1"/>清除草稿库</label></p>
+			        <p><label for="checkOrder"><input type="checkbox" id="checkOrder" name="removeOrder" value="1"/>清除所有订单</label></p>
+			        </#if>
+			    </div>
+		      </fieldset>
+		  </div>
+	      
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确认</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>
+

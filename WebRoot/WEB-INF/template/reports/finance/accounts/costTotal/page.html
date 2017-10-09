@@ -1,0 +1,42 @@
+<div class="panel pageContent">
+	<div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">
+					 <#if action?? && action == 'operation'>
+					      利润表
+					  <#assign privs = '6-107-641-p'/>
+					 <#elseif action?? && action == 'cashBank'>
+					       现金银行
+					   <#assign privs = '6-107-635-p'/>
+					 <#elseif action?? && action == 'otherIncome'>
+					        其它收入
+					   <#assign privs = '6-107-636-p'/>
+					 <#elseif action?? && action == 'fixedAssets'>
+					        固定资产
+					   <#assign privs = '6-107-638-p'/>
+					 <#elseif action?? && action == 'assetsDebtTree'> 
+					        资产负债表（树形表）
+					    <#assign privs = '6-107-643-p'/>
+					  <#elseif action?? && action == 'costTotal'> 
+					        费用合计统计
+					   <#assign privs = '6-107-638-p'/>
+					 <#else>  
+					      其它  
+					      <#assign privs = ''/>
+					 </#if>
+					</span></label>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div layoutH="40">
+		<div id="costTotalList" style="padding:2px; padding-top: 0px;" layoutH="50">
+			<#include "list.html"/>
+		</div>
+	</div>
+</div>
+
+
+

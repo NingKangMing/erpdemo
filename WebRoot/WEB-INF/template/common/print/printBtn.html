@@ -1,0 +1,10 @@
+<#--<#include "/WEB-INF/template/common/print/printBtn.html"/>-->
+<#if privs??>
+	<@shiro.hasPermission name='${privs!}'>
+	<a class="button" target="print" href="${href!}" serialize="true" rel="${formId!}"><span>打印</span></a>
+	</@shiro.hasPermission>
+<#else>
+    <a class="button" target="print" href="${href!}" serialize="true" rel="${formId!}"><span>打印</span></a>
+</#if>
+
+

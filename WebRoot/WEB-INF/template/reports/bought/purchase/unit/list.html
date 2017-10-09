@@ -1,0 +1,201 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/bought/purchase/unit/search/second" onsubmit="return dwzSearch(this, 'purchaseUnitStatisticsList');">
+	
+	<input type="hidden" name="pageNum" value="${pageMap.pageNum!}" />
+	<input type="hidden" name="numPerPage" value="${pageMap.numPerPage!}" />
+	<input type="hidden" name="orderField" value="${(params.orderField)!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${(params.orderDirection)!'asc'}" /><!--升序降序-->
+    <!-- ID用于树点击参数 -->
+	<input type="hidden" id="product.id" name="product.id" value="${(params.productId)!}"/>               <!-- 商品ID -->
+	<input type="hidden" id="staff.id" name="staff.id" value="${(params.staffId)!}"/>            <!-- 职员ID -->
+	<input type="hidden" id="storage.id" name="storage.id" value="${(params.storageId)!}"/>      <!-- 仓库ID -->
+	
+    <input type="hidden" name="product.fullName" value="${productName!}"/>
+    <input type="hidden" name="staff.name" value="${staffName!}"/>
+    <input type="hidden" name="storage.fullName" value="${storageName!}"/>
+    <input type="hidden" id="orderTypes" name="orderTypes" value="${orderTypes!}"/>   <!--进货单,进货退货单,进货换货单,借转进货单,委托结算单-->
+
+	<input type="hidden" id="startDate" name="startDate" value="${(params.startDate)!}"/>        <!--开始日期  -->
+	<input type="hidden" id="endDate" name="endDate" value="${(params.endDate)!}"/>            <!-- 结束日期 -->
+	<input type="hidden" id="shoeType" name="shoeType" value="${(params.shoeType)!}"/>         <!-- 过滤条件    下拉框改变赋值 -->
+	<input type="hidden" id="supId" name="supId" value="${(params.supId)!}"/>                               <!-- 父级ID -->
+	
+	<input type="hidden" id="isRow" name="isRow" value="${isRow!'false'}">
+	
+	<input type="hidden" name="totalCount" value="${(pageMap.totalCount)!0}"/>
+	<#include "/WEB-INF/template/base/baseSearchComDialog/searchConditionInputs.html"/><!--报表基本信息筛选条件保存 -->
+</form>
+<#assign showWidth = 100/>
+<#list rowList as row>
+    <#if row.width??>
+     <#assign showWidth = showWidth+row.width/>
+    </#if>
+</#list>
+<table class="table" rel="purchaseUnitStatisticsList" layoutH="225" width="${showWidth!}px">
+	<thead>
+		<tr>
+			<th width="50px" align="center" >行号</th>
+			<#list rowList as row>
+				   <th  width="${(row.width)!100}px" <#if row.isOrder?? && row.isOrder==2> orderField="${row.code}"  <#if params.orderField?? && row.code==params.orderField>class="${(params.orderDirection)!'asc'}"<#else>class="asc"</#if> </#if>>
+					 ${(row.showName)!(row.name)!}
+				   </th>
+			</#list>
+		</tr>
+	</thead>
+	<tbody>
+		<#list pageMap.pageList as bill>
+	    <#if bill.node==2>
+		<tr target="id" rel="${bill.id!0}-${bill.baseAmount!}" trel="reports_purchaseUnitStatistics"  crel="purchaseUnitStatisticsList" cTarget="ajax" url="${base}/reports/bought/purchase/unit/search/tree-${bill.id}" relevancyIds="unit.id,staff.id,storage.id,startDate,endDate,shoeType,orderTypes">
+		<#else>
+		<tr target="id" rel="${bill.id!0}-${bill.baseAmount!}" serialize="true" cTarget="openNavTab"  title="进货明细账本" url="${base}/reports/bought/purchase/unit/detail/${bill.id!0}?baseAmount=${bill.baseAmount!}" callBefore="callBeforeNavTab" cRel="purchaseUnitDetailAccountView">
+		</#if>
+			<td><a>${bill_index+1+pageMap.limit}</a><#if bill.node==2>..</#if></td>
+			<#list rowList as row>
+			<#if row.code?? && 'code'==row.code>
+			<td>${bill.code!''}</td>
+			<#elseif row.code?? && 'fullName'==row.code>
+			<td>${bill.fullName!''}</td>
+			<#elseif row.code?? && 'baseAmount'==row.code>
+			<td>${bill.baseAmount!}</td>
+			<#elseif row.code?? && 'avgPrice'==row.code>
+			<td>
+			     
+			     <@shiro.hasPermission name='1101-s'>
+		         ${bill.avgPrice!}
+				 </@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					***
+				 </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'discountMoney'==row.code>
+			<td> 
+			    
+			     <@shiro.hasPermission name='1101-s'>
+		         ${bill.discountMoney!}
+				 </@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					***
+				 </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'taxPrice'==row.code>
+			<td>
+			       
+			       <@shiro.hasPermission name='1101-s'>
+		         ${bill.taxPrice!}
+				 </@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					***
+				 </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'taxes'==row.code>
+			<td>
+			    
+			    <@shiro.hasPermission name='1101-s'>
+		         ${bill.taxes!}
+				 </@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					***
+				 </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'taxMoney'==row.code>
+			<td>
+			    
+			    <@shiro.hasPermission name='1101-s'>
+		         ${bill.taxMoney!}
+				 </@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					***
+				 </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'several'==row.code>
+			<td>${bill.several!}</td>
+			<#elseif row.code?? && 'giftAmount'==row.code>
+			<td>${bill.giftAmount!}</td>
+			<#elseif row.code?? && 'retailMoney'==row.code>
+			<td>
+			    
+			    <@shiro.hasPermission name='1101-s'>
+		         ${bill.retailMoney!}
+				 </@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					***
+				 </@shiro.lacksPermission>
+			</td>
+			</#if>
+			</#list>
+		</tr>
+		</#list>
+	</tbody>
+    <tfoot>
+	   <tr isSelect="false" style="border-top: #D0D0D0 solid 1px">
+	   <td>合计</td>
+	   <#list rowList as row>
+	    <#if row.code?? && 'baseAmount'==row.code>
+	    <td><#if baseAmounts?? && baseAmounts !=0>${baseAmounts!}</#if></td>
+	    <#elseif row.code?? && 'discountMoney'==row.code>
+	    <td>
+	      <@shiro.hasPermission name='1101-s'>
+         <#if discountMoneys?? && discountMoneys !=0>${discountMoneys!}</#if>
+		 </@shiro.hasPermission>
+		 <@shiro.lacksPermission name='1101-s'>
+			***
+		 </@shiro.lacksPermission>
+	     </td>
+	     <#elseif row.code?? && 'taxes'==row.code>
+	     <td>
+	       <@shiro.hasPermission name='1101-s'>
+         <#if taxess?? && taxess !=0>${taxess!}</#if>
+		 </@shiro.hasPermission>
+		 <@shiro.lacksPermission name='1101-s'>
+			***
+		 </@shiro.lacksPermission>
+	     </td>
+	    <#elseif row.code?? && 'taxMoney'==row.code>
+	     <td>
+	       <@shiro.hasPermission name='1101-s'>
+         <#if taxMoneys?? && taxMoneys !=0>${taxMoneys!}</#if>
+		 </@shiro.hasPermission>
+		 <@shiro.lacksPermission name='1101-s'>
+			***
+		 </@shiro.lacksPermission>
+	     </td>
+	    <#elseif row.code?? && 'several'==row.code>
+	     <td><#if severals?? && severals !=0>${severals!}</#if></td>
+	    <#elseif row.code?? && 'giftAmount'==row.code>
+	     <td><#if giftAmounts?? && giftAmounts !=0>${giftAmounts!}</#if> </td>
+	    <#elseif row.code?? && 'retailMoney'==row.code>
+	     <td>
+	      <@shiro.hasPermission name='1101-s'>
+         <#if retailMoneys?? && retailMoneys !=0>${retailMoneys!}</#if>
+		 </@shiro.hasPermission>
+		 <@shiro.lacksPermission name='1101-s'>
+			***
+		 </@shiro.lacksPermission>
+	     </td>
+	    <#else>
+	    <td></td>
+	    </#if>
+	   </#list>
+	  </tr> 
+	</tfoot>
+</table>
+
+
+<#include "/WEB-INF/template/unitl/paging.html"/>	
+<div class="divider"></div>
+<div>
+    <a class="button" target="dialog" href="${base}/reports/bought/purchase/unit" rel="unitPurchaseStatisticsDialog" param="supId,shoeType,isOpen" width="460" height="400" aimTitle="单位进货统计" aimUrl="${base}/reports/bought/purchase/unit/search" aimTabId="unitPurchaseStatisticsView" aimDiv="purchaseUnitStatisticsList"><span>查询条件</span></a><!-- aimDiv值为all eq gt 下拉框改变赋值-->
+    <a class="button" target="navTab" href="${base}/reports/bought/purchase/unit/detail/{id}"  serialize="true" callBefore="callBeforeNavTab" title="进货明细账本" rel="purchaseUnitDetailAccountView"><span>明细账本</span></a>
+    <#if isRow?? && isRow=='true'>
+    <a class="buttonDisabled" href="javascript:;"><span>列表</span></a>
+    <#else>
+        <a class="button" type="POST" serialize="true" target="ajax" rel="purchaseUnitStatisticsList"  href="${base}/reports/bought/purchase/unit/search/row"><span>列表</span></a>
+    </#if>
+    <a class="button" target="dialog" href="${base}/base/product/toReportBaseFilter/pagerForm-unit" rel="report_unit_filtter" width="400" height="210" aimTitle="单位进货统计" aimUrl="${base}/reports/bought/purchase/unit/search" aimTabId="unitPurchaseStatisticsView" ><span>单位筛选</span></a>
+</div>
+<div style="float: right;">
+     <#assign privs = '3-41-306-p'/>
+	<#assign href = '${base}/reports/bought/purchase/unit/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

@@ -1,0 +1,70 @@
+
+<div class="pageContent">
+    <form class="tableForm">
+	<table class="table " layoutH="75"  targetType="dialog">
+		<thead>
+		<tr>
+		   <th width="50px" align="center">行号</th>
+		   <th width="100px" align="center">价格类型</th>
+		   <th width="100px" align="center">单价</th>
+		  
+		</tr>
+	  </thead>
+	  <tbody>
+		 <tr ondblclick="inputPriceDialog(this)">
+		    <td>1 <input type="hidden" name="price" value="${(priceDiscount.lastCostPrice)!0}"/></td>
+		    <td>最近折前进价</td>
+		    <td>
+		       
+		       <@shiro.hasPermission name='1101-s'>
+					 ${(priceDiscount.lastCostPrice)!0}
+				  </@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					 ***
+				 </@shiro.lacksPermission>
+		    </td>
+		 </tr>
+		 <tr ondblclick="inputPriceDialog(this)">
+		    <td>2 <input type="hidden" name="price" value="${(productUnit.defaultPrice1)!0}"/></td>
+		    <td>预设售价1</td>
+		    <td>${(productUnit.defaultPrice1)!0}</td>
+		 </tr>
+		 <tr ondblclick="inputPriceDialog(this)">
+		    <td>3 <input type="hidden" name="price" value="${(productUnit.defaultPrice2)!0}"/></td>
+		    <td>预设售价2</td>
+		    <td>${(productUnit.defaultPrice2)!0}</td>
+		 </tr>
+		 <tr ondblclick="inputPriceDialog(this)">
+		    <td>4 <input type="hidden" name="price" value="${(productUnit.defaultPrice3)!0}"/></td>
+		    <td>预设售价3</td>
+		    <td>${(productUnit.defaultPrice3)!0}</td>
+		 </tr>
+		 <tr ondblclick="inputPriceDialog(this)">
+		    <td>5 <input type="hidden" name="price" value="${(productUnit.retailPrice)!0}"/></td>
+		    <td>零售价</td>
+		    <td>${(productUnit.retailPrice)!0}</td>
+		 </tr>
+		 <tr ondblclick="inputPriceDialog(this)">
+		    <td>6 <input type="hidden" name="price" value="${(stockAvgprice)!0}"/></td>
+		    <td>库存均价</td>
+		    <td>
+		         <@shiro.hasPermission name='1101-s'>
+					  ${(stockAvgprice)!0}
+				  </@shiro.hasPermission>
+				 <@shiro.lacksPermission name='1101-s'>
+					 ***
+				 </@shiro.lacksPermission>
+		    </td>
+		 </tr>
+	  </tbody>
+	</table>
+	</form>
+</div>
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+    <a style="margin-left: 100px;" class="button"  onclick="inputPriceDialog()"><span>确定</span></a>
+	<div style="margin-left: 30px;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+</div>
+
+	

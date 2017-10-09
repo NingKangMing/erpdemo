@@ -1,0 +1,60 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/finance/yearCostTotal/${action!operation}-second" onsubmit="return dwzSearch(this, 'yearCostTotalList');">
+    <input type="hidden" name="action" value="${action!operation}"/>
+	<#list yearEndIds as yearEndId>
+		<input type="hidden"  name="yearEndId" value="${yearEndId!}" />
+	</#list>
+</form>
+<table class="table" rel="yearCostTotalList" layoutH="120">
+	<thead>
+		<tr>
+			<th width="50px">行号</th>
+			<th width="100px">科目编号</th>
+			<th width="150px" align="left">科目全名</th>
+			<#list yearEndList as yearEnd>
+			   <th width="100px">${yearEnd.yearsName!}数据</th>
+			</#list>
+		</tr>
+	</thead>
+	<tbody>
+		<#list accountList as account>
+		  <tr target="accountId" rel="${(account.id)!0}">
+		     <td>${account_index+1}</td>
+		     <td>${(account.code)!}</td>
+		     <td>${(account.blank)!}${(account.fullName)!}</td>
+		     <#list yearEndList as yearEnd>
+			   <td>    
+			         
+			          <#if yearEnd.id == 0 >
+		                 <#assign allMoneys = 0/>
+				         <#assign setMoneys = 0/>
+				         <#if (account["yearMoney"+yearEnd.id])??>
+				           <#assign allMoneys = account["yearMoney"+yearEnd.id]/>
+				         </#if>
+				         <#if account.setMoneys??>
+				           <#assign setMoneys = account.setMoneys/>
+				         </#if>
+				         
+				         <#if allMoneys!=0 || setMoneys !=0>
+					            ${allMoneys+setMoneys}
+				         </#if>
+		              <#else>
+		                 ${(account["yearMoney"+yearEnd.id])!}
+		              </#if>
+			   </td>
+			</#list>
+		     
+		  </tr>
+		</#list>
+	</tbody>
+</table>
+
+<div class="divider"></div>
+<div>
+    <a class="button" href="${base}/reports/finance/yearCostTotal/yearEnd" aimTabId="${view!}" aimTitle="<#if action?? && action == 'profit'>年度利润表比较<#elseif action?? && action == 'asset'> 年度资产负债表比较<#else>其它 </#if>" aimUrl="${base}/reports/finance/yearCostTotal/${action!}" caption="年结存信息框" target="dialog" rel="yearEndDialog" mask="true" height="500" width="410"><span>查询条件</span></a>
+</div>
+<div style="float: right;">
+	<#assign href = '${base}/reports/finance/yearCostTotal/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

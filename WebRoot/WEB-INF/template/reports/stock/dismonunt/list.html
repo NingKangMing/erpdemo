@@ -1,0 +1,109 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/stock/dismonunt/dialogSearch/page" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <!-- ID用于树点击参数 -->
+	<input type="hidden" id="modelType" name="modelType" value="${modelType}"/>        <!-- prd(商品销售统计)  unit(单位销售统计) -->
+	<input type="hidden" id="staff.id" name="staff.id" value="${staffId}"/>            <!-- 职员ID -->
+	<input type="hidden" id="staff.id" name="staff.name" value="${staffFullName!}"/>            <!-- 职员ID -->
+	
+	<input type="hidden" id="inStorage.id" name="inStorage.id" value="${inStorageId}"/>     
+	<input type="hidden" id="outStorage.id" name="outStorage.id" value="${outStorageId}"/>      
+	<input type="hidden" id="inStorage.fullName" name="inStorage.fullName" value="${inStorageFullName}"/>         
+	<input type="hidden" id="outStorage.fullName" name="outStorage.fullName" value="${outStorageFullName}"/>         
+	<input type="hidden" id="startTime" name="startTime" value="${startTime}"/>        <!--开始日期  -->
+	<input type="hidden" id="endTime" name="endTime" value="${endTime}"/>              <!-- 结束日期 -->
+	<input type="hidden" id="aimDiv" name="aimDiv" value="${aimDiv}"/>                 <!-- 过滤条件     all eq gt 下拉框改变赋值 -->
+	<input type="hidden" id="supId" name="supId" value="${supId}"/>                               <!-- 父级ID -->
+	<input type="hidden" id="node" name="node" value="${node!2}"/>                              
+	
+	<input type="hidden" name="selectedObjectId" id="selectedObjectId" value="${objectId!0}" /><!--   默认选中对象的Id -->
+	<input type="hidden" name="whereComeDetail" value="other"> 
+	<#include "/WEB-INF/template/base/baseSearchComDialog/searchConditionInputs.html"/><!--报表基本信息筛选条件保存 -->
+</form>
+<#include "/WEB-INF/template/common/columnConfig/tableTotalWidthLink.html"/>
+<table class="table" rel="${listID}" layoutH="230">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody id="reports_sameOrDiffPricecount_body">
+	    <#if pageMap??&&pageMap.pageList??>
+		<#list pageMap.pageList as obj>
+	    <#if obj.node==2>
+		<tr isSelect="true" nodeType1="${obj.node!'2'}" rel="${obj.id!0}" trel="${ztreeID}"  crel="${listID}" cTarget="ajax" url="${base}/reports/stock/dismonunt/dialogSearch/tree?modelType=${modelType}&supId=${obj.id}" relevancyIds="product.id,unit.id,staff.id,inStorage.id,outStorage.id,pageOrderTypes,startTime,endTime,aimDiv">
+		<#else>
+		<tr isSelect="true" nodeType1="${obj.node!'1'}" rel="${obj.id!0}" cTarget="openNavTab"  sameId="reports_cc_sameOrDiffPrice_detail_id">
+		</#if>
+			<td><a>${obj_index+1+pageMap.limit}</a><#if obj.node==2>..</#if></td>
+			<#list rowList as row>
+			<#if row.code?? && 'code'==row.code>
+			<td>${obj.code!''}</td> <!-- 编号 -->
+			<#elseif row.code?? && 'fullName'==row.code>
+			<td>${obj.fullName!''}</td> <!-- 全名 -->
+			<#elseif row.code?? && 'smallName'==row.code>
+			<td>${obj.smallName!''}</td> 
+			<#elseif row.code?? && 'spell'==row.code>
+			<td>${obj.spell!''}</td> 
+			<#elseif row.code?? && 'standard'==row.code>
+			<td>${obj.standard!''}</td> 
+			<#elseif row.code?? && 'model'==row.code>
+			<td>${obj.model!''}</td> 
+			<#elseif row.code?? && 'field'==row.code>
+			<td>${obj.field!''}</td>
+			 <#elseif row.code?? && 'savePath'==row.code>
+			<td>
+			<#if (obj.savePath)??>
+			    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(obj.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(obj.savePath)!}"  width="20px" height="20px"/>
+            </#if>
+			</td>
+			<#elseif row.code?? && 'baseInAmounts'==row.code>
+			<td>${obj.baseInAmounts!''}</td> 
+			<#elseif row.code?? && 'helpInAmount'==row.code>
+			<td>${obj.helpInAmount!''}</td>
+			 <#elseif row.code?? && 'baseInMoneys'==row.code>
+			<td>${obj.baseInMoneys!''}</td> 
+			<#elseif row.code?? && 'baseOutAmounts'==row.code>
+			<td>${obj.baseOutAmounts!''}</td> 
+			<#elseif row.code?? && 'helpOutAmount'==row.code>
+			<td>${obj.helpOutAmount!''}</td> 
+			<#elseif row.code?? && 'baseOutMoneys'==row.code>
+			<td>
+			    <@shiro.hasPermission name='1101-s'>
+			    ${obj.baseOutMoneys!''}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td> 
+			</#if>
+			</#list>
+		</tr>
+		</#list>
+		</#if>
+	</tbody>
+	<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+
+	
+<div class="divider"></div>
+<div>
+    <a class="button" target="dialog" href="${base}/reports/stock/dismonunt/toSearchDialog/${modelType}" rel="reportRemoveCountSearchDialog" width="330" height="400" aimTitle="生产拆装单统计" aimUrl="${base}/reports/stock/dismonunt/dialogSearch/search" aimTabId="reportRemoveCountView" aimDiv="${aimDiv}"><span>查询条件</span></a><!-- aimDiv值为all eq gt 下拉框改变赋值-->
+    
+    <a class="button" id="reports_cc_sameOrDiffPrice_detail_id" href="${base}/common/dateDialog" caption="选择时间" target="dialog" rel="dateDialog" width="300" height="250" type="post"
+    param="inStorage.id,outStorage.id,inStorage.fullName,outStorage.fullName,selectedObjectId" verify="selectedObjectId" verifyText="没有选中商品"
+    aimTitle="生产拆装单明细账本" aimTabId="remove_cc_detail" 
+    aimUrl="${base}/reports/stock/dismonunt/dismonuntDetail?modelType=${modelType}"><span>明细账本</span></a>
+    <#if node?? && node == 1>
+		<a class="buttonDisabled" href="javascript:;"><span>列表</span></a>
+	<#else>
+		<a class="button" href="${base}/reports/stock/dismonunt/dialogSearch/line" target="ajax" rel="${listID}"  relevancyIds="modelType,staff.id,inStorage.id,outStorage.id,startTime,endTime,aimDiv,supId"><span>列表</span></a>
+	</#if>
+	<a class="button" target="dialog" href="${base}/base/product/toReportBaseFilter/pagerForm-product" rel="report_product_filtter" width="400" height="210"  aimTitle="生产拆装单统计" aimTabId="reportRemoveCountView" aimUrl="${base}/reports/stock/dismonunt/dialogSearch/search" ><span>商品筛选</span></a>
+</div>
+<div style="float: right;">
+	<#assign privs = '5-82-525-p'/>
+	<#assign href = '${base}/reports/stock/dismonunt/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

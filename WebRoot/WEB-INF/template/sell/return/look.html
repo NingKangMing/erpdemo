@@ -1,0 +1,273 @@
+<!-- 销售退货单查看  -->
+<div class="pageContent" id="boughtPage" >
+	<form id="xsth_sellForm" class="tableForm pageForm" enctype="text/plain" method="post" action="${base}/sell/return/add" onsubmit="return validateCallback(this, navTabAjaxDoneDialog)">
+	<input type="hidden" name="actionType" value="look"/>
+	<input type="hidden" name="bill.id" value="${(bill.id)!}"/>
+	<div id="hasFujianClassId" <#if orderFuJianIds?length gt 0>class="textContent center fujianClass"<#else>class="textContent center"</#if>>
+	      <div>
+	         <span style="font-size: 18px;">销售退货单</span>
+			 <span style="float: right;">
+		                 录单日期
+		     <input type="text"  name="sellReturnBill.recodeDate" <#if isRCW==true>style="color: red;"</#if>  name="bill.recodeDate" dateFmt="yyyy-MM-dd HH:mm:ss" value="${(bill.recodeDate)?string('yyyy-MM-dd HH:mm:ss')}" readonly="readonly"/>
+		                单据编号
+		    <input class="line" type="text" name="sellReturnBill.code" style="width: 200px" <#if isRCW==true>style="color: red;"</#if> value="${(bill.code)!}" readonly="readonly"/>
+		    </span>
+	     </div>
+	     <div>
+	                         退货单位
+	        <input class="line" type="text" <#if isRCW==true>style="color: red;"</#if> name="unit.fullName" value="${(bill.getBillUnit(session.loginConfigId).fullName)!}" readonly="readonly"/>
+	                           经手人 
+	        <input class="line" type="text" <#if isRCW==true>style="color: red;"</#if> name="staff.name"  value="${(bill.getBillStaff(session.loginConfigId).name)!}" readonly="readonly"/>
+	                            部门    
+	        <input type="text" class="line" <#if isRCW==true>style="color: red;"</#if>  name="department.fullName" value="${(bill.getBillDepartment(session.loginConfigId).fullName)!}" readonly="readonly"/>    
+	        <#if isFreeVersion != "yes"&&version!=1>                     
+	                           交货日期
+	        <input type="text" name="bill.deliveryDate" <#if isRCW==true>style="color: red;"</#if>  dateFmt="yyyy-MM-dd" value="${(bill.deliveryDate)?string('yyyy-MM-dd')}" readonly="readonly"/>
+	        </#if>
+	     </div>
+	     <div>
+	                           收货仓库
+     	    <input class="line" <#if isRCW==true>style="color: red;"</#if> name="storage.fullName" value="${(bill.getBillStorage(session.loginConfigId).fullName)!}" readonly="readonly"/>
+	                          摘要
+	        <input style="width: 250px;" class="line" type="text" <#if isRCW==true>style="color: red;"</#if> type="text" name="bill.remark" value="${(bill.remark)!}" readonly="readonly"/>
+	                          附加说明
+	        <input style="width: 250px;" class="line" <#if isRCW==true>style="color: red;"</#if> type="text" name="bill.memo" value="${(bill.memo)!}" readonly="readonly"/>
+	        <#if showDiscount?? && showDiscount>                 
+	                          整单折扣
+	        <input style="width: 50px;" class="line" <#if isRCW==true>style="color: red;"</#if> type="text"  name="bill.discounts"  value="${(bill.discounts)!}" readonly="readonly"/>
+	        </#if>
+	        <#include "/WEB-INF/template/common/columnConfig/billRowConfigLink.html"/>
+	        <span style="float: right;">
+		        <#include "/WEB-INF/template/common/lookBillPreOrNext/page.html"/>
+		        <div style="float: right;">
+		        <img style="margin-top: 5px;" onclick="openOrderFujianDialog('${base}','${tableId}','0','${(bill.id)!}');" title="单据附件" src="${base}/img/bill/fujian.jpg" alt="单据附件">
+		        <input type="hidden" id="orderFuJianIds" name="orderFuJianIds" value="${orderFuJianIds!}"/>
+		        </div>
+		    </span>
+	     </div>
+	</div>
+	<div class="divider"></div>
+	<div class="pageContent">
+	   <#assign showWidth = 0/>
+	   <#list rowList as row>
+	     <#if row.width??>
+	      <#assign showWidth = showWidth+row.width/>
+	     </#if>
+	   </#list>
+	   <table class="table" model="order"  layoutH="251" width="${showWidth!}px">
+	        <thead>
+			 <tr>
+				<th width="50px" >
+					行号
+				</th>
+				<#list rowList as row>
+				   <th width="${(row.width)!100}px"> 
+					 ${(row.showName)!(row.name)!}
+				   </th>
+				</#list>
+			</tr>
+		  </thead>
+		  <tbody id="sellreturnbody" preDataName="sellReturnDetail">
+		     <#list detailList as detail>
+		     <tr <#if isRCW==true>style="color: red;"</#if> >
+		       <td>${detail_index+1}</td>
+		       <!--  -->
+		     <#list rowList as row>
+		       <#if row.code?? && 'code'==row.code>
+		       <!-- 商品编号-->
+		       <td>${(detail.product.code)!}</td> 
+		       <#elseif row.code?? && 'fullName'==row.code>
+		       <!-- 商品名称 -->
+		       <td>${(detail.product.fullName)!}</td>
+		       
+		       
+		       <#elseif row.code?? && 'smallName'==row.code>
+		       <!-- 商品简称 -->
+		       <td>${(detail.product.smallName)!''}</td>
+		       <#elseif row.code?? && 'spell'==row.code>
+		       <!-- 商品拼音 -->
+		       <td>${(detail.product.spell)!''}</td>
+		       <#elseif row.code?? && 'standard'==row.code>
+		       <!-- 规格 -->
+		       <td>${(detail.product.standard)!''}</td>
+		       <#elseif row.code?? && 'model'==row.code>
+		       <!-- 型号 -->
+		       <td>${(detail.product.model)!''}</td>
+		       <#elseif row.code?? && 'field'==row.code>
+		       <!-- 产地 -->
+		       <td>${(detail.product.field)!''}</td>
+		       <#elseif row.code?? && 'savePath'==row.code>
+		       <!-- 图片 -->
+		       <td>
+					<#if (detail.product.savePath)??>
+					    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(detail.product.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(detail.product.savePath)!}"  width="20px" height="20px"/>
+		            </#if>
+				</td>
+		       
+		       <#elseif row.code?? && 'baseUnit'==row.code>
+		       <!-- 单位 -->
+		       <td>${(detail.selectUnit)!}</td>
+		       <#elseif row.code?? && 'helpUnit'==row.code>
+		       <!-- 辅助单位 -->
+		       <td>${(detail.product.assistUnit)!}</td>
+		       <#elseif row.code?? && 'produceDate'==row.code>
+		       <!-- 生产日期 -->
+		       <td><#if detail.produceDate??>${(detail.produceDate)?string("yyyy-MM-dd")}</#if></td>
+		       <#elseif row.code?? && 'produceEndDate'==row.code>
+		       <!-- 结束日期 -->
+		       <td><#if detail.produceEndDate??>${(detail.produceEndDate)?string("yyyy-MM-dd")}</#if></td>
+		       <#elseif row.code?? && 'batch'==row.code>
+		       <!-- 批号 -->
+		       <td>${(detail.batch)!}</td>
+		       <#elseif row.code?? && 'helpAmount'==row.code>
+		       <!-- 辅助数量 -->
+		       <td>${(detail.helpAmount)!}</td>
+		       <#elseif row.code?? && 'amount'==row.code>
+		       <!-- 数量 -->
+		       <td>${(detail.amount)!}</td>
+		       <#elseif row.code?? && 'baseAmount'==row.code>
+		       <!-- 基本数量-->
+		       <td>${(detail.getOtherAmount(1))!} ${(detail.product.calculateUnit1)!}</td>
+		       <#elseif row.code?? && 'baseAmount1'==row.code>
+		       <!-- 辅助数量1 -->
+		       <td>${(detail.getOtherAmount(2))!} ${(detail.product.calculateUnit2)!}</td>
+		       <#elseif row.code?? && 'baseAmount2'==row.code>
+		       <!-- 辅助数量2 -->
+		       <td>${(detail.getOtherAmount(3))!} ${(detail.product.calculateUnit3)!}</td>
+		       <#elseif row.code?? && 'price'==row.code>
+		       <!-- 单价 -->
+		       <td>${(detail.price)!}</td>
+		       <#elseif row.code?? && 'money'==row.code>
+		       <!-- 金额 -->
+		       <td>${(detail.money)!}</td>
+		       <#elseif row.code?? && 'discount'==row.code>
+		       <!-- 折扣 -->
+		       <td>${(detail.discount)!}</td>
+		       <#elseif row.code?? && 'discountPrice'==row.code>
+		       <!-- 折后单价 -->
+		       <td>${(detail.discountPrice)!}</td>
+		       <#elseif row.code?? && 'discountMoney'==row.code>
+		       <!-- 折后金额 -->
+		       <td>${(detail.discountMoney)!}</td>
+		       <#elseif row.code?? && 'taxRate'==row.code>
+		       <!-- 税率 -->
+		       <td>${(detail.taxRate)!}</td>
+		       <#elseif row.code?? && 'taxPrice'==row.code>
+		       <!-- 含税单价 -->
+		       <td>${(detail.taxPrice)!}</td>
+		       <#elseif row.code?? && 'tax'==row.code>
+		       <!-- 税额 -->
+		       <td>${(detail.taxes)!}</td>
+		       <#elseif row.code?? && 'taxMoney'==row.code>
+		       <!-- 含税金额 -->
+		       <td>${(detail.taxMoney)!}</td>
+		       <#elseif row.code?? && 'memo'==row.code>
+		       <!-- 备注 -->
+		       <td>${(detail.memo)!}</td>
+		       <#elseif row.code?? && 'status'==row.code>
+		       <!-- 状态 -->
+		       <td>
+		           <#if detail.id??>
+		              <#if detail.price??>
+		                 <#if detail.price==0>
+		                   	 赠品
+		                 </#if>
+		              <#else> 
+		                                                                     赠品  
+		              </#if>
+		           </#if>
+		       </td>
+		       <#elseif row.code?? && 'arrivalAmount'==row.code>
+		       <!-- 到货数量 -->
+		       <td>${(detail.arrivalAmount)!}</td>
+		       <#elseif row.code?? && 'barCode'==row.code>
+		       <!--条码 -->
+		       <td>${(detail.product["barCode"+detail.selectUnitId])!}</td>
+		       <#elseif row.code?? && 'message'==row.code>
+		       <!-- 附加信息 -->
+		       <td>${(detail.message)!}</td>
+		       <#elseif row.code?? && 'storageCode'==row.code>
+		       <!-- 仓库编号 -->
+		       <td>${(detail.storage.code)!}</td>
+		       <#elseif row.code?? && 'storageFullName'==row.code>
+		       <!-- 仓库全名-->
+		       <td>${(detail.storage.fullName)!}</td>
+		       <#elseif row.code?? && 'retailPrice'==row.code>
+		       <!--零售单价-->
+		       <td>
+		       		<#if (detail.id)??&&detail.selectUnitId==1>
+			            ${(detail.product.retailPrice1)!}
+			         <#elseif (detail.id)??&&detail.selectUnitId==2>
+			         	${(detail.product.retailPrice2)!}
+			         <#elseif (detail.id)??&&detail.selectUnitId==3>
+			         	${(detail.product.retailPrice3)!}
+			         </#if>
+		       </td>
+		       <#elseif row.code?? && 'retailMoney'==row.code>
+		       <!--零售金额-->
+		       <td>${(detail.retailMoney)!}</td>
+		       <#else>
+		         <td></td>
+		       </#if>
+		      </#list>
+		     </tr>
+		     </#list>
+		  </tbody>
+		  <tfoot>
+		       <tr <#if isRCW==true>style="color: red;"</#if> style="border-top: #D0D0D0 solid 1px">
+		       <td>合计</td>
+		       <#list rowList as row>
+		            <#if row.code?? && 'amount'==row.code>
+		             <!-- 总数 -->
+		             <td>${(bill.amounts)!0}</td>
+		            <#elseif row.code?? && 'money'==row.code>
+		            <!-- 总价 -->
+		            <td>${(bill.moneys)!0}</td>
+		            <#elseif row.code?? && 'discountMoney'==row.code>
+		            <!-- 折后总价 -->
+		            <td>${(bill.discountMoneys)!0}</td>
+		            <#elseif row.code?? && 'tax'==row.code>
+		             <!-- 税额 -->
+		            <td>${(bill.taxes)!0}</td>
+		            <#elseif row.code?? && 'taxMoney'==row.code>
+		            <!-- 税额 -->
+		            <td>${(bill.taxMoneys)!0}</td>
+		            <#elseif row.code?? && 'retailMoney'==row.code>
+		            <!-- 零售金额 -->
+		            <td>${(bill.retailMoneys)!0}</td>
+		            <#else>
+		            <td></td>
+		            </#if>
+		       </#list>
+		       </tr>
+		  </tfoot>
+	   </table>
+	   <div class="divider"></div> 
+	   <div class="textContent center">
+	     <div style="margin-top: 13px;">
+	         <span>
+			       付款账户<input class="line" type="text" id="payTypeAccounts" name="sellReturnBill.bankPay" <#if isRCW==true>style="color: red;"</#if> value="${(bill.bankPay)!''}" readonly="readonly"/>
+	                                  付款金额<input class="line number" type="text" id="payTypeMoneys"  name="sellReturnBill.payMoney"  <#if isRCW==true>style="color: red;"</#if> value="${(payOrgetMoneys)!''}" readonly="readonly"/> 
+	              <input type="hidden" name="payTypeIds" value="${(payTypeIdStrs)!}"  id="payTypeIdStrs">
+	              <input type="hidden" name="payTypeMoneys" value="${(payTypeMoneyStrs)!}" id="payTypeMoneyStrs">
+	         </span>
+			 <span style="float: right;">
+		                优惠金额<input class="line number" type="text"   name="sellReturnBill.privilege" <#if isRCW==true>style="color: red;"</#if> value="${(bill.privilege)!'0'}"/> 
+		                 优惠后金额：<input type="text" class="stealth"  value="${(bill.privilegeMoney)!'0'}" <#if isRCW==true>style="color: red;"</#if> style="width: 100px" readonly="readonly"/>
+		    </span>
+	     </div>
+	   </div>
+	   <div class="divider"></div> 
+		<div>
+	     <div style="float: right;">
+	        <#include "/WEB-INF/template/common/base/accountDetailCommomLink.html"/>
+	        <#assign privs = '403-p'/>
+			<#assign href = '${base}/sell/return/print'/>
+			<#assign formId = 'xsth_sellForm'/>
+			<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	        <a class="button" href="javascript:void(0);" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a>
+	     </div>
+	    </div>
+	</div>
+  </form>
+</div>

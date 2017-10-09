@@ -1,0 +1,33 @@
+<div class="pageContent">
+    <form action="${base}/init/makeInit/make" method="post" class="pageForm required-validate" enctype="text/plain" onsubmit="return validateCallback(this,dialogReloadDialog)">
+		<h1>期初建账..开账</h1>
+		<div style="margin:auto; margin-top:22px; width: 280px; height: 180px;">
+			<div style="border: 1px solid #DDDDDD;width: 280px; height: 140px;">
+				<p style="text-indent:3em; width: 250px;margin:auto;">
+					<span style="line-height: 35px;">在您完成了期初建账以后，必须要先进行开账处理，然后才能进行业务录入，开账之后还可以进行反开账回到期初状态，但是已经有过账单据之后就不能反开账。</span>
+				</p>
+			</div>
+			<#if hasOpenAccount=="open">
+			<div style="color: red; margin-left: 80px; margin-top: 20px;">开账日期:${hasOpenAccountTime!}</div>
+			<#else>
+			<div style="color: red; margin-left: 40px; margin-top: 10px;">开账日期:<input name="hasOpenAccountTime" class="date" dateFmt="yyyy-MM-dd" hasClear="no" readonly="readonly" value="${today!}"/></div>
+			</#if>
+		</div>
+		
+		<input type="hidden" name="isOption" value="true"/>
+		<!--提交按钮  -->
+		<div class="formBar">
+		<@shiro.hasPermission name='2-256-s'>
+		<#if hasOpenAccount=="open">
+		    <div style="margin-left: 5px;" class="buttonDisabled"><div class="buttonContent"><button type="button" disabled="disabled">开账</button></div></div>
+			<div style="margin-left: 5px;" class="buttonActive"><div class="buttonContent"><button type="button" onclick="btnChangeFormAction(this)" action="${base}/init/makeInit/invertMake" >反开账</button></div></div>
+		<#else>
+		    <div style="margin-left: 5px;" class="buttonActive"><div class="buttonContent"><button type="button" onclick="btnChangeFormAction(this)" action="${base}/init/makeInit/make">开账</button></div></div>
+			<div style="margin-left: 5px;" class="buttonDisabled"><div class="buttonContent"><button type="button" disabled="disabled">反开账</button></div></div>
+		</#if>
+		</@shiro.hasPermission>
+		<div style="margin-left: 160px;" class="buttonActive"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+		</div>
+		<!--end 提交按钮  -->
+	</form>
+</div>

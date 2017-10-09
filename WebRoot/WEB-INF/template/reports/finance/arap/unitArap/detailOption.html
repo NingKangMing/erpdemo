@@ -1,0 +1,49 @@
+<div class="pageContent">
+	<h2 class="contentTitle">条件选择</h2>
+	<form action="${base}/reports/finance/arap/unitArap/toDetail" method="post" class="pageForm required-validate" enctype="text/plain" onsubmit="return validateCallback(this,aioDialogPostCallBreak)">
+	    <input type="hidden" name="aimTabId" id="aimTabId"/>	     <!-- 设置目标Tab组件ID -->				
+	    <input type="hidden" name="aimUrl" id="aimUrl"/>	         <!-- 设置目标URl -->				
+	    <input type="hidden" name="aimTitle" id="aimTitle"/>         <!-- 设置目标标题 -->
+	    
+	    
+	    <input type="hidden" name="isPost" value=true><!-- 区别表单提交 -->
+	    <input type="hidden" id="selectedObjectId" name="selectedObjectId" value=${selectedObjectId!}>
+	    					
+		<div class="pageFormContent" layoutH="100">
+			<fieldset style="width: 90%;margin:0px auto;">
+	     		<legend>列表选择</legend>
+	     		<table style="margin:0px auto;">
+	     			<tr height="40px;">
+	     				<td>
+	     					<input style="float: left;" type="radio" name="pattern" id="pattern1" value="gets" checked="checked"/><label for="pattern1">应收款明细</label>
+	     				</td>
+	     				<td>
+	     					<input style="float: left;" type="radio" name="pattern" id="pattern2" value="pays"/><label for="pattern2">应付款明细</label>
+	     				</td>
+	     			</tr>
+	     		</table>
+	     	</fieldset>
+	     	<fieldset style="width: 90%;margin:0px auto; margin-top: 15px;">
+			    <legend>选择日期</legend>
+			    	<table style="margin:0px auto;">
+			    		<tr height="50px;">
+			    			<td>开始日期：</td>
+			    			<td><input type="text" class="date" name="startTime" dateFmt="yyyy-MM-dd" value="${startTime!''}" hasClear="no" readonly="readonly"/></td>
+			    		</tr>
+			    		<tr height="50px;">
+			    			<td>结束日期：</td>
+			    			<td><input type="text" class="date" name="endTime" dateFmt="yyyy-MM-dd" value="${endTime!''}" hasClear="no" readonly="readonly"/></td>
+			    		</tr>
+			    	</table>
+	    			<div align="center"><input name="userSearchDate" type="checkbox" checked="checked" value="checked"/>保存时间条件</div>
+		   </fieldset>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确认</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>
+

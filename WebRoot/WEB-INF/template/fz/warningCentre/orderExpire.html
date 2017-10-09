@@ -1,0 +1,70 @@
+<form id="pagerForm" enctype="text/plain" onsubmit="return divSearch(this, 'warningList');" action="${base}/fz/warningCentre/orderExpire/${modelType!}" method="post">
+	<input type="hidden" name="pageNum" value="${pageMap.pageNum!1}" />
+	<input type="hidden" name="numPerPage" value="${pageMap.numPerPage!15}" />
+	<input type="hidden" name="orderField" value="${orderField!'bill.updateTime'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+	
+	<input type="hidden" id="aheadDay" class="digits" name="aheadDay" value="${aheadDay!0}"/>
+	<input type="hidden" name="modelType" value="${modelType}"/>
+</form>
+
+<table class="table" rel="warningList" layoutH="150">
+	<thead>
+		<tr>
+			<th width="45" align="center" >行号</th>
+			<th width="100" align="center"  orderField="bill.updateTime" <#if orderField?? && 'bill.updateTime'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >制单日期</th>
+			<th width="100" align="center"  orderField="bill.code" <#if orderField?? && 'bill.code'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >单据编号</th>
+			<th width="100" align="center"  orderField="unit.code" <#if orderField?? && 'unit.code'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >单位编号</th>
+			<th width="100" align="center"  orderField="unit.fullName" <#if orderField?? && 'unit.fullName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >单位全名</th>
+			<th width="100" align="center"  orderField="deliveryDate" <#if orderField?? && 'deliveryDate'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >交货日期</th>
+			<th width="100" align="center"  orderField="staff.code" <#if orderField?? && 'staff.code'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >职员编号</th>
+			<th width="100" align="center"  orderField="staff.name" <#if orderField?? && 'unit.name'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >职员全名</th>
+			<th width="100" align="center"  orderField="bill.remark" <#if orderField?? && 'bill.remark'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >摘要</th>
+			<th width="100" align="center"  orderField="bill.memo" <#if orderField?? && 'bill.memo'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if> >附加说明</th>
+		</tr>
+	</thead>
+	<tbody>
+		<#list pageMap.pageList as expire>
+		<tr target="id" rel="${expire.id!}">
+			<td align="center"><a>${expire_index+1+pageMap.limit}</a></td>
+			<td align="center"><#if expire.updateTime??>${(expire.updateTime)?string("yyyy-MM-dd")}</#if></td>
+			<td align="center">${expire.code!}</td>
+			<td align="center">${expire.unit.code!}</td>
+			<td align="center">${expire.unit.fullName!}</td>
+			<td align="center"><#if expire.deliveryDate??>${(expire.deliveryDate)?string("yyyy-MM-dd")}</#if></td>
+			<td align="center">${expire.staff.code!}</td>
+			<td align="center">${expire.staff.name!}</td>
+			<td align="center">${expire.remark!}</td>
+			<td align="center">${expire.memo!}</td>
+		</tr>
+		</#list>
+	</tbody>
+</table>
+
+<#include "/WEB-INF/template/unitl/paging.html"/>
+	
+<div class="divider"></div>
+<div>
+    <form class="tableForm">
+        <#if modelType=='sell'>
+            <a style="float: left">
+                                  到期销售订单提前报警天数 <input class="digits" onblur="navTabPageBreak({aheadDay:this.value},'${(pageMap.listID)!''}')" value="${aheadDay!0}" size="5" maxlength="5"/>
+            </a>       
+         <a rel="sellLookView" title="销售订单" target="navTab" href="${base}/sell/book/look/{id}" class="button"><span>查看单据</span></a>
+        <#else>
+           <a style="float: left">
+                               到期进货订单提前报警天数 <input  class="digits" onblur="navTabPageBreak({aheadDay:this.value},'${(pageMap.listID)!''}')" value="${aheadDay!0}" size="5" maxlength="5"/>
+            </a>      
+         <a rel="boughtLookView" title="进货订单" target="navTab" href="${base}/bought/bought/look/{id}" class="button"><span>查看单据</span></a>
+        </#if>
+                  
+    </form>
+	
+</div>
+<div style="float: right;">
+     <#assign privs = '8-807-p'/>
+	<#assign href = '${base}/fz/warningCentre/orderExpirePrint'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

@@ -1,0 +1,22 @@
+<!--系统管理-->
+<#if isFreeVersion != "yes">
+<div class="nav-content">
+   <a href="${base}/sys/sysConfig" target="dialog" rel="sysConfigDialog" width="450" height="465" title="系统配置" class="nav-btn"><img alt="系统配置" src="${base}/img/base/user-cfg.png"><span>系统配置</span></a>
+   <a width="330" height="190" href="${base}/user/toEditPwd" href1="${base}/common/verify/permittedVerify?key=9-901-s" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="dialog" rel="sys_editPwd" class="nav-btn"><img alt="修改密码" src="${base}/img/base/pwd-edit.png"><span>修改密码</span></a>
+   <a href="${base}/sys/permission" target="dialog" rel="permissionDialog" width="920" height="600" class="nav-btn"><img alt="权限设置" src="${base}/img/base/priv-setting.png"><span>权限设置</span></a>
+</div>
+<div class="nav-content">
+   <a width="330" height="220" href="${base}/sys/backup/toBackup" href1="${base}/common/verify/permittedVerify?key=9-904-s" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="dialog" rel="sys_backup" class="nav-btn nav-fix"><img alt="数据备份" src="${base}/img/base/backup.png"><span>数据备份</span></a>
+   <a width="550" height="460" href="${base}/sys/backup/toRecover" href1="${base}/common/verify/permittedVerify?key=9-905-s" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="dialog" rel="sys_recover" class="nav-btn"><img alt="数据恢复" src="${base}/img/base/recover.png" ><span>数据恢复</span></a>
+</div>
+<#else>
+<div class="nav-content">
+   <a width="450" height="465" href="${base}/sys/sysConfig" target="dialog" rel="sysConfigDialog"  title="系统配置" class="nav-btn"><img alt="系统配置" src="${base}/img/base/user-cfg.png"><span>系统配置</span></a>
+   <a width="330" height="190" href="${base}/user/toEditPwd" href1="${base}/common/verify/permittedVerify?key=9-901-s" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="dialog" rel="sys_editPwd" class="nav-btn"><img alt="修改密码" src="${base}/img/base/pwd-edit.png"><span>修改密码</span></a>
+</div>
+<div class="nav-content">
+   <a width="330" height="220" href="${base}/sys/backup/toBackup" href1="${base}/common/verify/permittedVerify?key=9-904-s" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="dialog" rel="sys_backup" class="nav-btn"><img alt="数据备份" src="${base}/img/base/backup.png"><span>数据备份</span></a>
+   <a width="550" height="460" href="${base}/sys/backup/toRecover" href1="${base}/common/verify/permittedVerify?key=9-905-s" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" target="dialog" rel="sys_recover" class="nav-btn"><img alt="数据恢复" src="${base}/img/base/recover.png" ><span>数据恢复</span></a>
+</div>
+</#if>
+

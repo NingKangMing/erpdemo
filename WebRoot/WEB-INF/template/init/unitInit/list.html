@@ -1,0 +1,140 @@
+<form id="pagerForm" class="pageForm required-validate" enctype="text/plain" onsubmit="return navTabSearch(this);" method="post" action="${base}/init/unitInit/${toAction!'list'}/${supId}">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+	
+	<input  type="hidden" name="supId" value="${supId!'all'}"/>   <!-- 点击树节点，搜索树下面的数据 -->
+	<input type="hidden"  name="node" value="${node!0}"/>
+	<!--end 第一次筛选结果条件保存   方便第二次过滤筛选 -->
+	
+	<input type="hidden" id="aimDiv" name="aimDiv" value="${aimDiv!'all'}">
+	
+	<input type="hidden" name="showLastPage" id="showLastPage" />   <!-- 新增，复制新增完成后跳转到最后一页 -->
+	<input type="hidden" name="selectedObjectId" id="selectedObjectId" />   <!-- 新增，复制新增完成后跳转到最后一页     选中的Id -->
+	
+	<#include "/WEB-INF/template/base/baseSearchComDialog/searchConditionInputs.html"/><!--报表基本信息筛选条件保存 -->
+</form> 
+<#include "/WEB-INF/template/common/columnConfig/tableTotalWidthLink.html"/>
+<table class="table" rel="${listID!}" layoutH="200">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody>
+		<#list pageMap.pageList as unit>
+	    <#if unit.node==2>
+	    <!-- index,sequence用于上下移动参数 -->
+		<tr  objectId="${objectId!0}" status="false" isSelect="true" target="id" trel="${treeID!}" rel="${unit.id}" crel="${listID!}" cTarget="ajax" url="${base}/init/unitInit/list/${unit.id}">
+		<#else>
+		
+		<@shiro.hasPermission name='2-252-u'>
+		<#if hasOpen=="yes">
+	    <tr>
+	    <#else>
+	    <tr objectId="${objectId!0}" status="2"  target="id" rel="${unit.id}" isSelect="true"   cTarget="citeEvent" citeEventModuleId="editUnitInitBtn" citeEventType="click">
+	    </#if>
+        </@shiro.hasPermission>
+	    <@shiro.lacksPermission name='2-252-u'>
+	    <#if hasOpen=="yes">
+	    <tr>
+	    <#else>
+	    <tr objectId="${objectId!0}" status="2"  target="id" rel="${unit.id}" isSelect="true">
+	    </#if>
+        </@shiro.lacksPermission>
+		</#if>
+			<td><a>${unit_index+1+pageMap.limit}</a><#if unit.node==2>..</#if></td>
+			<#list rowList as row>
+			<#if row.code?? && 'code'==row.code>
+			<td>${unit.code!''}</td>
+			<#elseif row.code?? && 'fullName'==row.code>
+			<td>${unit.fullName!''}</td>
+			<#elseif row.code?? && 'smallName'==row.code>
+			<td>${unit.smallName!''}</td>
+			<#elseif row.code?? && 'spell'==row.code>
+			<td>${unit.spell!''}</td>
+			<#elseif row.code?? && 'address'==row.code>
+			<td>${unit.address!''}</td>
+			<#elseif row.code?? && 'phone'==row.code>
+			<td>${unit.phone!''}</td>
+			<#elseif row.code?? && 'email'==row.code>
+			<td>${unit.email!''}</td>
+			<#elseif row.code?? && 'contact1'==row.code>
+			<td>${unit.contact1!''}</td>
+			<#elseif row.code?? && 'mobile1'==row.code>
+			<td>${unit.mobile1!''}</td>
+			<#elseif row.code?? && 'contact2'==row.code>
+			<td>${unit.contact2!''}</td>
+			<#elseif row.code?? && 'mobile2'==row.code>
+			<td>${unit.mobile2!''}</td>
+			<#elseif row.code?? && 'staffFullName2'==row.code>
+			<td>${unit.staffFullName2!''}</td>
+			<#elseif row.code?? && 'bank'==row.code>
+			<td>${unit.bank!''}</td>
+			<#elseif row.code?? && 'bankAccount'==row.code>
+			<td>${unit.bankAccount!''}</td>
+			<#elseif row.code?? && 'zipCode'==row.code>
+			<td>${unit.zipCode!''}</td>
+			<#elseif row.code?? && 'fax'==row.code>
+			<td>${unit.fax!''}</td>
+			<#elseif row.code?? && 'tariff'==row.code>
+			<td>${unit.tariff!''}</td>
+			<#elseif row.code?? && 'areaFullName2'==row.code>
+			<td>${unit.areaFullName2!''}</td>
+			<#elseif row.code?? && 'fitPrice'==row.code>
+			<td>
+			    <#if unit.fitPrice == 0>
+				无
+				<#elseif unit.fitPrice == 1>
+				零售价
+				<#elseif unit.fitPrice == 2>
+				预设售价1
+				<#elseif unit.fitPrice == 3>
+				预设售价2
+				<#elseif unit.fitPrice == 4>
+				预设售价3	
+				</#if>
+			</td>
+			<#elseif row.code?? && 'status'==row.code>
+			<td id="status${unit.id}">
+				<#if unit.node?number == 1>
+					<#if unit.status?number == 1>停用</#if>
+					<#if unit.status?number == 2>启用</#if>
+				</#if>
+			</td>
+			<#elseif row.code?? && 'beginGetMoneys'==row.code>
+			<td>${unit.beginGetMoneys!''}</td>
+			<#elseif row.code?? && 'beginPayMoneys'==row.code>
+			<td>${unit.beginPayMoneys!''}</td>
+			</#if>
+			</#list>
+		</tr>
+		</#list>
+	</tbody>
+	<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+    <@shiro.hasPermission name='2-252-u'>
+    <#if hasOpen=="yes">
+    <a class="buttonDisabled" href="javascript:void(0);"><span>修改期初</span></a>
+    <#else>
+     <a id="editUnitInitBtn" class="button" href="${base}/init/unitInit/toEditUnitInit" title="修改期初"  isExec="{status}" warn="不能修改某一类商品！" target="dialog" param="selectedObjectId" width="350" height="280"><span>修改期初</span></a>
+    </#if>
+    </@shiro.hasPermission>
+    
+    <a class="button" target="dialog" href="${base}/base/product/toReportBaseFilter/pagerForm-unit" rel="report_unit_filtter" width="400" height="210" aimTitle="期初单位应收应付" aimUrl="${base}/init/unitInit" aimTabId="unitInitView"><span>单位筛选</span></a>   
+    
+    <#if supId?? && supId!=0>
+      <a class="button" href="${base}/init/unitInit/list/${pSupId!0}-${supId}" trel="${treeID!}" nodeId="${pSupId!0}"  target="ajax" rel="${listID!}"><span>上级</span></a>  
+    <#else>
+       <a class="buttonDisabled" href="javascript:void(0);"><span>上级</span></a>
+    </#if>
+    
+    <div style="float: right;">
+    <#assign privs = '2-252-p'/>
+    <#assign href = '${base}/init/unitInit/print'/>
+    <#assign formId = 'pagerForm'/>
+    <#include "/WEB-INF/template/common/print/printBtn.html"/>
+    <a class="button" href="#" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a> 
+    </div>
+</div>

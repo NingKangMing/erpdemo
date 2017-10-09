@@ -1,0 +1,44 @@
+<div class="panel">
+	<div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">往来对账</span></label>
+				</li>
+			</ul>
+			<ul class="searchContent" style="margin-top: 5px;">
+				<li>
+					<span style="margin-left: 10px;">查询时间：</span>${startDate!''}至${endDate!''}
+				</li>
+			</ul>
+			<ul class="searchContent">
+				<li>
+					<span style="margin-left: 10px;">往来单位:</span><#if unitFullName=="">全部单位</#if>${unitFullName} 
+					<span style="margin-left: 50px;">内部职员:</span><#if staffFullName=="">全部职员</#if>${staffFullName} 
+					<span style="margin-left: 50px;">此前余额:</span><#if (pageMap.preLastMoney)??>${(pageMap.preLastMoney)!}</#if>
+				</li>
+				<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+				<li style="float: right;">
+					过滤
+					<select onchange="xsReportAmountChange(this,'filter','pagerForm','');">
+				       <option <#if filter=="all">selected="selected"</#if> value="all">全部显示</option>
+				       <option <#if filter=="noRCW">selected="selected"</#if> value="noRCW">不显示红冲单据</option>
+				    </select> 
+				</li>
+				<li style="float: right;">
+				             对账方式 
+				    <select onchange="xsReportAmountChange(this,'checkBy','pagerForm','');">
+				       <option <#if checkBy=="byProduct">selected="selected"</#if> value="byProduct">按商品对账</option>
+				       <option <#if checkBy=="byOrder">selected="selected"</#if> value="byOrder">按单据对账</option>
+				    </select>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div layoutH="87">
+		<#include "/WEB-INF/template/reports/finance/arap/arapMoneyCheck/list.html" />
+	</div>
+</div>
+
+
+

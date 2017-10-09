@@ -1,0 +1,86 @@
+<input type="hidden" id="projectBasePath" value="${base}"/>
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/prdSellCostCount/prdXsCostDetail" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="orderField" value="${orderField!'recodeDate'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    
+    <input type="hidden" name="orderId" value="${orderId!}" />
+    <input type="hidden" name="billTypeId" value="${billTypeId!}" />
+    
+    
+</form>
+<#include "/WEB-INF/template/common/columnConfig/tableTotalWidthLink.html"/>
+<table class="table" layoutH="170">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody id="reports_prdsellcount_body">
+		<#list pageMap.pageList as obj>
+		<tr <#if obj.isRCW!=0> style="color: red;" </#if>>
+			<td><a>${obj_index+1}</a></td>
+			<#list rowList as row>
+			<#if row.code?? && 'recodeDate'==row.code>
+			<td>${(obj.recodeDate?string('yyyy-MM-dd HH:mm:ss'))}</td>
+			<#elseif row.code?? && 'productCode'==row.code>
+			<td>${(obj.productCode)!''}</td>
+			<#elseif row.code?? && 'productFullName'==row.code>
+			<td>${(obj.productFullName)!''}</td>
+			<#elseif row.code?? && 'basePrice'==row.code>
+			<td><#if obj.basePrice??&&obj.basePrice!=0>${(obj.basePrice)!''}</#if></td>
+			<#elseif row.code?? && 'baseAmount'==row.code>
+			<td><#if obj.baseAmount??&&obj.baseAmount!=0>${(obj.baseAmount)!''}</#if></td>
+			<#elseif row.code?? && 'sellMoney'==row.code>
+			<td><#if obj.sellMoney??&&obj.sellMoney!=0>${(obj.sellMoney)!''}</#if></td>
+			<#elseif row.code?? && 'costPrice'==row.code>
+			<td>
+			    <@shiro.hasPermission name='1101-s'>
+				<#if obj.costPrice??&&obj.costPrice!=0>${(obj.costPrice)!''}</#if>
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'costMoneys'==row.code>
+			<td>
+			    <@shiro.hasPermission name='1101-s'>
+				<#if obj.costMoneys??&&obj.costMoneys!=0>${(obj.costMoneys)!''}</#if>
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'sellWinMoney'==row.code>
+			<td>
+			    <@shiro.hasPermission name='1101-s'>
+				<#if obj.sellWinMoney??&&obj.sellWinMoney!=0>${(obj.sellWinMoney)!''}</#if>
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'unitCode'==row.code>
+			<td>${(obj.unitCode)!''}</td>
+			<#elseif row.code?? && 'unitFullName'==row.code>
+			<td>${(obj.unitFullName)!''}</td>
+			<#elseif row.code?? && 'staffCode'==row.code>
+			<td>${(obj.staffCode)!''}</td>
+			<#elseif row.code?? && 'staffFullName'==row.code>
+			<td>${(obj.staffFullName)!''}</td>
+			<#elseif row.code?? && 'storageCode'==row.code>
+			<td>${(obj.storageCode)!''}</td>
+			<#elseif row.code?? && 'storageFullName'==row.code>
+			<td>${(obj.storageFullName)!''}</td>
+			</#if>
+			</#list>
+		</tr>
+		</#list>
+	</tbody>
+	<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+	
+<div class="divider"></div>
+<div>
+</div>
+<div style="float: right;">
+	<#assign href = '${base}/reports/prdSellCostCount/costDetailprint'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

@@ -1,0 +1,78 @@
+<div class="pageContent">
+	<h2 class="contentTitle">月结存与反月结存</h2>
+	<form action="${base}/sys/monthEnd/monthEnd" class="pageForm required-validate" enctype="text/plain" method="post" onsubmit="return validateCallback(this, dialogAjaxDone1)">
+	  <div class="pageFormContent" layoutH="100">
+	  <!-- 多个tab -->
+	  <div class="tabs" style="width: 573px;">
+      <div class="tabsHeader" style="width: 570px;">
+         <div class="tabsHeaderContent">
+            <ul>
+               <li class="selected"><a href="#" onclick="sysMonthEndTabChange();"><span>结存</span></a></li>
+               <li><a href="#" onclick="sysUnMonthEndTabChange();"><span>反结存</span></a></li>
+            </ul>
+         </div>
+      </div>
+      <div class="tabsContent" style="height:250px;">
+         <!-- 月结存 -->
+         <div>
+             <div style="float: left; width: 200px; margin-left: 25px; margin-top: 40px;">
+                 <span style="line-height: 25px; ">月结存交在当前账本处做一个标记，建议用户每个月月底做一次月结存，这样可以准确划分每月的账本，以便快速准确的查询统计每月的资产、销售、费用和利润等。月结存不会对账本有任何影响。</span>
+                 <div style="color: red; margin-top: 20px; margin-left: 20px;"> 注:系统每年只能做11次结存!</div> 
+             </div>
+             <div style="float: right; margin-right: 20px;">
+                <fieldset>
+				    <legend>本月相关日期</legend>
+				    <table style="height: 200px;">
+				       <#if preEndDate??>
+				       <tr>
+				          <td>上月结束</td>
+				          <td>${preEndDate?string('yyyy-MM-dd')}
+				       </tr>
+				       </#if>
+				       <tr>
+				          <td>本月开始</td>
+				          <td>
+				          ${startDate?string('yyyy-MM-dd')}
+				          <input type="hidden" id="startDate" name="monthEnd.startDate" value="${startDate?string('yyyy-MM-dd')}"/>
+				          </td>
+				       </tr>
+				       <tr>
+				          <td>本月结束</td>
+				          <td><input class="date" id="endDate"  name="monthEnd.endDate" value="${endDate?string('yyyy-MM-dd')}" type="text" readonly="readonly"/></td>
+				       </tr>
+				       <tr>
+				          <td>月结期间</td>
+				          <td><input class="number" id="monthCount" name="monthEnd.monthCount" value="${monthCount!1}" type="text" <#if preEndDate??>readonly="readonly"</#if>/></td>
+				       </tr>
+				       <tr>
+				          <td>本月名称</td>
+				          <td><input type="text" name="monthEnd.monthsName" value="${currentMonthName!}" maxlength="3"/></td>
+				       </tr>
+				    </table>
+			   </fieldset>   
+             </div>
+         </div>
+         <!--end 月结存 -->
+         <div>
+              <div style="margin-top: 30px; line-height: 30px; letter-spacing: 5px; text-indent : 20px;">反月结存是月结存的反向过程，该操作将从会计本月的上月开始，取消有关月结存标记。</div>
+              <div style="line-height: 30px;letter-spacing: 5px; text-indent : 20px;">一次反月结存操作只能处理一个会计月的标记。反月结存不会对账本产生任何影响。</div>
+              <div style="line-height: 30px;letter-spacing: 5px; text-indent : 20px;">当系统中只剩下本会计月时，将不允许做反月结存操作。</div>
+              <div style="color: red;line-height: 30px;text-indent : 20px;">注：当前系统中有${monthEndCount+1}个会计月，您可以反${monthEndCount}次</div>
+         </div>
+      </div>
+      <div class="tabsFooter">
+         <div class="tabsFooterContent"></div>
+      </div>
+	  </div>
+	  <!--end 多个tab -->	 
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><a class="button" href="javascript:void(0);" href1="${base}/sys/monthEnd/monthEnd" id="monthEndSubmit" onclick="submitBeforeValidate(this,'sysMonthEnd')"><span>结存</span></a></li>
+				<li><a class="button" style="display: none;" href="${base}/sys/monthEnd/unMonthEnd" id="unMonthEndSubmit" target="submit"><span>反结存</span></a></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>
+

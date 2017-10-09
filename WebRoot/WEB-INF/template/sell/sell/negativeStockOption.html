@@ -1,0 +1,73 @@
+<!-- 销售单保存负库存提示 -->
+<div>
+
+<div class="pageHeader">
+	<div class="searchBar">
+	   <ul class="searchContent">
+	       <li><h2 class="contentTitle">以下商品已经出现负库存，请确定操作是否继续进行？</h2></li>
+	    </ul>
+	</div>
+</div>
+
+<input type="hidden" id="modelType" value="${modelType}"/>
+<input type="hidden" id="basePath" value="${basePath}"/>
+<input type="hidden" id="trIndexs" value="${trIndexs}"/>
+<input type="hidden" id="productIds" value="${productIds}"/>
+<input type="hidden" id="negativeStockAmounts" value="${negativeStockAmounts}"/>
+<input type="hidden" id="costAriths" value="${costAriths}"/>
+<input type="hidden" id="prdUnitNames" value="${prdUnitNames}"/>
+<input type="hidden" id="selectUnitIds" value="${selectUnitIds}"/>
+<input type="hidden" id="notStocks" value="${notStocks}"/>
+
+
+<div class="pageContent">
+	<table class="table" layoutH="100"  targetType="dialog">
+		<thead>
+			<tr>
+				<th width="30" align="center">行号</th> 
+				<th width="60" align="center">所在行号</th>
+				<th width="60" align="center">商品编号</th>
+				<th width="100" align="center">商品全名</th>
+				<th width="70" align="center">库存数量</th>
+				<th width="70" align="center">负库存数量</th>
+				<th width="60" align="center">仓库编号</th>
+				<th width="70" align="center">仓库全名</th>
+			</tr>
+		</thead>
+		<tbody>
+		    <#list prdAndStoRecords as prdSto>
+			<tr>
+				<td><a>${prdSto_index+1}</a></td>
+				<td>${prdSto.trIndex}</td>
+				<td ccname="code">${prdSto.product.code}</td>
+				<td ccname="fullName">${prdSto.product.fullName}</td>
+				<td>
+				 <@shiro.hasPermission name='5-81-511-s'>
+	                ${prdSto.stockAmount}
+			     </@shiro.hasPermission>
+			     <@shiro.lacksPermission name='5-81-511-s'>
+				    ***
+			     </@shiro.lacksPermission>
+				</td>
+				<td>
+				 <@shiro.hasPermission name='5-81-511-s'>
+	                ${prdSto.negativeStockAmount}
+			     </@shiro.hasPermission>
+			     <@shiro.lacksPermission name='5-81-511-s'>
+				    ***
+			     </@shiro.lacksPermission>
+				</td>
+				<td>${prdSto.storage.code}</td>
+				<td>${prdSto.storage.fullName}</td>
+			</tr>
+			</#list>
+		</tbody>
+	</table>
+</div>
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+    <a style="margin-left: 440px;" class="button" onclick="xsNagetiveStockComfirm()"><span>确定</span></a>
+	<div style="margin-left: 20px;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+</div>
+</div>

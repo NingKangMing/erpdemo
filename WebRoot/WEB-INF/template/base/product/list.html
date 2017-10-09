@@ -1,0 +1,129 @@
+<form id="pagerForm" onsubmit="return navTabSearch(this);" class="pageForm required-validate" enctype="text/plain" method="post" action="${base}/base/product/list/${supId}">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+	
+	<!--筛选       第一次筛选结果条件保存   方便第二次过滤筛选 -->
+	<input id="b_product_filter_attr" type="hidden" name="searchPar1" value="${searchPar1!''}"/>
+	<input id="b_product_filter_value" type="hidden" name="searchValue1" value="${searchValue1!''}"/>
+	<input  type="hidden" name="supId" value="${supId!'all'}"/>   <!-- 点击树节点，搜索树下面的数据 -->
+	<input type="hidden"  name="node" value="${node!0}"/>
+	<!--end 第一次筛选结果条件保存   方便第二次过滤筛选 -->
+	
+	<input type="hidden" name="showLastPage" id="showLastPage" />   <!-- 新增，复制新增完成后跳转到最后一页 -->
+	<input type="hidden" name="selectedObjectId" id="selectedObjectId" />   <!-- 新增，复制新增完成后跳转到最后一页     选中的Id -->
+	
+</form> 
+<#include "/WEB-INF/template/common/columnConfig/tableTotalWidthLink.html"/>
+<table class="table" rel="b_product_paging" layoutH="140">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody>
+		<#list pageMap.pageList as product>
+	    <#if product.node==2>
+	    <!-- index,sequence用于上下移动参数 -->
+		<tr objectId="${objectId!0}" status="false" order="${product.rank!0}" oldOrder="${product.rank!0}" target="id" trel="b_product_treeId" rel="${product.id!0}" crel="b_product_paging" cTarget="ajax" url="${base}/base/product/list/${product.id}">
+		<#else>
+		<tr objectId="${objectId!0}" status="2" order="${product.rank!0}" oldOrder="${product.rank!0}" target="id" rel="${product.id!0}" title="修改" crel="b_product_paging" drel="unit_edit_${product.id}" <@shiro.hasPermission name='1-201-u'>cTarget="dialog"</@shiro.hasPermission> widths="570" heights="450" url="${base}/base/product/edit/${product.id}">
+		</#if>
+			<td><a>${product_index+1+pageMap.limit}</a><#if product.node==2>..</#if></td>
+			<#list rowList as row>
+			<#if row.code?? && 'code'==row.code>
+			<td>${product.code!''}</td>
+			<#elseif row.code?? && 'fullName'==row.code>
+			<td>${product.fullName!''}</td>
+			<#elseif row.code?? && 'smallName'==row.code>
+			<td>${product.smallName!''}</td>
+			<#elseif row.code?? && 'spell'==row.code>
+			<td>${product.spell!''}</td>
+			<#elseif row.code?? && 'standard'==row.code>
+			<td>${product.standard!''}</td>
+			<#elseif row.code?? && 'model'==row.code>
+			<td>${product.model!''}</td>
+			<#elseif row.code?? && 'field'==row.code>
+			<td>${product.field!''}</td>
+			<#elseif row.code?? && 'assistUnit'==row.code>
+			<td>${product.assistUnit!}</td>
+			<#elseif row.code?? && 'calculateUnit1'==row.code>
+			<td>${product.calculateUnit1!}</td>
+			<#elseif row.code?? && 'retailPrice1'==row.code>
+			<td>${product.retailPrice1!}</td>
+			<#elseif row.code?? && 'barCode1'==row.code>
+			<td>${product.barCode1!''}</td>
+			<#elseif row.code?? && 'defaultPrice11'==row.code>
+			<td>${product.defaultPrice11!''}</td>
+			<#elseif row.code?? && 'defaultPrice12'==row.code>
+			<td>${product.defaultPrice12!''}</td>
+			<#elseif row.code?? && 'defaultPrice13'==row.code>
+			<td>${product.defaultPrice13!''}</td>
+			<#elseif row.code?? && 'savePath'==row.code>
+			<td>
+			    <#if (product.savePath)??>
+				    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(product.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(product.savePath)!}"  width="20px" height="20px"/>
+	            </#if>
+			</td>
+			<#elseif row.code?? && 'memo'==row.code>
+			<td>${product.memo!}</td>
+			<#elseif row.code?? && 'status'==row.code>
+			<td id="status${product.id}">
+				<#if product.node?number == 1>
+					<#if product.status?number == 1>停用</#if>
+					<#if product.status?number == 2>启用</#if>
+				</#if>
+			</td>
+			<#elseif row.code?? && 'costArith'==row.code>
+			<td>
+				<#if product.node?number == 1>
+					<#if product.costArith?number == 1>移动加权平均</#if>
+					<#if product.costArith?number == 4>手工指定法</#if>
+				</#if>
+			</td>
+			<#elseif row.code?? && 'validity'==row.code>
+			<td>${product.validity!''}</td>
+			</#if>
+		    </#list>
+		</tr>
+		</#list>
+	</tbody>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+    <@shiro.hasPermission name='1-201-a'>
+	<a class="button" target="dialog" rel="b_product_id" href="${base}/base/product/add/${supId}" href1="${base}/common/baseInfo/verifyBaseAddPrivs/${supId!0}-product" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" title="基本信息●商品信息" width="570" height="450"><span>新增</span></a>
+	<a class="button" target="dialog" rel="b_product_id" href="${base}/base/product/copyAdd/{id}" href1="${base}/common/baseInfo/verifyBaseAddPrivs/${supId!0}-product" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" width="570" height="450"><span>复制新增</span></a>
+	<a class="button" target="dialog" rel="b_product_id" href="${base}/base/product/sort/{id}"  href1="${base}/common/baseInfo/verifyBaseAddPrivs/{id}-product-sort" modelType="newUrlValidate" callBefore="callBeforeNavTabValidate" title="基本信息●商品信息" width="570" height="450"><span>增加下级</span></a>
+	</@shiro.hasPermission>
+	<@shiro.hasPermission name='1-201-u'>
+	<a class="button" target="dialog"   rel="b_product_id" href="${base}/base/product/edit/{id}" width="570" height="450"><span>修改</span></a>
+	<a class="button" target="ajaxTodo" href="${base}/base/product/delete/{id}" callback="removeTreeAjaxTodo" title="数据删除后不能恢复，确认删除？"><span>删除</span></a>
+	</@shiro.hasPermission>
+	<#if node?? && node == 1>
+		<a class="buttonDisabled" href="javascript:;"><span>列表</span></a>
+	<#else>
+		<a class="button" href="${base}/base/product/list/${supId}?actionType=line" target="ajax" rel="b_product_paging"><span>列表</span></a>
+	</#if>
+	<a class="button" target="dialog" rel="b_product_filter" href="${base}/base/product/filter" title="条件查询" width="400" height="210"><span>查询</span></a>
+	<#if supId?? && supId!=0 && node!=1>
+    	<a class="button" href="${base}/base/product/list/${pSupId!0}-${supId}" trel="b_product_treeId" nodeId="${pSupId!0}"  target="ajax" rel="b_product_paging"><span>上级</span></a>
+	<#else>
+        <a class="buttonDisabled" href="javascript:void(0);"><span>上级</span></a>
+	</#if>
+	
+<div style="float: right;">
+    <@shiro.hasPermission name='1-201-u'>
+	<a class="button" target="ajaxTodo" href="${base}/base/product/disableOrEnable/{id}" isExec="{status}" warn="不能操作一类基础数据！" callback="editStatus"><span>停用/启用</span></a>
+	</@shiro.hasPermission>
+    <a class="button" href="javascript:void(0);" target="tableRowSort" rel="b_product_paging" sort="up"><span>上移</span></a>
+    <a class="button" href="javascript:void(0);" target="tableRowSort" sort="down" rel="b_product_paging"><span>下移</span></a>
+    <a class="button" href="${base}/base/product/saveRank" target="tableRowSortSave" rel="b_product_paging" warn="没有排序变更"><span>排序保存</span></a>
+    <#assign privs = '1-201-p'/>
+    <#assign href = '${base}/base/product/print'/>
+    <#assign formId = 'pagerForm'/>
+    <#include "/WEB-INF/template/common/print/printBtn.html"/>
+    <a class="button" href="#" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a>
+</div>
+    
+    
+</div>

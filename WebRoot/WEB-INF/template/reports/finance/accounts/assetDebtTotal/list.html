@@ -1,0 +1,74 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/finance/accounts/assetDebtTotal/second" onsubmit="return dwzSearch(this, 'costTotalList');">
+    <input type="hidden" name="id" value="${id!}"/>
+</form>
+<table class="table" rel="costTotalList" layoutH="120">
+	<thead>
+		<tr>
+			<th width="50px">行号</th>
+			<th width="150px" align="left">资产类</th>
+			<th width="150px">累计金额（资产类）</th>
+			<th width="150px" align="left">负债及权益类</th>
+			<th width="150px">累计金额（负债及权益类）</th>
+		</tr>
+	</thead>
+	<tbody>
+		<#list accountList as account>
+		  <tr>
+		     <td>${account_index+1}</td>
+		     <td>${(account.cost.blank)!}${(account.cost.fullName)!}</td>
+		     <td>
+		        <#assign allCostMoneys = 0/>
+		         <#assign setCostMoneys = 0/>
+		         <#if (account.cost.allMoneys)??>
+		           <#assign allCostMoneys = account.cost.allMoneys/>
+		         </#if>
+		         <#if (account.cost.setMoneys)??>
+		           <#assign setCostMoneys = account.cost.setMoneys/>
+		         </#if>
+		         <#if allCostMoneys!=0 || setCostMoneys !=0>
+			            ${allCostMoneys+setCostMoneys}
+		         </#if>
+		       
+		     </td>
+		     <td>${(account.debt.blank)!}${(account.debt.fullName)!}</td>
+		     <td>
+		          
+		         <#assign allDebtMoneys = 0/>
+		         <#assign setDebtMoneys = 0/>
+		         <#if (account.debt.allMoneys)??>
+		           <#assign allDebtMoneys = account.debt.allMoneys/>
+		         </#if>
+		         <#if (account.debt.setMoneys)??>
+		           <#assign setDebtMoneys = account.debt.setMoneys/>
+		         </#if>
+		         <#if allDebtMoneys!=0 || setDebtMoneys !=0>
+			            ${allDebtMoneys+setDebtMoneys}
+		         </#if>
+		     </td>
+		  </tr>
+		</#list>
+		<tr>
+		     <td>${index}</td>
+		     <td>资产总计：</td>
+		     <td>${(costMoneyTotle)!}</td>
+		     <td>负债及权益总计：</td>
+		     <td>${(debtMoneyTotle)!}</td>
+		 </tr>
+	</tbody>
+</table>
+
+<div class="divider"></div>
+<div>
+    <#if isFreeVersion != "yes">
+    <a class="button" height="500" width="400" href="${base}/reports/finance/accounts/costTotal/toHistory" mask="true" 
+      rel="historyDialog" target="dialog" caption="月结存信息框" aimTabId="assetDebtTotalStateView" aimTitle="资产负债表"
+	aimUrl="${base}/reports/finance/accounts/assetDebtTotal"><span>历史记录</span></a>
+	</#if>
+</div>
+<div style="float: right;">
+     <#assign privs = '6-107-642-p'/>
+	<#assign href = '${base}/reports/finance/accounts/assetDebtTotal/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

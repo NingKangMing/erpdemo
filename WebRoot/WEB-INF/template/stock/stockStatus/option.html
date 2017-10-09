@@ -1,0 +1,72 @@
+<div id="cc_stockStatus_dialog_paging">
+<div class="pageHeader">
+	<form id="pagerForm" rel="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/stock/stockStatus/dialogSearch" onsubmit="return dwzSearch(this, 'dialog');">
+		<input type="hidden" name="pageNum" value="${(pageMap.get('pageNum'))!}" />
+		<input type="hidden" name="numPerPage" value="${(pageMap.get('numPerPage'))!}" />
+		<input type="hidden" name="orderField" value="${orderField!'proRank'}" /><!--查询排序-->
+	    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+	    <input type="hidden" name="supId" value="${supId!0}" />
+		<input type="hidden" name="selectedObjectId" id="selectedObjectId" value="${objectId!0}"/>   <!--   默认选中对象的Id -->
+		
+		<input type="text" id="checkObjIds" name="checkObjIds" value=""/>
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label>仓库全称:</label>
+					<input class="textInput" name="proFullName" value="${proFullName!}" type="text">
+				</li>	  
+				<li>
+					<label>仓库编号:</label>
+					<input class="textInput" name="proCode" value="${proCode!}" type="text">
+				</li>
+				<li style="float: right; margin-right: 20px;"><div class="buttonActive"><div class="buttonContent"><button type="submit">查询</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>
+<div class="pageContent">
+	<table class="table" layoutH="130"  targetType="dialog">
+		<thead>
+			<tr>
+				<th width="50" align="center">行号</th> 
+				<th width="100" align="center"><input class="checkboxCtrl" type="checkbox" group="proIdArr" onclick="checkAllAndVersa(this,'checkObjIds','cc_stock_dialog_tbody');"/></th>
+				<th width="100" align="center" orderField="proCode"  <#if orderField?? && 'proCode'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>商品编号</th>
+				<th width="100" align="center" orderField="proFullName"  <#if orderField?? && 'proFullName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>商品全名</th>
+				<th width="100" align="center" orderField="sckAmount"  <#if orderField?? && 'sckAmount'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>基本数量</th>
+				<th>辅助数量</th>
+				<th orderField="proAssistUnit"  <#if orderField?? && 'proAssistUnit'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>辅助单位</th>
+			</tr>
+		</thead>
+		<tbody id="cc_stock_dialog_tbody">
+		    <#list pageMap.pageList as recode>
+		    <#if recode.proNode==2>
+		    <!-- selectCheckboxObjs   要选中的checkBox -->
+			<tr objectId="${objectId!0}" checkId="${recode.proId!0}" rel="${recode.proSupId!0}-${recode.proId!0}"  cTarget="dialog"  drel="cc_stock_dialog"  url="${base}/stock/stockStatus/dialogList/${recode.proId}">
+			<#else>
+			<tr objectId="${objectId!0}" checkId="${recode.proId!0}" rel="${recode.proSupId!0}-${recode.proId!0}" >
+			</#if>
+				<td><a>${recode_index+1+pageMap.limit}</a><#if recode.proNode==2>..</#if></td>
+				<td><input type="checkbox" name="proIdArr"  value="${recode.proSupId!0}-${recode.proId!0}" onclick="checkItem(this,'checkObjIds');"/></td>
+				<td>${recode.proCode!''}</td>
+				<td>${recode.proFullName!''}</td>
+				<td>${recode.sckAmount!''}</td>
+				<td>${recode.sckHelpAmount!''}</td>
+				<td>${recode.proAssistUnit!''}</td>
+			</tr>
+			</#list>
+		</tbody>
+	</table>
+</div>
+<#include "/WEB-INF/template/unitl/dialogpage.html"/>
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+    <a style="margin-left: 150px;" class="button"  url="${base}/stock/stockStatus/searchBack/" target="checkedBack" irel="b_dialog_product_page_checkboxIds" callback="billCallBack"><span>选中</span></a>
+	<#if objId?? && objId!=0>
+	   <a style="margin-left: 220px;" class="button" href="${base}/stock/stockStatus/dialogList/${objId}-up" target="ajax" rel="cc_stockStatus_dialog_paging" ><span>上级</span></a>
+    <#else>
+       <a style="margin-left: 220px;" class="buttonDisabled" href="javascript:void(0);"><span>上级</span></a>
+    </#if>
+	<div style="margin-left: 30px;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+</div>
+</div>

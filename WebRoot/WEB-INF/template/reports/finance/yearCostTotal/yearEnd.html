@@ -1,0 +1,65 @@
+<div class="pageContent">
+   <form action="${base}/reports/finance/costDistribution/go" method="post" class="tableForm pageForm" enctype="text/plain" onsubmit="return validateCallback(this,aioDialogOpenNavTab)">
+      <input type="hidden" id="aimTabId" name="aimTabId"  value=""/>
+      <input type="hidden" id="aimUrl"   name="aimUrl"   value=""/>
+      <input type="hidden" id="aimTitle" name="aimTitle"  value=""/>
+      <!-- 动态需要的参数 -->
+      <#if paraMap?exists>
+          <#list paraMap.keySet() as k>
+          	<input type="hidden" id="${k}" name="${k}" value="${paraMap.get(k)}"/>
+          </#list>
+      </#if>
+      
+      <div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">
+					     年结存信息框
+					</span></label>
+				</li>
+			</ul>
+		</div>
+	</div>
+      <div layoutH="70">
+	       <table class="table" layoutH="100">
+	           <thead>
+		          <tr>
+		               <th width="30px">行号</th>
+		               <th width="30px">选择</th>
+		               <th width="90px">年份</th>
+		               <th width="100px">开始日期</th>
+		               <th width="100px">结束日期</th>
+		          </tr>
+		       </thead>
+		       <tbody>
+		           <tr>
+		              <td>1</td>
+		              <td><input type="checkbox" name="yearEndId" class="required" value="0"></td>
+		              <td>本年</td>
+		              <td>${startDate!}</td>
+		              <td>${endDate!}</td>
+		           </tr>
+		           <#list yearEndList as year>
+		             <tr>
+		              <td>${year_index+2}</td>
+		              <td><input type="checkbox" name="yearEndId" class="required" value="${year.id}"></td>
+		              <td>${year.yearsName!}</td>
+		              <td><#if year.startDate??>${year.startDate?string("yyyy-MM-dd")}</#if></td>
+		              <td><#if year.endDate??>${year.endDate?string("yyyy-MM-dd")}</#if></td>
+		             </tr>
+		           </#list>
+		       </tbody>
+	       </table>
+	 </div>
+	 
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+		</ul>
+	  </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

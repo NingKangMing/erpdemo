@@ -1,0 +1,48 @@
+<!-- eg:库存状况分布-》价格方式-->
+<!-- 
+特殊参数：{param:赋值给在列表隐藏文本域中预留的id,aimDiv：指定要刷新的divId}
+eg调用方式：<a class="button" href="${base}/common/priceWay"
+	 		param="priceWay" aimDiv="stockDistributedList" target="dialog"
+	 		rel="priceWay"  width="220" height="300">
+	 		<span>价格方式</span>
+		</a>
+ -->
+<div class="pageContent">
+<h2 class="contentTitle">请选择价格方式</h2>
+   <form action="${base}/common/searchDialog/go" method="post" class="pageForm required-validate" enctype="text/plain" onsubmit="return validateCallback(this,aioReloadForm)">
+      <input type="hidden" id="aimDiv" name="aimDiv"  value=""/><!-- 目标DivId -->
+      <div layoutH="75">
+	       <fieldset>
+			    	<ul style=" margin-left: 20px;">
+			    		<li style="line-height: 28px;">
+			    			<input type="radio" name="priceWay" id="stockPrice" value="stockPrice" <#if priceWay?? && priceWay=="stockPrice">checked</#if> /><label for="stockPrice">库存成本价</label>
+			    		</li>
+			    		<li style="line-height: 28px;">
+			    			<input type="radio" name="priceWay" id="budgetPrice1" value="budgetPrice1" <#if priceWay?? && priceWay=="budgetPrice1">checked</#if> /><label for="budgetPrice1">预售价1</label>
+			    		</li>
+			    		<li style="line-height: 28px;">
+			    			<input type="radio" name="priceWay" id="budgetPrice2" value="budgetPrice2" <#if priceWay?? && priceWay=="budgetPrice2">checked</#if> /><label for="budgetPrice2">预售价2</label>
+			    		</li>
+			    		<li style="line-height: 28px;">
+			    			<input type="radio" name="priceWay" id="budgetPrice3" value="budgetPrice3" <#if priceWay?? && priceWay=="budgetPrice3">checked</#if> /><label for="budgetPrice3">预售价3</label>
+			    		</li>
+			    		<li style="line-height: 28px;">
+			    			<input type="radio" name="priceWay" id="retailPrice" value="retailPrice" <#if priceWay?? && priceWay=="retailPrice">checked</#if> /><label for="retailPrice">零售价</label>
+			    		</li>
+			    		<li style="line-height: 28px;">
+			    			<input type="radio" name="priceWay" id="lastInPrice" value="lastInPrice" <#if priceWay?? && priceWay=="lastInPrice">checked</#if> /><label for="lastInPrice">最近折后进价</label>
+						</li>
+			    	</ul>
+		   </fieldset>   
+	 </div>
+	 
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+		</ul>
+	  </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

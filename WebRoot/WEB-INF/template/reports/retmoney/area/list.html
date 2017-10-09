@@ -1,0 +1,110 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/retmoney/area/search/second" onsubmit="return dwzSearch(this, 'returnMomeyAreaList');">
+	
+	<input type="hidden" name="pageNum" value="${pageMap.pageNum!}" />
+	<input type="hidden" name="numPerPage" value="${pageMap.numPerPage!}" />
+	<input type="hidden" name="orderField" value="${(params.orderField)!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${(params.orderDirection)!'asc'}" /><!--升序降序-->
+
+	<input type="hidden" id="startTime" name="startTime" value="${(params.startTime)!}"/>        <!--开始日期  -->
+	<input type="hidden" id="endTime" name="endTime" value="${(params.endTime)!}"/>            <!-- 结束日期 -->
+	<input type="hidden" id="supId" name="supId" value="${(params.supId)!}"/>                               <!-- 父级ID -->
+	<input type="hidden" id="isRow" name="isRow" value="${isRow!'false'}">
+	<input type="hidden" name="totalCount" value="${(pageMap.totalCount)!0}"/>
+</form>
+<table class="table" rel="returnMomeyAreaList" layoutH="190">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody>
+		<#list pageMap.pageList as area>
+		  <#if area.area.node?? && area.area.node==2>
+		  <tr  target="id" rel="${(area.area.id)!0}" serialize="true" trel="reports_returnMomeyArea" crel="returnMomeyAreaList" cTarget="ajax" url="${base}/reports/retmoney/area/search/child-${(area.area.id)!0}">
+		  <#else> 
+		  <tr target="id" rel="${(area.area.id)!0}" serialize="true" cTarget="openNavTab" cel="returnMoneyDepmAccountView" title="明细账本"  url="${base}/reports/retmoney/area/account/${(area.area.id)!0}">
+		  </#if>
+		    <td>${area_index+1+pageMap.limit}
+		        <#if area.area.node?? && area.area.node==2>
+		          ..
+		        </#if>
+		    </td>
+		    <#list rowList as row>
+		    <#if row.code?? && 'area.code'==row.code>
+		    <td>${(area.area.code)!}</td>
+		    <#elseif row.code?? && 'area.fullName'==row.code>
+		    <td>
+		         ${(area.area.fullName)!} 
+		         <#if !area.area.id??>其它地区</#if>
+		     </td>
+		    <#elseif row.code?? && 'sellMoneys'==row.code>
+		    <td>${(area.sellMoneys)!}</td>
+		    <#elseif row.code?? && 'cashGetMoneys'==row.code>
+		    <td>${(area.cashGetMoneys)!}</td>
+		    <#elseif row.code?? && 'bankGetMoneys'==row.code>
+		    <td>${(area.bankGetMoneys)!}</td>
+		    <#elseif row.code?? && 'getMoneySum'==row.code>
+		    <td>
+		       <#assign cashGetMoneys = 0 />
+		       <#assign bankGetMoneys = 0 />
+		       <#if area.cashGetMoneys??>
+		           <#assign cashGetMoneys = area.cashGetMoneys/>
+		       </#if>
+		       <#if area.bankGetMoneys??>
+		           <#assign bankGetMoneys = area.bankGetMoneys/>
+		       </#if>
+		       <#if cashGetMoneys !=0 || bankGetMoneys!=0>
+		            ${cashGetMoneys+bankGetMoneys}
+		       </#if>
+            </td>
+            <#elseif row.code?? && 'getMoneys'==row.code>
+            <td>
+                 ${(area.getMoneys)!}
+             </td>
+             <#elseif row.code?? && 'payMoneys'==row.code>
+             <td>
+                  ${(area.payMoneys)!}
+             </td>
+             <#elseif row.code?? && 'shouldGetMoneys'==row.code>
+             <td>
+                 <#assign shouldGetMoneys = 0>
+                 <#assign shouldPayMoneys = 0>
+                 <#if area.shouldGetMoneys??><#assign shouldGetMoneys = area.shouldGetMoneys></#if>
+                 <#if area.shouldPayMoneys??><#assign shouldPayMoneys = area.shouldPayMoneys></#if>
+                 
+                 <#assign isMaxGet = shouldGetMoneys-shouldPayMoneys>
+                 <#if isMaxGet gt 0>
+                     ${isMaxGet!}
+                 </#if>
+                
+             </td>
+             <#elseif row.code?? && 'shouldPayMoneys'==row.code>
+             <td>
+                 <#assign isMaxPay = shouldPayMoneys-shouldGetMoneys>
+                 <#if isMaxPay gt 0>
+                     ${isMaxPay!}
+                 </#if>
+             </td>
+             </#if>
+             </#list>
+		  </tr>
+		</#list>
+	</tbody>
+    <#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+
+
+<#include "/WEB-INF/template/unitl/paging.html"/>	
+<div class="divider"></div>
+<div>
+    <a class="button" height="250" width="300" mask="true" rel="dateDialog" target="dialog" caption="查询条件" aimTabId="returnMoneyAreaView" aimTitle="部门回款统计" aimUrl="${base}/reports/retmoney/area/search" href="${base}/common/dateDialog"><span>查询条件</span></a>
+    <a class="button" serialize="true" target="navTab" rel="returnMoneyAreaAccountView" title="明细账本"  href="${base}/reports/retmoney/area/account/{id}"><span>明细账本</span></a>
+    <#if isRow?? && isRow=='true'>
+    <a class="buttonDisabled" href="javascript:;"><span>列表</span></a>
+    <#else>
+      <a class="button" type="POST" serialize="true" target="ajax" rel="returnMomeyAreaList"  href="${base}/reports/retmoney/area/search/row"><span>列表</span></a>
+    </#if>
+</div>
+<div style="float: right;">
+     <#assign privs = '6-103-105-630-p'/>
+	<#assign href = '${base}/reports/retmoney/area/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

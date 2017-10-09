@@ -1,0 +1,30 @@
+<div class="panel" id="pagePanel">
+	<div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">期初应收应付</span></label>
+				</li>
+			</ul>
+			<ul class="searchContent">
+			    <#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+				<li style="float: right;">
+				    过滤<select onchange="xsReportAmountChange(this,'aimDiv','pagerForm','${listID!}');">
+				       <option <#if aimDiv=="all">selected="selected"</#if> value="all">显示所有</option>
+				       <option <#if aimDiv=="noZero">selected="selected"</#if> value="noZero">应收应付不为0</option>
+				       <option <#if aimDiv=="zero">selected="selected"</#if> value="zero">应收应付为0</option>
+				    </select>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div layoutH="30">
+		<div style="float:left; display:block; overflow:auto; width:210px; border:solid 1px #CCC; line-height:21px; background:#fff" layoutH="42">
+			<ul id="${treeID!}" target="ztree" selectNodeId="${supId!0}" relevancyIds="aimDiv" class="ztree" url="${base}/init/unitInit/tree" rel="${listID!}" ctarget="ajax"></ul>
+		</div>
+		
+		<div id="${listID!}" style="margin-left: 220px;padding:2px;" layoutH="40">
+			<#include "/WEB-INF/template/init/unitInit/list.html" />
+		</div>
+	</div>
+</div>

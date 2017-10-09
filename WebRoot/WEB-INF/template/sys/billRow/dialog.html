@@ -1,0 +1,21 @@
+
+<div class="pageContent">
+   <form action="${base}/sys/billRow/edit" id="billRowForm" class="tableForm pageForm" enctype="text/plain" method="post" onsubmit="return validateCallback(this, dialogAjaxDone)">
+    <h2 class="contentTitle">单据格式配置</h2>
+    <div class="divider"></div>
+	<div layoutH="100">
+		<div id="billRowList"  layoutH="102">
+		     <#include "list.html"/> 
+		</div>
+   </div>
+   <div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="$('#billRowForm').submit();">保存</button></div></div></li>
+				<li><a class="button" href="${base}/sys/billRow/saveRank/" target="tableRowSortSave" rel="billRowList" warn="没有排序变更" targetType="dialog"><span>排序保存</span></a></li>
+				<li><a class="button" href="javascript:void(0);" target="tableRowSort" rel="billRowList" targetType="dialog"><span>上移</span></a></li>
+				<li><a class="button" href="javascript:void(0);" target="tableRowSort" sort="down" rel="billRowList" targetType="dialog"><span>下移</span></a></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+			</ul>
+   </div>
+   </form>
+</div>

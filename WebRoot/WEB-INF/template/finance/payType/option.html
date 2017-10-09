@@ -1,0 +1,31 @@
+<div class="pageContent">
+    <form class="tableForm">
+	<table class="table" layoutH="60"  targetType="dialog">
+		<thead>
+		<tr>
+		   <th width="50" align="center">行号</th>
+		   <th width="100" align="center">账号编号</th>
+		   <th width="100" align="center">账户名称</th>
+		   <th width="100" align="center">金额</th>
+		</tr>
+	  </thead>
+	  <tbody id="cw_payType_bodyId">
+	    <input type="hidden"  id="payType" value="${payType}"/>  <!-- 支付类型    单据支付还是运费支付 -->
+	    <#list payTypes as payType>
+		<tr>
+		   <td>${payType_index+1}<input type="hidden" value="${payType.id!0}"/></td>
+		   <td>${payType.code!''}</td>
+		   <td>${payType.fullName!''}</td>
+		   <td><input type="text" class="stealth number" value="${payType.aioMoney!''}"/></td>
+		</tr>
+		</#list>
+	  </tbody>
+	</table>
+	</form>
+</div>
+<!--divider虚线-->
+<div class="divider"></div>
+<div>
+    <a style="margin-left: 100px;" class="button"   onclick="cwPayTypeDialogTotal('${payType!'payType'}');"><span>确定</span></a>
+	<div style="margin-left: 30px;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+</div>

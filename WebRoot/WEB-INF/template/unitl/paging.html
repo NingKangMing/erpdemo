@@ -1,0 +1,22 @@
+<div class="panelBar">
+		<!-- 
+		<div class="pages">
+			<span>
+				每页<input type="text" style="width:30px;" onblur="navTabPageBreak({pageNum:${(pageMap.pageNum)!1},numPerPage:this.value},'${(pageMap.listID)!''}')" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"  name="numPerPage"  onchange="navTabPageBreak({pageNum:${(pageMap.pageNum)!1},numPerPage:this.value},'${(pageMap.listID)!''}')" value="${(pageMap.numPerPage)!15}"/>
+			</span>
+			<span>条，共${(pageMap.totalCount)!0}条</span>
+		</div>
+		 -->
+		 <div class="pages">
+			<span>显示</span>  
+			<select class="combox" name="numPerPage" onchange="navTabPageBreak({pageNum:${(pageMap.pageNum)!1},numPerPage:this.value},'${(pageMap.listID)!''}')">
+				<#--<option <#if pageMap.numPerPage?number == 15>selected</#if> value="15">15</option>-->
+				<option <#if pageMap.numPerPage?number == 20>selected</#if> value="20">20</option>
+				<option <#if pageMap.numPerPage?number == 50>selected</#if> value="50">50</option>
+				<option <#if pageMap.numPerPage?number == 100>selected</#if> value="100">100</option>
+				<option <#if pageMap.numPerPage?number == pageMap.totalCount||pageMap.numPerPage==1>selected</#if> value="<#if (pageMap.totalCount)??&&pageMap.totalCount!=0>${(pageMap.totalCount)!1}<#else>1</#if>">全部</option>
+			</select>
+			<span>条，共${(pageMap.totalCount)!0}条</span>
+		</div>
+		<div class="pagination" rel="${(pageMap.listID)!''}" target="ajaxTodo"  totalCount="${(pageMap.totalCount)!0}" numPerPage="${(pageMap.numPerPage)!15}" pageNumShown="5" currentPage="${(pageMap.pageNum)!1}"></div>
+</div>

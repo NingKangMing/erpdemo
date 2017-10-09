@@ -1,0 +1,76 @@
+
+<div class="pageContent center">
+      <h2 class="contentTitle">查询条件</h2>
+      <form  method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/bought/purchase/dialogSearch" onsubmit="return aioDivFilter(this,'purchaseDialogTable');">
+        
+        <table>
+           <tr style="height:30px;" width="70px">
+              <td style="text-align: right;">单据编号:</td>
+              <td colspan="3"><input type="text" name="purchaseBill.code" size="55"/></td>
+           </tr>
+           <tr style="height:30px;">
+              <td style="text-align: right;">往来单位:</td>
+              <td colspan="3">
+                 <input type="text" name="unit.fullName" size="55" ondblclick="$('#unitDialogLook').click();"/>
+                 <a class="btnLook" id="unitDialogLook" type="POST" href="${base}/base/unit/option/"  warn="单位" lookupgroup="unit" lookuppk="id" width="600" height="410">单位</a>
+              </td>
+           </tr>
+           <tr style="height:30px;">
+              <td style="text-align: right;">经手人:</td>
+              <td>
+                  <input type="text" name="staff.name" ondblclick="$('#staffDialogLook').click();"/>
+                  <a class="btnLook" id="staffDialogLook" href="${base}/base/staff/dialogChild/"  warn="员工" lookupgroup="staff" lookuppk="id" width="600" height="410">职员</a>
+              </td>
+              <td style="text-align: right;">部门:</td>
+              <td>
+                  <input type="text" name="department.fullName" ondblclick="$('#departmentDialogLook').click();"/>
+                  <a class="btnLook" id="departmentDialogLook" type="POST" href="${base}/base/department/option/" warn="部门" lookupgroup="department" lookuppk="id" width="500" height="450">部门</a>
+              </td>
+           </tr>
+           <tr style="height:30px;">
+              <td style="text-align: right;">商品:</td>
+              <td>
+                  <input  type="text" name="product.fullName"  ondblclick="$('#productDialogLook').click();"/>
+	              <a class="btnLook" id="productDialogLook" href="${base}/base/product/option/${(sellbookBill.unitId)!0}" warn="商品" lookupgroup="product" lookuppk="id" width="600" height="410">商品</a>
+              </td>
+              <td style="text-align: right;">存货仓库:</td>
+              <td>
+                 <input type="text" name="storage.fullName" ondblclick="$('#storageDialogLook').click();"/>
+                 <a class="btnLook" id="storageDialogLook" href="${base}/base/storage/dialogList/"  warn="仓库" lookupgroup="storage" lookuppk="id" width="600" height="410">仓库</a>
+              </td>
+           </tr>
+           <tr style="height:30px;">
+              <td style="text-align: right;">单据摘要:</td>
+              <td colspan="3"><input type="text" name="purchaseBill.remark" size="55"/></td>
+           </tr>
+           <tr style="height:30px;">
+              <td style="text-align: right;">附加说明:</td>
+              <td colspan="3"><input type="text" name="purchaseBill.memo" size="55"/></td>
+           </tr>
+           <tr style="height:30px;">
+              <td style="text-align: right;">单据备注:</td>
+              <td colspan="3"><input type="text" name="purchaseDetail.memo" size="55"/></td>
+           </tr>
+           <tr>
+		  	<td colspan="4" align="center">
+		  	   <fieldset>
+		  	     <legend>选中时间</legend>
+		  	       <div style="height:30px;">开始时间：  <input class="date" type="text" name="startDate" value="${startDate!}" readonly="readonly"/></div>
+		  	       <div style="height:30px;">结束时间 ： <input class="date" type="text" name="endDate" value="${endDate!}" readonly="readonly"/></div>
+		  	   	   <div>
+						<input name="userSearchDate" type="checkbox" checked="checked" value="checked"/>保存时间条件
+			       </div>
+		  	   </fieldset>
+		  	</td>
+		  </tr>
+        </table>
+        <!--提交按钮  -->
+	  <div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+		</ul>
+	  </div>
+	  <!--end 提交按钮  -->
+      </form>
+</div>

@@ -1,0 +1,356 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/stock/jxcChange/dialogSearch/page" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <!-- ID用于树点击参数 -->
+	<input type="hidden" id="modelType" name="modelType" value="${modelType}"/>        <!-- prd(商品销售统计)  unit(单位销售统计) -->
+	<input type="hidden" id="storage.id" name="storage.id" value="${storageId}"/>      
+	<input type="hidden" id="storage.fullName" name="storage.fullName" value="${storageFullName}"/>         
+	<input type="hidden" id="startTime" name="startTime" value="${startTime}"/>        <!--开始日期  -->
+	<input type="hidden" id="endTime" name="endTime" value="${endTime}"/>              <!-- 结束日期 -->
+	<input type="hidden" id="aimDiv" name="aimDiv" value="${aimDiv}"/>                 <!-- 过滤条件     all eq gt 下拉框改变赋值 -->
+	<input type="hidden" id="supId" name="supId" value="${supId}"/>                               <!-- 父级ID -->
+	<input type="hidden" id="node" name="node" value="${node!2}"/>                              
+	
+	<input type="hidden" name="selectedObjectId" id="selectedObjectId" value="${objectId!0}" /><!--   默认选中对象的Id -->
+	<input type="hidden" name="whereComeDetail" value="other"> 
+		<#include "/WEB-INF/template/base/baseSearchComDialog/searchConditionInputs.html"/><!--报表基本信息筛选条件保存 -->
+</form>
+<#include "/WEB-INF/template/common/columnConfig/tableTotalWidthLink.html"/>
+<table class="table" rel="${listID}" layoutH="235">
+    <#--
+	<tr>
+		<th colspan="9">&nbsp;</th>
+		
+		<th colspan="2" align="center">上期存</th>
+		<th colspan="18" align="center">本期入</th>
+		<th colspan="18" align="center">本期出</th>
+		<th colspan="2" align="center">本期存</th>
+	</tr>
+	-->
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody>
+	    <#if pageMap??&&pageMap.pageList??>
+		<#list pageMap.pageList as recode>
+		<#if recode.node==2>
+		<tr isSelect="true" nodeType1="${recode.node!'2'}" rel="${recode.id!0}" trel="${ztreeID}"  crel="${listID}" cTarget="ajax" url="${base}/reports/stock/jxcChange/dialogSearch/tree?modelType=${modelType}&supId=${recode.id}" relevancyIds="storage.id,startTime,endTime,aimDiv">
+		<#else>
+		<tr isSelect="true" nodeType1="${recode.node!'1'}" rel="${recode.id!0}" cTarget="openNavTab"  sameId="reports_jxc_detail_id">
+		</#if>
+			<td><a>${recode_index+1+pageMap.limit}</a><#if recode.node==2>..</#if></td>
+			<#list rowList as row>
+			<#if row.code?? && 'code'==row.code>
+			<td>${recode.code!}</td>
+			<#elseif row.code?? && 'fullName'==row.code>
+			<td>${recode.fullName!}</td>
+			<#elseif row.code?? && 'smallName'==row.code>
+			<td>${recode.smallName!}</td>
+			<#elseif row.code?? && 'spell'==row.code>
+			<td>${recode.spell!}</td>
+			<#elseif row.code?? && 'standard'==row.code>
+			<td>${recode.standard!}</td>
+			<#elseif row.code?? && 'model'==row.code>
+			<td>${recode.model!}</td>
+			<#elseif row.code?? && 'field'==row.code>
+			<td>${recode.field!}</td>
+			<#elseif row.code?? && 'savePath'==row.code>
+			<td>
+				<#if (recode.savePath)??>
+				    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(recode.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(recode.savePath)!}"  width="20px" height="20px"/>
+	            </#if>
+			</td>
+			
+			<!-- 上期存 -->
+			<#elseif row.code?? && 'preAmount'==row.code>
+		    <td>${(recode.preAmount)!}</td>
+		    <#elseif row.code?? && 'preMoney'==row.code>
+			<td>
+			    <@shiro.hasPermission name='1101-s'>
+				${(recode.preMoney)!}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			
+		    <!-- end上期存 -->
+		    
+		    <!-- 本期入 -->
+		    <#elseif row.code?? && 'pruchaseAmount'==row.code>
+		    <td>${(recode.pruchaseAmount)!}</td>
+		    <#elseif row.code?? && 'pruchaseMoney'==row.code>
+			<td>
+			    <@shiro.hasPermission name='1101-s'>
+				${(recode.pruchaseMoney)!}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'sellReturnAmount'==row.code>
+		    <td>${(recode.sellReturnAmount)!}</td>
+		    <#elseif row.code?? && 'sellReturnMoney'==row.code>
+			<td>
+				<@shiro.hasPermission name='1101-s'>
+ 				${(recode.sellReturnMoney)!}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			
+			
+			<#elseif row.code?? && 'dismountInAmount'==row.code>
+		    <td>${(recode.dismountInAmount)!}</td>
+		    <#elseif row.code?? && 'dismountInMoney'==row.code>
+			<td>
+				<@shiro.hasPermission name='1101-s'>
+ 				${(recode.dismountInMoney)!}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			
+			
+			<#elseif row.code?? && 'overflowAmount'==row.code>
+		    <td>${(recode.overflowAmount)!}</td>
+		    <#elseif row.code?? && 'overflowMoney'==row.code>
+			<td>
+				<@shiro.hasPermission name='1101-s'>
+				${(recode.overflowMoney)!}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'parityallotInAmount'==row.code>
+		    <td>${(recode.parityallotInAmount)!}</td>
+		    <#elseif row.code?? && 'parityallotInMoney'==row.code>
+			<td>
+				<@shiro.hasPermission name='1101-s'>
+				${(recode.parityallotInMoney)!}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'difftallotInAmount'==row.code>
+		    <td>${(recode.difftallotInAmount)!}</td>
+		    <#elseif row.code?? && 'difftallotInMoney'==row.code>
+			<td>
+				<@shiro.hasPermission name='1101-s'>
+				${(recode.difftallotInMoney)!}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'sellBarterInAmount'==row.code>
+		    <td>${(recode.sellBarterInAmount)!}</td>
+		    <#elseif row.code?? && 'sellBarterInMoney'==row.code>
+			<td>
+				<@shiro.hasPermission name='1101-s'>
+				${(recode.sellBarterInMoney)!}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'pruchaseBarterInAmount'==row.code>
+		    <td>${(recode.pruchaseBarterInAmount)!}</td>
+		    <#elseif row.code?? && 'pruchaseBarterInMoney'==row.code>
+			<td>
+				<@shiro.hasPermission name='1101-s'>
+				${(recode.pruchaseBarterInMoney)!}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'otherinAmount'==row.code>
+		    <td>${(recode.otherinAmount)!}</td>
+		    <#elseif row.code?? && 'otherinMoney'==row.code>
+			<td>
+				<@shiro.hasPermission name='1101-s'>
+				${(recode.otherinMoney)!}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'inAllAmount'==row.code>
+		    <td>${(recode.inAllAmount)!}</td>
+		    <#elseif row.code?? && 'inAllMoney'==row.code>
+			<td>
+				<@shiro.hasPermission name='1101-s'>
+				${(recode.inAllMoney)!}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+		    <!-- end本期入 -->
+		    
+		    <!-- 本期出 -->
+		    <#elseif row.code?? && 'sellAmount'==row.code>
+		    <td>${(recode.sellAmount)!}</td>
+		    <#elseif row.code?? && 'sellMoney'==row.code>
+			<td>
+				<@shiro.hasPermission name='1101-s'>
+				${(recode.sellMoney)!}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'pruchaseReturnAmount'==row.code>
+		    <td>${(recode.pruchaseReturnAmount)!}</td>
+		    <#elseif row.code?? && 'pruchaseReturnMoney'==row.code>
+			<td>
+				<@shiro.hasPermission name='1101-s'>
+				${(recode.pruchaseReturnMoney)!}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			
+			
+			<#elseif row.code?? && 'dismountOutAmount'==row.code>
+		    <td>${(recode.dismountOutAmount)!}</td>
+		    <#elseif row.code?? && 'dismountOutMoney'==row.code>
+			<td>
+				<@shiro.hasPermission name='1101-s'>
+				${(recode.dismountOutMoney)!}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			
+			
+			<#elseif row.code?? && 'breakageAmount'==row.code>
+		    <td>${(recode.breakageAmount)!}</td>
+		    <#elseif row.code?? && 'breakageMoney'==row.code>
+			<td>
+				<@shiro.hasPermission name='1101-s'>
+				${(recode.breakageMoney)!}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'parityalloOutAmount'==row.code>
+		    <td>${(recode.parityalloOutAmount)!}</td>
+		    <#elseif row.code?? && 'parityalloOutMoney'==row.code>
+			<td>
+				<@shiro.hasPermission name='1101-s'>
+				${(recode.parityalloOutMoney)!}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'difftallotOutAmount'==row.code>
+		    <td>${(recode.difftallotOutAmount)!}</td>
+		    <#elseif row.code?? && 'difftallotOutMoney'==row.code>
+			<td>
+				<@shiro.hasPermission name='1101-s'>
+				${(recode.difftallotOutMoney)!}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'sellBarterOutAmount'==row.code>
+		    <td>${(recode.sellBarterOutAmount)!}</td>
+		    <#elseif row.code?? && 'sellBarterOutMoney'==row.code>
+			<td>
+				<@shiro.hasPermission name='1101-s'>
+				${(recode.sellBarterOutMoney)!}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'pruchaseBarterOutAmount'==row.code>
+		    <td>${(recode.pruchaseBarterOutAmount)!}</td>
+		    <#elseif row.code?? && 'pruchaseBarterOutMoney'==row.code>
+			<td>
+			    <@shiro.hasPermission name='1101-s'>
+				${(recode.pruchaseBarterOutMoney)!}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'otheroutAmount'==row.code>
+		    <td>${(recode.otheroutAmount)!}</td>
+		    <#elseif row.code?? && 'otheroutMoney'==row.code>
+			<td>
+				<@shiro.hasPermission name='1101-s'>
+				${(recode.otheroutMoney)!}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+			<#elseif row.code?? && 'outAllAmount'==row.code>
+		    <td>${(recode.outAllAmount)!}</td>
+		    <#elseif row.code?? && 'outAllMoney'==row.code>
+			<td>
+				<@shiro.hasPermission name='1101-s'>
+				${(recode.outAllMoney)!}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+		    <!-- end本期出 -->
+		    
+		    <!-- 本期入 -->
+		    <#elseif row.code?? && 'afterAmount'==row.code>
+		    <td>${recode.afterAmount!}</td>
+		    <#elseif row.code?? && 'afterMoney'==row.code>
+			<td>
+				<@shiro.hasPermission name='1101-s'>
+				${recode.afterMoney!}
+			    </@shiro.hasPermission>
+				<@shiro.lacksPermission name='1101-s'>
+				***  
+			    </@shiro.lacksPermission>
+			</td>
+		    <!-- end本期存 -->
+		    </#if>
+			</#list>
+		</tr>
+		</#list>
+		</#if>
+	</tbody>
+	<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+
+	
+<div class="divider"></div>
+<div>
+    <a class="button" target="dialog" href="${base}/reports/stock/jxcChange/toSearchDialog/${modelType}" rel="reportjxcChangeCountSearchDialog" width="330" height="330" aimTitle="全能进销存变动报表" aimUrl="${base}/reports/stock/jxcChange/dialogSearch/search" aimTabId="reportjxcChangeCountView" aimDiv="${aimDiv}"><span>查询条件</span></a><!-- aimDiv值为all eq gt 下拉框改变赋值-->
+    
+    <a class="button" id="reports_jxc_detail_id" href="${base}/common/dateDialog" param="storage.id,selectedObjectId" verify="selectedObjectId" verifyText="没有选中商品" aimTabId="proDetailBillView" aimTitle="商品明细账本" aimUrl="${base}/stock/stockStatus/proDetailBill" caption="选择时间" target="dialog" rel="dateDialog" mask="true" width="300" height="250"><span>明细账本</span></a>
+    
+    <#if node?? && node == 1>
+		<a class="buttonDisabled" href="javascript:;"><span>列表</span></a>
+	<#else>
+		<a class="button" href="${base}/reports/stock/jxcChange/dialogSearch/line" target="ajax" rel="${listID}"  relevancyIds="modelType,storage.id,startTime,endTime,aimDiv,supId"><span>列表</span></a>
+	</#if>
+	<a class="button" target="dialog" href="${base}/base/product/toReportBaseFilter/pagerForm-product" rel="report_product_filtter" width="400" height="210" aimTitle="全能进销存变动报表" aimUrl="${base}/reports/stock/jxcChange/dialogSearch/search" aimTabId="reportjxcChangeCountView"><span>商品筛选</span></a>
+</div>
+<div style="float: right;">
+	<#assign privs = '526-p'/>
+	<#assign href = '${base}/reports/stock/jxcChange/print/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

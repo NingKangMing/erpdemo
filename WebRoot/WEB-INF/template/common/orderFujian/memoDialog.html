@@ -1,0 +1,22 @@
+<div class="pageContent">
+	<h2 class="contentTitle">请输入备注</h2>
+	<form action="${base}/upload/orderFujianUpdateMemo" class="tableForm pageForm" enctype="multipart/form-data" method="post" onsubmit="return validateCallback(this,dialogAjaxDone1);">
+	    <input type="hidden" name="id" value="${(obj.id)!0}"/>	    		
+		<div class="pageFormContent" layoutH="100">
+            <table>
+               <tr>
+                  <td>
+                  	<input type="text" name="memo" value="${(obj.memo)!''}" size="50" style="margin-top: 20px; margin-left: 20px;"/>
+                  </td>
+               </tr>
+            </table>			
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确认</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>
+

@@ -1,0 +1,41 @@
+<div class="pageContent">
+	<h2 class="contentTitle">应收应付上限设置</h2>
+	<form action="${base}/reports/finance/arap/analysis/limitMoneyUpdate" class="tableForm" enctype="text/plain" method="post" onsubmit="return validateCallback(this,dialogAjaxDone)">
+		<input type="hidden" name="unitId" value="${unitId!0}">
+		
+		<input type="hidden" id="startDate" name="startTime" value="${startTime!''}"/>      <!--开始日期  -->
+	    <input type="hidden" id="endDate" name="endTime" value="${endTime!''}"/>            <!-- 结束日期 -->
+	    <input type="hidden" id="aimDiv" name="aimDiv" value="${aimDiv!'all'}"/>            <!-- 过滤条件  -->
+	    <input type="hidden" id="totalGetDown" name="totalGetDown" value="${totalGetDown!'-999999999'}"/>  <!-- 应收款上限    开 -->
+		<input type="hidden" id="totalGetUp" name="totalGetUp" value="${totalGetUp!'999999999'}"/>         <!-- 应收款上限    结束 -->
+		<input type="hidden" id="totalPayDown" name="totalPayDown" value="${totalPayDown!'-999999999'}"/>  <!-- 应付款上限    开 -->
+		<input type="hidden" id="totalPayUp" name="totalPayUp" value="${totalPayUp!'999999999'}"/>         <!-- 应付款上限    结束 -->
+		
+		<div class="pageFormContent" layoutH="100">
+			<fieldset>
+				<legend></legend>
+				<table style="margin:0px auto;">
+					<tr height="30px;">
+						<td>单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位&nbsp;&nbsp;&nbsp;&nbsp;:</td>
+						<td>${unitFullName!''}</td>
+				    </tr>
+					<tr height="35px;">
+						<td>应收款上限:</td>
+						<td><input type="text" name="getMoneyLimit" value="${getMoneyLimit!''}"/></td>
+					</tr>
+					<tr height="35px;">
+						<td>应付款上限:</td>
+						<td><input type="text" name="payMoneyLimit" value="${payMoneyLimit!''}"/></td>
+					</tr>
+				</table>
+			</fieldset>
+			<input style="margin-left: 30px;" type="checkbox" name="currentUnit" value="yes"/>统一设置当前列表所有单位应收应付上限
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>

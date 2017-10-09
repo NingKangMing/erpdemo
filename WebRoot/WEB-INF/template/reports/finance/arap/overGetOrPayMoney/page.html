@@ -1,0 +1,36 @@
+<div class="panel">
+    <input id="whichCallBack" type="hidden" value="cw_arapOverGetOrPayMoney"/><!-- 用于区分不同模块库存商品带回进不同函数     ID是写死，value用于区分 -->
+	<div class="pageHeader">
+		<div class="searchBar" id="pageSearch">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">${modelName!''}</span></label>
+				</li>
+			</ul>
+			<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+			<ul class="searchContent" style="margin-top: 5px;">
+				<li style="float: right;">
+				 报警<select onchange="xsReportAmountChange(this,'warn','pagerForm','${listID}');">
+				       <option <#if warn=="all">selected="selected"</#if> value="all">显示所有</option>
+				       <option <#if warn=="cancel">selected="selected"</#if> value="cancel">只显示取消报警</option>
+				       <option <#if warn=="delay">selected="selected"</#if> value="delay">只显示延期报警</option>
+				    </select> 
+				  截至日期<input class="date" type="text" name="stopDate" value="${stopDate!''}" readonly="readonly"/>
+				 单位名称
+				 <input type="hidden" name="unit.id" id="unitId" value="${unitId!0}"/>
+			     <input class="line" type="hidden" name="unit.fullName" id="unitName"/>
+			     <input class="textInput" type="text" size="30" name="unit.fullName" id="unitName" <#if unitId??&&unitId==0>value="全部单位"</#if>/>
+			     <a class="btnLook" id="unitLook" backParam="cw_arapOverGetOrPayMoney" btnPattern="selectMany,selectAll" type="GET" href="${base}/base/unit/option/0" warn="单位" lookupgroup="unit" type="post" lookuppk="id" width="600" height="410">单位</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div layoutH="70">
+		<div id="${listID}">
+			<#include "/WEB-INF/template/reports/finance/arap/overGetOrPayMoney/list.html" />
+		</div>
+	</div>
+</div>
+
+
+

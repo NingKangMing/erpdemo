@@ -1,0 +1,110 @@
+<div class="pageContent" id="proStockLinePage">
+	<div class="textContent center">
+	     <div>
+	         <span style="font-size: 18px;line-height: 30px;">库存状况列表</span>
+	     </div>
+	     <div>
+	     	<fieldset style="width: 260px; float: left;">
+	     		<legend>批次</legend>
+	     		<ul>
+	     			<li style="height: 40px;line-height: 40px;float:left; width: 130px; text-align: center;">
+	    				<input type="radio" target=ajax rel="proStockLinePage" name="batchPattern" id="batchPattern1" value="merge" <#if batchPattern?? && batchPattern=="merge">checked</#if> /><label for="batchPattern1">合并批次</label>
+	    			</li>
+	     			<li style="height: 40px;line-height: 40px;float:left; width: 130px; text-align: center;">
+	    				<input type="radio" target=ajax rel="proStockLinePage" name="batchPattern" id="batchPattern2" value="split" <#if batchPattern?? && batchPattern=="split">checked</#if> /><label for="batchPattern2">拆分批次</label>
+	    			</li>
+	     		</ul>
+	     	</fieldset>
+	     	<span style=" margin-left:30px; line-height: 70px;">仓库：${storageName!''}</span>
+	     </div>
+	     	<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+	</div>
+	<div>
+		<form id="pagerForm" enctype="text/plain" onsubmit="return divSearch(this, 'proStockLinePage');" action="${base}/stock/stockStatus/proStockLinePage" method="post">
+			<input type="hidden" name="pageNum" value="${pageMap.pageNum!1}" />
+			<input type="hidden" name="numPerPage" value="${pageMap.numPerPage!15}" />
+			<input type="hidden" name="orderField" value="${orderField!'sck.id'}" /><!--查询排序-->
+		    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+			
+			<input type="hidden" name="selectedObjectId" id="selectedObjectId" value="${objectId!0}" /><!--   默认选中对象的Id -->
+			<input type="hidden" id="storageId" name="storageId" value="${storageId!0}"/>
+			<input type="hidden" id="storagePids" name="storagePids" value="${storagePids!'{0}'}"/>
+			<input type="hidden" id=batchPattern name="batchPattern" value="${batchPattern!'merge'}"/>
+			<input type="hidden" id=searchPar name="searchPar" value="${searchPar!''}"/>
+			<input type="hidden" id=searchVal name="searchVal" value="${searchVal!''}"/>
+		</form>
+		<table class="table" rel="proStockLinePage" layoutH="240">
+			<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+			<tbody>
+				<#list pageMap.pageList as recode>
+				<tr objectId="${objectId!0}" relevancyIds="storageId,selectedObjectId" target="pid" rel="${recode.pro.id!0}" isSelect="true"  url="${base}/common/dateDialog" aimTabId="proDetailBillView" aimTitle="商品明细账本" aimUrl="${base}/stock/stockStatus/proDetailBill" caption="选择时间" cTarget="dialog" rel="dateDialog" widths="300" heights="250" >
+					<td>${recode_index+1+pageMap.limit}</td>
+					<#list rowList as row>
+						<#assign columnObj = "" />
+						<#if row.code?? && ((row.code)?index_of(".")>-1)>
+							<#assign columnObj = (row.code)?substring(0,(row.code)?index_of(".")) />
+							<#assign columnParam = (row.code)?substring((row.code)?index_of(".")+1) />
+						<#else>
+							<#assign columnParam = row.code />
+						</#if>
+					
+						<#if row.code?? && 'avgPrice'==row.code>
+							<td align="center">
+								<#if (recode.avgPrice)??>
+									<@shiro.hasPermission name='1101-s'>
+								    	${recode.avgPrice!}
+								    </@shiro.hasPermission>
+									<@shiro.lacksPermission name='1101-s'>
+										***  
+								    </@shiro.lacksPermission>
+							    </#if>
+							</td>
+						<#elseif row.code?? && 'pro.savePath'==row.code>
+							<td>
+								<#if (recode.pro.savePath)??>
+								    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(recode.pro.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(recode.pro.savePath)!}"  width="20px" height="20px"/>
+					            </#if>
+							</td>
+						<#elseif row.code?? && 'moneys'==row.code>
+							<td>
+								<#if (recode.moneys)??>
+									<@shiro.hasPermission name='1101-s'>
+								    	${(recode.moneys)!}
+								    </@shiro.hasPermission>
+									<@shiro.lacksPermission name='1101-s'>
+										***  
+								    </@shiro.lacksPermission>
+								</#if>
+							</td>
+						<#elseif row.code?? && 'sck.produceDate'==row.code>
+							<td><#if recode.sck.produceDate??>${recode.sck.produceDate?string("yyyy-MM-dd")}</#if></td>
+						<#else>
+							<#if columnObj?? && columnObj!="">
+								<td>${((recode[columnObj])[columnParam])!}</td>
+							<#else>
+								<td>${recode[columnParam]!}</td>
+							</#if>
+						</#if>
+					</#list>
+					
+				</tr>
+				</#list>
+			</tbody>
+			<#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+		</table>
+	
+		<#include "/WEB-INF/template/unitl/paging.html"/>
+		
+		<div class="divider"></div>
+		<div>
+			<a class="button" href="${base}/common/dateDialog" param="storageId,selectedObjectId" verify="selectedObjectId" verifyText="没有选中商品" aimTabId="proDetailBillView" aimTitle="商品明细账本" aimUrl="${base}/stock/stockStatus/proDetailBill" caption="选择日期" target="dialog" rel="dateDialog" mask="true" width="300" height="250"><span>明细账本</span></a>
+		</div>
+		<div style="float: right;">
+		    <#assign privs = '5-81-511-p'/>
+	<#assign href = '${base}/stock/stockStatus/printStockLine'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+			<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+		</div>
+	</div>
+</div>

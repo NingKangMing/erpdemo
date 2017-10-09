@@ -1,0 +1,42 @@
+<div class="panel">
+	<div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">商品销售退货统计</span></label>
+				</li>
+			</ul>
+			<ul class="searchContent" style="margin-top: 5px;">
+				<li>
+					<span style="margin-left: 10px;">查询时间：</span>${startDate}至${endDate}
+				</li>
+			</ul>
+			<ul class="searchContent">
+				<li>
+					<span style="margin-left: 10px;">往来单位:</span><#if unitFullName=="">全部单位</#if>${unitFullName} 
+					<span style="margin-left: 50px;">内部职员:</span><#if staffFullName=="">全部职员</#if>${staffFullName} 
+					<span style="margin-left: 50px;">仓库:</span><#if storageFullName=="">全部仓库</#if>${storageFullName} 
+					<span style="margin-left: 50px;">商品:</span><#if productFullName=="">全部商品</#if>${productFullName} 
+				</li>
+				<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+			</ul>
+		</div>
+	</div>
+	<#if productId==0>
+		<div layoutH="80">
+			<div style="float:left; display:block; overflow:auto; width:210px; border:solid 1px #CCC; line-height:21px; background:#fff" layoutH="100">
+				<ul id="reports_prdsellreturncount" target="ztree" selectNodeId="${supId!0}" relevancyIds="unit.id,staff.id,storage.id,startDate,endDate" class="ztree" url="${base}/reports/sellReturnCount/tree/prd" rel="xsth_prdSellCount" ctarget="ajax"></ul>
+			</div>
+			<div id="${listID!}" style="margin-left: 220px;padding:2px; padding-top: 0px;" layoutH="87">
+				<#include "/WEB-INF/template/reports/sell/prdSellreturnCount/list.html" />
+			</div>
+		</div>
+	<#else>
+		<div id="${listID!}" layoutH="87">
+			<#include "/WEB-INF/template/reports/sell/prdSellreturnCount/list.html" />
+		</div>
+	</#if>
+</div>
+
+
+

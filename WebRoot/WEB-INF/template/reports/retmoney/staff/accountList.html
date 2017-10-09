@@ -1,0 +1,61 @@
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/retmoney/staff/account/0-second" onsubmit="return dwzSearch(this, 'returnMomeyStaffAccountList');">
+	
+	<input type="hidden" name="pageNum" value="${pageMap.pageNum!}" />
+	<input type="hidden" name="numPerPage" value="${pageMap.numPerPage!}" />
+	<input type="hidden" name="orderField" value="${(params.orderField)!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${(params.orderDirection)!'asc'}" /><!--升序降序-->
+
+	<input type="hidden" id="startTime" name="startTime" value="${(params.startTime)!}"/>        <!--开始日期  -->
+	<input type="hidden" id="endTime" name="endTime" value="${(params.endTime)!}"/>            <!-- 结束日期 -->
+	<input type="hidden" id="staffId" name="staffId" value="${(params.staffId)!}"/>                               <!-- 职员ID -->
+	<input type="hidden" id="unitId" name="unitId" value="${(params.unitId)!}"/>                               <!-- 单位ID -->
+	<input type="hidden" id="isRcw" name="isRcw" value="${(params.isRcw)!}">
+	<input type="hidden" name="totalCount" value="${(pageMap.totalCount)!0}"/>
+</form>
+<table class="table" rel="returnMomeyStaffAccountList" layoutH="220">
+	<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+	<tbody>
+		<#list pageMap.pageList as bill>
+		  
+		  <tr target="id" rel="${(bill.id)!0}-${(bill.billTypeId)!0}" cRel="returnMomeyStaffAccountLook" title="${(bill.billTypeName)!}" url="${base}/common/bill/lookBill/${bill.id!0}-${bill.billTypeId!0}" cTarget="openNavTab" <#if bill.isRCW?? &&  bill.isRCW!=0 >style="color: red;"</#if>>
+		 
+		    <td>${bill_index+1+pageMap.limit}</td>
+		    <#list rowList as row>
+		    <#if row.code?? && 'billTypeName'==row.code>
+		    <td>${(bill.billTypeName)!} </td>
+		    <#elseif row.code?? && 'recodeDate'==row.code>
+		    <td><#if bill.recodeDate??>${bill.recodeDate?string("yyyy-MM-dd")}</#if></td>
+		    <#elseif row.code?? && 'billCode'==row.code>
+		    <td>${(bill.code)!} </td>
+		    <#elseif row.code?? && 'unit.code'==row.code>
+		    <td>${(bill.unit.code)!} </td>
+		    <#elseif row.code?? && 'unit.fullName'==row.code>
+		    <td>${(bill.unit.fullName)!} </td>
+		    <#elseif row.code?? && 'accounts.code'==row.code>
+		    <td>${(bill.accounts.code)!} </td>
+		    <#elseif row.code?? && 'accounts.fullName'==row.code>
+		    <td>${(bill.accounts.fullName)!} </td>
+		    <#elseif row.code?? && 'payMoney'==row.code>
+		    <td>${(bill.payMoney)!} </td>
+		    <#elseif row.code?? && 'remark'==row.code>
+		    <td>${(bill.remark)!} </td>
+		    </#if>
+            </#list>
+		  </tr>
+		</#list>
+	</tbody>
+    <#include "/WEB-INF/template/common/columnConfig/tableTfootLink.html"/>
+</table>
+
+
+<#include "/WEB-INF/template/unitl/paging.html"/>	
+<div class="divider"></div>
+<div>
+    <a class="button" dynamic="true" target="navTab" href="${base}/common/bill/lookBill/{id}"><span>查看单据</span></a>
+</div>
+<div style="float: right;">
+	<#assign href = '${base}/reports/retmoney/staff/printAccount'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

@@ -1,0 +1,53 @@
+
+<div class="pageContent center">
+      <h2 class="contentTitle">查询条件</h2>
+      <form  method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/bought/go" onsubmit="return validateCallback(this,aioDialogOpenNavTab)">
+           <input type="hidden" id="aimTabId" name="aimTabId" value="boughtDetailSearchView"/>
+           <input type="hidden" id="aimUrl"   name="aimUrl"   value="${base}/reports/bought/detail/search"/>
+           <input type="hidden" id="aimTitle" name="aimTitle" value="进货订单明细查询"/>
+           
+            <fieldset style="text-align: center;">
+            <legend>选择条件</legend>
+               <div style="height:30px;">
+					  商品全名<input id="product.id" type="hidden"  name="product.id"/>
+					<input class="enter" size="30" type="text" lookid="product.id" lookname="product" name="product.fullName"/>
+					<a id="productLook" class="btnLook" height="410" width="600" lookuppk="id" lookupgroup="product" warn="商品" href="${base}/base/product/option" shownameid="product.fullName" reloadid="proDistributionDialog" isreload="true">商品</a>
+					               	  
+                 
+               </div>
+               <div style="height:30px;">
+                                                单位全名<input type="hidden" name="unit.id" value=""/>
+	                     <input type="hidden" name="unit.fullName" value=""/>
+	                     <input class="enter" size="30" type="text" name="unit.fullName" value=""/>
+	                     <a class="btnLook" id="unitLook" href="${base}/base/unit/option/${(boughtBill.unitId)!0}"  warn="单位" lookupgroup="unit" type="post" lookuppk="id" width="600" height="410">单位</a>
+               </div>
+               <div style="height:30px;">
+             	       经&nbsp;手&nbsp;人&nbsp;<input type="hidden" name="staff.id" value=""/>
+				   <input type="hidden" name="staff.name" value=""/>
+				   <input class="enter" size="30" type="text" name="staff.name" value=""/>
+				   <a class="btnLook" id="staffLook" type="POST" rel="staffLookDialog" href="${base}/base/staff/dialogChild/${(boughtBill.staffId)!0}"  warn="员工" lookupgroup="staff" lookuppk="id" width="600" height="410">职员</a>
+               </div>
+               <div style="height:30px;">
+                                             仓库全名<input type="hidden" name="storage.id" value=""/>
+		     	 <input class="enter" size="30" type="text" name="storage.fullName" value=""  lookName="storage" lookId="storage.id"/>
+			     <a class="btnLook" id="storageLook" type="POST" href="${base}/base/storage/dialogList"  warn="仓库" lookupgroup="storage" lookuppk="id" width="600" height="410">仓库</a>
+               </div>
+           </fieldset>
+           <fieldset style="text-align: center;">
+	  	     <legend>选择时间</legend>
+	  	       <div style="height:30px;">开始日期:<input class="date" type="text" name="startDate" value="${startDate!}" hasClear="no" readonly="readonly"/></div>
+	  	       <div style="height:30px;">结束日期:<input class="date" type="text" name="endDate" value="${endDate!}" hasClear="no" readonly="readonly"/></div>
+	  	       <div>
+								<input name="userSearchDate" type="checkbox" checked="checked" value="checked"/>保存时间条件
+			      </div>
+	  	   </fieldset>
+        <!--提交按钮  -->
+	  <div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+		</ul>
+	  </div>
+	  <!--end 提交按钮  -->
+      </form>
+</div>

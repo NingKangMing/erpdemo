@@ -1,0 +1,84 @@
+
+<form id="pagerForm" onsubmit="return divSearch(this, 'unitPermissionList');" action="${base}/sys/basePermission/unit" method="post">
+	<input type="hidden" name="pageNum" value="${(unitPageMap.get('pageNum'))}" />
+	<input type="hidden" name="numPerPage" value="${(unitPageMap.get('numPerPage'))!}" />
+	<input type="hidden" name="orderField" value="${orderField!'rank'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    <input type="hidden" name="userId" value="${userId!}">
+    <input type="hidden" name="pSupId" value="${supId!-1}">
+</form>
+<table class="table" rel="unitPermissionList" layoutH="200">
+	<thead>
+		<tr>
+			<th width="50px">
+				行号
+			</th>
+			<th width="150px" align="center" orderField="code" <#if orderField?? && 'code'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+				单位编号
+			</th>
+			<th width="150px" align="center" orderField="fullName" <#if orderField?? && 'fullName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+				单位全称
+			</th>
+			<th width="150px" align="center" orderField="status" <#if orderField?? && 'status'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+				状态
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<#list unitPageMap.pageList as unit>
+		  <#if unit.node==2>
+		  <tr objectId="${objectId!0}" target="unitId" rel="${unit.id}"  crel="unitPermissionList" cTarget="ajax" url="${base}/sys/basePermission/unit/${unit.id}-{userId}">
+		  <#else>
+		   <tr objectId="${objectId!0}" target="unitId" rel="${unit.id}">
+		  </#if>
+			<td><a>${unit_index+1+unitPageMap.limit}</a>
+				<#if unit.node==2>..</#if>
+			</td>
+			<td>
+				${unit.code!''}
+			</td>
+			<td>
+				${unit.fullName!''}
+			</td>
+	
+			<td onclick="tdRelevanceTr(this,'unitChoose');">
+				<#if unit.privs==3>
+				       ★
+				<#elseif unit.privs==2>
+				       ☆
+				</#if>
+			</td>
+		</tr>
+		</#list>
+	</tbody>
+</table>
+<div class="panelBar">
+		 <div class="pages">
+			<span>显示</span>  
+			<select class="combox" name="numPerPage" onchange="navTabPageBreak({pageNum:${(unitPageMap.pageNum)!1},numPerPage:this.value},'${(unitPageMap.listID)!''}')">
+				<option <#if unitPageMap.numPerPage?number == 15>selected</#if> value="15">15</option>
+				<option <#if unitPageMap.numPerPage?number == 20>selected</#if> value="20">20</option>
+				<option <#if unitPageMap.numPerPage?number == 50>selected</#if> value="50">50</option>
+				<option <#if unitPageMap.numPerPage?number == 100>selected</#if> value="100">100</option>
+			</select>
+			<span>条，共${(unitPageMap.totalCount)!0}条</span>
+		</div>
+		<div class="pagination" rel="${(unitPageMap.listID)!''}" target="ajaxTodo"  totalCount="${(unitPageMap.totalCount)!0}" numPerPage="${(unitPageMap.numPerPage)!15}" pageNumShown="5" currentPage="${(unitPageMap.pageNum)!1}"></div>
+</div>
+
+<!--divider虚线-->
+	<div class="divider"></div>
+	<div>
+			<a class="button" id="unitChoose" href="${base}/sys/basePermission/choose/{userId}-{baseType}-{unitId}" target="ajaxTodo"  callback="reloadNavTabDiv"><span>选中</span></a>
+			<a class="button" href="${base}/sys/basePermission/allChoose/{userId}-{baseType}-{unitId}" target="ajaxTodo"  callback="reloadNavTabDiv"><span>全选</span></a>
+			<a class="button" href="${base}/sys/basePermission/empty/{userId}-{baseType}-{unitId}" target="ajaxTodo"  callback="reloadNavTabDiv"><span>清空</span></a>
+			<#if supId?? && supId!=-1>
+			<a class="button" href="${base}/sys/basePermission/unit?pSupId=${pSupId!0}&objectId=${supId!0}" relevancyIds="userId" target="ajax"  rel="unitPermissionList"><span>上级</span></a>
+	        <#else>
+	        <a class="buttonDisabled" href="javascript:void(0);"><span>上级</span></a>
+	        </#if>
+	        
+	</div>
+	<div style="float: right;">
+			<a class="button" href="javascript:void(0);" onclick="navTab.closeCurrentTab()"><span>关闭</span> </a>
+	</div>

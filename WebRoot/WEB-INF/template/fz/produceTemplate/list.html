@@ -1,0 +1,42 @@
+<form id="pagerForm" enctype="text/plain" onsubmit="return divSearch(this, 'produceTemplateList');" action="${base}/fz/produceTemplate/list" method="post">
+	<input type="hidden" name="pageNum" value="${pageMap.pageNum!1}" />
+	<input type="hidden" name="numPerPage" value="${pageMap.numPerPage!15}" />
+	<input type="hidden" name="orderField" value="${orderField!'tmp.id'}" /><!--查询排序-->
+    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+    
+    <input type="hidden" name="showLastPage" id="showLastPage" />   <!-- 跳转到最后一页 -->
+	<input type="hidden" name="selectedObjectId" id="selectedObjectId" />   <!--   默认选中对象的Id -->
+</form>
+<table class="table" rel="produceTemplateList" layoutH="178">
+		<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>
+		<tbody>
+			<#list pageMap.pageList as recode>
+			<tr objectId="${objectId!0}" target="tid" rel="${recode.tmp.id}"  cTarget="citeEvent" citeEventModuleId="editBtn" citeEventType="click" >
+				<td><a>${recode_index+1+pageMap.limit}</a></td>
+				<#list rowList as row>
+					<#assign columnObj = "" />
+					<#if row.code?? && ((row.code)?index_of(".")>-1)>
+						<#assign columnObj = (row.code)?substring(0,(row.code)?index_of(".")) />
+						<#assign columnParam = (row.code)?substring((row.code)?index_of(".")+1) />
+					<#else>
+						<#assign columnParam = row.code />
+					</#if>
+					<#if row.code?? && 'pro.savePath'==row.code>
+						<td>
+							<#if (recode.pro.savePath)??>
+							    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(recode.pro.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(recode.pro.savePath)!}"  width="20px" height="20px"/>
+				            </#if>
+						</td>
+					<#else>
+						<#if columnObj?? && columnObj!="">
+							<td>${((recode[columnObj])[columnParam])!}</td>
+						<#else>
+							<td>${recode[columnParam]!}</td>
+						</#if>
+					</#if>
+				</#list>
+			</tr>
+			</#list>
+		</tbody>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>

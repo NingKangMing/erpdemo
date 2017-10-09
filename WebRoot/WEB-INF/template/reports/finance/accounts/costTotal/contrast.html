@@ -1,0 +1,89 @@
+<div class="pageContent">
+      <form id="pagerForm">
+          <input type="hidden" name="accountsId" value="${(account.id)!}"/>
+      </form>
+      <div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">
+					 比较-会计科目
+					</span></label>
+				</li>
+			</ul>
+			<ul class="searchContent">
+		
+				<li>
+					<label>会计科目:${(account.fullName)!}</label>
+				</li>
+			</ul>
+		</div>
+	</div>
+      <div layoutH="100">
+	       <table class="table" layoutH="130">
+	           <thead>
+		          <tr>
+		               <th width="30px">行号</th>
+		               <th width="50px">项目</th>
+		               <th width="50px">一月</th>
+		               <th width="50px">二月</th>
+		               <th width="50px">三月</th>
+		               <th width="50px">四月</th>
+		               <th width="50px">五月</th>
+		               <th width="50px">六月</th>
+		               <th width="50px">七月</th>
+		               <th width="50px">八月</th>
+		               <th width="50px">九月</th>
+		               <th width="50px">十月</th>
+		               <th width="50px">十一月</th>
+		               <th width="50px">十二月</th>
+		          </tr>
+		       </thead>
+		       <tbody>
+		           <tr>
+		              <td>1</td>
+		              <td>发生金额</td>
+		              <td>${(cost.monthMoney1)!}</td>
+		              <td>${(cost.monthMoney2)!}</td>
+		              <td>${(cost.monthMoney3)!}</td>
+		              <td>${(cost.monthMoney4)!}</td>
+		              <td>${(cost.monthMoney5)!}</td>
+		              <td>${(cost.monthMoney6)!}</td>
+		              <td>${(cost.monthMoney7)!}</td>
+		              <td>${(cost.monthMoney8)!}</td>
+		              <td>${(cost.monthMoney9)!}</td>
+		              <td>${(cost.monthMoney10)!}</td>
+		              <td>${(cost.monthMoney11)!}</td>
+		              <td>${(cost.monthMoney12)!}</td>
+		           </tr>
+		          <tr>
+		              <td></td>
+		              <td></td>
+		              <td></td>
+		              <td></td>
+		              <td></td>
+		              <td></td>
+		              <td></td>
+		              <td></td>
+		              <td></td>
+		              <td></td>
+		              <td></td>
+		              <td></td>
+		              <td></td>
+		              <td></td>
+		           </tr>
+		       </tbody>
+	       </table>
+	 </div>
+	 
+	  <!--提交按钮  -->
+	  <div class="formBar">
+	  <ul>
+	<#assign href = '${base}/reports/finance/accounts/costTotal/printContrast'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+		</ul>
+	  </div>
+	  <!--end 提交按钮  -->
+</div>

@@ -1,0 +1,13 @@
+<!--列配置  表头html-->
+<#--<#include "/WEB-INF/template/common/columnConfig/tableHeadLink.html"/>-->
+<thead>
+	<tr>
+		<#if isCheckbox?? && isCheckbox==true><th width="45" align="center" ><input class="checkboxCtrl" type="checkbox" group="draftBillRel" onclick="checkAllAndVersa(this,'checkObjIds','businessDraftTbody')"/></th></#if> 
+		<th width="50px" align="center" >行号</th>
+		<#list rowList as row>
+			   <th  width="${(row.width)!100}px" <#if row.isOrder?? && row.isOrder==2> orderField="${row.code}"  <#if orderField?? && row.code==orderField>class="${(orderDirection)!'asc'}"<#else>class="asc"</#if> </#if>>
+				 ${(row.showName)!(row.name)!}
+			   </th>
+		</#list>
+	</tr>
+</thead>

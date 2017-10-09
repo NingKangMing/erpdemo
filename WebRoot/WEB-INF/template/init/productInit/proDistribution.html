@@ -1,0 +1,94 @@
+<div id="proDistributionDialog">
+	<form id="pagerForm"  enctype="text/plain"  onsubmit="return divSearch(this, 'dialog');" action="${base}/init/productInit/proDistribution" method="post">
+		<input type="hidden" name="pageNum" value="${pageMap.pageNum!1}" />
+		<input type="hidden" name="numPerPage" value="${pageMap.numPerPage!10}" />
+		<input type="hidden" name="orderField" value="${orderField!'sge.rank'}" /><!--查询排序-->
+	    <input type="hidden" name="orderDirection" value="${orderDirection!'asc'}" /><!--升序降序-->
+		
+		<!-- 保存条件 -->
+		<input type="hidden" id="term_supId" name="supId" value="${supId!0}"/>
+		<input type="hidden" name="selectedObjectId" id="selectedObjectId" value="${objectId!0}" /><!--   默认选中对象的Id -->
+		<input type="hidden" id="product.id" name="product.id" value="${productId!0}"/>
+	</form>
+	<div class="pageContent">
+		<h2 style="margin-left: 25px;margin-top: 15px;">当前商品全名【<span id="product.fullName">${pro.fullName!''}</span>】</h2>
+		<div style="float: left; margin-left: 30px; margin-top: 10px;">仓库：全部仓库</div>
+		<div style="float: right; margin-right: 20px; height:43px;">
+			商品全名
+			<input type="hidden" id="product.id" name="product.id" value="${productId!0}"/>
+	   	    <input name="product.fullName" lookName="product" lookId="product.id" />
+	        <a class="btnLook" id="productLook"  isReload=true reloadId="proDistributionDialog" showNameId="product.fullName" href="${base}/base/product/option" warn="商品" lookupgroup="product" lookuppk="id" width="600" height="410">商品</a>
+		</div>
+		<div style="width: 100%;" layoutH="110">
+			<table class="table"  targetType="dialog"  layoutH="190">
+				<thead>
+					<tr>
+						<th  width="40" align="center">
+							行号
+						</th>
+						<th  width="80" align="center" orderField="code" <#if orderField?? && 'code'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+							仓库编号
+						</th>
+						<th  width="100" align="center" orderField="fullName" <#if orderField?? && 'fullName'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+							仓库全名
+						</th>
+						<th  width="100" align="center" orderField="spell" <#if orderField?? && 'spell'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+							库存数量
+						</th>
+						<th  width="100" align="center" orderField="spell" <#if orderField?? && 'spell'==orderField>class="${orderDirection!'asc'}"<#else>class="asc"</#if>>
+							库存金额
+						</th>
+						
+					</tr>
+				</thead>
+				<tbody>
+				<#if pageMap?? && pageMap.pageList??>
+					<#list pageMap.pageList as record>
+					  <#if record.sge.node==2>
+					  <tr objectId="${objectId!0}" relevancyIds="product.id" rel="${record.sge.id}" drel="proDistributionDialog" cTarget="dialog" url="${base}/init/productInit/proDistribution/${record.sge.id}">
+					  <#else>
+					  <tr objectId="${objectId!0}"  rel="${record.sge.id}" >
+					  </#if>
+						<td align="center">
+							<a>${record_index+1+pageMap.limit}</a>
+							<#if record.sge.node==2>..</#if>
+						</td>
+						<td align="center">${record.sge.code!''}</td>
+						<td align="center">${record.sge.fullName!''}</td>
+						<td align="center">${record.amounts!''}</td>
+						<td align="center">
+							<@shiro.hasPermission name='1101-s'>
+						    	${record.moneys!''}
+						    </@shiro.hasPermission>
+							<@shiro.lacksPermission name='1101-s'>
+								***
+						    </@shiro.lacksPermission>
+						</td>
+					</tr>
+					</#list>
+				</#if>
+				</tbody>
+				<tfoot>
+				       <tr isSelect="false" style="border-top: #D0D0D0 solid 1px">
+					       <td align="center">合计</td>
+					       <td align="center"></td>
+					       <td align="center"></td>
+					       <td align="center" hasCount="true"></td>
+					       <td align="center" hasCount="true"></td>
+				       </tr>
+			    </tfoot>
+			</table>
+			<#include "/WEB-INF/template/unitl/dialogpage.html"/>
+		</div>
+		
+		<!--divider虚线-->
+		<div class="divider"></div>
+		<div>
+			<#if supId?? && supId!=0>
+			   <a style="margin-left: 250px;" class="button" href="${base}/init/productInit/proDistribution/${pSupId!0}-${supId!0}" relevancyIds="product.id" target="ajax"  rel="proDistributionDialog"><span>上级</span></a>
+		    <#else>
+		       <a style="margin-left: 250px;" class="buttonDisabled" href="javascript:void(0);"><span>上级</span></a>
+		    </#if>
+			<div style="margin-left: 30px;" class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+		</div>
+</div>

@@ -1,0 +1,40 @@
+<div class="panel pageContent">
+	<div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">地区明细账本</span></label>
+				</li>
+			</ul>
+			<ul class="searchContent" style="margin-top: 5px;">
+				<li>
+					<span style="margin-left: 10px;">查询时间：</span>${(params.startTime)!}&nbsp;&nbsp;至&nbsp;&nbsp;${(params.endTime)!}
+				</li>
+			</ul>
+			<ul class="searchContent" style="margin-top: 5px;">
+				<li>
+					<span style="margin-left: 10px;">地区:</span><#if area??> ${area.fullName!} <#else> 其它地区 </#if>
+				</li>
+				<#assign columnType = 'cw511'/>
+				<#include "/WEB-INF/template/common/columnConfig/columnConfigSetLink.html"/>
+				<li style="float: right;">
+				        红冲过滤：
+     				<select name="isRcw" onchange="javascript:selectPost(this,'returnMomeyAreaAccountList','isRcw');">
+     					<option value="" >全部显示</option>
+     					<option value="0" >不显示红冲单据</option>
+     				</select>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div layoutH="60">
+		
+		<div id="returnMomeyAreaAccountList" style="padding:2px; padding-top: 0px;" layoutH="70">
+		 
+			<#include "accountList.html"/>
+		</div>
+	</div>
+</div>
+
+
+

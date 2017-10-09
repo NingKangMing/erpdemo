@@ -1,0 +1,51 @@
+<div class="panel">
+	<div class="pageHeader">
+		<div class="searchBar">
+			<ul class="searchContent">
+				<li>
+					<label><span style="font:bold 18px '宋体',Arial,Times;">物价管理</span></label>
+				</li>
+			</ul>
+			<ul class="searchContent">
+			    <li  style="float: right;margin-left: 10px;margin-right: 10px">
+				   <a href="${base}/fz/reportRow/search/fz500" target="dialog" rel="reportRowView"  width="520" height="500"><img src="${base}/img/base/setting.png" width="20px" height="20px" title="列配置"/></a>
+				</li>
+				<li style="float: right;">
+				  过滤<select name="typeUnit" onchange="javascript:selectPost(this,'pricesManageList','typeUnit');">
+				       <option <#if typeUnit?? && typeUnit=="all">selected="selected"</#if> value="all">全部显示</option>
+				       <option <#if typeUnit?? && typeUnit=="base1">selected="selected"</#if> value="base1">只显示基本单位</option>
+				       <option <#if typeUnit?? && typeUnit=="base2">selected="selected"</#if> value="base2">只显示辅助单位1</option>
+				       <option <#if typeUnit?? && typeUnit=="base3">selected="selected"</#if> value="base3">只显示辅助单位2</option>
+				       <option <#if typeUnit?? && typeUnit=="base23">selected="selected"</#if> value="base23">显示所有辅助单位</option>
+				    </select>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div>
+		<div id="pricesManageList">
+			<#include "list.html" />
+		</div>
+			
+		<div class="divider"></div>
+		<div>
+		    <a class="button" href="${base}/stock/stock/orderDialog/" aimParam="true" title="商品选择" target="dialog" rel="pricesManageProductDialog" width="570" height="450" aimTitle="物价管理" aimUrl="${base}/fz/pricesManage" aimTabId="pricesManageView"><span>选择商品</span></a>
+		    <@shiro.hasPermission name='8-800-u'>
+		    <a class="button" href="${base}/fz/pricesManage/toPrices/{id}" target="dialog" rel="newPriceDialog" title="新价格输入" width="340" height="340"><span>修改售价</span></a>
+		    </@shiro.hasPermission>
+		    <@shiro.hasPermission name='8-800-s'>
+		    <a class="button" href="${base}/fz/pricesManage/toFormula" target="dialog"  serialize="true" rel="pricesFormuladialog" width="400" height="400" ><span>物价生成</span></a>
+		    </@shiro.hasPermission>
+		</div>
+		<div style="float: right;">
+			<#assign privs = '8-800-p'/>
+	<#assign href = '${base}/fz/pricesManage/print'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+			<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+		</div>
+	</div>
+</div>
+
+
+

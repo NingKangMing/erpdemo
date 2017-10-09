@@ -1,0 +1,10 @@
+<!--报表   基本信息查询框 -->
+<#--<#include "/WEB-INF/template/common/base/reports/productReportLink.html"/>-->
+<tr style="height: 30px;">
+  <td>商品全名:</td>
+    <td>
+	    <input  type="hidden" name="product.id" id="productId"/>
+	    <input  type="text" name="product.fullName" size="30" ondblclick="$('#productDialogLook').click();"/>
+	    <a class="btnLook" id="productDialogLook" btnPattern="selectMany,selectAll" href="${base}/base/product/option/0" warn="商品" lookupgroup="product" lookuppk="id" width="600" height="410">商品</a>
+	</td>
+</tr>

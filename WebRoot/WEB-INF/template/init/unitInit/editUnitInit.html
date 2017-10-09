@@ -1,0 +1,44 @@
+<div  class="pageContent">
+   <form action="${base}/init/unitInit/editUnitInit" method="post" class="tableForm" enctype="text/plain" onsubmit="return validateCallback(this,dialogAjaxDone)">
+      <input type="hidden" name="unit.id" value="${unit.id!}"/>
+      <h1>期初应收应付</h1>
+      <div  layoutH="70">
+      	<div style="margin-top: 20px; margin-left: 60px;">
+		      <table style="width:80%;">
+		      	<tr height="40px;">
+		      		<td>
+			      		单位名称:
+		      		</td>
+		      		<td>
+			      		${unit.fullName!''}
+		      		</td>
+		      	</tr>
+		      	<tr height="40px;">
+		      		<td>
+			      		期初应收
+		      		</td>
+		      		<td>
+			      		<input class="number" name="unit.beginGetMoney" value="${(unit.beginGetMoney)!0}" />
+		      		</td>
+		      	</tr>
+		      	<tr height="40px;">
+		      		<td>
+			      		期初应付
+		      		</td>
+		      		<td>
+			      		<input class="number" name="unit.beginPayMoney" value="${(unit.beginPayMoney)!0}" />
+		      		</td>
+		      	</tr>
+		      </table>
+	     </div>
+      </div>
+	  <!--提交按钮  -->
+	  <div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="submitBeforeValidate(this,'editUnitInit')">确定</button></div></div></li>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+		</ul>
+	  </div>
+	  <!--end 提交按钮  -->
+   </form>
+</div>

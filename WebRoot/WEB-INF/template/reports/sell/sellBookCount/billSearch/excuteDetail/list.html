@@ -1,0 +1,78 @@
+<input type="hidden" id="projectBasePath" value="${base}"/>
+<form id="pagerForm" method="post" class="pageForm required-validate" enctype="text/plain" action="${base}/reports/book/executeDetail/page" onsubmit="return dwzSearch(this, 'dialog');">
+	<input type="hidden" name="pageNum" value="${(pageMap.pageNum)!}" />
+	<input type="hidden" name="numPerPage" value="${(pageMap.numPerPage)!}" />
+     <!-- ID用于树点击参数 -->
+	<input type="hidden" id="billId" name="billId" value="${billId!'0'}"/>               <!-- 销售订单头表ID -->
+</form>
+<table class="table" rel="${listID}" layoutH="230">
+	<thead>
+		<tr>
+			<th width="80" align="center">行号</th>
+			<th width="100" align="center">单据类型</th>
+			<th width="100" align="center">单据编号</th>
+			<th width="100" align="center">执行日期</th>
+			<th width="100" align="center">摘要</th>
+			<th width="100" align="center">执行人编号</th>
+			<th width="100" align="center">执行人全称</th>
+			<th width="100" align="center">部门编号</th>
+			<th width="100" align="center">部门全称</th>
+			<th width="100" align="center">税后金额</th>
+			<th width="100" align="center">附加说明</th>
+		</tr>
+	</thead>
+	<tbody id="reports_prdsellcount_body">
+		<#if pageMap??&&pageMap.pageList??>
+		<#list pageMap.pageList as obj>
+		<tr target="id" rel="${(obj.id)}-${obj.orderType}" <#if obj.isRCW??&&obj.isRCW!=0> style="color: red"</#if> orderId="${(obj.id)}" orderType="xsd" cTarget="openNavTab"  sameId="reports_prd_xs_detail_id">
+			<td><a>${obj_index+1}</a></td>
+			<td>
+			    <#if obj.orderType=="xsd">
+			             销售单
+			    <#elseif obj.orderType=="xsdd">
+			   	 销售订单
+			    </#if>
+			</td>
+			<td>${(obj.code)!''}</td>
+			<td>${(obj.updateTime?string('yyyy-MM-dd HH:mm:ss'))}</td>
+			<td>${(obj.remark)!''}</td>
+			<td>${(obj.staff.code)!}</td>
+		    <td>${(obj.staff.fullName)!}</td>
+			<td>${(obj.department.code)!''}</td>
+			<td>${(obj.department.fullName)!''}</td>
+			<td><#if obj.sellMoney??&&obj.sellMoney!=0>${(obj.sellMoney)!''}</#if></td>
+			<td>${(obj.memo)!''}</td>
+		</tr>
+		</#list>
+		</#if>
+	</tbody>
+	<tfoot>
+	       <tr isSelect="false" style="border-top: #D0D0D0 solid 1px">
+		       <td align="center">合计</td>
+		       <td align="center"></td>
+		       <td align="center"></td>
+		       <td align="center"></td>
+		       <td align="center"></td>
+		       <td align="center"></td>
+		       <td align="center"></td>
+		       <td align="center"></td>
+		       <td align="center"></td>
+		       <td align="center" hascount="true"></td>
+		       <td align="center"></td>
+	       </tr>
+    </tfoot>
+</table>
+<#include "/WEB-INF/template/unitl/paging.html"/>
+
+	
+<div class="divider"></div>
+<div>
+    
+    <a id="reports_prd_xs_detail_id" class="button" href="${base}/reports/book/executeLook/{id}" target="navTab"><span>查看单据</span></a> 
+</div>
+<div style="float: right;">
+	<#assign href = '${base}/reports/book/executeDetailPrint'/>
+	<#assign formId = 'pagerForm'/>
+	<#include "/WEB-INF/template/common/print/printBtn.html"/>
+	<a class="button" href="javascript:;" onclick="navTab.closeCurrentTab()"><span>关闭</span></a>
+</div>

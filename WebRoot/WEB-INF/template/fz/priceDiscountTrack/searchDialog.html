@@ -1,0 +1,48 @@
+<div class="pageContent">
+	<h2 class="contentTitle">查询</h2>
+	<form>
+	    <input type="hidden" name="aimTabId" id="aimTabId"/>	     <!-- 设置目标Tab组件ID -->				
+	    <input type="hidden" name="aimUrl" id="aimUrl"/>	         <!-- 设置目标URl -->				
+	    <input type="hidden" name="aimTitle" id="aimTitle"/>         <!-- 设置目标标题 -->
+	    <input type="hidden" name="aimDiv"  id="aimDiv"/>            <!-- 目标DivId   (放过滤条件   all eq gt) -->
+	    
+	    					
+		<div class="pageFormContent" layoutH="100">
+            <table>
+               <tr>
+                  <td style="vertical-align: top;">
+                      <fieldset style="width: 280px;">
+					    <legend>选择基本信息</legend>
+					    <table>
+				           <tr style="height: 30px;">
+				              <td>商品全名:</td>
+				              <td>
+				                  <input  type="hidden" name="product.id" id="productId"/>
+				                  <input  type="text" name="product.fullName" size="30" ondblclick="$('#productDialogLook').click();"/>
+	              				  <a class="btnLook" id="productDialogLook" href="${base}/base/product/option/0" btnPattern="selectMany,selectAll" warn="商品" lookupgroup="product" lookuppk="id" width="600" height="410">商品</a>
+				              </td>
+				           </tr>
+				           <tr style="height: 30px;">
+				              <td>单位全名:</td>
+				              <td>
+				                  <input type="hidden" name="unit.id" id="unitId"/>
+							      <input class="line" type="hidden" name="unit.fullName" id="unitName"/>
+							      <input class="textInput" type="text" size="30" name="unit.fullName" id="unitName"/>
+							      <a class="btnLook" id="unitLook"  href="${base}/base/unit/option/0" btnPattern="selectMany,selectAll" warn="单位" lookupgroup="unit" type="post" lookuppk="id" width="600" height="410">单位</a>
+				              </td>
+				           </tr>
+				        </table>
+				      </fieldset>
+                  </td>
+               </tr>
+            </table>			
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="fristOpenNavTabAfterLoadData(this)">确认</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>
+

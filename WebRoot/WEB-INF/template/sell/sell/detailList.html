@@ -1,0 +1,94 @@
+<div align="right" style="margin-right: 10px;margin-bottom: 5px;">
+	<a href="${base}/fz/reportRow/search/xsdyy" target="dialog" title="单据明细列配置" rel="reportRowView"  width="520" height="500"><img src="${base}/img/base/setting.png" width="20px" height="20px" title="单据明细配置"/></a>
+</div>
+<table  class="table" layoutH="360"  width="200%">
+	     <thead>
+	       <tr>
+	          <th width="50px">行号</th>
+	          <th width="50px"><input class="checkboxCtrl" type="checkbox" group="detailId"/></th>
+	          <#list detailRowList as row>
+				   <th align="center" width="${(row.width)!100}px">
+					 ${(row.showName)!(row.name)!}
+				   </th>
+			  </#list>
+	       </tr>
+	     </thead>
+	     <tbody>
+	          <#if detailList??>
+	           <#list detailList as detail>
+	             <tr>
+		           <td>${detail_index+1}</td>
+		           <td><input type="checkbox" name="detailId" value="${(detail.detail.id)!}"/></td>
+		           <#list detailRowList as row>
+			       <#if row.code?? && 'code'==row.code>
+			       <!-- 商品编号 -->
+			       <td>${(detail.product.code)!}</td>
+			       <#elseif row.code?? && 'fullName'==row.code>
+		       	   <!-- 商品名称 -->
+			       <td>${(detail.product.fullName)!}</td>
+			       <#elseif row.code?? && 'smallName'==row.code>
+			       <!-- 商品简称 -->
+			       <td>${(detail.product.smallName)!''}</td>
+			       <#elseif row.code?? && 'spell'==row.code>
+			       <!-- 商品拼音 -->
+			       <td>${(detail.product.spell)!''}</td>
+			       <#elseif row.code?? && 'standard'==row.code>
+			       <!-- 规格 -->
+			       <td>${(detail.product.standard)!''}</td>
+			       <#elseif row.code?? && 'model'==row.code>
+			       <!-- 型号 -->
+			       <td>${(detail.product.model)!''}</td>
+			       <#elseif row.code?? && 'field'==row.code>
+			       <!-- 产地 -->
+			       <td>${(detail.product.field)!''}</td>
+			       <#elseif row.code?? && 'savePath'==row.code>
+			       <!-- 图片 -->
+			       <td>
+						<#if (detail.product.savePath)??>
+						    <img onMouseOver="toolTip('<img src=${base}/upLoadImg/${(detail.product.savePath)!} width=400px height=350px>')" onMouseOut="toolTip()"  src="${base}/upLoadImg/${(detail.product.savePath)!}"  width="20px" height="20px"/>
+			            </#if>
+				   </td>
+				   <#elseif row.code?? && 'untreatedAmount'==row.code>
+			       <!-- 数量 -->
+			       <td>${(detail.detail.untreatedAmount)!}</td>
+			       <#elseif row.code?? && 'unit'==row.code>
+			       <td> ${(detail.product.calculateUnit1)!} </td>	   
+			       	   <!-- 单位 
+				       <#if detail.selectUnitId?? && detail.selectUnitId==1>
+			           <td> ${(detail.product.calculateUnit1)!} </td>
+			           <#elseif detail.selectUnitId?? && detail.selectUnitId==2>
+			           <td> ${(detail.product.calculateUnit2)!} </td>
+			           <#elseif detail.selectUnitId?? && detail.selectUnitId==3>
+			           <td> ${(detail.product.calculateUnit3)!}</td>
+			           <#else>
+			           <td></td>
+			           </#if>-->
+			       <#elseif row.code?? && 'basePrice'==row.code>
+			       <td>${(detail.detail.basePrice)!}</td>
+		           <#elseif row.code?? && 'money'==row.code>
+			       <td>
+		               <#if detail.detail.untreatedAmount??&&detail.detail.basePrice??>
+		               	${(detail.detail.untreatedAmount)*(detail.detail.basePrice)!}
+		               </#if>
+		           </td>
+			       <#elseif row.code?? && 'discount'==row.code>
+		           <td>${(detail.detail.discount)!}</td>
+		           <#elseif row.code?? && 'taxRate'==row.code>
+		           <td>${(detail.detail.taxRate)!}</td>
+		           <#elseif row.code?? && 'taxes'==row.code>
+		           <td>${(detail.detail.taxes)!}</td>
+		           <#elseif row.code?? && 'produceDate'==row.code>
+		           <td><#if detail.detail.produceDate??>${detail.detail.produceDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
+		           <#elseif row.code?? && 'batch'==row.code>
+		           <td>${(detail.detail.batch)!}</td>
+		           <#elseif row.code?? && 'memo'==row.code>
+		           <td>${(detail.detail.memo)!}</td>
+		           <#else>
+		           <td></td>
+		       	   </#if>
+		           </#list>
+		         </tr>
+	           </#list>
+	          </#if>
+	     </tbody>
+</table>
